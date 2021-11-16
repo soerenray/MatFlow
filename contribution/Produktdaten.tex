@@ -1,0 +1,36 @@
+\section{Produkt-Daten}
+% welche Daten erhält das Produkt, welche Daten müssen gespeichert werden.
+% keine konkrete Implimentierung, Datenbankaufbau erst in Phase 2 Entwurf
+
+\begin{anforderung}{D}
+    \item \label{anwendungs_daten} Anwendungsdaten
+    \begin{subanforderung}{D}
+    	\item Datei
+        \item Name
+        \item Parameter
+        \item Beschreibung
+        \item Status
+        \item Startzeit
+        \item Laufzeit
+        \item Tags ??
+        \item Zeitstempel der Erstellung
+        \item \label{experiment_ersteller} Ersteller
+        \item Kommentar?
+    \end{subanforderung}
+
+    \item \label{kommentar_daten} Kommentardaten
+    \begin{subanforderung}{D}
+        \item Kommentartext
+        \item Zeitstempel der Erstellung
+        \item \label{kommentar_ersteller} Ersteller
+    \end{subanforderung}
+
+    \item \label{nutzer_daten}Nutzerdaten
+    \begin{subanforderung}{D}
+        \item Benutzername
+        \item Passwort
+        \item Berechtigungen
+        \item Echter Name
+    \end{subanforderung}
+\end{anforderung}
+\newpage
