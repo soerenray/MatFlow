@@ -6,9 +6,11 @@
 \usepackage{hyperref} % for pdf conversion (links etc.)
 \usepackage{csquotes} % provides \enquote{} macro for "quotes"
 \usepackage[nonumberlist]{glossaries}  % provides glossary commands
-\usepackage{enumitem}
 
-\include{Definitionen}
+\hypersetup{
+    pdftitle={Pflichtenheft},
+}
+\include{definitionen}
 
 \title{'NAME PRODUKT'
         Workflowanwendung für Machine Learning Experimente}
@@ -18,17 +20,29 @@
 
 \begin{document}
 
-%Titel
+% Titel
 \maketitle
-\newpage
+\pagebreak
+\setcounter{tocdepth}{2}
 \tableofcontents
+\pagebreak
 
-%Inhalt
-\input{Einleitung}
-\input{Zielbestimmung}
-\input{Produkteinsatz}
-\input{Produktumgebung}
-\input{Produktfunktionen}
-\input{Produktdaten}
+% Inhalt
+\input{einleitung}
+\input{zielbestimmung}
+\input{produkt_einsatz}
+\input{produkt_umgebung}
+\input{produkt_funktion}
+%\input{produkt_daten}
+%\input{systemmodell}
+%\input{produkt_leistungen}
+%\input{benutzeroberflaeche}
+%\input{qualitaetsbestimmungen}
+%\input{testfaelle}
+%\input{entwicklungsumgebung}
+
+% Glossar
+\clearpage
+%\printnoidxglossaries
 
 \end{document}
