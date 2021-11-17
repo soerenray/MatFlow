@@ -3,4 +3,9 @@
         {\end{enumerate}
 }
 
+\newenvironment{subenumPH}[1]
+	{ \setlist{nolistsep}\begin{enumerate}[label=/#1\arabic{enumi}\arabic*/, leftmargin=0.9cm, noitemsep]}
+	{\vspace{0.2cm}\setlist{listsep}\end{enumerate}
+}
+
 \newpage

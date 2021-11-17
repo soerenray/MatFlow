@@ -3,25 +3,17 @@
 % welche Daten erhält das Produkt, welche Daten müssen gespeichert werden.
 % keine konkrete Implimentierung, Datenbankaufbau erst in Phase 2 Entwurf
 
-\newenvironment{enumPH}[1]{
-	\begin{enumerate}[label=/#1\arabic*0/, leftmargin=1.6cm, noitemsep]}
-	{\end{enumerate}
-}
-
-
-
-
 \begin{enumPH}{D}
 	\item \label{server_daten}Serverdaten
-	\begin{enumPH}{D}
+	\begin{subenumPH}{D}
 		\item Servername
 		\item Serveradresse
 		\item Laufende Anwendungen
 		\item Pipeline?
-	\end{enumPH}
+	\end{subenumPH}
 
     \item \label{anwendungs_daten}Anwendungsdaten
-    \begin{enumPH}{D}
+    \begin{subenumPH}{D}
     	\item Datei
         \item Name
         \item Parameter
@@ -33,21 +25,21 @@
         \item Zeitstempel der Erstellung
         \item \label{experiment_ersteller}Ersteller
         \item Kommentar?
-    \end{enumPH}
+    \end{subenumPH}
 
     \item \label{kommentar_daten}Kommentardaten
-    \begin{enumPH}{D}
+    \begin{subenumPH}{D}
         \item Kommentartext
         \item Zeitstempel der Erstellung
         \item \label{kommentar_ersteller}Ersteller
-    \end{enumPH}
+    \end{subenumPH}
 
     \item \label{nutzer_daten}Nutzerdaten
-    \begin{enumPH}{D}
+    \begin{subenumPH}{D}
         \item Benutzername
         \item Passwort
         \item Berechtigungen
         \item Echter Name
-    \end{enumPH}
+    \end{subenumPH}
 \end{enumPH}
 \newpage
