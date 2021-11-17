@@ -1,19 +1,27 @@
 \section{Produkt-Daten}
+
 % welche Daten erhält das Produkt, welche Daten müssen gespeichert werden.
 % keine konkrete Implimentierung, Datenbankaufbau erst in Phase 2 Entwurf
 
-\begin{anforderung}{D}
-	\item \label{server_daten} Serverdaten
-	\begin{subanforderung}{D}
+\newenvironment{enumPH}[1]{
+	\begin{enumerate}[label=/#1\arabic*0/, leftmargin=1.6cm, noitemsep]}
+	{\end{enumerate}
+}
+
+
+
+
+\begin{enumPH}{D}
+	\item \label{server_daten}Serverdaten
+	\begin{enumPH}{D}
 		\item Servername
 		\item Serveradresse
 		\item Laufende Anwendungen
 		\item Pipeline?
-		\item 
-	\end{subanforderung}
-		
-    \item \label{anwendungs_daten} Anwendungsdaten
-    \begin{subanforderung}{D}
+	\end{enumPH}
+
+    \item \label{anwendungs_daten}Anwendungsdaten
+    \begin{enumPH}{D}
     	\item Datei
         \item Name
         \item Parameter
@@ -23,23 +31,23 @@
         \item Laufzeit
         \item Tags ?
         \item Zeitstempel der Erstellung
-        \item \label{experiment_ersteller} Ersteller
+        \item \label{experiment_ersteller}Ersteller
         \item Kommentar?
-    \end{subanforderung}
+    \end{enumPH}
 
-    \item \label{kommentar_daten} Kommentardaten
-    \begin{subanforderung}{D}
+    \item \label{kommentar_daten}Kommentardaten
+    \begin{enumPH}{D}
         \item Kommentartext
         \item Zeitstempel der Erstellung
-        \item \label{kommentar_ersteller} Ersteller
-    \end{subanforderung}
+        \item \label{kommentar_ersteller}Ersteller
+    \end{enumPH}
 
     \item \label{nutzer_daten}Nutzerdaten
-    \begin{subanforderung}{D}
+    \begin{enumPH}{D}
         \item Benutzername
         \item Passwort
         \item Berechtigungen
         \item Echter Name
-    \end{subanforderung}
-\end{anforderung}
+    \end{enumPH}
+\end{enumPH}
 \newpage
