@@ -2,6 +2,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex
 
+
+#dummy script to check if airflow import works and python interpreter is right
+test.py
+
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
