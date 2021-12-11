@@ -1,14 +1,18 @@
 Das ist die Struktur der Datenbank bis ich wieder in Karlsruhe an meinem PC eine ordentlichere Datei schreiben kann ~Lukas
 
 Server      (server_ID:Int, name:String, adress:String?)    key: {server_ID}
-notNull: {*}
 
-Execution   (workflow_ID:Int, server_ID:Int, start:timestamp, end:timestamp, user_ID:Int, result:file)      key: {workflow_ID}      secondary keys: {server_ID, user_ID}
-notNull: {*}\{start, end, result}
+Execution   (workflow_ID:Int, version:String, server_ID:Int, start:timestamp, end:timestamp, email:Int, result:file)      key: {(Workflow)workflow_ID, (Version)version), (Server)server_ID}      secondary keys: {(User)mail}
+    notNull: {*}\{start, end, result}
 
-Workflow    (workflow_ID:Int, file:file, dag:file, user_ID:Int)     key: {workflow_ID}      secondary key: {user_ID}
+Workflow    (workflow_ID:Int, name:String, dag:file)     key: {workflow_ID}      
 
-User        (user_ID:Int, name:String, permission:Int, password:String)     key: {user_ID}
+Version     (workflow_ID:Int, version:String, email:Int, conf:file)    key: {(Workflow)workflow_ID, version}          secondary key: {(User)email}
+
+
+Workflow_Template   (template_ID, name:String, dag:file, email)     key: {template_ID}        secondary key: {(User)email}
+
+User        (email:String, name:String, permission:Int, password:(Int, String))     key: {email}
 
 
 
