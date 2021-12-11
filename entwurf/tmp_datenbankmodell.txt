@@ -1,0 +1,15 @@
+Das ist die Struktur der Datenbank bis ich wieder in Karlsruhe an meinem PC eine ordentlichere Datei schreiben kann ~Lukas
+
+Server      (server_ID:Int, name:String, adress:String?)    key: {server_ID}
+notNull: {*}
+
+Execution   (workflow_ID:Int, server_ID:Int, start:timestamp, end:timestamp, user_ID:Int, result:file)      key: {workflow_ID}      secondary keys: {server_ID, user_ID}
+notNull: {*}\{start, end, result}
+
+Workflow    (workflow_ID:Int, file:file, dag:file, user_ID:Int)     key: {workflow_ID}      secondary key: {user_ID}
+
+User        (user_ID:Int, name:String, permission:Int, password:String)     key: {user_ID}
+
+
+
+
