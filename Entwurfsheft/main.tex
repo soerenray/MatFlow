@@ -1,0 +1,60 @@
+\documentclass{scrartcl}
+
+\usepackage[utf8]{inputenc} % use utf8 file encoding for TeX sources
+\usepackage[T1]{fontenc}    % avoid garbled Unicode text in pdf
+\usepackage[german]{babel}  % german hyphenation, quotes, etc
+\usepackage{hyperref} % for pdf conversion (links etc.)
+\usepackage{csquotes} % provides \enquote{} macro for "quotes"
+\usepackage[nonumberlist]{glossaries}  % provides glossary commands
+\usepackage{enumitem} % provide enumerate
+\usepackage{float} % nötig für {table}[H]
+\usepackage{graphicx}
+\usepackage{geometry}
+
+\hypersetup{
+    pdftitle={Entwurfsheft},
+}
+
+%\makenoidxglossaries
+%\input{glossary}
+%\include{definitionen}
+
+\title{Entwurf\\
+		MatFlow \\
+        Workflowanwendung für Machine Learning Experimente}
+\author{Florian Küfner, Soeren Raymond, Alessandro Santospirito, \\ 
+        Lukas Wilhelm, Nils Wolters} 
+\date{Dezember 2021}
+
+\begin{document}
+
+% Titel
+\maketitle
+\pagebreak
+\setcounter{tocdepth}{2}
+\tableofcontents
+\pagebreak
+
+% Inhalt
+
+\input{datenbankverbindung}
+
+
+%\input{einleitung}
+%\input{zielbestimmung}
+%\input{produkt_einsatz}
+%\input{produkt_umgebung}
+%\input{produkt_funktion}
+%\input{produkt_daten}
+%\input{systemmodell}
+%\input{produkt_leistungen}
+%\input{benutzeroberflaeche}
+%\input{qualitaetszielbestimmungen}
+%\input{testfaelle}
+%\input{entwicklungsumgebung}
+
+% Glossar
+\clearpage
+%\printnoidxglossaries
+
+\end{document}

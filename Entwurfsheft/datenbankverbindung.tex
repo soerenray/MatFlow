@@ -1,0 +1,21 @@
+\section{Datenbankverbindung}
+
+\subsection{Datenbankaufbau}
+Server      (server_ID:Int, name:String, adress:String?)    key: {server_ID}
+
+Execution   (workflow_ID:Int, version:String, server_ID:Int, start:timestamp, end:timestamp, email:Int, result:file)      key: {(Workflow)workflow_ID, (Version)version), (Server)server_ID}      secondary keys: {(User)mail}
+notNull: {*}\{start, end, result}
+
+Workflow    (workflow_ID:Int, name:String, dag:file)     key: {workflow_ID}      
+
+Version     (workflow_ID:Int, version:String, email:Int, conf:file)    key: {(Workflow)workflow_ID, version}          secondary key: {(User)email}
+
+
+Workflow_Template   (template_ID, name:String, dag:file, email)     key: {template_ID}        secondary key: {(User)email}
+
+User        (email:String, name:String, permission:Int, password:(Int, String))     key: {email}
+
+
+
+
+\newpage
