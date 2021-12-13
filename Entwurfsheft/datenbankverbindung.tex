@@ -1,19 +1,59 @@
 \section{Datenbankverbindung}
 
 \subsection{Datenbankaufbau}
-Server      (server_ID:Int, name:String, adress:String?)    key: {server_ID}
+Die Datenbank beinhaltet folgende Tabellen:\\
+\textnormal{$\underline{Primärschlüssel}$},
+\textnormal{$Fremdschlüssel_{Name\:in\:Ursprungstabelle}$}
 
-Execution   (workflow_ID:Int, version:String, server_ID:Int, start:timestamp, end:timestamp, email:Int, result:file)      key: {(Workflow)workflow_ID, (Version)version), (Server)server_ID}      secondary keys: {(User)mail}
-notNull: {*}\{start, end, result}
+\begin{itemize}
+	\item Server
+	\begin{itemize}
+		\item $\textnormal{\underline{server\_ID}}$ :String
+		\item name :String
+		\item adress :String
+		\item limitWorkflows :int
+	\end{itemize}
+	\item User
+	\begin{itemize}
+		\item $\textnormal{\underline{email}}$ :String
+		\item name :String
+		\item permission :int
+		\item password :String
+		\item hashnr :int
+	\end{itemize}
+	\item Workflow\_Template
+	\begin{itemize}
+		\item \textnormal{$\underline{name}$} :String
+		\item \textnormal{$creator_{email\:in\:User}$} :String
+		\item dag :File
+		%muss ich noch recherchieren wie genau files gespeichert werden können
+	\end{itemize}
+	\item Workflow
+	\begin{itemize}
+		\item $\textnormal{\underline{name}}$ :String
+		\item dag :File
+		\item files :File
+	\end{itemize}
+	\item Version
+	\begin{itemize}
+		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
+		\item $\underline{version}$ :String
+		\item $creator_{email\:in\:User}$ :String
+		\item conf :file
+	\end{itemize}
+	\item Execution
+	\begin{itemize}
+		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
+		\item $\underline{version}_{in\:Version}$ :String
+		\item $\underline{server\_ID}_{in\:Server}$ :String
+		\item $executor_{email\:in\:User}$ :String
+		\item start :timestamp
+		\item stop :timestamp
+		\item result :file
+	\end{itemize}
+\end{itemize}
 
-Workflow    (workflow_ID:Int, name:String, dag:file)     key: {workflow_ID}      
 
-Version     (workflow_ID:Int, version:String, email:Int, conf:file)    key: {(Workflow)workflow_ID, version}          secondary key: {(User)email}
-
-
-Workflow_Template   (template_ID, name:String, dag:file, email)     key: {template_ID}        secondary key: {(User)email}
-
-User        (email:String, name:String, permission:Int, password:(Int, String))     key: {email}
 
 
 
