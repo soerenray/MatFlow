@@ -1,0 +1,18 @@
+getTemplateNames
+- gebe:
+- erwarte: alle Template Namen als Strings
+
+getTemplateByName
+- gebe: Name eines Templates
+- erwarte: die Ensprechende Zeile in der Template Relation
+
+getNamesOfWorkflowsAndConfigFiles
+- gebe:
+- erwarte: 2-dimensionales Array vom Typ String[][] 
+  Wobei die Inneren Arrays die Form [<Name der WF-Instanz>, <Name 1. config file>, <Name 2. config file>, ...] haben
+  Es gibt für JEDE Workflow-Instanz ein solches inneres Array
+
+getConfigFileOfWorkflowInstance
+- gebe: name einer workflow-instanz, name einer config file
+- erwarte: config-file der aktuellen verison der wf-instanz
+
