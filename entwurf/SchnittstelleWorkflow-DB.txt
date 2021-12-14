@@ -1,3 +1,12 @@
+createTemplate
+- gebe: TemplateObjekt = Template-Name + dagDefinition File (brauchst du hier noch mehr Metadaten: user, timestamp...?)
+- erwarte: ich kann später die file anhand des Names bekommen
+
+createWorkflowInstanceFromTemplate
+- gebe: nameTemplate, name der zu erstellenden WF-instanz, config-Folder (Directory von python os)
+- erwarte: neuer Eintrag im /dag directory, 
+  Eintrag in WF-relation (hier muss auch eine neue Version erstellt werden -> müssen wir auf jeden Fall nochmal besprechen)
+
 getTemplateNames
 - gebe:
 - erwarte: alle Template Namen als Strings
@@ -16,3 +25,19 @@ getConfigFileOfWorkflowInstance
 - gebe: name einer workflow-instanz, name einer config file
 - erwarte: config-file der aktuellen verison der wf-instanz
 
+getConfigFileFromWorkflowInstance
+- gebe: name der WF-instanz, name der configFile 
+- erwarte: die configFile der aktuellen Version der genannten Instanz
+
+createNewVersionOfWorkflowInstance
+- gebe: name der WF-instanz, neue Versionsnummer, Versionsnummer des Vorgängers, alle geänderten config Files (Directory von python os) 
+  + einen Eintrag für die "diff-Spalte" (das ist sind im Prinzip eine auflistung von 5-Tupeln von Strings)
+- erwarte: anlegen einer neuen Version -> abspeichern aller geänderten Files + kopieren der ungeänderten Files vom vorgänger
+
+getVersionsFromWorkflowInstance
+- gebe: name der WorkflowInstanz
+- erwarte: alle Versionsnummern + den jeweiligen Eintrag in der "diff-Spalte"
+
+setActiveVersionThroughNumber
+- gebe: Namen der WorkflowInstanz, Versionsnummer der version, die die aktive werden soll.
+- erwarte: Eintrag "aktive Version" wird angepasst
