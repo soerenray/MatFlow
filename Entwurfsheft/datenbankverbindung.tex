@@ -5,16 +5,16 @@ Die Datenbank beinhaltet folgende Tabellen:\\
 \textnormal{$\underline{Primärschlüssel}$},
 \textnormal{$Fremdschlüssel_{Name\:in\:Ursprungstabelle}$}
 
-\begin{itemize}
+\begin{itemize}[noitemsep]
 	\item Server
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item $\textnormal{\underline{server\_ID}}$ :String
 		\item name :String
 		\item adress :String
 		\item limitWorkflows :int
 	\end{itemize}
 	\item User
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item $\textnormal{\underline{email}}$ :String
 		\item name :String
 		\item permission :int
@@ -22,27 +22,27 @@ Die Datenbank beinhaltet folgende Tabellen:\\
 		\item hashnr :int
 	\end{itemize}
 	\item Workflow\_Template
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item \textnormal{$\underline{name}$} :String
 		\item \textnormal{$creator_{email\:in\:User}$} :String
 		\item dag :File
 		%muss ich noch recherchieren wie genau files gespeichert werden können
 	\end{itemize}
 	\item Workflow
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item $\textnormal{\underline{name}}$ :String
 		\item dag :File
 		\item files :File
 	\end{itemize}
 	\item Version
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
 		\item $\underline{version}$ :String
 		\item $creator_{email\:in\:User}$ :String
 		\item conf :file
 	\end{itemize}
 	\item Execution
-	\begin{itemize}
+	\begin{itemize}[noitemsep]
 		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
 		\item $\underline{version}_{in\:Version}$ :String
 		\item $\underline{server\_ID}_{in\:Server}$ :String
@@ -52,6 +52,55 @@ Die Datenbank beinhaltet folgende Tabellen:\\
 		\item result :file
 	\end{itemize}
 \end{itemize}
+
+\subsection{Database Package}
+
+Hier Package png und Erklärung
+
+\subsubsection{Class.DatabaseTable}
+DatabaseTable ist die einzige Klasse die direkt mit der Datenbank kommuniziert. Ihre Funktion ist hauptsächlich MySQL Befehle entgegennimmt, diese an die Datenbank weitergibt und die dadurch erhaltenen Antworten zurückgibt.
+
+\paragraph{set(create: String):String} Erstelle neuen Eintrag. Versuche $create$ auf MySQL auszuführen und gib die Antwort als String zurück.
+
+\paragraph{delete(del: String):String} Lösche einen existierenden Eintrag. Versuche $del$ auf MySQL auszuführen und gib die Antwort als String zurück.
+
+\paragraph{modify(change: String):String} Ändere einen existierenden Eintrag. Versuche $change$ auf MySQL auszuführen und gib die Antwort als String zurück.
+
+
+
+
+
+
++getUser(UID:Int): String
++getUserAll(): String
+
++getTemplate(tID: Int); String
++getTemplate(): String
++getWorkflow(wID: Int) :String
++getWorkflowAll(): String
++getWorkflowVersion(wID: Int, vID:String):String
++getWorkflowVersionAll(wID: Int): String
+
+
++getServer(sID: Int): String
++getServerAll(): String
+
++getPassword(uID: Int): (Int, String)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
