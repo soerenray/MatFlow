@@ -29,7 +29,11 @@ getConfigFileFromWorkflowInstance
 
 getActiveVersionOfWorkflowInstance (diese Anfrage brauche ich fürs Backend, deshalb habe ich sie übersehen)
 - gebe: name der WF-instanz
-- erwarte: versionsnummer der aktuellen version
+- erwarte: aktuelle Version inkl. config-Dateien
+
+getVersionNumbersOfWorkflowInstance
+-gebe: name der WF-instanz
+-erwarte: Nummern aller Versionen dieser Wf-instanz (in sortierter Reihenfolge [wenn einfach möglich, wenn nicht sortiere ich])
 
 ******************************************NEU
 
