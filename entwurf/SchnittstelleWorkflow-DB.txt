@@ -21,13 +21,17 @@ getNamesOfWorkflowsAndConfigFiles
   Wobei die Inneren Arrays die Form [<Name der WF-Instanz>, <Name 1. config file>, <Name 2. config file>, ...] haben
   Es gibt für JEDE Workflow-Instanz ein solches inneres Array
 
-getConfigFileOfWorkflowInstance
-- gebe: name einer workflow-instanz, name einer config file
-- erwarte: config-file der aktuellen verison der wf-instanz
-
 getConfigFileFromWorkflowInstance
 - gebe: name der WF-instanz, name der configFile 
 - erwarte: die configFile der aktuellen Version der genannten Instanz
+
+************************************NEU
+
+getActiveVersionOfWorkflowInstance (diese Anfrage brauche ich fürs Backend, deshalb habe ich sie übersehen)
+- gebe: name der WF-instanz
+- erwarte: versionsnummer der aktuellen version
+
+******************************************NEU
 
 createNewVersionOfWorkflowInstance
 - gebe: name der WF-instanz, neue Versionsnummer, Versionsnummer des Vorgängers, alle geänderten config Files (Directory von python os) 
