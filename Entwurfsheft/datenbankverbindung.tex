@@ -1,58 +1,95 @@
 \section{Datenbankverbindung}
 
 \subsection{Datenbankaufbau}
-Die Datenbank beinhaltet folgende Tabellen:\\
-\textnormal{$\underline{Primärschlüssel}$},
-\textnormal{$Fremdschlüssel_{Name\:in\:Ursprungstabelle}$}
+Die Datenbank beinhaltet folgende Tabellen:
 
-\begin{itemize}[noitemsep]
-	\item Server
-	\begin{itemize}[noitemsep]
-		\item $\textnormal{\underline{server\_ID}}$ :String
-		\item name :String
-		\item adress :String
-		\item limitWorkflows :int
-	\end{itemize}
-	\item User
-	\begin{itemize}[noitemsep]
-		\item $\textnormal{\underline{email}}$ :String
-		\item name :String
-		\item permission :int
-		\item password :String
-		\item hashnr :int
-	\end{itemize}
-	\item Workflow\_Template
-	\begin{itemize}[noitemsep]
-		\item \textnormal{$\underline{name}$} :String
-		\item \textnormal{$creator_{email\:in\:User}$} :String
-		\item dag :File
-		%muss ich noch recherchieren wie genau files gespeichert werden können
-	\end{itemize}
-	\item Workflow
-	\begin{itemize}[noitemsep]
-		\item $\textnormal{\underline{name}}$ :String
-		\item dag :File
-		\item files :File
-	\end{itemize}
-	\item Version
-	\begin{itemize}[noitemsep]
-		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
-		\item $\underline{version}$ :String
-		\item $creator_{email\:in\:User}$ :String
-		\item conf :file
-	\end{itemize}
-	\item Execution
-	\begin{itemize}[noitemsep]
-		\item $\underline{workflow}_{name\:in\:Workflow}$ :String
-		\item $\underline{version}_{in\:Version}$ :String
-		\item $\underline{server\_ID}_{in\:Server}$ :String
-		\item $executor_{email\:in\:User}$ :String
-		\item start :timestamp
-		\item stop :timestamp
-		\item result :file
-	\end{itemize}
-\end{itemize}
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{Server} &  & \\
+	\hline
+	name & String & $key; notNull$ \\
+	\hline
+	adress & String & $notNull$\\
+	\hline
+	containerlimit & int & $notNull$\\
+	\hline
+\end{tabular}
 
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{Workflow\_Template} &  & \\
+	\hline
+	name & String & $key; notNull$ \\
+	\hline
+	dag & .py -File & $notNull$\\
+	\hline
+\end{tabular}
+
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{Workflow} &  & \\
+	\hline
+	name & String & $key; notNull$ \\
+	\hline
+	files & String & $notNull$ \\
+	\hline
+	dag & .py  -File & $notNull$\\
+	\hline
+\end{tabular}
+
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{Version} & & \\
+	\hline
+	wfName & String & $key; notNull;$ name from Workflow\\
+	\hline
+	version & String & $key; notNull$ \\
+	\hline
+\end{tabular}
+
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{ActiveVersion} & & \\
+	\hline
+	wfName & String & $key; notNull;$ name from Workflow\\
+	\hline
+	version & String & $notNull;$ from Version\\
+	\hline
+\end{tabular}
+
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{VersionFile} & & \\
+	\hline
+	wfName & String & $key; notNull;$ name from Workflow\\
+	\hline
+	version & String & $key; notNull;$ from Version \\
+	\hline
+	confKey & String & $key; notNull;$ from ConfFiles \\
+	\hline
+\end{tabular}
+
+\paragraph{}
+\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+	\hline
+	\textbf{ConfFile} & & \\
+	\hline
+	confKey & String & $key; notNull$ \\
+	\hline
+	file & .conf -File & $notNull$ \\
+	\hline
+\end{tabular}
+
+\paragraph{Note}While the dag-file could be used as a key between Workflow\_Template and Workflow, it is not efficient to traverse over. On creation of a new Workflow, the based Template dag-file will be copied.
+
+
+% vv Neu schreiben vv
 \subsection{Database Package}
 
 Hier Package png und Erklärung
@@ -70,22 +107,6 @@ DatabaseTable ist die einzige Klasse die direkt mit der Datenbank kommuniziert. 
 
 
 
-
-+getUser(UID:Int): String
-+getUserAll(): String
-
-+getTemplate(tID: Int); String
-+getTemplate(): String
-+getWorkflow(wID: Int) :String
-+getWorkflowAll(): String
-+getWorkflowVersion(wID: Int, vID:String):String
-+getWorkflowVersionAll(wID: Int): String
-
-
-+getServer(sID: Int): String
-+getServerAll(): String
-
-+getPassword(uID: Int): (Int, String)
 
 
 
