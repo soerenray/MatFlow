@@ -39,12 +39,11 @@ getVersionNumbersOfWorkflowInstance
 
 createNewVersionOfWorkflowInstance
 - gebe: name der WF-instanz, neue Versionsnummer, Versionsnummer des Vorgängers, alle geänderten config Files (Directory von python os) 
-  + einen Eintrag für die "diff-Spalte" (das ist sind im Prinzip eine auflistung von 5-Tupeln von Strings)
 - erwarte: anlegen einer neuen Version -> abspeichern aller geänderten Files + kopieren der ungeänderten Files vom vorgänger
 
 getVersionsFromWorkflowInstance
 - gebe: name der WorkflowInstanz
-- erwarte: alle Versionsnummern + den jeweiligen Eintrag in der "diff-Spalte"
+- erwarte: Ein Array des Types "DatabaseVersion" (siehe mein Entwurf) das entsprecht: alle Versionsnummern + zu jeder Version die geänderten config-files
 
 setActiveVersionThroughNumber
 - gebe: Namen der WorkflowInstanz, Versionsnummer der version, die die aktive werden soll.
