@@ -1,11 +1,226 @@
 \subsubsection{Workflow Package}
 
+
+\paragraph{Class: WorkflowManager}
+This class provides a singleton object that receives all requests addressed to this package. This class is also communicating with the API of Airflow as well as with the Database package.
+\subparagraph{Methods}
+
+\subparagraph{getInstance():WorkflowManager}
+Returns the singleton object if already existing otherwise it calls the private constructor
+
+\subparagraph{createTemplate(template:Template):void}
+Causes the creation of a new template entry in the database. The new template can be used for creating workflow instances afterwards.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{template:}
+	A Template object that provides all the necessery components for creating a new workflow template
+\end{itemize}
+
+\subparagraph{Exceptions}
+\begin{itemize}
+	\item{DoubleTemplateNameException}
+	Gets thrown if the user trys to use an already existing template name
+	\item{InvalidDagFileException}
+	Gets thrown if the user hands over an invalid dag-definition-file
+\end{itemize}
+
+\subparagraph{createWorkflowInstanceFromTemplate(templateName:String, workflowInstanceName:String, configFiles:File[]):void}
+Causes the instantiation of a workflow instance under the use of a workflow template. 
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{templateName:}
+	The identifier of the template that is used for instantiation
+	\item{workflowInstanceName:}
+	The name of the new workflow instance
+	\item{configFiles:}
+	Cointains all the files needed for the execution of the workflow
+\end{itemize}
+
+\subparagraph{Exceptions}
+\begin{itemize}
+	\item{DoubleWorkflowInstanceNameException}
+	Gets thrown if the user trys to use an already existing workflow instance name
+	\item{EmptyConfigFolderException}
+	Gets thrown if the user hands over an empty config-folder
+\end{itemize}
+
+\subparagraph{getTemplateNames():String[]}
+Makes database request and returns the names of all templates in the system
+
+\subparagraph{getTemplateFromName(templateName:String):Template}
+Forwards the request for the named template to the database and returns result
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{templateName:}
+	The identifier of the desired template
+\end{itemize}
+
+\subparagraph{getNamesOfWorkflowsAndConfigFiles():String[][]}
+Forwards the request to the database and returns the names of all workflow instances in combination with the associated config-files
+
+\subparagraph{getKeyValuePairsFromConfigFile(workflowInstanceName:String,configFileName:String):String[][]}
+Requests the desired config-file from the current version of the named workflow instance from the database. Afterwards changes the format from a file into an array of key-value-pairs and returns the result
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstanceName:}
+	The identifier of the workflow instance
+	\item{configFileName:}
+	The name of the desired config file
+\end{itemize}
+
+\subparagraph{createNewVersionOfWorkflowInstance(workflowInstanceName:String,changedFiles:ReducedConfigFile[], versionNote:String):void}
+Causes the creation of a new version of the workflow instance in the database. The predecessor of the new version is the active version of the instance.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstanceName:}
+	The identifier of the workflow instance of which a new version is created
+	\item{changedFiles:}
+	The config-files that were changed in comparison to the predecessor version in key-value-pair representation
+	\item{versionNote}
+	Note about the new version given by the user
+\end{itemize}
+
+\subparagraph{getVersionsFromWorkflowInstance(workflowInstanceName:string):FrontendVersion[]}
+Requests information about all the versions of the given workflow instance from the database. Afterwards calculates the difference to the predecessor for every version and returns that information in combination with the version numbers and version notes
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstanceName:}
+	The identifier of the given workflow instance
+\end{itemize}
+
+\subparagraph{setActiveVersionThroughNumber(workflowInstanceName:String, versionNumber:String):void}
+Changes the active version of a workflow instance in the database
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstanceName:}
+	The name of the workflow instance of which the active version shall be changed
+	\item{versionNumber:}
+	The number of the new active version
+\end{itemize}
+
+\subparagraph{Exceptions}
+\begin{itemize}
+	\item{WorkflowRunningException}
+	Gets thrown if the workflow instance is running. In that case the active version can not be changed
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Class: Template}
+This class represents a workflow template. It contains the identifying name of the template as well as a dag-definition-file.
+\subparagraph{Constructor}
+
+\subparagraph{Template(name:String, dagDefinitionFile:File):Template}
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{name:}
+	The name of the new template
+	\item{dagDefinitionFile:}
+	The file which defines the behavior of workflows instantiated of this template
+\end{itemize}
+
+\subparagraph{Exceptions}
+\begin{itemize}
+	\item{DoubleTemplateNameException}
+	Gets thrown if the database already contains a template with the given name
+	\item{InvalidDagFileException}
+	Gets thrown if the handed dag-definition-file is invalid
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Class: WorkflowInstance}
+This class represents a workflow template. It contains the identifying name of the template as well as a dag-definition-file.
+\subparagraph{Constructor}
+
+\subparagraph{WorkflowInstance(name:String, dagDefinitionFile:File, configFolder:File[]):WorkflowInstance}
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{name:}
+	The identifying name of the workflow instance
+	\item{dagDefinitionFile:}
+	The file which defines the behavior of the workflow instance
+	\item{configFolder:}
+	An array of files that is needed for executing the workflow
+\end{itemize}
+
+\subparagraph{Exceptions}
+\begin{itemize}
+	\item{DoubleWorkflowInstanceNameException}
+	Gets thrown if the workflow instance name is already given away to another workflow instance
+	\item{EmptyConfigFolderException}
+	Gets thrown if the handed configFolder-array is empty
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Class: ParameterChange}
+This class represents the change of a key-value pair. It contains the old aswell as the new version of both the key aswell as the value. Furthermore it holds the name of the file the change was made in.
+\subparagraph{Constructor}
+
+\subparagraph{ParameterChange(oldKey:String, newKey:String, oldValue:String, newValue:String, configFileName:String):ParameterChange}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Class: ReducedConfigFile}
+This class holds all information to represent a config-file in the frontend.
+\subparagraph{Constructor}
+
+\subparagraph{ReducedConfigFile(fileName:String, keyValuePairs:(String,String)[]):ReducedConfigFile}
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{fileName:}
+	The name of the config-file through which the config-file can be identified among other config files of the workflow instance
+	\item{keyValuePairs:}
+	The contents of the file in key-value-pair representation
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Class: ConfigFile}
+This is a subclass of ReducedConfigFile and additionally holds the config-file itself aswell as the name of the associated workflow instance.
+\subparagraph{Constructor}
+
+\subparagraph{ConfigFile(workflowInstanceName:String, configFileName:String, file:File):ConfigFile}
+It isn't necessary to hand the key-value-pairs because they can be derived from the file itself.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstanceName:}
+	The name of the associated workflow instance
+	\item{configFileName:}
+	The name of the config-file through which the config-file can be identified among other config files of the workflow instance
+	\item{file:}
+	The actual config-file
+\end{itemize}
+
+\subparagraph{Methods}
+
+\subparagraph{applyChanges(changes:ReducedConfigFile):void}
+The method compares the key-value-pairs given through the ReducedConfigFile to the pairs of the object itself. Changes detected are applied to the actual config file that is located in the database.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{changes:}
+	Contains the key-value-pairs of the file after the changes made by the user in the frontend
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \paragraph{Class: Version}
-Kommentar zur Klasse TODO
+This class represents a version of a workflow instance. It's main task is to switch between the two different representations of versions one in the frontend, one in the database.
 \subparagraph{Constructor}
 
 \subparagraph{Version(versionNumber:VersionNumber, note:String):Version}
-%bei derart trivialen Konstruktoren/Methoden spare ich mir einen Funktionskommentar
 
 \subparagraph{Parameters}
 \begin{itemize}
@@ -72,3 +287,5 @@ This method calculates the smallest free successor of the VersionNumber for the 
 	\item{workflowInstance:}
 	Identifier of the workflow instance to which the new number corresponds to
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
