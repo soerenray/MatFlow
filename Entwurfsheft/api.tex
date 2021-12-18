@@ -1,0 +1,19 @@
+\subsubsection{API Schnittstelle}
+\paragraph{Class: FrontendAPI}
+Diese Klasse ist der Dreh- und Angelpunkt der ganzen Anwendung. Alle Anfragen von der Client Applikation werden an diese API, 
+entworfen im Bequemlichkeitsmuster der \textbf{Fassade}, (im JSON Format) geschickt. Die Entscheidung FrontendAPI als 
+\textbf{Singleton} zu entwerfen besteht darin, dass die API eine global ansprechbare Instanz sein soll, die auf dem Server an 
+einem bestimmten Port laufen soll. Wie dies geschieht sind Implementierungsdetails, bei denen das eingebundene Framework 
+\textbf{Flask} hilft, muss aber in die Entwurfsentscheidung einbezogen werden.
+\subparagraph{Constructor}
+
+\subparagraph{Version(versionNumber:VersionNumber, note:String):Version}
+%bei derart trivialen Konstruktoren/Methoden spare ich mir einen Funktionskommentar
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{versionNumber:}
+	Number that identifies the new Version
+	\item{note:}
+	TODO
+\end{itemize}
