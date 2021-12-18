@@ -12,6 +12,63 @@ Kommentar zur Klasse TODO
 	\item{versionNumber:}
 	Number that identifies the new Version
 	\item{note:}
-	TODO
+	Note from user that can be used for documenting the version
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Class: FrontendVersion}
+This class inherits from Version and is specialized to satisfy the need for information of the client application
+\subparagraph{Constructor}
+
+\subparagraph{FrontendVersion(versionNumber:VersionNumber, note:String, changes:ParameterChange[]):FrontendVersion}
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{versionNumber:}
+	Number that identifies the new Version
+	\item{note:}
+	Note from user that can be used for documenting the version
+	\item{changes:}
+	Contains the difference to the predecessor version in form of the changed key-value-pairs
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Class: DatabaseVersion}
+This class inherits from Version and is specialized to fit the way versions are managed in the database
+\subparagraph{Constructor}
+
+\subparagraph{DatabaseVersion(versionNumber:VersionNumber, note:String, changedConfigFiles:File[]):DatabaseVersion}
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{versionNumber:}
+	Number that identifies the new Version
+	\item{note:}
+	Note from user that can be used for documenting the version
+	\item{changedConfigFiles:}
+	Contains all the config-files that were changed in this version
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\paragraph{Class: VersionNumber}
+This class represents string expressions that are valid version numbers
+\subparagraph{Methods}
+
+\subparagraph{static fromString(number:String):VersionNumber}
+This static method converts a string of correct syntax into a VersionNumber by calling the private constructor.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{number:}
+	String that has to fit the regular expression of a version number
+\end{itemize}
+
+\subparagraph{getSuccessor(workflowInstance:String):VersionNumber}
+This method calculates the smallest free successor of the VersionNumber for the given workflow instance
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{workflowInstance:}
+	Identifier of the workflow instance to which the new number corresponds to
+\end{itemize}
