@@ -1,19 +1,44 @@
-\subsubsection{API Schnittstelle}
+\subsubsection{API Package}
+\paragraph{Package: api} This package is the interface between the client's application and the server application. 
+All requests are sent to this API(package) in JSON format.
 \paragraph{Class: FrontendAPI}
-Diese Klasse ist der Dreh- und Angelpunkt der ganzen Anwendung. Alle Anfragen von der Client Applikation werden an diese API, 
-entworfen im Bequemlichkeitsmuster der \textbf{Fassade}, (im JSON Format) geschickt. Die Entscheidung FrontendAPI als 
-\textbf{Singleton} zu entwerfen besteht darin, dass die API eine global ansprechbare Instanz sein soll, die auf dem Server an 
-einem bestimmten Port laufen soll. Wie dies geschieht sind Implementierungsdetails, bei denen das eingebundene Framework 
-\textbf{Flask} hilft, muss aber in die Entwurfsentscheidung einbezogen werden.
-\subparagraph{Constructor}
+This class is the main interface of the whole application.The decision to design FrontendAPI as
+ \textbf{Singleton} pattern means that the API should be a globally accessible instance that runs on the server
+on a certain port. The way this happens happens is an  implementation detail with which the framework
+\textbf{Flask} helps, but the base idea must be respected in the software design decision. The client application
+can get the api status code to obtain information regarding the execution of api calls (e.g. status code
+changes when an exception has been thrown)
 
-\subparagraph{Version(versionNumber:VersionNumber, note:String):Version}
-%bei derart trivialen Konstruktoren/Methoden spare ich mir einen Funktionskommentar
+\paragraph{get\texttt{\_}FrontendAPI():FrontendAPI} returns the FrontendAPI in singleton design fashion, meaning there is only one instance
+of FrontendAPI in circulation at all times.
 
-\subparagraph{Parameters}
+\paragraph{get\texttt{\_}status\texttt{\_}code():int} return status code  
+
+\paragraph{set\texttt{\_}status\texttt{\_}code(status\texttt{\_}code:int)}
+sets the status code, only performed by the \textbf{ExceptionHandler}
 \begin{itemize}
-	\item{versionNumber:}
-	Number that identifies the new Version
-	\item{note:}
-	TODO
+        \item \textbf{status\texttt{\_}code}
+        the status code showing the state of the latest API call
 \end{itemize}
+
+\paragraph{get\texttt{\_}server\texttt{\_}details():String}
+gets all server details (container limit, cpu resources, ..) and returns them in a json format
+(json.dumps is interpreted as String in native python)
+
+\paragraph{set\texttt{\_}server\texttt{\_}details(json\texttt{\_}details): String)}
+sets all server details (container limit, cpu resources, ..) in a json format
+(json objects are interpreted as String in native python). Only one bulk update as a whole
+due to long delay with server communication from client's perspective
+\begin{itemize}
+        \item \textbf{server\texttt{\_}details}
+        all server details in json format
+\end{itemize}
+
+\paragraph{get\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(): String}
+gets all server details (container limit, cpu resources, ..) in a json format
+(json objects are interpreted as String in native python). Only one bulk update as a whole
+due to long delay with server communication from client's perspective
+
+
+
+
