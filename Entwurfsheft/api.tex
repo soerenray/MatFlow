@@ -9,36 +9,193 @@ on a certain port. The way this happens happens is an  implementation detail wit
 can get the api status code to obtain information regarding the execution of api calls (e.g. status code
 changes when an exception has been thrown)
 
-\paragraph{get\texttt{\_}FrontendAPI():FrontendAPI} returns the FrontendAPI in singleton design fashion, meaning there is only one instance
-of FrontendAPI in circulation at all times.
+\subparagraph{static get\texttt{\_}FrontendAPI(): FrontendAPI} returns the FrontendAPI in singleton design fashion, meaning 
+there is only one instance of FrontendAPI in circulation at all times.
 
-\paragraph{get\texttt{\_}status\texttt{\_}code():int} return status code  
+\subparagraph{get\texttt{\_}status\texttt{\_}code(): int} return status code  
 
-\paragraph{set\texttt{\_}status\texttt{\_}code(status\texttt{\_}code:int)}
+\subparagraph{set\texttt{\_}status\texttt{\_}code(status\texttt{\_}code: int)}
 sets the status code, only performed by the \textbf{ExceptionHandler}
 \begin{itemize}
         \item \textbf{status\texttt{\_}code}
         the status code showing the state of the latest API call
 \end{itemize}
 
-\paragraph{get\texttt{\_}server\texttt{\_}details():String}
-gets all server details (container limit, cpu resources, ..) and returns them in a json format
-(json.dumps is interpreted as String in native python)
+\subparagraph{get\texttt{\_}server\texttt{\_}details(): String}
+gets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) 
+and returns them in a json format (json.dumps is interpreted as String in native python)
 
-\paragraph{set\texttt{\_}server\texttt{\_}details(json\texttt{\_}details): String)}
-sets all server details (container limit, cpu resources, ..) in a json format
-(json objects are interpreted as String in native python). Only one bulk update as a whole
+\subparagraph{set\texttt{\_}server\texttt{\_}details(json\texttt{\_}details: String)}
+sets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) in
+ a json format (json objects are interpreted as String in native python). Only one bulk update as a whole
 due to long delay with server communication from client's perspective
 \begin{itemize}
         \item \textbf{server\texttt{\_}details}
         all server details in json format
 \end{itemize}
 
-\paragraph{get\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(): String}
-gets all server details (container limit, cpu resources, ..) in a json format
+\subparagraph{get\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(): String}
+gets all users and their details (user names, privileges, statuses) in a json format
 (json objects are interpreted as String in native python). Only one bulk update as a whole
 due to long delay with server communication from client's perspective
 
 
+\subparagraph{set\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(json\texttt{\_}details: String)}
+sets all user details (user name, privilege, statuse) for a specific user in a json format
+(json objects are interpreted as String in native python). Only one bulk update as a whole
+due to long delay with server communication from client's perspective. If user does not already exist, one will be created.
 
+\subparagraph{delete\texttt{\_}user(json\texttt{\_}details: String)}
+deletes a user by username
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        json object which only contains the username key and value
+\end{itemize}
+
+
+%ab hier wf
+\subparagraph{get\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
+(json\texttt{\_}details: String): String}
+returns a json object containing workflow instance's version number key and value
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        json object which only contains the workflow instance name and version number key and value
+\end{itemize}
+
+\subparagraph{replace\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
+(json\texttt{\_}details: String)}
+replaces the (active) workflow instance's version number 
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        json object which only contains the workflow instance name key and value and version number key and value
+\end{itemize}
+
+
+\subparagraph{set\texttt{\_}config\texttt{\_}file(json\texttt{\_}details)}
+changes multiple config files based on input/ key value pair changes in client's applications during workflow instance 
+configuration
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        json object which contains the changed config files and respectively their changed values, contains workflow
+        instance key and value
+\end{itemize}
+
+\subparagraph{get\texttt{\_}config\texttt{\_}from\texttt{\_}wf\texttt{\_}instance(json\texttt{\_}details): String}
+gets all config file names related to specific workflow instance (version)
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        json object which contains the wanted workflow instance name and its respective version
+\end{itemize}
+
+
+\subparagraph{get\texttt{\_}all\texttt{\_}wf\texttt{\_}instances\texttt{\_}and\texttt{\_}config\texttt{\_}files
+(json\texttt{\_}details: String)}
+gets all  config file \textbf{names} (method is used when no config file has been referenced to workflow instance)
+
+\subparagraph{verify\texttt{\_}lgin(json\texttt{\_}details:String)}
+verifies username with associated password
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains username and password
+\end{itemize}
+
+\subparagraph{register(json\texttt{\_}details:String)}
+registers a new user
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains username, password and repeated password
+\end{itemize}
+
+%neue Klasse
+\paragraph{Class : JSONToPython}
+This class converts all json data into the wanted object by extracting certain keys and values and instantiating
+a new (temporary) object which executes the wanted methods (e.g. extract server and then execute set new container limit).
+Instantiated objects will be deleted by the garbage collection after they are finished writing back / getting data
+from the database.
+
+\subparagraph{static extract\texttt{\_}user(json\texttt{\_}details:String): User}
+extracts json details and builds a new User based off of these json details
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains username, privilege and status
+\end{itemize}
+
+\subparagraph{static extract\texttt{\_}server(json\texttt{\_}details:String): Server}
+extracts json details and builds a new Server based off of these json details
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains servername, container limit, cpu and gpu resources, executing server (yes/no) and ip address
+\end{itemize}
+
+\subparagraph{static extract\texttt{\_}template(json\texttt{\_}details:String): Template}
+extracts json details and builds a new Template based off of these json details
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains dag definition file name and template name
+\end{itemize}
+
+%Unklar wie config files verschickt werden
+\subparagraph{static extract\texttt{\_}configs(json\texttt{\_}details:String): ConfigFile[]}
+extracts json details and builds a new ConfigFile array based off of these json details
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains config files which in themselves contain config file name, workflow instance name,
+        and key value pairs
+\end{itemize}
+
+%neue Klasse
+\paragraph{Class : PythonToJSON}
+This class converts all python objects into json data by extracting certain keys and values and dumping
+them into a json object.
+
+\subparagraph{static encode\texttt{\_}user(user: User): String}
+extracts all user attributes and dumps them into json object
+\begin{itemize}
+        \item \textbf{user}
+        user whose attributes are to be encoded
+\end{itemize}
+
+\subparagraph{static encode\texttt{\_}server(server: Server): String}
+extracts all server attributes and dumps them into json object
+\begin{itemize}
+        \item \textbf{user}
+        server whose attributes are to be encoded
+\end{itemize}
+
+\subparagraph{static encode\texttt{\_}template(template: Template): String}
+extracts template attributes and dumps them into json object
+\begin{itemize}
+        \item \textbf{user}
+        template whose attributes are to be encoded
+\end{itemize}
+
+\subparagraph{static encode\texttt{\_}wf\texttt{\_}instance(wf\texttt{\_}instance: WorkflowInstance): String}
+extracts workflow instance attributes and dumps them into json object
+\begin{itemize}
+        \item \textbf{user}
+        workflow instance whose attributes are to be encoded
+\end{itemize}
+
+\subparagraph{static encode\texttt{\_}config(config: ConfigFile): String}
+extracts config file attributes and dumps them into json object
+\begin{itemize}
+        \item \textbf{user}
+        config file whose attributes are to be encoded
+\end{itemize}
+
+%neue Klasse
+\paragraph{Class: Exception Handler}
+This class handles all MatFlowExceptions and those who inherit from MatFlowException. It is  
+responsible for changing the API's status code.
+
+\subparagraph{handle\texttt{\_}exception(exception: MatFlowException)}
+sets the API's status code to the specific exception's status code by calling the private method
+set\texttt{\_}status\texttt{\_}code.
+\begin{itemize}
+        \item \textbf{exception}
+        specific MatFlowException that was thrown during request
+\end{itemize}
+
+\subparagraph{success()}
+sets status code to success code
 
