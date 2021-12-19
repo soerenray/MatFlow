@@ -1,5 +1,5 @@
 \subsubsection{Workflow Package}
-
+This package defines the logic behind the creation and the management of workflow templates, workflow instances and versions of workflow instances. It receives requests in the singleton object of WorkflowManager from the client application through the api package of the server application. The package also communicates with the database interface to safe and recall data aswell as with the API of Apache Airflow.
 
 \paragraph{Class: WorkflowManager}
 This class provides a singleton object that receives all requests addressed to this package. This class is also communicating with the API of Airflow as well as with the Database package.
