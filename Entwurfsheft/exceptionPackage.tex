@@ -1,1 +1,97 @@
 \subsubsection{Exception package}
+
+\paragraph{Class: Exception}
+This is the native Python exception package. See \url{https://docs.python.org/3/tutorial/errors.html} 
+for more information on usage and best practices.
+
+\paragraph{Class: MatFlowException}
+This is the MatFlow parent exception from which all the specified exceptions inherit. It adds more functionality to 
+a standard exception through the exception's status code and function which gets the status code. This is important for our
+\nameref{API}.
+\subparagraph{Constructor}
+\subparagraph{MatFlowException(message: String, status\texttt{\_}code: int): MatFlowException}
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{message:}
+	The message that is displayed when the exception is thrown. Native to the parent class but not relevant to application,
+    nevertheless intriguing when extending this application 
+    \item{status\texttt{\_}code:}
+	The status code representing the thrown exception
+\end{itemize}
+
+\subparagraph{Methods}
+\subparagraph{get\texttt{\_}status\texttt{\_}code(): int}
+gets the status code
+
+
+\paragraph{Class: UserExistsException}
+This is an exception that is thrown when a user does not exist.
+\subparagraph{Constructor}
+
+\subparagraph{UserExistsException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+\paragraph{Class: DoubleTemplateNameException}
+This is an exception that is thrown when the desired template name already exists.
+\subparagraph{Constructor}
+
+\subparagraph{DoubleTemplateNameException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+
+\paragraph{Class: InvalidDagFileException}
+This is an exception that is thrown when the dag definition file is not correct.
+\subparagraph{Constructor}
+
+\subparagraph{InvalidDagFileException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+
+\paragraph{Class: DoubleWorkflowInstanceNameException}
+This is an exception that is thrown when the desired workflow instance name already exists.
+\subparagraph{Constructor}
+
+\subparagraph{DoubleWorkflowInstanceNameException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+
+\paragraph{Class: EmptyConfigFolderException}
+This is an exception that is thrown when the config folder is empty, meaning that no config can be selected.
+\subparagraph{Constructor}
+
+\subparagraph{EmptyConfigFolderException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+
+\paragraph{Class: WorkflowInstanceRunningException}
+This is an exception that is thrown when the workflow instance is already running.
+\subparagraph{Constructor}
+
+\subparagraph{WorkflowInstanceRunningException(message : String)}
+\subparagraph{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+
+
