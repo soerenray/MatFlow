@@ -1,0 +1,121 @@
+\subsubsection{User Administration}
+
+
+\paragraph{Class: Registration}
+This class is used to sign up new Users for our application and also for airflow.
+\subparagraph{Methods}
+
+\subparagraph{signUser(username: String, password: password): boolean}
+
+Method uses username and password to sign up new user and returns a boolean to confirm the registration
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{username:}
+	The preferred username
+	\item{password:}
+	The preferred password
+\end{itemize}
+
+
+
+\paragraph{Class: User}
+This class is used to construct new Users.
+\subparagraph{Constructor}
+
+\subparagraph{user(username: string, status: string, privilege: string)}
+
+\subparagraph{Parameters}
+
+\begin{itemize}
+	\item{username:}
+	The users username
+	\item{status:}
+	The users status. Can be active, inactive or banned
+	\item{privilege:}
+	The users privilege. Can be Reviewer, Develloper or Admin
+\end{itemize}
+
+
+
+\paragraph{Class: Login}
+This class is used to log in existing Users.
+\subparagraph{Methods}
+
+\subparagraph{loginUser(username: String, password: password): boolean}
+
+Method uses username and password to log in user and returns a boolean to confirm the login.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{username:}
+	The username to log in
+	\item{password:}
+	The password to log in
+\end{itemize}
+
+
+
+
+\paragraph{Class: UserAdministration}
+This class is used to change the parameters of existing users.
+
+\subparagraph{Constructor}
+
+\subparagraph{userAdministration(user: user)}
+
+\subparagraph{Parameters}
+
+\begin{itemize}
+	\item{user:}
+	The user that needs to be edited
+\end{itemize}
+
+\subparagraph{Methods}
+
+\subparagraph{deleteUser(user:user): void}
+
+Method gets the wanted User and deltes him. Afterwards the user is not able to log in anymore.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{user:}
+	The user that is supposed to get deleted
+\end{itemize}
+
+
+\subparagraph{resetPassword(oldPassword: password, newPassword: password): void}
+
+Method resets the users password and sets the new password.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{oldPassword:}
+	The users old password that gets deleted
+	\item{newPassword:}
+	The users new password that is getting set
+\end{itemize}
+
+\subparagraph{setPrivilege(privilege: string): void}
+
+Method resets the users old privilege and updates to the new privilege.
+
+\subparagraph{Parameters}
+\begin{itemize}
+	\item{privilege:}
+	The privilege the user gets updated to
+\end{itemize}
+
+\subparagraph{activateUser(): void}
+
+Method activates the User. The User can now log in to the application.
+
+
+
+
+
+
+
+
+
+
