@@ -1,7 +1,9 @@
 \subsubsection{API Package}
 \paragraph{Package: api} This package is the interface between the client's application and the server application. 
 All requests are sent to this API(package) in JSON format.
+
 \paragraph{Class: FrontendAPI}
+
 This class is the main interface of the whole application.The decision to design FrontendAPI as
  \textbf{Singleton} pattern means that the API should be a globally accessible instance that runs on the server
 on a certain port. The way this happens happens is an  implementation detail with which the framework
