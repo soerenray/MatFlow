@@ -4,7 +4,7 @@
 Die Datenbank beinhaltet folgende Tabellen:
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
 	\hline
 	\textbf{Workflow\_Template} &  & \\
 	\hline
@@ -12,10 +12,10 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	dag & .py -File & $notNull$\\
 	\hline
-\end{tabular}
+\end{dataTable}
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
 	\hline
 	\textbf{Workflow} &  & \\
 	\hline
@@ -25,10 +25,23 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	dag & .py  -File & $notNull$\\
 	\hline
-\end{tabular}
+\end{dataTable}
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
+	\hline
+	\textbf{FolderFile} &  & \\
+	\hline
+	wfname & String & $key; notNull;$ name from Workflow\\
+	\hline
+	filesID & int & $key; notNull$ \\
+	\hline
+	file & File & $notNull$\\
+	\hline
+\end{dataTable}
+
+\paragraph{}
+\begin{dataTable}
 	\hline
 	\textbf{Version} & & \\
 	\hline
@@ -38,10 +51,10 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	note & String & \\
 	\hline
-\end{tabular}
+\end{dataTable}
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
 	\hline
 	\textbf{ActiveVersion} & & \\
 	\hline
@@ -49,10 +62,10 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	version & String & $notNull;$ from Version\\
 	\hline
-\end{tabular}
+\end{dataTable}
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
 	\hline
 	\textbf{VersionFile} & & \\
 	\hline
@@ -62,10 +75,10 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	confKey & String & $key; notNull;$ from ConfFiles \\
 	\hline
-\end{tabular}
+\end{dataTable}
 
 \paragraph{}
-\begin{tabular}{|p{4cm}|p{2cm}|p{6cm}|}
+\begin{dataTable}
 	\hline
 	\textbf{ConfFile} & & \\
 	\hline
@@ -73,11 +86,25 @@ Die Datenbank beinhaltet folgende Tabellen:
 	\hline
 	file & .conf -File & $notNull$ \\
 	\hline
-\end{tabular}
+\end{dataTable}
 
-\paragraph{Notiz} Die dag Datei hätte als Schlüssel zwischen Workflow\_Template und Workflow fungieren können, ist aber redundant für alle Operationen auf einem Workflow.
+\paragraph{}
+\begin{dataTable}
+	\hline
+	\textbf{ResultFile} &  & \\
+	\hline
+	wfname & String & $key; notNull;$ name from Workflow\\
+	\hline
+	version & String & $key; notNull;$ from Version \\
+	\hline
+	filesID & int & $key; notNull$ \\
+	\hline
+	file & File & $notNull$\\
+	\hline
+\end{dataTable}
+
+\paragraph{Anmerkung} Die dag Datei hätte als Schlüssel zwischen Workflow\_Template und Workflow fungieren können, ist aber redundant für alle Operationen auf einem Workflow.
 Deshalb wurde entschieden die Datei bei einer Workflowerstellung direkt zu kopieren.
-
 
 
 \newpage
