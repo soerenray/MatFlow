@@ -4,10 +4,7 @@ All requests are sent to this API(package) in JSON format.
 
 \paragraph{Class: FrontendAPI}
 
-This class is the main interface of the whole application.The decision to design FrontendAPI as
- \textbf{Singleton} pattern means that the API should be a globally accessible instance that runs on the server
-on a certain port. The way this happens happens is an  implementation detail with which the framework
-\textbf{Flask} helps, but the base idea must be respected in the software design decision. The client application
+This class is the main interface of the whole application. The client application
 can get the api status code to obtain information regarding the execution of api calls (e.g. status code
 changes when an exception has been thrown)
 
@@ -25,11 +22,11 @@ sets the status code, only performed by the \textbf{ExceptionHandler}
 
 \subparagraph{get\texttt{\_}server\texttt{\_}details(): String}
 gets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) 
-and returns them in a json format (json.dumps is interpreted as String in native python)
+and returns them in a json format 
 
 \subparagraph{set\texttt{\_}server\texttt{\_}details(json\texttt{\_}details: String)}
 sets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) in
- a json format (json objects are interpreted as String in native python). Only one bulk update as a whole
+ a json format. Only one bulk update as a whole
 due to long delay with server communication from client's perspective
 \begin{itemize}
         \item \textbf{server\texttt{\_}details}
@@ -37,14 +34,12 @@ due to long delay with server communication from client's perspective
 \end{itemize}
 
 \subparagraph{get\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(): String}
-gets all users and their details (user names, privileges, statuses) in a json format
-(json objects are interpreted as String in native python). Only one bulk update as a whole
+gets all users and their details (user names, privileges, statuses) in a json format. Only one bulk update as a whole
 due to long delay with server communication from client's perspective
 
 
 \subparagraph{set\texttt{\_}all\texttt{\_}users\texttt{\_}and\texttt{\_}details(json\texttt{\_}details: String)}
-sets all user details (user name, privilege, statuse) for a specific user in a json format
-(json objects are interpreted as String in native python). Only one bulk update as a whole
+sets all user details (user name, privilege, statuse) for a specific user in a json format. Only one bulk update as a whole
 due to long delay with server communication from client's perspective. If user does not already exist, one will be created.
 
 \subparagraph{delete\texttt{\_}user(json\texttt{\_}details: String)}
@@ -136,8 +131,8 @@ extracts json details and builds a new Template based off of these json details
         contains dag definition file name and template name
 \end{itemize}
 
-\subparagraph{static extract\texttt{\_}configs(json\texttt{\_}details:String): ConfigFile[]}
-extracts json details and builds a new ConfigFile array based off of these json details
+\subparagraph{static extract\texttt{\_}configs(json\texttt{\_}details:String): ReducedConfigFile[]}
+extracts json details and builds a new ReducedConfigFile array based off of these json details
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
         contains config files names which in themselves contain config file name, workflow instance name,
@@ -177,8 +172,8 @@ extracts workflow instance attributes and dumps them into json object
         workflow instance whose attributes are to be encoded
 \end{itemize}
 
-\subparagraph{static encode\texttt{\_}config(config: ConfigFile): String}
-extracts config file attributes and dumps them into json object
+\subparagraph{static encode\texttt{\_}config(config: ReducedConfigFile): String}
+turns key value pairs into json object
 \begin{itemize}
         \item \textbf{user}
         config file whose attributes are to be encoded
