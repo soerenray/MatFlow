@@ -1,4 +1,4 @@
 \newcommand{\class}[1]{\begin{center}\Large\bfseries Class: #1 \end{center}}
-\newcommand{\method}[1]{\textbf{#1}}
-\newcommand{\methods}{\large Methods \newline}
-\newcommand{\constructor}{\large Constructor \newline}
+\newcommand{\method}[1]{\item \textbf{#1}}
+\newenvironment{methodenv}[1]{\paragraph{#1}\begin{itemize}}{\end{itemize}}
+\newcommand{\smallPara}[1]{\subparagraph{\small #1}}
