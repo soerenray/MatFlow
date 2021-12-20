@@ -1,4 +1,11 @@
 \subsection{Server}
 
+\subsubsection{\nameref{API}}
+\includegraphics[width=1\textwidth]{res/api.drawio.png}
+Dieses Package ist zuständig für die Kommunikation zwischen der Client Applikation und der Serverapplikation (siehe Kapitel 
+Kommunikation). Anfragen an die Klasse FrontendAPI werden an die dementsprechenden packages weitergeleitet, wo diese konkret 
+ausgeführt werden. Diese Klasse fängt alle Exceptions und leitet sie an die Klasse ExceptionHandler weiter.
+In der ExceptionHandler Klasse wird dann der Status Code der FrontendAPI Klasse geändert, der für den Client aussagekräftig
+darüber ist welcher Fehler geworfen wurde.
 
 \newpage
