@@ -1,8 +1,10 @@
-\subsection{Database}
+\subsubsection{Database}
 
 \subsubsection{WorkflowData}
 Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeinträgen für Workflows arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine \textbf{MatFlowException}.
+
+Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
 
 \paragraph{createWorkflowInstanceFromTemplate(tName: String, wfName: String, confFold: Folder):void}
 Create a new instance of a workflow by using the dag-file of a Template, 
@@ -65,6 +67,8 @@ Return a sortet list of Strings of all Versions of a Workflow.
 Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeinträgen für Workflow\_Template arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine \textbf{MatFlowException}.
 
+Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
+
 \paragraph{createTemplate(template:Template):void}
 Read Values from template and convert them into a sql query.
 Throw error if name already exists.
@@ -89,6 +93,8 @@ Throw error if Template doesn't exist.
 
 \subsubsection{DatabaseTable}
 DatabaseTable ist die einzige Klasse die direkt mit der Datenbank kommuniziert. Ihre Funktion ist hauptsächlich MySQL Befehle entgegennimmt, diese an die Datenbank weiterzugeben und die dadurch erhaltenen Antworten zurückgibt. Im Fall eines Fehlers, wie einem leeren Ergebnis oder eines ungültigen Befehls wird eine \textbf{MatFlowException} geworfen.
+
+Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
 
 \paragraph{set(create: String):String} Create new entry on Database. Try to execute create on Database and return value.
 \begin{itemize}
