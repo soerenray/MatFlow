@@ -55,21 +55,20 @@ deletes a user by username
 \end{itemize}
 
 
-%ab hier wf
 \subparagraph{get\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
 (json\texttt{\_}details: String): String}
-returns a json object containing workflow instance's version number key and value
+returns workflow instance's version number 
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        json object which only contains the workflow instance name and version number key and value
+        json object which only contains the workflow instance name and version number 
 \end{itemize}
 
 \subparagraph{replace\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
 (json\texttt{\_}details: String)}
-replaces the (active) workflow instance's version number 
+replaces the specified workflow instance's version number 
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        json object which only contains the workflow instance name key and value and version number key and value
+        json object which only contains the workflow instance name and version number
 \end{itemize}
 
 
@@ -78,21 +77,22 @@ changes multiple config files based on input/ key value pair changes in client's
 configuration
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        json object which contains the changed config files and respectively their changed values, contains workflow
-        instance key and value
+        json object which contains the changed config files name, 
+        all key value pairs per config file, 
+        contains workflow instance name
 \end{itemize}
 
 \subparagraph{get\texttt{\_}config\texttt{\_}from\texttt{\_}wf\texttt{\_}instance(json\texttt{\_}details): String}
 gets all config file names related to specific workflow instance (version)
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        json object which contains the wanted workflow instance name and its respective version
+        json object which contains the wanted workflow instance name and its respective version and config file name
 \end{itemize}
 
 
-\subparagraph{get\texttt{\_}all\texttt{\_}wf\texttt{\_}instances\texttt{\_}and\texttt{\_}config\texttt{\_}files
-(json\texttt{\_}details: String)}
-gets all  config file \textbf{names} (method is used when no config file has been referenced to workflow instance)
+\subparagraph{get\texttt{\_}all\texttt{\_}wf\texttt{\_}instances\texttt{\_}names\texttt{\_}and\texttt{\_}config\texttt{\_}files
+\texttt{\_}names(json\texttt{\_}details: String)}
+gets all  config file and all workflow instances \textbf{names} 
 
 \subparagraph{verify\texttt{\_}lgin(json\texttt{\_}details:String)}
 verifies username with associated password
@@ -136,12 +136,11 @@ extracts json details and builds a new Template based off of these json details
         contains dag definition file name and template name
 \end{itemize}
 
-%Unklar wie config files verschickt werden
 \subparagraph{static extract\texttt{\_}configs(json\texttt{\_}details:String): ConfigFile[]}
 extracts json details and builds a new ConfigFile array based off of these json details
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        contains config files which in themselves contain config file name, workflow instance name,
+        contains config files names which in themselves contain config file name, workflow instance name,
         and key value pairs
 \end{itemize}
 
