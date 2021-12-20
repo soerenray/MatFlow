@@ -2,6 +2,12 @@
 This package defines the logic behind the creation and the management of workflow templates, workflow instances and versions of workflow instances. It receives requests in the singleton object of WorkflowManager from the client application through the api package of the server application. The package also communicates with the database interface to safe and recall data aswell as with the API of Apache Airflow.
 
 \class{WorkflowManager}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/WorkflowManager.pdf}}
+\caption{WorkflowManager class from class diagram}
+\end{figure}
+
 This class provides a singleton object that receives all requests addressed to this package. This class is also communicating with the API of Airflow as well as with the Database package.
 
 \begin{methodenv}{Methods}
@@ -115,6 +121,12 @@ Changes the active version of a workflow instance in the database
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \class{Template}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/Template.pdf}}
+\caption{Template class from class diagram}
+\end{figure}
+
 This class represents a workflow template. It contains the identifying name of the template as well as a dag-definition-file.
 
 \begin{methodenv}{Constructor}
@@ -141,6 +153,12 @@ This class represents a workflow template. It contains the identifying name of t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{WorkflowInstance}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/WorkflowInstance.pdf}}
+\caption{WorkflowInstance class from class diagram}
+\end{figure}
+
 This class represents a workflow template. It contains the identifying name of the template as well as a dag-definition-file.
 
 \begin{methodenv}{Constructor}
@@ -170,6 +188,12 @@ This class represents a workflow template. It contains the identifying name of t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{ParameterChange}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/ParameterChange.pdf}}
+\caption{ParameterChange class from class diagram}
+\end{figure}
+
 This class represents the change of a key-value pair. It contains the old aswell as the new version of both the key aswell as the value. Furthermore it holds the name of the file the change was made in.
 
 \begin{methodenv}{Constructor}
@@ -180,6 +204,12 @@ This class represents the change of a key-value pair. It contains the old aswell
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{ReducedConfigFile}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/ReducedConfigFile.pdf}}
+\caption{ReducedConfigFile class from class diagram}
+\end{figure}
+
 This class holds all information to represent a config-file in the frontend.
 
 \begin{methodenv}{Constructor}
@@ -198,6 +228,12 @@ This class holds all information to represent a config-file in the frontend.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{ConfigFile}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/ConfigFile.pdf}}
+\caption{ConfigFile class from class diagram}
+\end{figure}
+
 This is a subclass of ReducedConfigFile and additionally holds the config-file itself aswell as the name of the associated workflow instance.
 
 \begin{methodenv}{Constructor}
@@ -232,6 +268,12 @@ The method compares the key-value-pairs given through the ReducedConfigFile to t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{Version}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/Version.pdf}}
+\caption{Version class from class diagram}
+\end{figure}
+
 This class represents a version of a workflow instance. It's main task is to switch between the two different representations of versions one in the frontend, one in the database.
 \begin{methodenv}{Constructor}
 
@@ -248,6 +290,12 @@ This class represents a version of a workflow instance. It's main task is to swi
 \end{methodenv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \class{FrontendVersion}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/FrontendVersion.pdf}}
+\caption{FrontendVersion class from class diagram}
+\end{figure}
+
 This class inherits from Version and is specialized to satisfy the need for information of the client application
 \begin{methodenv}{Constructor}
 
@@ -266,6 +314,12 @@ This class inherits from Version and is specialized to satisfy the need for info
 \end{methodenv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \class{DatabaseVersion}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/DatabaseVersion.pdf}}
+\caption{DatabaseVersion class from class diagram}
+\end{figure}
+
 This class inherits from Version and is specialized to fit the way versions are managed in the database
 \begin{methodenv}{Constructor}
 
@@ -285,6 +339,12 @@ This class inherits from Version and is specialized to fit the way versions are 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{VersionNumber}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/VersionNumber.pdf}}
+\caption{VersionNumber class from class diagram}
+\end{figure}
+
 This class represents string expressions that are valid version numbers
 \begin{methodenv}{Methods}
 
