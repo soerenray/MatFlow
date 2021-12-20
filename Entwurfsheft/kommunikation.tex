@@ -11,8 +11,19 @@ Hier ist also eine horizontale Schichtenarchitektur vorhanden.
 %Frontend API
 \subsubsection{Frontend API}
 Hinweis: Json Objekte werden in Python nativ als String interpretiert. Das ist dementsprechend im Entwurf aber durch die 
-Benennung der Parameter klar, da json Objekte immer mit json\texttt{\_}details o.Ä. beschrieben werden.
-Mithilfe von Flask läuft auf dem Hostserver eine RESTful API, die 
+Benennung der Parameter klar, da json Objekte immer mit json\texttt{\_}details o.Ä. beschrieben werden. \\ \\
+Mithilfe von Flask läuft auf dem Hostserver eine RESTful API, von der ein Status Code geholt werden kann, der über den Erfolg 
+bzw. über den Art des geworfenen Fehlers Auskunft gibt.\\ 
+Da wir uns hier mit Fehlern der MatFlow Anwendung auseinandersetzen, sind alle Fehler im 6xx Format.
+Folgende spezifische Fehlerarten gibt es, d.h. diese Status Codes erweitern die standardisierten Codes wie etwa 404:
+\begin{itemize}
+    \item 601: UserExistsException
+    \item 602: DoubleTemplateNameException
+    \item 603: InvalidDagFileException
+    \item 604: DoubleWorkflowInstanceNameException
+    \item 605: EmptyConfigFolderException
+    \item 606: WorkflowInstanceRunningException
+\end{itemize}
 
 %Lukas zum Database package
 \subsubsection{Database package}
