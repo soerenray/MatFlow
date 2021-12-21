@@ -1,5 +1,15 @@
 \subsubsection{\label{database} Database}
-This package controlls all data that is to be written in the MySQL Database and gives the appropriate response to queries in form of data or errors.
+Dieses Paket kontrolliert alle Daten die in die Datenbank geschrieben werden.
+Entweder sollen Daten in die Datenbank geschrieben werden, oder sie sollen ausgelesen werden. Die Antwort ist dementsprechend entweder leer, die gewünschten Daten, oder, im Fall von Unstimmigkeiten, eine Fehlermeldung.
+
+Da jede Klasse auf dem Singleton Entwurfsmuster aufbaut wurden sämtliche darauf basierenden Parameter und Funktionen weggelassen.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{res/Database_Package.pdf} 
+	\caption{Database-Paket \& Operationen}
+	\label{fig:fig:database_package}
+\end{figure}
 
 
 \class{WorkflowData}
