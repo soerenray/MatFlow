@@ -29,12 +29,12 @@ sets the status code, only performed by the \textbf{ExceptionHandler}
 \end{itemize}
 
 \method{get\texttt{\_}server\texttt{\_}details(): String}
-gets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) 
+gets all server details (servername, ip address) 
 and returns them in a json format 
 
 \method{set\texttt{\_}server\texttt{\_}details(json\texttt{\_}details: String)}
-sets all server details (container limit, cpu resources, gpu resources, servername, ip address, executing server (yes/no)) in
- a json format. Only one bulk update as a whole
+sets all server details (servername, ip address) in
+a json format. Only one bulk update as a whole
 due to long delay with server communication from client's perspective
 \smallPara{Parameters}
 \begin{itemize}
@@ -59,19 +59,19 @@ deletes a user by username
         json object which only contains the username key and value
 \end{itemize}
 
-
-\method{get\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
+\method{get\texttt{\_}wf\texttt{\_}instance\texttt{\_}versions
 (json\texttt{\_}details: String): String}
-returns workflow instance's version number 
+returns workflow instance versions
 \smallPara{Parameters}
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        json object which only contains the workflow instance name and version number 
+        json object which only contains the workflow instance name
 \end{itemize}
 
-\method{replace\texttt{\_}wf\texttt{\_}instance\texttt{\_}version\texttt{\_}number
+
+\method{replace\texttt{\_}wf\texttt{\_}instance\texttt{\_}active\texttt{\_}version
 (json\texttt{\_}details: String)}
-replaces the specified workflow instance's version number 
+replaces the specified workflow instance's active version
 \smallPara{Parameters}
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
@@ -90,8 +90,9 @@ configuration
         contains workflow instance name
 \end{itemize}
 
+
 \method{get\texttt{\_}config\texttt{\_}from\texttt{\_}wf\texttt{\_}instance(json\texttt{\_}details): String}
-gets all config file names related to specific workflow instance (version)
+gets config file by workflow instance name and associated config file name (encoded with JSON)
 \smallPara{Parameters}
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
@@ -103,7 +104,7 @@ gets all config file names related to specific workflow instance (version)
 \texttt{\_}names(json\texttt{\_}details: String)}
 gets all  config file and all workflow instances \textbf{names} 
 
-\method{verify\texttt{\_}lgin(json\texttt{\_}details:String)}
+\method{verify\texttt{\_}login(json\texttt{\_}details:String)}
 verifies username with associated password
 \smallPara{Parameters}
 \begin{itemize}
@@ -127,13 +128,34 @@ gets a preview picture of the DAG (used when in editor preview mode)
         contains encoded template
 \end{itemize}
 
-\method{create\texttt{\_}template(json\texttt{\_}details:String)}
+\method{create\texttt{\_}template(json\texttt{\_}details)}
 creates a new template
 \smallPara{Parameters}
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
         contains encoded template
 \end{itemize}
+
+\method{get\texttt{\_}all\texttt{\_}templates(): String}
+gets all template names that are registered
+
+\method{create\texttt{\_}workflow\texttt{\_}instance(json\texttt{\_}details)}
+creates a new workflow instance
+\smallPara{Parameters}
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains encoded workflow instance
+\end{itemize}
+
+\method{get\texttt{\_}template(json\texttt{\_}details)}
+gets wanted template
+\smallPara{Parameters}
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains template name
+\end{itemize}
+
+
 
 \end{methodenv}
 
@@ -165,7 +187,7 @@ extracts json details and builds a new Server based off of these json details
 \smallPara{Parameters}
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
-        contains servername, container limit, cpu and gpu resources, executing server (yes/no) and ip address
+        contains servername  and ip address
 \end{itemize}
 
 \method{static extract\texttt{\_}template(json\texttt{\_}details:String): Template}
@@ -212,7 +234,7 @@ extracts all user attributes and dumps them into json object
 extracts all server attributes and dumps them into json object
 \smallPara{Parameters}
 \begin{itemize}
-        \item \textbf{user}
+        \item \textbf{server}
         server whose attributes are to be encoded
 \end{itemize}
 
@@ -220,7 +242,7 @@ extracts all server attributes and dumps them into json object
 extracts template attributes and dumps them into json object
 \smallPara{Parameters}
 \begin{itemize}
-        \item \textbf{user}
+        \item \textbf{template}
         template whose attributes are to be encoded
 \end{itemize}
 
@@ -228,7 +250,7 @@ extracts template attributes and dumps them into json object
 extracts workflow instance attributes and dumps them into json object
 \smallPara{Parameters}
 \begin{itemize}
-        \item \textbf{user}
+        \item \textbf{wf\texttt{\_}instance}
         workflow instance whose attributes are to be encoded
 \end{itemize}
 
@@ -236,8 +258,16 @@ extracts workflow instance attributes and dumps them into json object
 turns key value pairs into json object
 \smallPara{Parameters}
 \begin{itemize}
-        \item \textbf{user}
+        \item \textbf{config}
         config file whose attributes are to be encoded
+\end{itemize}
+
+\method{static encode\texttt{\_}versions(versions: Version[]): String}
+turns an array of versions into JSON
+\smallPara{Parameters}
+\begin{itemize}
+        \item \textbf{versions}
+        array of versions
 \end{itemize}
 
 \end{methodenv}
