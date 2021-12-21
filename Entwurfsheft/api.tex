@@ -74,7 +74,7 @@ replaces the specified workflow instance's version number
 \end{itemize}
 
 
-\method{set\texttt{\_}config\texttt{\_}file(json\texttt{\_}details)}
+\method{create\texttt{}version\texttt{\_}of\texttt{\_}wf\texttt{\_}instance(json\texttt{\_}details)}
 changes multiple config files based on input/ key value pair changes in client's applications during workflow instance 
 configuration
 \smallPara{Parameters}
@@ -112,6 +112,22 @@ registers a new user
 \begin{itemize}
         \item \textbf{json\texttt{\_}details}
         contains username, password and repeated password
+\end{itemize}
+
+\method{get\texttt{\_}graph\texttt{\_}for\texttt{\_}temporary\texttt{\_}template(json\texttt{\_}details:String): File}
+gets a preview picture of the DAG (used when in editor preview mode)
+\smallPara{Parameters}
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains encoded template
+\end{itemize}
+
+\method{create\texttt{\_}template(json\texttt{\_}details:String)}
+creates a new template
+\smallPara{Parameters}
+\begin{itemize}
+        \item \textbf{json\texttt{\_}details}
+        contains encoded template
 \end{itemize}
 
 \end{methodenv}
