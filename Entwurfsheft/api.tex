@@ -4,6 +4,11 @@ All requests are sent to this API(package) in JSON format.
 
 \class{FrontendAPI}
 
+\begin{figure}[h]
+        \centerline{\includegraphics[scale=1]{res/Klassen/FrontendAPI.pdf}}
+        \caption{FrontendAPI class from class diagram}
+\end{figure}
+
 This class is the main interface of the whole application. The client application
 can get the api status code to obtain information regarding the execution of api calls (e.g. status code
 changes when an exception has been thrown)
@@ -134,6 +139,12 @@ creates a new template
 
 %neue Klasse
 \class{JSONToPython}
+
+\begin{figure}[h]
+        \centerline{\includegraphics[scale=1]{res/Klassen/JSONToPython.pdf}}
+        \caption{JSONToPython class from class diagram}
+\end{figure}
+
 This class converts all json data into the wanted object by extracting certain keys and values and instantiating
 a new (temporary) object which executes the wanted methods (e.g. extract server and then execute set new container limit).
 Instantiated objects will be deleted by the garbage collection after they are finished writing back / getting data
@@ -178,6 +189,12 @@ extracts json details and builds a new ReducedConfigFile array based off of thes
 
 %neue Klasse
 \class{PythonToJSON}
+
+\begin{figure}[h]
+        \centerline{\includegraphics[scale=1]{res/Klassen/PythonToJson.pdf}}
+        \caption{PythonToJSON class from class diagram}
+\end{figure}
+
 This class converts all python objects into json data by extracting certain keys and values and dumping
 them into a json object.
 
@@ -227,6 +244,12 @@ turns key value pairs into json object
 
 %neue Klasse
 \class{Exception Handler}
+
+\begin{figure}[h]
+        \centerline{\includegraphics[scale=1]{res/Klassen/ExceptionHandler.pdf}}
+        \caption{ExceptionHandler class from class diagram}
+\end{figure}
+
 This class handles all MatFlowExceptions and those who inherit from MatFlowException. It is  
 responsible for changing the API's status code.
 

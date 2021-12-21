@@ -3,10 +3,22 @@
 \paragraph{Package: exceptionPackage}This package contains all MatFlowExceptions.
 
 \class{Exception}
+
+\begin{figure}[H]
+        \centerline{\includegraphics[scale=1]{res/Klassen/Exception.pdf}}
+        \caption{Exception class from class diagram}
+\end{figure}
+
 This is the native Python exception package. See \url{https://docs.python.org/3/tutorial/errors.html} 
 for more information on usage and best practices.
 
 \class{MatFlowException}
+
+\begin{figure}[H]
+        \centerline{\includegraphics[scale=1]{res/Klassen/MatFlowException.pdf}}
+        \caption{MatFlowException class from class diagram}
+\end{figure}
+
 This is the MatFlow parent exception from which all the specified exceptions inherit. It adds more functionality to 
 a standard exception through the exception's status code and function which gets the status code. This is important for our
 \nameref{API}.
@@ -28,6 +40,12 @@ gets the status code
 
 
 \class{UserExistsException}
+
+\begin{figure}[H]
+        \centerline{\includegraphics[scale=1]{res/Klassen/UserExistsException.pdf}}
+        \caption{UserExistsException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when a user does not exist.
 \begin{methodenv}{Constructor}
 
@@ -41,6 +59,12 @@ This is an exception that is thrown when a user does not exist.
 \end{methodenv}
 
 \class{DoubleTemplateNameException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/DoubleTemplateNameException.pdf}}
+    \caption{DoubleTemplateNameException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the desired template name already exists.
 \begin{methodenv}{Constructor}
 
@@ -54,6 +78,12 @@ This is an exception that is thrown when the desired template name already exist
 
 
 \class{InvalidDagFileException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/InvalidDagFileException.pdf}}
+    \caption{InvalidDagFileException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the dag definition file is not correct (when dag file is finished coding).
 \begin{methodenv}{Constructor}
 
@@ -67,6 +97,12 @@ This is an exception that is thrown when the dag definition file is not correct 
 
 
 \class{DoubleWorkflowInstanceNameException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/DoubleWorkflowInstanceNameException.pdf}}
+    \caption{DoubleWorkflowInstanceNameException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the desired workflow instance name already exists.
 \begin{methodenv}{Constructor}
 
@@ -80,6 +116,12 @@ This is an exception that is thrown when the desired workflow instance name alre
 
 
 \class{EmptyConfigFolderException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/EmptyConfigFolderException.pdf}}
+    \caption{EmptyConfigFolderException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the config folder is empty, meaning that no config can be selected.
 \begin{methodenv}{Constructor}
 
@@ -93,6 +135,12 @@ This is an exception that is thrown when the config folder is empty, meaning tha
 
 
 \class{WorkflowInstanceRunningException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/WorkflowInstanceRunningException.pdf}}
+    \caption{WorkflowInstanceRunningException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the workflow instance is already running.
 \begin{methodenv}{Constructor}
 
@@ -105,6 +153,12 @@ This is an exception that is thrown when the workflow instance is already runnin
 \end{methodenv}
 
 \class{UnrepresentableDagException}
+
+\begin{figure}[H]
+    \centerline{\includegraphics[scale=1]{res/Klassen/UnrepresentableDagException.pdf}}
+    \caption{UnrepresentableDagException class from class diagram}
+\end{figure}
+
 This is an exception that is thrown when the dag cannot be previewed(when dag file editing is in progress (JUST preview)).
 \begin{methodenv}{Constructor}
 
