@@ -1,18 +1,18 @@
 \subsubsection{Exception package}
 
-This package contains all MatFlowExceptions.
+\paragraph{Package: exceptionPackage}This package contains all MatFlowExceptions.
 
-\paragraph{Class: Exception}
+\class{Exception}
 This is the native Python exception package. See \url{https://docs.python.org/3/tutorial/errors.html} 
 for more information on usage and best practices.
 
-\paragraph{Class: MatFlowException}
+\class{MatFlowException}
 This is the MatFlow parent exception from which all the specified exceptions inherit. It adds more functionality to 
 a standard exception through the exception's status code and function which gets the status code. This is important for our
 \nameref{API}.
-\subparagraph{Constructor}
-\subparagraph{MatFlowException(message: String, status\texttt{\_}code: int): MatFlowException}
-\subparagraph{Parameters}
+\begin{methodenv}{Constructor}
+\method{MatFlowException(message: String, status\texttt{\_}code: int): MatFlowException}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{message:}
 	The message that is displayed when the exception is thrown. Native to the parent class but not relevant to application,
@@ -21,79 +21,97 @@ a standard exception through the exception's status code and function which gets
 	The status code representing the thrown exception
 \end{itemize}
 
-\subparagraph{Methods}
-\subparagraph{get\texttt{\_}status\texttt{\_}code(): int}
+\method{get\texttt{\_}status\texttt{\_}code(): int}
 gets the status code
 
+\end{methodenv}
 
-\paragraph{Class: UserExistsException}
+
+\class{UserExistsException}
 This is an exception that is thrown when a user does not exist.
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{UserExistsException(message : String)}
-\subparagraph{Parameters}
+\method{UserExistsException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
 
-\paragraph{Class: DoubleTemplateNameException}
+\end{methodenv}
+
+\class{DoubleTemplateNameException}
 This is an exception that is thrown when the desired template name already exists.
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{DoubleTemplateNameException(message : String)}
-\subparagraph{Parameters}
+\method{DoubleTemplateNameException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
+\end{methodenv}
 
 
-\paragraph{Class: InvalidDagFileException}
-This is an exception that is thrown when the dag definition file is not correct.
-\subparagraph{Constructor}
+\class{InvalidDagFileException}
+This is an exception that is thrown when the dag definition file is not correct (when dag file is finished coding).
+\begin{methodenv}{Constructor}
 
-\subparagraph{InvalidDagFileException(message : String)}
-\subparagraph{Parameters}
+\method{InvalidDagFileException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
+\end{methodenv}
 
 
-\paragraph{Class: DoubleWorkflowInstanceNameException}
+\class{DoubleWorkflowInstanceNameException}
 This is an exception that is thrown when the desired workflow instance name already exists.
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{DoubleWorkflowInstanceNameException(message : String)}
-\subparagraph{Parameters}
+\method{DoubleWorkflowInstanceNameException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
+\end{methodenv}
 
 
-\paragraph{Class: EmptyConfigFolderException}
+\class{EmptyConfigFolderException}
 This is an exception that is thrown when the config folder is empty, meaning that no config can be selected.
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{EmptyConfigFolderException(message : String)}
-\subparagraph{Parameters}
+\method{EmptyConfigFolderException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
+\end{methodenv}
 
 
-\paragraph{Class: WorkflowInstanceRunningException}
+\class{WorkflowInstanceRunningException}
 This is an exception that is thrown when the workflow instance is already running.
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{WorkflowInstanceRunningException(message : String)}
-\subparagraph{Parameters}
+\method{WorkflowInstanceRunningException(message : String)}
+\smallPara{Parameters}
 \begin{itemize}
     \item{message:}
     The message that is displayed when this exception is thrown.
 \end{itemize}
+\end{methodenv}
 
+\class{UnrepresentableDagException}
+This is an exception that is thrown when the dag cannot be previewed(when dag file editing is in progress (JUST preview)).
+\begin{methodenv}{Constructor}
 
+\method{UnrepresentableDagException(message : String)}
+\smallPara{Parameters}
+\begin{itemize}
+    \item{message:}
+    The message that is displayed when this exception is thrown.
+\end{itemize}
+\end{methodenv}
