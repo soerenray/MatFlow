@@ -53,6 +53,21 @@ Causes the instantiation of a workflow instance under the use of a workflow temp
 	Gets thrown if the user hands over an empty config-folder
 \end{itemize}
 
+\method{getDagRepresentationFromTemplate(template:Template):File}
+Takes a dag file and a dag name and returns a preview of the defined graph. Uses functionality of airflow. Is used in the template editor.
+
+\smallPara{Parameters}
+\begin{itemize}
+	\item{template:}
+	The template dag to represent
+\end{itemize}
+
+\smallPara{Exceptions}
+\begin{itemize}
+	\item{UnrepresentableDagException}
+	Gets thrown if the syntax in the given file doesn't allow a representation
+\end{itemize}
+
 \method{getTemplateNames():String[]}
 Makes database request and returns the names of all templates in the system
 
