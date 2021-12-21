@@ -197,10 +197,22 @@ This class represents a workflow template. It contains the identifying name of t
 This class represents the change of a key-value pair. It contains the old aswell as the new version of both the key aswell as the value. Furthermore it holds the name of the file the change was made in.
 
 \begin{methodenv}{Constructor}
-
-
 \method{ParameterChange(oldKey:String, newKey:String, oldValue:String, newValue:String, configFileName:String):ParameterChange}
+\smallPara{Parameters}
+\begin{itemize}
+	\item{oldKey:}
+	The key of the pair before the change
+	\item{newKey:}
+	The key of the pair after the change
+	\item{oldValue:}
+	The value of the pair before the change
+	\item{newValue:}
+	The value of the pair after the change
+	\item{configFileName:}
+	The name of the file in which the change was made
+\end{itemize}
 \end{methodenv}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{ReducedConfigFile}
