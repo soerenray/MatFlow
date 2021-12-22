@@ -1,5 +1,8 @@
 \subsection{Server}
 
+\subsection{Überblick}
+TODO: Bild einfügen und Text
+
 \subsubsection{\nameref{API}}
 \begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/api.drawio.pdf}
@@ -10,6 +13,21 @@ Kommunikation). Anfragen an die Klasse FrontendAPI werden an die dementsprechend
 ausgeführt werden. Diese Klasse fängt alle Exceptions und leitet sie an die Klasse ExceptionHandler weiter.
 In der ExceptionHandler Klasse wird dann der Status Code der FrontendAPI Klasse geändert, der für den Client aussagekräftig
 darüber ist welcher Fehler geworfen wurde.
+
+
+\subsubsection{Workflow package}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{res/Klassen/wfPackage.pdf}
+    \caption{Klassendiagramm des Workflow packages}
+\end{figure}
+
+
+\subsubsection{TGDSOperator}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{res/Klassen/tgdsOp.pdf}
+    \caption{Klassendiagramm des TGDS-Operators}
+\end{figure}
+
 
 \subsubsection{MatFlowExceptions}
 \begin{figure}[H]
