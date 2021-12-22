@@ -4,7 +4,7 @@ This package defines the logic behind the creation and the management of Users, 
 
 \class{Registration}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centerline{\includegraphics[scale=1]{res/Klassen/RegistrationClass.pdf}}
 \caption{Registration class from class diagram}
 \end{figure}
@@ -37,13 +37,13 @@ Method uses username and password to sign up new user and returns a boolean to c
 
 \class{User}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centerline{\includegraphics[scale=1]{res/Klassen/UserClass.pdf}}
 \caption{User class from class diagram}
 \end{figure}
 
 This class is used to construct new Users.
-begin{methodenv}{Constructor}
+\begin{methodenv}{Constructor}
 
 \method{user(username: string, status: string, privilege: string)}
 
@@ -63,7 +63,7 @@ begin{methodenv}{Constructor}
 
 \class{Login}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centerline{\includegraphics[scale=1]{res/Klassen/LoginClass.pdf}}
 \caption{Login class from class diagram}
 \end{figure}
@@ -90,7 +90,7 @@ Method uses username and password to log in user and returns a boolean to confir
 
 \class{UserController}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centerline{\includegraphics[scale=1]{res/Klassen/UserControllerClass.pdf}}
 \caption{UserController class from class diagram}
 \end{figure}
@@ -126,7 +126,7 @@ Method gets the wanted User and deltes him. Afterwards the user is not able to l
 
 Method resets the users password and sets the new password.
 
-\smallpara{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{oldPassword:}
 	The users old password that gets deleted
@@ -138,7 +138,7 @@ Method resets the users password and sets the new password.
 
 Method resets the users old privilege and updates to the new privilege.
 
-\smallpara{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{privilege:}
 	The privilege the user gets updated to

@@ -1,27 +1,34 @@
 \subsubsection{Hardware Administration}
+This package defines the logic behind the Hardware Administration.
 
 
-\paragraph{Class: HardwareController}
+\class{HardwareController}
+
+\begin{figure}[H]
+\centerline{\includegraphics[scale=1]{res/Klassen/HardwareControllerClass.pdf}}
+\caption{HardwareController class from class diagram}
+\end{figure}
+
 This class is used to surveillance and edit the Hardware of the Server
 
-\subparagraph{Methods}
+\begin{methodenv}{Methods}
 
-\subparagraph{addServer(server: server): void}
+\method{addServer(server: server): void}
 
 Method adds a Server to the HardwareAdministration
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{server:}
 	The server that is getting added
 \end{itemize}
 
 
-\subparagraph{changeContainerLimit(server: server, containerLimit: number): void}
+\method{changeContainerLimit(server: server, containerLimit: number): void}
 
 Method changes the containerlimit of the chosen server to the preferred number.
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{server:}
 	The server that is getting edited
@@ -30,27 +37,34 @@ Method changes the containerlimit of the chosen server to the preferred number.
 \end{itemize}
 
 
-\subparagraph{selectServer(server: server): void}
+\method{selectServer(server: server): void}
 
 Method selects the server that is getting edited
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{server:}
 	The server that is getting selected
 \end{itemize}
+\end{methodenv}
 
 
 
 
-\paragraph{Class: Server}
+\class{ Server}
+
+\begin{figure}[H]
+\centerline{\includegraphics[scale=1]{res/Klassen/ServerClass.pdf}}
+\caption{Server class from class diagram}
+\end{figure}
+
 This class is used to create a Server object
 
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{server(name: string, address: string, status: string, containerLimit: number, selectedForExecution: boolean, resources: [(string, string)])}
+\method{server(name: string, address: string, status: string, containerLimit: number, selectedForExecution: boolean, resources: [(string, string)])}
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 
 \begin{itemize}
 	\item{name:}
@@ -66,4 +80,5 @@ This class is used to create a Server object
 	\item{resources:}
 	The servers resources
 \end{itemize}
+\end{methodenv}
 
