@@ -89,7 +89,7 @@ Return a sortet list of Strings of all Versions of a Workflow.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{TemplateData}
+\class{TemplateData}
 Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeinträgen für Workflow\_Template arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
@@ -130,7 +130,7 @@ Throw error if Template doesn't exist.
 \end{methodenv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{ServerData}
+\class{ServerData}
 Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeintrag für Server arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
@@ -171,7 +171,7 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 \end{methodenv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{DatabaseTable}
+\class{DatabaseTable}
 DatabaseTable ist die einzige Klasse die direkt mit der Datenbank kommuniziert. Ihre Funktion ist hauptsächlich MySQL Befehle entgegennimmt, diese an die Datenbank weiterzugeben und die dadurch erhaltenen Antworten zurückgibt. Im Fall eines Fehlers, wie einem leeren Ergebnis oder eines ungültigen Befehls wird eine entsprechende \textbf{MatFlowException} geworfen.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
