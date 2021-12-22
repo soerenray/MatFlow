@@ -20,6 +20,10 @@ darüber ist welcher Fehler geworfen wurde.
     \includegraphics[width=1\textwidth]{res/Klassen/wfPackage.pdf}
     \caption{Klassendiagramm des Workflow packages}
 \end{figure}
+Das Workflow Package ist für die Erstellung und Verwaltung von Workflow-Templates, -Instanzen und -Versionen zuständig.
+Es stellt ein Bindeglied in der Kommunikationskette zwischen Client, Airflow und der Datenban dar.
+Alle Anfragen die vom Client gestellt und der API weitergeleitet werden kommen zentral im Singleton-Objekt der Klasse WorkflowManager an.
+Dieses erstellt dann andere Objekte und stellt seinerseits Anfragen an die Airflow API und die Datenbank-Schnittstelle.
 
 \subsection{\nameref{database}}
 Entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
@@ -37,6 +41,9 @@ Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nich
     \includegraphics[width=1\textwidth]{res/Klassen/tgdsOp.pdf}
     \caption{Klassendiagramm des TGDS-Operators}
 \end{figure}
+Die Aufgabe dieses Packages ist es Airflow um einen weiteren Operator, den AlternatingOperator, zu erweitern.
+Der Operator kann dann verwendet werden um zwei Tasks im Wechsel auszuführen. 
+Dies ist bei der Implementierung eines bestimmten Theory-Guided-Data-Science-Modells von Nutzen. 
 
 
 \subsubsection{MatFlowExceptions}
