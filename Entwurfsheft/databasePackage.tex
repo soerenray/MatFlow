@@ -1,15 +1,9 @@
 \subsubsection{\label{database} Database}
-Dieses Paket kontrolliert alle Daten die in die Datenbank geschrieben werden.
+
+Dieses Paket\ref{fig:database_package}  kontrolliert alle Daten die in die Datenbank geschrieben werden.
 Entweder sollen Daten in die Datenbank geschrieben werden, oder sie sollen ausgelesen werden. Die Antwort ist dementsprechend entweder leer, die gewünschten Daten, oder, im Fall von Unstimmigkeiten, eine Fehlermeldung.
 
 Da jede Klasse auf dem Singleton Entwurfsmuster aufbaut wurden sämtliche darauf basierenden Parameter und Funktionen weggelassen.
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=1\textwidth]{res/Database_Package.pdf} 
-	\caption{Database-Paket \& Operationen}
-	\label{fig:fig:database_package}
-\end{figure}
 
 
 \class{WorkflowData}
@@ -17,6 +11,12 @@ Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeintr�
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/Klassen/WorkflowData.pdf} 
+	\caption{WorkflowData}
+	\label{fig:workflowDataClass}
+\end{figure}
 
 \begin{methodenv}{Methods}
 
@@ -94,6 +94,12 @@ Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeintr�
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/Klassen/TemplateData.pdf} 
+	\caption{WorkflowData}
+	\label{fig:workflowDataClass}
+\end{figure}
 
 \begin{methodenv}{Methods}
 	
@@ -129,6 +135,12 @@ Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeintra
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/Klassen/ServerData.pdf} 
+	\caption{WorkflowData}
+	\label{fig:workflowDataClass}
+\end{figure}
 
 \begin{methodenv}{Methods}
 	
@@ -163,6 +175,12 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 DatabaseTable ist die einzige Klasse die direkt mit der Datenbank kommuniziert. Ihre Funktion ist hauptsächlich MySQL Befehle entgegennimmt, diese an die Datenbank weiterzugeben und die dadurch erhaltenen Antworten zurückgibt. Im Fall eines Fehlers, wie einem leeren Ergebnis oder eines ungültigen Befehls wird eine entsprechende \textbf{MatFlowException} geworfen.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{res/Klassen/DatabaseTable.pdf} 
+	\caption{WorkflowData}
+	\label{fig:workflowDataClass}
+\end{figure}
 
 \begin{methodenv}{Methods}
 	

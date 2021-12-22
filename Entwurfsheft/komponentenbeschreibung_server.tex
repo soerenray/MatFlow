@@ -21,6 +21,16 @@ darüber ist welcher Fehler geworfen wurde.
     \caption{Klassendiagramm des Workflow packages}
 \end{figure}
 
+\subsection{\nameref{database}}
+Entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
+Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nicht existiert, wird eine entsprechende MathFlowException an den Aufrufer zurückgeworfen.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{res/Database_Package.pdf} 
+	\caption{Klassendiagramm von Database}
+	\label{fig:database_package}
+\end{figure}
+
 
 \subsubsection{TGDSOperator}
 \begin{figure}[H]
