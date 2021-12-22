@@ -1,13 +1,17 @@
 \subsection{Server}
 
 \subsubsection{Überblick}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/Moduluebersicht.pdf}
     \caption{Übersicht über den Entwurf der Server Anwendung}
 \end{figure}
+Die Server Anwendung ist in ihren Grundzügen in einer Schichtenarchitektur aufgebaut. 
+Die zentrale Anlaufstelle für Anfragen des Clients stellt das API Package dar.
+Dieses hat Abhängigkeiten zu den Workflow, User Administration und Hardware Administration Packages, welche wiederum auf die Datenbank-Schnittstelle und die Airflow API zugreifen.
+
 
 \subsubsection{\nameref{API}}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/api.drawio.pdf}
     \caption{API Package}
 \end{figure}
@@ -19,7 +23,7 @@ darüber ist welcher Fehler geworfen wurde.
 
 
 \subsubsection{Workflow package}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/Klassen/wfPackage.pdf}
     \caption{Klassendiagramm des Workflow packages}
 \end{figure}
@@ -31,7 +35,7 @@ Dieses erstellt dann andere Objekte und stellt seinerseits Anfragen an die Airfl
 \subsection{\nameref{database}}
 Entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
 Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nicht existiert, wird eine entsprechende MathFlowException an den Aufrufer zurückgeworfen.
-\begin{figure}[h]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=1\textwidth]{res/Database_Package.pdf} 
 	\caption{Klassendiagramm von Database}
@@ -40,7 +44,7 @@ Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nich
 
 
 \subsubsection{TGDSOperator}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/Klassen/tgdsOp.pdf}
     \caption{Klassendiagramm des TGDS-Operators}
 \end{figure}
@@ -50,7 +54,7 @@ Dies ist bei der Implementierung eines bestimmten Theory-Guided-Data-Science-Mod
 
 
 \subsubsection{MatFlowExceptions}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{res/Klassen/MatFlowExceptions.drawio.pdf}
     \caption{MatFlowExceptions}
 \end{figure}
