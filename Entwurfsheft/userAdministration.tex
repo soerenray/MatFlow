@@ -1,15 +1,24 @@
 \subsubsection{User Administration}
+This package defines the logic behind the creation and the management of Users, their registrations and their logins.
 
 
-\paragraph{Class: Registration}
+\class{Registration}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/RegistrationClass.pdf}}
+\caption{Registration class from class diagram}
+\end{figure}
+
 This class is used to sign up new Users for our application and also for airflow.
-\subparagraph{Methods}
 
-\subparagraph{signUser(username: String, password: password): boolean}
+
+\begin{methodenv}{Methods}
+
+\method{signUser(username: String, password: password): boolean}
 
 Method uses username and password to sign up new user and returns a boolean to confirm the registration
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{username:}
 	The preferred username
@@ -17,21 +26,28 @@ Method uses username and password to sign up new user and returns a boolean to c
 	The preferred password
 \end{itemize}
 
-\subparagraph{Exceptions}
+\smallPara{Exceptions}
 \begin{itemize}
 	\item{UserExistsException}
 	Gets thrown if the user trys to register with an already used username
 \end{itemize}
+\end{methodenv}
 
 
 
-\paragraph{Class: User}
+\class{User}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/UserClass.pdf}}
+\caption{User class from class diagram}
+\end{figure}
+
 This class is used to construct new Users.
-\subparagraph{Constructor}
+begin{methodenv}{Constructor}
 
-\subparagraph{user(username: string, status: string, privilege: string)}
+\method{user(username: string, status: string, privilege: string)}
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 
 \begin{itemize}
 	\item{username:}
@@ -41,60 +57,76 @@ This class is used to construct new Users.
 	\item{privilege:}
 	The users privilege. Can be Reviewer, Develloper or Admin
 \end{itemize}
+\end{methodenv}
 
 
 
-\paragraph{Class: Login}
+\class{Login}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/LoginClass.pdf}}
+\caption{Login class from class diagram}
+\end{figure}
+
 This class is used to log in existing Users.
-\subparagraph{Methods}
 
-\subparagraph{loginUser(username: String, password: password): boolean}
+\begin{methodenv}{methods}
+
+\method{loginUser(username: String, password: password): boolean}
 
 Method uses username and password to log in user and returns a boolean to confirm the login.
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{username:}
 	The username to log in
 	\item{password:}
 	The password to log in
 \end{itemize}
+\end{methodenv}
 
 
 
 
-\paragraph{Class: UserController}
+\class{UserController}
+
+\begin{figure}[h]
+\centerline{\includegraphics[scale=1]{res/Klassen/UserControllerClass.pdf}}
+\caption{UserController class from class diagram}
+\end{figure}
+
 This class is used to change the parameters of existing users.
 
-\subparagraph{Constructor}
+\begin{methodenv}{Constructor}
 
-\subparagraph{UserController(user: user)}
+\method{UserController(user: user)}
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 
 \begin{itemize}
 	\item{user:}
 	The user that needs to be edited
 \end{itemize}
+\end{methodenv}
 
-\subparagraph{Methods}
+\begin{methodenv}{Methods}
 
-\subparagraph{deleteUser(user:user): void}
+\method{deleteUser(user:user): void}
 
 Method gets the wanted User and deltes him. Afterwards the user is not able to log in anymore.
 
-\subparagraph{Parameters}
+\smallPara{Parameters}
 \begin{itemize}
 	\item{user:}
 	The user that is supposed to get deleted
 \end{itemize}
 
 
-\subparagraph{resetPassword(oldPassword: password, newPassword: password): void}
+\method{resetPassword(oldPassword: password, newPassword: password): void}
 
 Method resets the users password and sets the new password.
 
-\subparagraph{Parameters}
+\smallpara{Parameters}
 \begin{itemize}
 	\item{oldPassword:}
 	The users old password that gets deleted
@@ -102,19 +134,21 @@ Method resets the users password and sets the new password.
 	The users new password that is getting set
 \end{itemize}
 
-\subparagraph{setPrivilege(privilege: string): void}
+\method{setPrivilege(privilege: string): void}
 
 Method resets the users old privilege and updates to the new privilege.
 
-\subparagraph{Parameters}
+\smallpara{Parameters}
 \begin{itemize}
 	\item{privilege:}
 	The privilege the user gets updated to
 \end{itemize}
 
-\subparagraph{activateUser(): void}
+\method{activateUser(): void}
 
 Method activates the User. The User can now log in to the application.
+
+\end{methodenv}
 
 
 
