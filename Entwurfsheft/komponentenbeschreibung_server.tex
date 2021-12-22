@@ -32,7 +32,21 @@ Es stellt ein Bindeglied in der Kommunikationskette zwischen Client, Airflow und
 Alle Anfragen die vom Client gestellt und der API weitergeleitet werden kommen zentral im Singleton-Objekt der Klasse WorkflowManager an.
 Dieses erstellt dann andere Objekte und stellt seinerseits Anfragen an die Airflow API und die Datenbank-Schnittstelle.
 
-\subsection{\nameref{database}}
+\subsubsection{User Administration}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{res/UserAdministration.pdf}
+    \caption{TODO Nils}
+\end{figure}
+TODO Nils
+
+\subsubsection{Hardware Administration}
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{res/HardwareAdministration.pdf}
+    \caption{TODO Nils}
+\end{figure}
+TODO Nils
+
+\subsubsection{\nameref{database}}
 Entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
 Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nicht existiert, wird eine entsprechende MathFlowException an den Aufrufer zurückgeworfen.
 \begin{figure}[H]
@@ -45,7 +59,8 @@ Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nich
 
 \subsubsection{TGDSOperator}
 \begin{figure}[H]
-    \includegraphics[width=1\textwidth]{res/Klassen/tgdsOp.pdf}
+    \centering
+    \includegraphics[width=0.65\textwidth]{res/Klassen/tgdsOp.pdf}
     \caption{Klassendiagramm des TGDS-Operators}
 \end{figure}
 Die Aufgabe dieses Packages ist es Airflow um einen weiteren Operator, den AlternatingOperator, zu erweitern.
