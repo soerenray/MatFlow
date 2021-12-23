@@ -94,7 +94,7 @@ Requests the desired config-file from the current version of the named workflow 
 	The name of the desired config file
 \end{itemize}
 
-\method{createNewVersionOfWorkflowInstance(workflowInstanceName:String, changedFiles:ReducedConfigFile[], versionNote:String):void}
+\method{createNewVersionOfWorkflowInstance(workflowInstanceName:String, \\changedFiles:ReducedConfigFile[], versionNote:String):void}
 Causes the creation of a new version of the workflow instance in the database. The predecessor of the new version is the active version of the instance.
 
 \smallPara{Parameters}
@@ -107,7 +107,7 @@ Causes the creation of a new version of the workflow instance in the database. T
 	Note about the new version given by the user
 \end{itemize}
 
-\method{getVersionsFromWorkflowInstance(workflowInstanceName:string):FrontendVersion[]}
+\method{getVersionsFromWorkflowInstance(workflowInstanceName:string):\\FrontendVersion[]}
 Requests information about all the versions of the given workflow instance from the database. Afterwards calculates the difference to the predecessor for every version and returns that information in combination with the version numbers and version notes
 
 \smallPara{Parameters}
@@ -176,7 +176,7 @@ This class represents a workflow template. It contains the identifying name of t
 
 \begin{methodenv}{Constructor}
 
-\method{WorkflowInstance(name:String, dagDefinitionFile:File, configFolder:File[]):WorkflowInstance}
+\method{WorkflowInstance(name:String, dagDefinitionFile:File, configFolder:File[]):\\WorkflowInstance}
 
 \smallPara{Parameters}
 \begin{itemize}
@@ -237,7 +237,7 @@ This class holds all information to represent a config-file in the frontend.
 
 \begin{methodenv}{Constructor}
 
-\method{ReducedConfigFile(fileName:String, keyValuePairs:(String,String)[]):ReducedConfigFile}
+\method{ReducedConfigFile(fileName:String, keyValuePairs:(String,String)[]):\\ReducedConfigFile}
 
 \smallPara{Parameters}
 \begin{itemize}
@@ -261,7 +261,7 @@ This is a subclass of ReducedConfigFile and additionally holds the config-file i
 
 \begin{methodenv}{Constructor}
 
-\method{ConfigFile(workflowInstanceName:String, configFileName:String, file:File):ConfigFile}
+\method{ConfigFile(workflowInstanceName:String, configFileName:String,\\ file:File):ConfigFile}
 It isn't necessary to hand the key-value-pairs because they can be derived from the file itself.
 
 \smallPara{Parameters}
@@ -323,7 +323,7 @@ This class inherits from Version and is specialized to satisfy the need for info
 \begin{methodenv}{Constructor}
 
 
-\method{FrontendVersion(versionNumber:VersionNumber, note:String, changes:ParameterChange[]):FrontendVersion}
+\method{FrontendVersion(versionNumber:VersionNumber, note:String, \\changes:ParameterChange[]):FrontendVersion}
 
 \smallPara{Parameters}
 \begin{itemize}
