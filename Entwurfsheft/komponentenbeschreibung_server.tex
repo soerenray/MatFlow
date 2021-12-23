@@ -65,8 +65,6 @@ Das Hardware Administration Package ist für die Anlegung und Verwaltung von Ser
 \newpage
 
 \subsubsection{\nameref{database}}
-Entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
-Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nicht existiert, wird eine entsprechende MathFlowException an den Aufrufer zurückgeworfen.
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{res/Database_Package.pdf} 
@@ -75,6 +73,9 @@ Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nich
 \end{figure}
 
 \FloatBarrier
+Das Datenbank Package entwirft für einen Aufruf einer Funktion einer Klasse in diesem Package den entsprechenden SQL Ausdruck und ruft diesen auf der Datenbank auf.
+Bei fehlerhaften Aufrufen, wie zum Beispiel der Abfrage eines Workflows der nicht existiert, wird eine entsprechende MathFlowException an den Aufrufer zurückgeworfen.
+
 \newpage
 
 \subsubsection{TGDSOperator}
