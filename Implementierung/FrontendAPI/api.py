@@ -1,22 +1,26 @@
 from __future__ import annotations
-from flask import Flask
+from flask import Flask, request
+# from ..Database import ServerData
+# from .. import ExceptionPackage
+from . import ExceptionHandler, JSONToPython, PythonToJSON
 from waitress import serve
 
+#according to Flask docs this command should be on modular level
 app = Flask('FrontendAPI')
 
-class FrontendAPI():
 
+class FrontendAPI():
     """
     This class is the main interface of the whole application. The client application can
     communicate with this api through json calls.
     """
 
-    #__app = None
+    # __app = None
     __instance = None
 
     def __init__(self):
         raise RuntimeError("Call get_frontend_api()")
-        #self.get_frontend_api()
+        # self.get_frontend_api()
 
     @classmethod
     def get_frontend_api(self) -> FrontendAPI:
@@ -28,14 +32,13 @@ class FrontendAPI():
             FrontendAPI: singleton FrontendAPI object
         """
         if self.__instance is None:
-            # package name as Flask's import_name
-            #self.__app = Flask('FrontendAPI')
+            exceptionHandler = ExceptionHandler()
             self.__start_api(self)
         else:
             pass
 
     def __start_api(self):
-        #serve(app, host="127.0.0.1", port=5000)
+        # serve(app, host="127.0.0.1", port=5000)
         app.run(debug='true')
 
     @staticmethod
@@ -56,11 +59,18 @@ class FrontendAPI():
         Returns:
             String: json-dumped object containing the above described information
         """
-        #hier wird der Server mit ip geholt
-        a = {"Server_details: hi"}
-        json_out = json.dumps(a)
-        return json_out
-        #return json
+        # hier wird der Server mit ip geholt
+        server = ServerData.getServer()
+        name: str = server.getName()
+        ip_address: str = server.getAddress()
+        status: str = server.getStatus()
+        container_limit: int = server.getContainerLimit()
+        executing: bool = server.isSelectedForExecution()
+        resources: list[tuple[str, str]] = server.getRessources()
+        out_dict: dict = {'serverName': name, 'serverAddress': ip_address, 'serverStatus': status,
+                          'containerLimit': container_limit, 'selectedForExecution': executing,
+                          'serverResources': resources}
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     @app.route('/set_server_details', methods=['POST'])
@@ -74,7 +84,17 @@ class FrontendAPI():
         Returns:
             String: response indicating successful request
         """
-        pass
+        try:
+            name: str = request.args.get('serverName')
+            ip_address: str = request.args.get('serverAddress')
+            status: str = request.args.get('serverStatus')
+            container_limit: int = request.args.get('containerLimit')
+            resources: list[tuple[str, str]] = request.args.get('serverResources')
+            executing: bool = request.args.get('selectedForExecution')
+        except MatFlowException as exception:
+            ExceptionHandler.handle_exception(exception.get_status_code())
+        else:
+            return ExceptionHandler.success(dict())
 
     @staticmethod
     @app.route('/get_all_users_and_details', methods=['GET'])
@@ -176,7 +196,7 @@ class FrontendAPI():
             String: json-dumped object containing encoded config file
         """
         pass
-        #return json
+        # return json
 
     @staticmethod
     @app.route('/create_workflow_instance', methods=['POST'])
@@ -287,7 +307,7 @@ class FrontendAPI():
             File: picture of dag in .png format
         """
         pass
-        #return file
+        # return file
 
 
 #########################
