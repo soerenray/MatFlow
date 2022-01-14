@@ -22,7 +22,7 @@ class WorkflowManager():
             # Put any initialization here.
         return self.__instance
 
-    def create_template(template: Template):
+    def create_template(self, template: Template):
         """Causes the creation of a new template entry in the database.
 
         Fails if the Template.name is already occuring in the database.
@@ -34,7 +34,7 @@ class WorkflowManager():
 
         """
 
-    def create_workflow_instance_from_template(template_name: str, workflow_instance_name: str, config_files):
+    def create_workflow_instance_from_template(self, template_name: str, workflow_instance_name: str, config_files):
         # type of config_files TODO
         """Causes the instantiation of a workflow instance under the use of a workflow template.
 
@@ -47,7 +47,7 @@ class WorkflowManager():
 
         """
 
-    def get_dag_representation_from_template(template:Template)->file:
+    def get_dag_representation_from_template(self, template:Template)->file:
         """Takes a dag file and a dag name and returns a preview of the defined graph
 
         Uses functionality of airflow. Is used in the template editor of the client application.
@@ -61,7 +61,7 @@ class WorkflowManager():
         """
         return None
 
-    def get_template_names()-> :
+    def get_template_names(self)-> :
         #TODO return type
         """Returns the names of all templates.
 
@@ -73,7 +73,7 @@ class WorkflowManager():
         """
         return None
 
-    def get_template_from_name(template_name: str)->Template:
+    def get_template_from_name(self, template_name: str)->Template:
         """Returns template idetified by the given name.
 
         Forwards the request for the named template to the database and returns result.
@@ -87,7 +87,7 @@ class WorkflowManager():
         """
         return None
 
-    def get_names_of_workflows_and_config_files()->:
+    def get_names_of_workflows_and_config_files(self)->:
         # TODO return type
         """Returns the names of all workflow instances aswell as the names of the associated config-files
 
@@ -101,7 +101,7 @@ class WorkflowManager():
         """
         return None
 
-    def get_key_value_pairs_from_config_file(workflow_instance_name: str, config_file_name: string)->]:
+    def get_key_value_pairs_from_config_file(self, workflow_instance_name: str, config_file_name: string)->]:
         # TODO return type
         """Returns the collection of all key value pairs in the specified config-file.
 
@@ -119,7 +119,7 @@ class WorkflowManager():
         """
         return None
 
-    def create_new_version_of_workflow_instance(workflow_instance_name: str, changed_files: , version_note:str):
+    def create_new_version_of_workflow_instance(self, workflow_instance_name: str, changed_files: , version_note:str):
         # TODO type of param "changed_files"
         """Causes the creation of a new version of the workflow instance in the database.
 
@@ -135,7 +135,7 @@ class WorkflowManager():
         """
         return None
 
-    def set_active_version_through_number(workflow_instance_name: str, version_number: str):
+    def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
         """Changes the active version of a workflow instance in the database.
 
         Before requesting the change in the database a call to the airflow api is made to make sure the workflow
