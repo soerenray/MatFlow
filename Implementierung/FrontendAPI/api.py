@@ -1,11 +1,19 @@
 from __future__ import annotations
-from flask import Flask
-from flask_restful import Resource, Api
+from flask import Flask, request
+import json
 from waitress import serve
 
+
+#According to Flask documentation this command should be done on module level.
 app = Flask('FrontendAPI')
 
-class FrontendAPI():
+# TODO man muss gar nicht das set status code ändern: in set status code die json nachricht übergeben und
+# dann von dort aus absenden
+
+
+# each of the api methods does not have arguments. This is due to the fact that the json data
+# that is sent to the api has to be fetched inside the method.
+class FrontendAPI:
 
     """
     This class is the main interface of the whole application. The client application can
@@ -14,7 +22,6 @@ class FrontendAPI():
 
     #__app = None
     __instance = None
-
 
     def __init__(self):
         raise RuntimeError("Call get_frontend_api()")
@@ -40,12 +47,10 @@ class FrontendAPI():
         #serve(app, host="127.0.0.1", port=5000)
         app.run(debug='true')
 
-    @app.route('/')
-    def default_get():
-        return "Welcome", 200
-
-    @app.route('/get_server_details')
-    def get_server_details(json_details: str) -> str:
+    @staticmethod
+    @app.route('/get_server_details', methods=['GET'])
+    #def get_server_details(json_details: str) -> str:
+    def get_server_details() -> str:
         """
         gets all server details (servername, ip address, cpu resources, gpu resources, selected for execution, container limit, status) and
         returns them in a json format
@@ -57,11 +62,12 @@ class FrontendAPI():
             String: json-dumped object containing the above described information
         """
         #hier wird der Server mit ip geholt
-        a = {"Server_details: hi"}
-        json_out = json.dumps(a)
-        return json_out
+        b = json.dumps({"ABC": 3})
+        return b
         #return json
 
+    @staticmethod
+    @app.route('/set_server_details', methods=['POST'])
     def set_server_details(json_details: str) -> str:
         """
         sets all server details (servername, ip address, cpu resources, gpu resources, selected for execution, container limit, status)
@@ -74,9 +80,11 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/get_all_users_and_details', methods=["GET"])
     def get_all_users_and_details() -> str:
         """
-        gets all users and their details (user names, privileges, statuses) in a json format
+        gets all users and their details (usernames, privileges, statuses) in a json format
 
         Returns:
              String: json-dumped object containing the above described information
@@ -84,9 +92,11 @@ class FrontendAPI():
         pass
         # return json
 
+    @staticmethod
+    @app.route('/set_user_details', methods=['POST'])
     def set_user_details(json_details: str) -> str:
         """
-        sets all user details (user name, privilege, status) for a specific user in a json format.
+        sets all user details (username, privilege, status) for a specific user in a json format.
         If user does not already exist, one will be created.
 
         Args:
@@ -97,6 +107,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/delete_user', methods=['DELETE'])
     def delete_user(json_details: str) -> str:
         """
         deletes a user by username
@@ -109,6 +121,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/get_wf_instance_versions', methods=['GET'])
     def get_wf_instance_versions(json_details: str) -> str:
         """
         gets the versions associated with wanted workflow instance
@@ -122,6 +136,8 @@ class FrontendAPI():
         # return json
         pass
 
+    @staticmethod
+    @app.route('/replace_wf_instance_active_version', methods=['POST'])
     def replace_wf_instance_active_version(json_details: str) -> str:
         """
         replaces the specified workflow instance’s active version
@@ -134,6 +150,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/create_version_of_wf_instance', methods=['POST'])
     def create_version_of_wf_instance(json_details: str) -> str:
         """
         changes multiple config files ba- sed on input/ key value pair changes in
@@ -148,6 +166,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/get_config_from_wf_instance', methods=['GET'])
     def get_config_from_wf_instance(json_details: str) -> str:
         """
         gets config file by workflow instance name and associated config file name
@@ -162,6 +182,8 @@ class FrontendAPI():
         pass
         #return json
 
+    @staticmethod
+    @app.route('/create_workflow_instance', methods=['POST'])
     def create_workflow_instance(json_details: str) -> str:
         """
         creates a new workflow instance
@@ -174,6 +196,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/get_all_wf_instances_names_and_config_files_names', methods=['GET'])
     def get_all_wf_instances_names_and_config_files_names() -> str:
         """
         gets all config file and all workflow instances names
@@ -184,6 +208,8 @@ class FrontendAPI():
         pass
         # return json
 
+    @staticmethod
+    @app.route('/verify_login', methods=['GET'])
     def verify_login(json_details: str) -> str:
         """
         verifies username with associated password
@@ -197,6 +223,8 @@ class FrontendAPI():
         pass
         # return json
 
+    @staticmethod
+    @app.route('/register_user', methods=['POST'])
     def register_user(json_details: str) -> str:
         """
         registers a new user
@@ -209,6 +237,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/create_template', methods=['POST'])
     def create_template(json_details: str) -> str:
         """
         creates a new template
@@ -221,6 +251,8 @@ class FrontendAPI():
         """
         pass
 
+    @staticmethod
+    @app.route('/get_all_template_names', methods=['GET'])
     def get_all_template_names() -> str:
         """
         gets all template names that are registered
@@ -231,6 +263,8 @@ class FrontendAPI():
         pass
         # return json
 
+    @staticmethod
+    @app.route('/get_template', methods=['GET'])
     def get_template(json_details: str) -> str:
         """
         gets wanted template
@@ -244,7 +278,9 @@ class FrontendAPI():
         pass
         # return json
 
-    def get_graph_for_temporary_template(json_details: str) -> str:
+    @staticmethod
+    @app.route('/get_graph_for_temporary_template', methods=['GET'])
+    def get_graph_for_temporary_template() -> str:
         """
         gets a preview picture of the DAG (used when in editor preview mode)
 
@@ -254,14 +290,12 @@ class FrontendAPI():
         Returns:
             File: picture of dag in .png format
         """
-        pass
-        #return file
+        # return file
+        a = request.get_json()
+        return a
 
 
 #########################
 ## The Flask webserver ##
 #########################
-
-
-
 a = FrontendAPI.get_frontend_api()
