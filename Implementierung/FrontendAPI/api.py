@@ -1,15 +1,15 @@
 from __future__ import annotations
 from flask import Flask, request
-# from ..Database import ServerData
-# from .. import ExceptionPackage
-from . import ExceptionHandler, JSONToPython, PythonToJSON
 from waitress import serve
 
+from exceptionhandler import ExceptionHandler
+
 #according to Flask docs this command should be on modular level
+
 app = Flask('FrontendAPI')
 
 
-class FrontendAPI():
+class FrontendAPI:
     """
     This class is the main interface of the whole application. The client application can
     communicate with this api through json calls.
@@ -85,12 +85,8 @@ class FrontendAPI():
             String: response indicating successful request
         """
         try:
-            name: str = request.args.get('serverName')
-            ip_address: str = request.args.get('serverAddress')
-            status: str = request.args.get('serverStatus')
-            container_limit: int = request.args.get('containerLimit')
-            resources: list[tuple[str, str]] = request.args.get('serverResources')
-            executing: bool = request.args.get('selectedForExecution')
+            server: Server = JSONToPython.extract_server(request.get_json())
+            ServerData.writeServer(server)
         except MatFlowException as exception:
             ExceptionHandler.handle_exception(exception.get_status_code())
         else:

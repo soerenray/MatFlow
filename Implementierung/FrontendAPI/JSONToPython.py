@@ -30,7 +30,14 @@ class JSONToPython():
         Returns:
             Server: decoded server object
         """
-        pass
+        name: str = request.args.get('serverName')
+        ip_address: str = request.args.get('serverAddress')
+        status: str = request.args.get('serverStatus')
+        container_limit: int = request.args.get('containerLimit')
+        resources: list[tuple[str, str]] = request.args.get('serverResources')
+        executing: bool = request.args.get('selectedForExecution')
+        server: Server = Server(name, ip_address, status, container_limit, executing, resources)
+        return server
 
     @staticmethod
     def extract_template(json_details: str) -> Template:

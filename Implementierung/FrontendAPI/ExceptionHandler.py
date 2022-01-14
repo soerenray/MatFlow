@@ -1,7 +1,8 @@
 import json
+from ..ExceptionPackage.matflowexception import MatFlowException
 
-from ..ExceptionPackage import MatFlowException
-class ExceptionHandler():
+
+class ExceptionHandler:
 
     """
     This class handles all MatFlowExceptions and those who inherit from MatFlowException.
@@ -31,6 +32,7 @@ class ExceptionHandler():
         """
         return json.dumps(self.__send_status_code(607))
 
+    @staticmethod
     def __send_status_code(self, status_code: int, out_dict: dict) -> dict:
         out_dict = out_dict.update({'status_code': status_code})
         return out_dict
