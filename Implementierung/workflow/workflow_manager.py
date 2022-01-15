@@ -1,6 +1,9 @@
 class WorkflowManager():
+    """
+    This class provides a singleton object that receives all requests addressed to this package.
+    This class is also communicating with the API of Airflow as well as with the Database package.
+    """
     # exceptions are missing TODO
-    # swap out "file" for real class
     __instance = None
 
     def __init__(self):
@@ -37,8 +40,6 @@ class WorkflowManager():
 
     def create_workflow_instance_from_template(self, template_name: str, workflow_instance_name: str, config_files: Path):
         """Causes the instantiation of a workflow instance under the use of a workflow template.
-
-        Extended description of function. TODO
 
         Args:
             template_name (str): The identifier of the template that is used for instantiation
