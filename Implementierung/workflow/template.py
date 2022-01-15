@@ -14,7 +14,6 @@ class Template():
             name (str): The name of the new template
             dag_definition_file (Path): Path of the file which defines the behavior of workflows
             instantiated from this template
-
         """
         self.name = name
         self.dag_definition_file = dag_definition_file
@@ -26,7 +25,6 @@ class Template():
 
         Returns:
             str: Name of the template
-
         """
         return self.name
 
@@ -35,7 +33,6 @@ class Template():
 
         Returns:
             Path: Path of the dag definition file
-
         """
         return self.dag_definition_file
 
@@ -46,7 +43,6 @@ class Template():
 
         Args:
             name (str): The new name of the template
-
         """
         self.name = name
 
@@ -55,6 +51,5 @@ class Template():
 
         Args:
             dag_definition_file (Path): The Path of the new dag definition file
-
         """
         self.dag_definition_file = dag_definition_file
