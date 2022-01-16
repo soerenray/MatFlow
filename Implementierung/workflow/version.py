@@ -11,8 +11,8 @@ class Version():
             version_number (VersionNumber): Number that identifies the new Version
             note (str): Note from user that can be used for documenting the version
         """
-        self.version_number = version_number
-        self.note = note
+        self.__version_number = version_number
+        self.__note = note
 
     #getter
 
@@ -22,7 +22,7 @@ class Version():
         Returns:
             VersionNumber: number of the version
         """
-        return self.version_number
+        return self.__version_number
 
     def get_note(self)-> str:
         """Gets the note attached to the version.
@@ -30,7 +30,7 @@ class Version():
         Returns:
             str: Attached note
         """
-        return self.note
+        return self.__note
 
     #setter
 
@@ -40,7 +40,7 @@ class Version():
         Args:
             version_number (VersionNumber): The new version number of the version
         """
-        self.version_number = version_number
+        self.__version_number = version_number
 
     def set_note(self, note: str):
         """Sets the version note
@@ -48,4 +48,4 @@ class Version():
         Args:
             note (str): The new note
         """
-        self.note = note
+        self.__note = note

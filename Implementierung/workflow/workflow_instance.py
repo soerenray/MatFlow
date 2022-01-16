@@ -17,9 +17,9 @@ class WorkflowInstance(Template):
             config_folder (Path): Path to a directory of input files needed for executing the workflow
 
         """
-        self.name = name
-        self.dag_definition_file = dag_definition_file
-        self.config_folder = config_folder
+        self.__name = name
+        self.__dag_definition_file = dag_definition_file
+        self.__config_folder = config_folder
 
     #getter
 
@@ -30,7 +30,7 @@ class WorkflowInstance(Template):
             Path: Path of the config folder
 
         """
-        return self.config_folder
+        return self.__config_folder
 
     #setter
 
@@ -41,4 +41,4 @@ class WorkflowInstance(Template):
             config_folder (Path): The Path of the new config folder
 
         """
-        self.config_folder = config_folder
+        self.__config_folder = config_folder

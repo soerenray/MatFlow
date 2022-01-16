@@ -12,9 +12,9 @@ class ConfigFile(ReducedConfigFile):
             key_value_pairs (list[tuple[str,str]]): The contents of the file in key-value-pair representation
             file (Path): Specifies the path of the file that is represented by this object
         """
-        self.file_name = file_name
-        self.key_value_pairs = key_value_pairs
-        self.file = file
+        self.__file_name = file_name
+        self.__key_value_pairs = key_value_pairs
+        self.__file = file
 
     #getter
 
@@ -24,7 +24,7 @@ class ConfigFile(ReducedConfigFile):
         Returns:
             Path: Path of the config file.
         """
-        return self.file
+        return self.__file
 
     #setter
 
@@ -34,7 +34,7 @@ class ConfigFile(ReducedConfigFile):
         Args:
             file (Path): The new path
         """
-        self.file = file
+        self.__file = file
 
     #methods
 

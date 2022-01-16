@@ -11,9 +11,9 @@ class FrontendVersion(Version):
             changes (list[ParameterChange]): Contains the difference to the predecessor version in form of the
             changed key-value-pairs
         """
-        self.version_number = version_number
-        self.note = note
-        self.changes = changes
+        self.__version_number = version_number
+        self.__note = note
+        self.__changes = changes
 
     #getter
 
@@ -23,7 +23,7 @@ class FrontendVersion(Version):
         Returns:
             list[ParameterChange]: List of changes
         """
-        return self.changes
+        return self.__changes
 
     #setter
 
@@ -33,4 +33,4 @@ class FrontendVersion(Version):
         Args:
             changes (list[ParameterChange]): The new list of changes
         """
-        self.changes = changes
+        self.__changes = changes

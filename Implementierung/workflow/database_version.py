@@ -12,9 +12,9 @@ class DatabaseVersion(Version):
             note (str): Note from user that can be used for documenting the version
             changed_config_files (Path): Path to directory containing all changed files
         """
-        self.version_number = version_number
-        self.note = note
-        self.changed_config_files = changed_config_files
+        self.__version_number = version_number
+        self.__note = note
+        self.__changed_config_files = changed_config_files
 
     #getter
 
@@ -24,7 +24,7 @@ class DatabaseVersion(Version):
         Returns:
             Path: Path to files
         """
-        return self.changed_config_files
+        return self.__changed_config_files
 
     #setter
 
@@ -34,4 +34,4 @@ class DatabaseVersion(Version):
         Args:
             changed_config_files (Path): The new path
         """
-        self.changed_config_files = changed_config_files
+        self.__changed_config_files = changed_config_files

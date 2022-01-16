@@ -15,8 +15,8 @@ class Template():
             dag_definition_file (Path): Path of the file which defines the behavior of workflows
             instantiated from this template
         """
-        self.name = name
-        self.dag_definition_file = dag_definition_file
+        self.__name = name
+        self.__dag_definition_file = dag_definition_file
 
     #getter
 
@@ -26,7 +26,7 @@ class Template():
         Returns:
             str: Name of the template
         """
-        return self.name
+        return self.__name
 
     def get_dag_definition_file(self)-> Path:
         """Gets the path of the dag definition file of the object.
@@ -34,7 +34,7 @@ class Template():
         Returns:
             Path: Path of the dag definition file
         """
-        return self.dag_definition_file
+        return self.__dag_definition_file
 
     #setter
 
@@ -44,7 +44,7 @@ class Template():
         Args:
             name (str): The new name of the template
         """
-        self.name = name
+        self.__name = name
 
     def set_dag_definition_file(self, dag_definition_file: Path):
         """Sets the path of the dag definition file of the object.
@@ -52,4 +52,4 @@ class Template():
         Args:
             dag_definition_file (Path): The Path of the new dag definition file
         """
-        self.dag_definition_file = dag_definition_file
+        self.__dag_definition_file = dag_definition_file

@@ -10,8 +10,8 @@ class ReducedConfigFile():
             config files of the workflow instance
             key_value_pairs (list[tuple[str,str]]): The contents of the file in key-value-pair representation
         """
-        self.file_name = file_name
-        self.key_value_pairs = key_value_pairs
+        self.__file_name = file_name
+        self.__key_value_pairs = key_value_pairs
 
     #getter
 
@@ -22,7 +22,7 @@ class ReducedConfigFile():
             str: Name of the file
 
         """
-        return self.file_name
+        return self.__file_name
 
     def get_key_value_pairs(self)-> list[tuple[str,str]]:
         """Gets the contents of the file in key-value-pair representation.
@@ -31,7 +31,7 @@ class ReducedConfigFile():
             list[tuple[str,str]]: The list of key-value-pairs
 
         """
-        return self.key_value_pairs
+        return self.__key_value_pairs
 
     #setter
 
@@ -42,7 +42,7 @@ class ReducedConfigFile():
             file_name (str): The new name of the file
 
         """
-        self.file_name = file_name
+        self.__file_name = file_name
 
     def set_key_value_pairs(self, key_value_pairs: list[tuple[str,str]]):
         """Sets new list of key-value-pairs.
@@ -51,4 +51,4 @@ class ReducedConfigFile():
             key_value_pairs (list[tuple[str,str]]): The list of key-value-pairs
 
         """
-        self.key_value_pairs = key_value_pairs
+        self.__key_value_pairs = key_value_pairs

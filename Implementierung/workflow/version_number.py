@@ -10,7 +10,7 @@ class VersionNumber():
         Args:
             number (str): The version number
         """
-        self.number = number
+        self.__number = number
 
     @ClassMethod
     def fromString(number: str)-> VersionNumber:
@@ -34,7 +34,7 @@ class VersionNumber():
         Returns:
             str: Version number
         """
-        return self.number
+        return self.__number
 
     #setter
 
@@ -44,4 +44,4 @@ class VersionNumber():
         Args:
             number (str): The new number that has to be a correct version number
         """
-        self.number = number
+        self.__number = number
