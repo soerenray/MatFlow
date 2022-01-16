@@ -36,9 +36,9 @@ class ConfigFile(ReducedConfigFile):
         """
         self.__file = file
 
-    #methods
+    #public methods
 
-    def apply_changes(changes: ReducedConfigFile):
+    def apply_changes(updated_file: ReducedConfigFile):
         """Finds differences between self and the given file and writes them to self.file
 
         The method compares the key-value-pairs given through the ReducedConfigFile to the pairs of the object itself.
@@ -47,3 +47,12 @@ class ConfigFile(ReducedConfigFile):
         Args:
             changes (ReducedConfigFile): The updated reduced version of the file
         """
+    #private methods
+
+    def __find_changes()-> list[ParameterChange]:
+        """
+        
+        """
+        pass
+
+    def __write_changes_to_file(changes: list[ParameterChange]):

@@ -118,7 +118,7 @@ class WorkflowManager():
         """
         pass
 
-    def create_new_version_of_workflow_instance(self, workflow_instance_name: str, changed_files: Path, version_note:str):
+    def create_new_version_of_workflow_instance(self, workflow_instance_name: str, changed_files: list[ReducedConfigFile], version_note:str):
         """Causes the creation of a new version of the workflow instance in the database.
 
         The new version is obtained by overwriting the given changed files and adopting all other files of the
@@ -126,7 +126,7 @@ class WorkflowManager():
 
         Args:
             workflow_instance_name (str): The identifier of the workflow instance of which a new version is created
-            changed_files (Path): Path to the config-files that were changed in comparison to the predecessor version
+            changed_files (Path): Tthe config-files that were changed in comparison to the predecessor version
                 in key-value-pair representation
             version_note (str): Note about the new version given by the user
 
