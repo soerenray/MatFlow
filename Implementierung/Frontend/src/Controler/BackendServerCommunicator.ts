@@ -7,29 +7,8 @@ import WorkflowInstance from '../Classes/WorkflowInstance'
 
 import {templateNames, workflowInstancesNameAndConfigFilesName, conf1, versions, users} from '../DummyData/DataInTypscript'
 
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
 class BackendServerCommunicator {
-    private static _singleBackendServerCommunicator: BackendServerCommunicator = null
-
-    /**
-     * Singelton pattern
-     */
-    private constructor() {}
-
-    /**
-     * Returns the onle object ob BackendServerCommunicator
-     * @returns The single instance of BackendServerCommunicator
-     */
-    public static returnBackendServerCommunicator(): BackendServerCommunicator { 
-        if(this._singleBackendServerCommunicator === null) {
-            this._singleBackendServerCommunicator = new BackendServerCommunicator()
-        }
-        return this._singleBackendServerCommunicator
-      }
+    public constructor() {}
 
     public login(userName: string, userPassword: string): void { return  }
     public register(userName: string, userPassword: string): void { return  }
@@ -49,34 +28,3 @@ class BackendServerCommunicator {
     public pullServers(): Server[] { return  }
     public pushServer(server: Server): void { return  }
 }
-
-let BackendServerCommunicatorObject: BackendServerCommunicator = BackendServerCommunicator.returnBackendServerCommunicator()
-
-export default new Vuex.Store({
-    state: {
-    },
-    getters: {
-        pullTemplatesName: state => {
-            return BackendServerCommunicatorObject.pullTemplatesName()
-        },
-        pullWorkflowInstancesNameAndConfigFilesName: state => {
-            return BackendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
-        },
-        pullConfigFileWithConfigFileNameWithWorkflowInstanceName: (state) => (configFileName: string, workflowInstanceName: string) => {
-            return BackendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(configFileName, workflowInstanceName)
-        },
-        pullVersionsWithWorkflowInstanceName: (state) => (workflowInstanceName: string) => {
-            return BackendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(workflowInstanceName)
-        },
-        pullUsers: state => {
-            return BackendServerCommunicatorObject.pullUsers()
-        }
-    },
-    mutations: {
-    },
-    actions: {
-    },
-    modules: {
-    }
-  })
-  

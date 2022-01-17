@@ -1,3 +1,5 @@
+import Version from '../Classes/Version'
+
 class VersionControl {
     private _tableHeaders: object[]
     private _versions: Version[]
