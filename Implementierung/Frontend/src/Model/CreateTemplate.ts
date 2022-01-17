@@ -1,29 +1,32 @@
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+
 class CreateTemplate {
-    private _templatesNames: string[]
+    private _templatesName: string[]
     private _chosenTemplateName: string
     private _templateFolder: File
     private _dagFile: File
 
     /**
     *
-    * @param templatesNames The templatesNames
+    * @param templatesName The templatesName
     * @param chosenTemplateName The chosenTemplateName
     * @param templateFolder The templateFolder
     * @param dagFile The dagFile
     */
-    constructor(templatesNames: string[], chosenTemplateName: string, templateFolder: File, dagFile: File,) {
-        this._templatesNames = templatesNames
+    constructor(templatesName: string[], chosenTemplateName: string, templateFolder: File, dagFile: File,) {
+        this._templatesName = templatesName
         this._chosenTemplateName = chosenTemplateName
         this._templateFolder = templateFolder
         this._dagFile = dagFile
     }
 
     /**
-    * Gets the templatesNames
-    * @returns _templatesNames
+    * Gets the templatesName
+    * @returns _templatesName
     */
-    public get templatesNames(): string[] {
-        return this._templatesNames
+    public get templatesName(): string[] {
+        this._templatesName = BackendServerCommunicator.pullTemplatesName()
+        return this._templatesName
     }
 
     /**
@@ -50,13 +53,12 @@ class CreateTemplate {
         return this._dagFile
     }
 
-
     /**
-    * Sets the value of _templatesNames
-    * @param templatesNames The new value of _templatesNames
+    * Sets the value of _templatesName
+    * @param templatesName The new value of _templatesName
     */
-    public set templatesNames(templatesNames: string[]) {
-        this._templatesNames = templatesNames
+    public set templatesName(templatesName: string[]) {
+        this._templatesName = templatesName
     }
 
     /**

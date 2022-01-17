@@ -17,7 +17,6 @@ class Approval {
         return this._approvalMessage
     }
 
-
     /**
     * Sets the value of _approvalMessage
     * @param approvalMessage The new value of _approvalMessage
