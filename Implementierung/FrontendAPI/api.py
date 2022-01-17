@@ -1,7 +1,9 @@
 from __future__ import annotations
 from flask import Flask, request
 from waitress import serve
-
+from Implementierung.Database.ServerData import ServerData
+from Implementierung.ExceptionPackage.matflowexception import MatFlowException
+from JSONtopython import JSONToPython
 from exceptionhandler import ExceptionHandler
 
 #according to Flask docs this command should be on modular level
@@ -310,4 +312,5 @@ class FrontendAPI:
 ## The Flask webserver ##
 #########################
 
-a = FrontendAPI.get_frontend_api()
+if __name__ == "__main__":
+    a = FrontendAPI.get_frontend_api()

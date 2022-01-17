@@ -1,5 +1,5 @@
 import json
-from ..ExceptionPackage.matflowexception import MatFlowException
+from Implementierung.ExceptionPackage.matflowexception import MatFlowException
 
 
 class ExceptionHandler:
@@ -18,7 +18,7 @@ class ExceptionHandler:
         Returns:
             String: status code nested in json object
         """
-        return json.dumps(self.__send_status_code(exception.get_status_code()))
+        return json.dumps(self.__send_status_code(exception.get_status_code(), dict()))
 
     def success(self, out_dict: dict) -> str:
         """
@@ -30,9 +30,10 @@ class ExceptionHandler:
         Returns:
             String: json object containing success status code (607)
         """
-        return json.dumps(self.__send_status_code(607))
+        return json.dumps(self.__send_status_code(607, out_dict))
 
     @staticmethod
-    def __send_status_code(self, status_code: int, out_dict: dict) -> dict:
-        out_dict = out_dict.update({'status_code': status_code})
-        return out_dict
+    def __send_status_code(status_code: int, unfinished_dict: dict) -> dict:
+        status_code_dict: dict = {'status_code': status_code}
+        unfinished_dict.update(status_code_dict)
+        return unfinished_dict
