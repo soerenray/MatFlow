@@ -45,3 +45,5 @@ class Template {
         this._templateName = templateName
     }
 }
+
+export default Template

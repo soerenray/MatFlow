@@ -1,13 +1,13 @@
 class ConfigFile {
     private _configFileName: string
-    private _keyValuePairs: [string, string]
+    private _keyValuePairs: Array<[string, string]>
 
     /**
     *
     * @param configFileName The configFileName
     * @param keyValuePairs The keyValuePairs
     */
-    constructor(configFileName: string, keyValuePairs: [string, string],) {
+    constructor(configFileName: string, keyValuePairs: Array<[string, string]>,) {
         this._configFileName = configFileName
         this._keyValuePairs = keyValuePairs
     }
@@ -24,7 +24,7 @@ class ConfigFile {
     * Gets the keyValuePairs
     * @returns _keyValuePairs
     */
-    public get keyValuePairs(): [string, string] {
+    public get keyValuePairs(): Array<[string, string]> {
         return this._keyValuePairs
     }
 
@@ -41,7 +41,9 @@ class ConfigFile {
     * Sets the value of _keyValuePairs
     * @param keyValuePairs The new value of _keyValuePairs
     */
-    public set keyValuePairs(keyValuePairs: [string, string]) {
+    public set keyValuePairs(keyValuePairs: Array<[string, string]>) {
         this._keyValuePairs = keyValuePairs
     }
 }
+
+export default ConfigFile

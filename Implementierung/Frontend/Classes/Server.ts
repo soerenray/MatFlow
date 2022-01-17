@@ -121,3 +121,5 @@ class Server {
         this._serverResources = serverResources
     }
 }
+
+export default Server
