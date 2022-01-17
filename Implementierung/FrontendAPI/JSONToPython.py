@@ -1,3 +1,11 @@
+from typing import List, Tuple
+from Implementierung.HardwareAdministration import Server
+from Implementierung.UserAdministration import User, UserController
+from Implementierung.workflow.template import Template
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from flask import request
+
+
 class JSONToPython:
 
     """
@@ -7,35 +15,39 @@ class JSONToPython:
     after they are finished writing back / getting data from the database.
     """
     @staticmethod
-    def extract_user(json_details: str) -> User:
+    def extract_user(request_details: request) -> User:
         """
         extracts json details and builds a new User based off of these json details
 
         Args:
-            json_details(String): contains encoded user
+            request_details(request): contains encoded user
 
         Returns:
             User: decoded user object
         """
-        pass
+        user_name: str = request_details.args.get('userName')
+        controller: UserController = UserController()
+        user: User = controller.getUser(user_name)
+        return user
+
 
     @staticmethod
-    def extract_server(json_details: str) -> Server:
+    def extract_server(request_details: request) -> Server:
         """
         extracts json details and builds a new Server based off of these json details
 
         Args:
-            json_details(String): contains encoded server
+            request_details(request): contains encoded server
 
         Returns:
             Server: decoded server object
         """
-        name: str = request.args.get('serverName')
-        ip_address: str = request.args.get('serverAddress')
-        status: str = request.args.get('serverStatus')
-        container_limit: int = request.args.get('containerLimit')
-        resources: list[tuple[str, str]] = request.args.get('serverResources')
-        executing: bool = request.args.get('selectedForExecution')
+        name: str = request_details.args.get('serverName')
+        ip_address: str = request_details.args.get('serverAddress')
+        status: str = request_details.args.get('serverStatus')
+        container_limit: int = request_details.args.get('containerLimit')
+        resources: List[Tuple[str, str]] = request_details.args.get('serverResources')
+        executing: bool = request_details.args.get('selectedForExecution')
         server: Server = Server(name, ip_address, status, container_limit, executing, resources)
         return server
 
@@ -63,6 +75,5 @@ class JSONToPython:
         Returns:
             ReducedConfigFile[]: array of reduced config files
         """
-        #hier array von ReducedConfigFile
+        # here array von ReducedConfigFile
         pass
-
