@@ -1,6 +1,7 @@
-import Path from pathlib
+from pathlib import Path
 
-class Template():
+
+class Template:
     """
     This class represents a workflow template.
     It contains the identifying name of the template as well as a dag-definition-file.
@@ -18,9 +19,9 @@ class Template():
         self.__name = name
         self.__dag_definition_file = dag_definition_file
 
-    #getter
+    # getter
 
-    def get_name(self)-> str:
+    def get_name(self) -> str:
         """Gets the name attribute of the object.
 
         Returns:
@@ -28,7 +29,7 @@ class Template():
         """
         return self.__name
 
-    def get_dag_definition_file(self)-> Path:
+    def get_dag_definition_file(self) -> Path:
         """Gets the path of the dag definition file of the object.
 
         Returns:
@@ -36,7 +37,7 @@ class Template():
         """
         return self.__dag_definition_file
 
-    #setter
+    # setter
 
     def set_name(self, name: str):
         """Sets the name attribute of the object.

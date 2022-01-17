@@ -1,4 +1,7 @@
-class Version():
+from .version_number import VersionNumber
+
+
+class Version:
     """
     This class represents a version of a workflow instance.
     It's main task is to switch between the two different representations of versions one in the frontend,
@@ -14,9 +17,9 @@ class Version():
         self.__version_number = version_number
         self.__note = note
 
-    #getter
+    # getter
 
-    def get_version_number(self)-> VersionNumber:
+    def get_version_number(self) -> VersionNumber:
         """Gets the number of the version.
 
         Returns:
@@ -24,7 +27,7 @@ class Version():
         """
         return self.__version_number
 
-    def get_note(self)-> str:
+    def get_note(self) -> str:
         """Gets the note attached to the version.
 
         Returns:
@@ -32,7 +35,7 @@ class Version():
         """
         return self.__note
 
-    #setter
+    # setter
 
     def set_version_number(self, version_number: VersionNumber):
         """Sets the number of the version.

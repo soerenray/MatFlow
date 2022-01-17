@@ -1,8 +1,11 @@
-class ReducedConfigFile():
+from typing import List, Tuple
+
+
+class ReducedConfigFile:
     """
     This class holds all information to represent a config-file in the frontend.
     """
-    def __init__(self, file_name: str, key_value_pairs: list[tuple[str,str]]):
+    def __init__(self, file_name: str, key_value_pairs: List[Tuple[str, str]]):
         """Constructor of class ReducedConfigFile.
 
         Args:
@@ -13,9 +16,9 @@ class ReducedConfigFile():
         self.__file_name = file_name
         self.__key_value_pairs = key_value_pairs
 
-    #getter
+    # getter
 
-    def get_file_name(self)-> str:
+    def get_file_name(self) -> str:
         """Gets the name of the config file.
 
         Returns:
@@ -24,7 +27,7 @@ class ReducedConfigFile():
         """
         return self.__file_name
 
-    def get_key_value_pairs(self)-> list[tuple[str,str]]:
+    def get_key_value_pairs(self) -> List[Tuple[str, str]]:
         """Gets the contents of the file in key-value-pair representation.
 
         Returns:
@@ -33,7 +36,7 @@ class ReducedConfigFile():
         """
         return self.__key_value_pairs
 
-    #setter
+    # setter
 
     def set_file_name(self, file_name: str):
         """Sets the file_name attribute of the object.
@@ -44,11 +47,11 @@ class ReducedConfigFile():
         """
         self.__file_name = file_name
 
-    def set_key_value_pairs(self, key_value_pairs: list[tuple[str,str]]):
+    def set_key_value_pairs(self, key_value_pairs: List[Tuple[str, str]]):
         """Sets new list of key-value-pairs.
 
         Args:
-            key_value_pairs (list[tuple[str,str]]): The list of key-value-pairs
+            key_value_pairs (List[Tuple[str, str]]): The list of key-value-pairs
 
         """
         self.__key_value_pairs = key_value_pairs

@@ -1,9 +1,14 @@
+from pathlib import Path
+from typing import List, Tuple
+from workflow.reduced_config_file import ReducedConfigFile
+
+
 class ConfigFile(ReducedConfigFile):
     """
     This is a subclass of ReducedConfigFile and additionally holds the config-file
-    itself aswell as the name of the associated workflow instance.
+    itself as well as the name of the associated workflow instance.
     """
-    def __init__(self, file_name: str, key_value_pairs: list[tuple[str,str]], file: Path):
+    def __init__(self, file_name: str, key_value_pairs: List[Tuple[str, str]], file: Path):
         """Constructor of class ConfigFile.
 
         Args:
@@ -12,13 +17,12 @@ class ConfigFile(ReducedConfigFile):
             key_value_pairs (list[tuple[str,str]]): The contents of the file in key-value-pair representation
             file (Path): Specifies the path of the file that is represented by this object
         """
-        self.__file_name = file_name
-        self.__key_value_pairs = key_value_pairs
+        super().__init__(file_name, key_value_pairs)
         self.__file = file
 
-    #getter
+    # getter
 
-    def get_file(self)-> Path:
+    def get_file(self) -> Path:
         """Gets the path of the config file.
 
         Returns:
@@ -26,7 +30,7 @@ class ConfigFile(ReducedConfigFile):
         """
         return self.__file
 
-    #setter
+    # setter
 
     def set_file(self, file: Path):
         """Sets the path of the config file
@@ -36,7 +40,7 @@ class ConfigFile(ReducedConfigFile):
         """
         self.__file = file
 
-    #public methods
+    # public methods
 
     def apply_changes(self, updated_file: ReducedConfigFile):
         """Finds differences between self and the given file and writes them to self.file
@@ -45,14 +49,17 @@ class ConfigFile(ReducedConfigFile):
         Changes detected are applied to the actual config file that is located in the database.
 
         Args:
-            changes (ReducedConfigFile): The updated reduced version of the file
+            updated_file (ReducedConfigFile): The updated reduced version of the file
         """
-    #private methods
+    # private methods
 
-    def __find_changes(self, updated_file: ReducedConfigFile)-> list[tuple[str,str,str,str]]:
+    def __find_changes(self, updated_file: ReducedConfigFile) -> List[Tuple[str, str, str, str]]:
         """
         Compares the key value file
         """
         pass
 
-    def __write_changes_to_file(changes: list[ParameterChange]):
+    def __write_changes_to_file(self, changes: List[Tuple[str, str, str, str]]):
+        """
+        comment
+        """

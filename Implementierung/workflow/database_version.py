@@ -1,4 +1,7 @@
-import Path from pathlib
+from pathlib import Path
+from workflow.version import Version
+from workflow.version_number import VersionNumber
+
 
 class DatabaseVersion(Version):
     """
@@ -12,13 +15,12 @@ class DatabaseVersion(Version):
             note (str): Note from user that can be used for documenting the version
             changed_config_files (Path): Path to directory containing all changed files
         """
-        self.__version_number = version_number
-        self.__note = note
+        super().__init__(version_number, note)
         self.__changed_config_files = changed_config_files
 
-    #getter
+    # getter
 
-    def get_changed_config_files(self)-> Path:
+    def get_changed_config_files(self) -> Path:
         """Gets path to files that were changed compared to the predecessor version.
 
         Returns:
@@ -26,7 +28,7 @@ class DatabaseVersion(Version):
         """
         return self.__changed_config_files
 
-    #setter
+    # setter
 
     def set_changed_config_files(self, changed_config_files: Path):
         """Sets new path to files that were changed compared to the predecessor version.
