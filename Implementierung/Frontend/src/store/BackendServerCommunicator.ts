@@ -55,6 +55,23 @@ let BackendServerCommunicatorObject: BackendServerCommunicator = BackendServerCo
 export default new Vuex.Store({
     state: {
     },
+    getters: {
+        pullTemplatesName: state => {
+            return BackendServerCommunicatorObject.pullTemplatesName()
+        },
+        pullWorkflowInstancesNameAndConfigFilesName: state => {
+            return BackendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+        },
+        pullConfigFileWithConfigFileNameWithWorkflowInstanceName: (state) => (configFileName: string, workflowInstanceName: string) => {
+            return BackendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(configFileName, workflowInstanceName)
+        },
+        pullVersionsWithWorkflowInstanceName: (state) => (workflowInstanceName: string) => {
+            return BackendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(workflowInstanceName)
+        },
+        pullUsers: state => {
+            return BackendServerCommunicatorObject.pullUsers()
+        }
+    },
     mutations: {
     },
     actions: {
