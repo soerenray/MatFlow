@@ -1,5 +1,7 @@
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+
 class CreateWorkflowInstance {
-    private _templatesNames: string[]
+    private _templatesName: string[]
     private _configFolder: File
     private _workflowInstanceFolder: File
     private _selectedTemplateName: string
@@ -7,14 +9,14 @@ class CreateWorkflowInstance {
 
     /**
     *
-    * @param templatesNames The templatesNames
+    * @param templatesName The templatesName
     * @param configFolder The configFolder
     * @param workflowInstanceFolder The workflowInstanceFolder
     * @param selectedTemplateName The selectedTemplateName
     * @param workflowInstanceName The workflowInstanceName
     */
-    constructor(templatesNames: string[], configFolder: File, workflowInstanceFolder: File, selectedTemplateName: string, workflowInstanceName: string,) {
-        this._templatesNames = templatesNames
+    constructor(templatesName: string[], configFolder: File, workflowInstanceFolder: File, selectedTemplateName: string, workflowInstanceName: string,) {
+        this._templatesName = templatesName
         this._configFolder = configFolder
         this._workflowInstanceFolder = workflowInstanceFolder
         this._selectedTemplateName = selectedTemplateName
@@ -22,11 +24,12 @@ class CreateWorkflowInstance {
     }
 
     /**
-    * Gets the templatesNames
-    * @returns _templatesNames
+    * Gets the templatesName
+    * @returns _templatesName
     */
-    public get templatesNames(): string[] {
-        return this._templatesNames
+    public get templatesName(): string[] {
+        this._templatesName = BackendServerCommunicator.pullTemplatesName()
+        return this._templatesName
     }
 
     /**
@@ -63,11 +66,11 @@ class CreateWorkflowInstance {
 
 
     /**
-    * Sets the value of _templatesNames
-    * @param templatesNames The new value of _templatesNames
+    * Sets the value of _templatesName
+    * @param templatesName The new value of _templatesName
     */
-    public set templatesNames(templatesNames: string[]) {
-        this._templatesNames = templatesNames
+    public set templatesName(templatesName: string[]) {
+        this._templatesName = templatesName
     }
 
     /**
