@@ -51,6 +51,7 @@ class VersionControl {
     * @returns _workflowInstancesName
     */
     public get workflowInstancesName(): string[] {
+        this._workflowInstancesName = BackendServerCommunicator.pullWorkflowInstancesName()
         return this._workflowInstancesName
     }
 
@@ -71,18 +72,18 @@ class VersionControl {
     }
 
     /**
-    * Sets the value of _workflowInstancesName
-    * @param workflowInstanceName The new value of _workflowInstancesName
-    */
-    public set workflowInstancesName(workflowInstancesName: string[]) {
-        this._workflowInstancesName = workflowInstancesName
-    }
-
-    /**
     * Sets the value of _workflowInstanceName
     * @param workflowInstanceName The new value of _workflowInstanceName
     */
     public set workflowInstanceName(workflowInstanceName: string) {
         this._workflowInstanceName = workflowInstanceName
+    }
+
+    /**
+    * Sets the value of _workflowInstancesName
+    * @param workflowInstanceName The new value of _workflowInstancesName
+    */
+    public set workflowInstancesName(workflowInstancesName: string[]) {
+        this._workflowInstancesName = workflowInstancesName
     }
 }
