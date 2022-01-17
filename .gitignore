@@ -6,6 +6,9 @@
 #dummy script to check if airflow import works and python interpreter is right
 test.py
 
+# filter out files in pycache directory
+*.pyc
+
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
