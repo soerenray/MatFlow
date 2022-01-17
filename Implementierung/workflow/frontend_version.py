@@ -1,8 +1,14 @@
+from typing import List
+from workflow.version import Version
+from workflow.version_number import VersionNumber
+from workflow.parameter_change import ParameterChange
+
+
 class FrontendVersion(Version):
     """
     This class inherits from Version and is specialized to satisfy the need for information of the client application.
     """
-    def __init__(self, version_number: VersionNumber, note: str, changes: list[ParameterChange]):
+    def __init__(self, version_number: VersionNumber, note: str, changes: List[ParameterChange]):
         """Constructor of class FrontendVersion.
 
         Args:
@@ -11,13 +17,12 @@ class FrontendVersion(Version):
             changes (list[ParameterChange]): Contains the difference to the predecessor version in form of the
             changed key-value-pairs
         """
-        self.__version_number = version_number
-        self.__note = note
+        super().__init__(version_number, note)
         self.__changes = changes
 
-    #getter
+    # getter
 
-    def get_changes(self)-> list[ParameterChange]:
+    def get_changes(self) -> List[ParameterChange]:
         """Gets the parameter changes compared to the predecessor version.
 
         Returns:
@@ -25,9 +30,9 @@ class FrontendVersion(Version):
         """
         return self.__changes
 
-    #setter
+    # setter
 
-    def set_changes(self, changes: list[ParameterChange]):
+    def set_changes(self, changes: List[ParameterChange]):
         """Sets the parameter changes compared to the predecessor version.
 
         Args:

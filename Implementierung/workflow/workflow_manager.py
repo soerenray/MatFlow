@@ -1,4 +1,10 @@
-class WorkflowManager():
+from pathlib import Path
+from typing import List, Tuple
+from workflow.template import Template
+from workflow.reduced_config_file import ReducedConfigFile
+
+
+class WorkflowManager:
     """
     This class provides a singleton object that receives all requests addressed to this package.
     This class is also communicating with the API of Airflow as well as with the Database package.
@@ -7,17 +13,13 @@ class WorkflowManager():
     __instance = None
 
     def __init__(self):
-        raise Error("Call get_instance()")
+        raise Exception("Call get_instance()")
 
     @classmethod
-    def get_instance(self) -> WorkflowManager:
+    def get_instance(cls, self):
         """Returns the singleton object of the WorkflowManager class.
 
             Returns the singleton object if already existing otherwise calls the private constructor.
-
-            Returns:
-                WorkflowManager: singleton object
-
             """
         if self.__instance is None:
             print('Creating new instance')
@@ -28,28 +30,29 @@ class WorkflowManager():
     def create_template(self, template: Template):
         """Causes the creation of a new template entry in the database.
 
-        Fails if the Template.name is already occuring in the database.
+        Fails if the Template.name is already occurring in the database.
         In case of success the new template can be used for creating workflow instances afterwards.
 
         Args:
-            template (Template): Template object that provides all necessery information for creating
+            template (Template): Template object that provides all necessary information for creating
             a new workflow template.
 
         """
         pass
 
-    def create_workflow_instance_from_template(self, template_name: str, workflow_instance_name: str, config_files: Path):
+    def create_workflow_instance_from_template(
+            self, template_name: str, workflow_instance_name: str, config_files: Path):
         """Causes the instantiation of a workflow instance under the use of a workflow template.
 
         Args:
             template_name (str): The identifier of the template that is used for instantiation
             workflow_instance_name (str): The name of the new workflow instance
-            config_files (Path): Cointains all the files needed for the execution of the workflow
+            config_files (Path): Contains all the files needed for the execution of the workflow
 
         """
         pass
 
-    def get_dag_representation_from_template(self, template:Template)-> Path:
+    def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph
 
         Uses functionality of airflow. Is used in the template editor of the client application.
@@ -63,19 +66,19 @@ class WorkflowManager():
         """
         pass
 
-    def get_template_names(self)-> list[str]:
+    def get_template_names(self) -> List[str]:
         """Returns the names of all templates.
 
         Makes database request and returns the names of all templates in the system.
 
         Returns:
-            list[str]: Collection of all template names
+            List[str]: Collection of all template names
 
         """
         pass
 
-    def get_template_from_name(self, template_name: str)-> Template:
-        """Returns template idetified by the given name.
+    def get_template_from_name(self, template_name: str) -> Template:
+        """Returns template identified by the given name.
 
         Forwards the request for the named template to the database and returns result.
 
@@ -88,20 +91,21 @@ class WorkflowManager():
         """
         pass
 
-    def get_names_of_workflows_and_config_files(self)-> list[list[str]]:
-        """Returns the names of all workflow instances aswell as the names of the associated config-files
+    def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
+        """Returns the names of all workflow instances as well as the names of the associated config-files
 
         Forwards the request to the database.
 
 
         Returns:
-            list[list[str]]: A two-dimensional array where the innner arrays start with the name of the template which is followed by
-                the names of the associated config-files
+            List[List[str]]: A two-dimensional array where the inner arrays start with the name of the template which
+            is followed by the names of the associated config-files
 
         """
         pass
 
-    def get_key_value_pairs_from_config_file(self, workflow_instance_name: str, config_file_name: string)->list[tuple[str,str]]:
+    def get_key_value_pairs_from_config_file(
+            self, workflow_instance_name: str, config_file_name: str) -> List[Tuple[str, str]]:
         """Returns the collection of all key value pairs in the specified config-file.
 
         Requests the desired config-file from the current version of the named workflow instance from the database.
@@ -113,12 +117,13 @@ class WorkflowManager():
             config_file_name (str): The name of the desired config file
 
         Returns:
-            list[tuple[str,str]]: The list of key value pairs in the config file
+            List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
         pass
 
-    def create_new_version_of_workflow_instance(self, workflow_instance_name: str, changed_files: list[ReducedConfigFile], version_note:str):
+    def create_new_version_of_workflow_instance(
+            self, workflow_instance_name: str, changed_files: List[ReducedConfigFile], version_note: str):
         """Causes the creation of a new version of the workflow instance in the database.
 
         The new version is obtained by overwriting the given changed files and adopting all other files of the
@@ -126,7 +131,7 @@ class WorkflowManager():
 
         Args:
             workflow_instance_name (str): The identifier of the workflow instance of which a new version is created
-            changed_files (Path): Tthe config-files that were changed in comparison to the predecessor version
+            changed_files (Path): The config-files that were changed in comparison to the predecessor version
                 in key-value-pair representation
             version_note (str): Note about the new version given by the user
 
@@ -145,4 +150,3 @@ class WorkflowManager():
 
         """
         pass
-
