@@ -28,6 +28,10 @@ let workflowInstancesNameAndConfigFilesName: Array<[string, string[]]> = [
     ]]
 ]
 
+// pullWorkflowInstancesName
+let workflowInstancesName: string[] = ['workflowInstance1', 'workflowInstance2']
+
+
 //pullConfigFileWithConfigFileNameWithWorkflowIsntanceName
 let conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1'], ['key2', 'val2']])
 
@@ -40,4 +44,4 @@ let users: User[] = [new User('name1', 'status1', 'privilege1'), new User('name2
 // pullServers
 // wont be implemented at the moement (time pressure)
 
-export { templateNames, workflowInstancesNameAndConfigFilesName, conf1, versions, users }
+export { templateNames, workflowInstancesNameAndConfigFilesName, workflowInstancesName, conf1, versions, users }

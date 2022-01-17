@@ -3,9 +3,8 @@ import User from '../Classes/User'
 import Server from '../Classes/Server'
 import Version from '../Classes/Version'
 import Template from '../Classes/Template'
-import WorkflowInstance from '../Classes/WorkflowInstance'
 
-import {templateNames, workflowInstancesNameAndConfigFilesName, conf1, versions, users} from '../DummyData/DataInTypscript'
+import {templateNames, workflowInstancesNameAndConfigFilesName, workflowInstancesName, conf1, versions, users} from '../DummyData/DataInTypscript'
 
 class BackendServerCommunicator {
     public constructor() {}
@@ -18,7 +17,7 @@ class BackendServerCommunicator {
     public static pullTemplatesName(): string[] { return templateNames }
     public static pullTemplateWithName(templateName: string): Template { return  }
     public static pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
-    public static pullWorkflowInstancesName(): string[] {return }
+    public static pullWorkflowInstancesName(): string[] {return workflowInstancesName }
     public static pullConfigFileWithConfigFileNameWithWorkflowInstanceName(configFileName: string, workflowInstanceName: string): ConfigFile { return conf1 }
     public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void { return }
     public static pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
