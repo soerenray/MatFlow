@@ -64,3 +64,5 @@ class User {
         this._userPrivilege = userPrivilege
     }
 }
+
+export default User

@@ -1,7 +1,7 @@
 class Version {
     private _versionNumber: string
     private _versionNote: string
-    private _parameterChanges: [string, string]
+    private _parameterChanges: Array<[string, string]>
 
     /**
     *
@@ -9,7 +9,7 @@ class Version {
     * @param versionNote The versionNote
     * @param parameterChanges The parameterChanges
     */
-    constructor(versionNumber: string, versionNote: string, parameterChanges: [string, string],) {
+    constructor(versionNumber: string, versionNote: string, parameterChanges: Array<[string, string]>,) {
         this._versionNumber = versionNumber
         this._versionNote = versionNote
         this._parameterChanges = parameterChanges
@@ -35,7 +35,7 @@ class Version {
     * Gets the parameterChanges
     * @returns _parameterChanges
     */
-    public get parameterChanges(): [string, string] {
+    public get parameterChanges(): Array<[string, string]> {
         return this._parameterChanges
     }
 
@@ -60,7 +60,9 @@ class Version {
     * Sets the value of _parameterChanges
     * @param parameterChanges The new value of _parameterChanges
     */
-    public set parameterChanges(parameterChanges: [string, string]) {
+    public set parameterChanges(parameterChanges: Array<[string, string]>) {
         this._parameterChanges = parameterChanges
     }
 }
+
+export default Version

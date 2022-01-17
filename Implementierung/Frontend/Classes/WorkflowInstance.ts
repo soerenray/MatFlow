@@ -45,3 +45,5 @@ class WorkflowInstance {
         this._activeVersionNumber = activeVersionNumber
     }
 }
+
+export default WorkflowInstance
