@@ -1,4 +1,4 @@
-class JSONToPython():
+class JSONToPython:
 
     """
     This class converts all json data into the wanted object by extracting certain keys and values and
