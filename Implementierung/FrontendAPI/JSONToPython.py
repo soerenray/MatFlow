@@ -65,15 +65,18 @@ class JSONToPython:
         pass
 
     @staticmethod
-    def extract_configs(json_details: str) -> ReducedConfigFile:
+    def extract_configs(request_details: request) -> List[ReducedConfigFile]:
         """
         extracts json details and builds a new ReducedConfigFile array based off of these json details
 
         Args:
-            json_details(String): contains encoded reduced config files
+            request_details(request): contains encoded reduced config files
 
         Returns:
             ReducedConfigFile[]: array of reduced config files
         """
-        # here array von ReducedConfigFile
-        pass
+        files: List[dict] = request.args.get('configFolder')
+        for config in files:
+            #config file name rausziehen
+            # key value Paare sind in Liste -> rausziehen
+            continue

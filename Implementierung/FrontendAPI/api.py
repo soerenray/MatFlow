@@ -6,7 +6,7 @@ from flask import Flask, request
 from waitress import serve
 from Implementierung.Database.ServerData import ServerData
 from Implementierung.ExceptionPackage.matflowexception import MatFlowException
-from Implementierung.workflow import FrontendVersion
+from Implementierung.workflow import FrontendVersion, ReducedConfigFile
 from Implementierung.workflow.workflow_instance import WorkflowInstance
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from JSONToPython import JSONToPython
@@ -178,7 +178,7 @@ class FrontendAPI:
 
         # template_name is inherited attribute
         versions: List[FrontendVersion] = workflow_manager.getVersionsFromWorkflowInstance(
-            request.args.get('templateName'))
+            request.args.get('workflowInstanceName'))
         return PythonToJSON.encode_versions(versions)
 
     @staticmethod
@@ -195,7 +195,7 @@ class FrontendAPI:
         """
         workflow_manager: WorkflowManager = WorkflowManager.get_instance()
         try:
-            workflow_manager.set_active_version_through_number(request.args.get('templateName'),
+            workflow_manager.set_active_version_through_number(request.args.get('workflowInstanceName'),
                                                            request.args.get('versionNumber'))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -216,7 +216,16 @@ class FrontendAPI:
         Returns:
             String: response indicating successful request
         """
-        pass
+        workflow_manager: WorkflowManager = WorkflowManager.get_instance()
+        wf_instance_name: str = request.args.get('workflowInstanceName')
+        version_note: str = request.args.get('versionNote')
+        configs: List[ReducedConfigFile] = JSONToPython.extract_configs(request)
+        try:
+            workflow_manager.create_new_version_of_workflow_instance(wf_instance_name, configs, version_note)
+        except MatFlowException as exception:
+            return ExceptionHandler.handle_exception(exception)
+        else:
+            return ExceptionHandler.success(dict())
 
     @staticmethod
     @app.route('/get_config_from_wf_instance', methods=['GET'])
@@ -231,8 +240,11 @@ class FrontendAPI:
         Returns:
             String: json-dumped object containing encoded config file
         """
-        pass
-        # return json
+        workflow_manager: WorkflowManager = WorkflowManager.get_instance()
+        file: ReducedConfigFile = \
+        workflow_manager.get_key_value_pairs_from_config_file(request.args.get('workflowInstanceName'),
+        request.args.get('configFileName'))
+        return PythonToJSON.encode_config(file)
 
     @staticmethod
     @app.route('/create_workflow_instance', methods=['POST'])
@@ -246,7 +258,9 @@ class FrontendAPI:
         Returns:
             String: response indicating successful request
         """
-        pass
+        wf_instance_name: str = request.args.get('workflowInstanceName')
+        template_name: str = request.args.get('templateName')
+        files: List[ReducedConfigFile] = JSONToPython.extract_configs(request)
 
     @staticmethod
     @app.route('/get_all_wf_instances_names_and_config_file_names', methods=['GET'])

@@ -88,7 +88,10 @@ class PythonToJSON:
         Returns:
             String: json-dumped object containing encoded reduced config file (essentially key value pairs)
         """
-        pass
+        out_dict = dict({'configFileName': reduced_config.get_file_name()})
+        key_value_pairs: List[(str, str)] = reduced_config.get_key_value_pairs()
+        out_dict.update({'keyValuePairs': key_value_pairs})
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_versions(versions: List[FrontendVersion]) -> str:
