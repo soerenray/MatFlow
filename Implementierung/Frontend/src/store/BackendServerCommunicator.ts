@@ -7,8 +7,13 @@ import WorkflowInstance from '../Classes/WorkflowInstance'
 
 import {templateNames, workflowInstancesNameAndConfigFilesName, conf1, versions, users} from '../DummyData/DataInTypscript'
 
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
 class BackendServerCommunicator {
-    private _singleBackendServerCommunicator: BackendServerCommunicator = null
+    private static _singleBackendServerCommunicator: BackendServerCommunicator = null
 
     /**
      * Singelton pattern
@@ -19,7 +24,7 @@ class BackendServerCommunicator {
      * Returns the onle object ob BackendServerCommunicator
      * @returns The single instance of BackendServerCommunicator
      */
-    public returnBackendServerCommunicator(): BackendServerCommunicator { 
+    public static returnBackendServerCommunicator(): BackendServerCommunicator { 
         if(this._singleBackendServerCommunicator === null) {
             this._singleBackendServerCommunicator = new BackendServerCommunicator()
         }
@@ -44,3 +49,17 @@ class BackendServerCommunicator {
     public pullServers(): Server[] { return  }
     public pushServer(server: Server): void { return  }
 }
+
+let BackendServerCommunicatorObject: BackendServerCommunicator = BackendServerCommunicator.returnBackendServerCommunicator()
+
+export default new Vuex.Store({
+    state: {
+    },
+    mutations: {
+    },
+    actions: {
+    },
+    modules: {
+    }
+  })
+  
