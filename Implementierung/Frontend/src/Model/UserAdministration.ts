@@ -1,15 +1,21 @@
+import User from '../Classes/User'
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+
 class UserAdministration {
     private _tableHeaders: object[]
     private _searchedUser: string
+    private _users: User[]
 
     /**
     *
     * @param tableHeaders The tableHeaders
     * @param searchedUser The searchedUser
+    * @param users The users
     */
-    constructor(tableHeaders: object[], searchedUser: string,) {
+    constructor(tableHeaders: object[], searchedUser: string, users: User[],) {
         this._tableHeaders = tableHeaders
         this._searchedUser = searchedUser
+        this._users = users
     }
 
     /**
@@ -28,6 +34,14 @@ class UserAdministration {
         return this._searchedUser
     }
 
+    /**
+    * Gets the users
+    * @returns _users
+    */
+    public get users(): User[] {
+        this._users = BackendServerCommunicator.pullUsers()
+        return this._users
+    }
 
     /**
     * Sets the value of _tableHeaders
@@ -43,5 +57,13 @@ class UserAdministration {
     */
     public set searchedUser(searchedUser: string) {
         this._searchedUser = searchedUser
+    }
+
+    /**
+    * Sets the value of users
+    * @param tableHeaders The new value of users
+    */
+    public set users(users: User[]) {
+        this._users = users
     }
 }
