@@ -258,9 +258,17 @@ class FrontendAPI:
         Returns:
             String: response indicating successful request
         """
+        workflow_manager: WorkflowManager = WorkflowManager.get_instance()
         wf_instance_name: str = request.args.get('workflowInstanceName')
         template_name: str = request.args.get('templateName')
         files: List[ReducedConfigFile] = JSONToPython.extract_configs(request)
+        try:
+            workflow_manager.create_workflow_instance_from_template(template_name, wf_instance_name, files)
+
+        except MatFlowException as exception:
+            return ExceptionHandler.handle_exception(exception)
+        else:
+            return ExceptionHandler.success(dict())
 
     @staticmethod
     @app.route('/get_all_wf_instances_names_and_config_file_names', methods=['GET'])
@@ -271,8 +279,11 @@ class FrontendAPI:
         Returns:
             String: json-dumped object containing all workflow instance names and config file names
         """
-        pass
-        # return json
+        workflow_manager: WorkflowManager = WorkflowManager.get_instance()
+        wf_instances: List[str] = workflow_manager.get_names_of_workflows_and_config_files()[0]
+        configs: List[str] = workflow_manager.get_names_of_workflows_and_config_files()[1]
+        out_dict = {'workflowInstanceNames': wf_instances, 'configFileNames': configs}
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     @app.route('/verify_login', methods=['GET'])

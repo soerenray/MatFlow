@@ -76,7 +76,11 @@ class JSONToPython:
             ReducedConfigFile[]: array of reduced config files
         """
         files: List[dict] = request.args.get('configFolder')
+        list_of_configs: List[ReducedConfigFile] = []
         for config in files:
-            #config file name rausziehen
-            # key value Paare sind in Liste -> rausziehen
-            continue
+            name: str = config['configFileName']
+            key_value_pairs: List[Tuple[str, str]] = config['keyValuePairs']
+            reduced_config: ReducedConfigFile = ReducedConfigFile(name, key_value_pairs)
+            list_of_configs.append(reduced_config)
+
+        return list_of_configs
