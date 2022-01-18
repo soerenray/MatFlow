@@ -17,16 +17,15 @@ class WorkflowManager:
         raise Exception("Call get_instance()")
 
     @classmethod
-    def get_instance(cls, self):
+    def get_instance(cls):
         """Returns the singleton object of the WorkflowManager class.
 
             Returns the singleton object if already existing otherwise calls the private constructor.
             """
-        if self.__instance is None:
-            print('Creating new instance')
-            self.__instance = self.__new__(self)
-            # Put any initialization here.
-        return self.__instance
+        if WorkflowManager.__instance is None:
+            # Creating new instance
+            WorkflowManager.__instance = WorkflowManager.__new__(cls)
+        return WorkflowManager.__instance
 
     def create_template(self, template: Template):
         """Causes the creation of a new template entry in the database.
@@ -106,7 +105,7 @@ class WorkflowManager:
         pass
 
     def get_key_value_pairs_from_config_file(
-            self, workflow_instance_name: str, config_file_name: str) -> List[Tuple[str, str]]:
+            self, workflow_instance_name: str, config_file_name: str) -> ReducedConfigFile:
         """Returns the collection of all key value pairs in the specified config-file.
 
         Requests the desired config-file from the current version of the named workflow instance from the database.
