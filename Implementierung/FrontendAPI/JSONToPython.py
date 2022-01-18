@@ -1,9 +1,14 @@
+from pathlib import Path
 from typing import List, Tuple
+import os
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User, UserController
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from flask import request
+import pickle
 
 
 class JSONToPython:
@@ -75,6 +80,7 @@ class JSONToPython:
         Returns:
             ReducedConfigFile[]: array of reduced config files
         """
+        #TODO configs speichern
         files: List[dict] = request.args.get('configFolder')
         list_of_configs: List[ReducedConfigFile] = []
         for config in files:
@@ -84,3 +90,18 @@ class JSONToPython:
             list_of_configs.append(reduced_config)
 
         return list_of_configs
+
+    @staticmethod
+    def extract_dag_file(request_details: request):
+        """
+        extracts json details and saves the dag definition file to the hard drive
+
+        Args:
+            request_details(request): contains dag definition file
+
+        """
+        parent_path: Path = Path(os.getcwd()).parent
+        temp_in_path: str = os.path.join(parent_path, 'temp_in')
+        dag_file: FileStorage = request_details.files['file']
+        filename: str = secure_filename(dag_file.filename)
+        dag_file.save(os.path.join(parent_path, temp_in_path, filename))

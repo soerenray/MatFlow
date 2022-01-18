@@ -10,24 +10,28 @@ from Implementierung.workflow.version import Version
 
 
 class PythonToJSON:
-
     """
     This class converts all python objects into json data by extracting certain keys and values and dumping them
     into a json object.
     """
 
     @staticmethod
-    def encode_user(user: User) -> str:
+    def encode_users(users: List[User]) -> str:
         """
         encodes all user attributes and dumps them into json object
 
         Args:
-            user(User): user whose attributes are to be encoded
+            users(List[User]): users whose attributes are to be encoded
 
         Returns:
             String: json-dumped object containing encoded user
         """
-        pass
+
+        out_dict = {}
+        for user in users:
+            out_dict.update({'userName': user.getUsername(), 'userStatus': user.getStatus(), 'userPrivilege':
+                            user.getPrivilege()})
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_server(server: Server) -> str:
@@ -62,7 +66,10 @@ class PythonToJSON:
         Returns:
             String: json-dumped object containing encoded template
         """
-        pass
+        name: str = template.get_name()
+        file = template.get_dag_definition_file()
+        # TODO file
+        return ExceptionHandler.success({'templateName': name, 'dagDefinitionFile': file})
 
     @staticmethod
     def encode_wf_instance(wf_instance: WorkflowInstance) -> str:
