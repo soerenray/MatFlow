@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, Tuple
+from workflow.frontend_version import FrontendVersion
 from workflow.template import Template
 from workflow.reduced_config_file import ReducedConfigFile
 
@@ -136,6 +137,22 @@ class WorkflowManager:
             version_note (str): Note about the new version given by the user
 
         """
+        pass
+
+    def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
+        """Returns a detailed overview of all versions of the given workflow instance.
+
+                Requests information about all the versions of the given workflow instance from the database.
+                Afterwards calculates the difference to the predecessor for every version and returns that information
+                in combination with the version numbers and version notes.
+
+                Args:
+                    workflow_instance_name (str): The identifier of the workflow instance
+
+                Returns:
+                    List[FrontendVersion]: The list version objects that contain the required information
+
+                """
         pass
 
     def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
