@@ -1,3 +1,4 @@
+import DatabaseTable
 class TemplateData:
     __instance = None
 
@@ -12,3 +13,15 @@ class TemplateData:
             #throw exception
         else:
             TemplateData.__instance = self
+
+
+    def create_Template(selftemplate):
+
+        return
+
+
+    def get_Template_Name():
+
+
+
+    def get_Template_By_Name(name):
