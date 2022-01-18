@@ -1,5 +1,7 @@
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+
 class ChooseConfigFile {
-    private _workflowIntancesAndConfigFilesNames: string[][]
+    private _workflowIntancesAndConfigFilesNames: Array<[string, string[]]>
     private _selectedWorkflowInstance: string
     private _selectedConfigFile: string
 
@@ -9,7 +11,7 @@ class ChooseConfigFile {
     * @param selectedWorkflowInstance The selectedWorkflowInstance
     * @param selectedConfigFile The selectedConfigFile
     */
-    constructor(workflowIntancesAndConfigFilesNames: string[][], selectedWorkflowInstance: string, selectedConfigFile: string,) {
+    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]>, selectedWorkflowInstance: string, selectedConfigFile: string,) {
         this._workflowIntancesAndConfigFilesNames = workflowIntancesAndConfigFilesNames
         this._selectedWorkflowInstance = selectedWorkflowInstance
         this._selectedConfigFile = selectedConfigFile
@@ -19,7 +21,8 @@ class ChooseConfigFile {
     * Gets the workflowIntancesAndConfigFilesNames
     * @returns _workflowIntancesAndConfigFilesNames
     */
-    public get workflowIntancesAndConfigFilesNames(): string[][] {
+    public get workflowIntancesAndConfigFilesNames(): Array<[string, string[]]> {
+        this._workflowIntancesAndConfigFilesNames = BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName()
         return this._workflowIntancesAndConfigFilesNames
     }
 
@@ -39,12 +42,11 @@ class ChooseConfigFile {
         return this._selectedConfigFile
     }
 
-
     /**
     * Sets the value of _workflowIntancesAndConfigFilesNames
     * @param workflowIntancesAndConfigFilesNames The new value of _workflowIntancesAndConfigFilesNames
     */
-    public set workflowIntancesAndConfigFilesNames(workflowIntancesAndConfigFilesNames: string[][]) {
+    public set workflowIntancesAndConfigFilesNames(workflowIntancesAndConfigFilesNames: Array<[string, string[]]>) {
         this._workflowIntancesAndConfigFilesNames = workflowIntancesAndConfigFilesNames
     }
 
