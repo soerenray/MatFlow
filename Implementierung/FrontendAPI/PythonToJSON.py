@@ -1,6 +1,15 @@
-from __future__ import annotations
+from Implementierung.HardwareAdministration import Server
+from Implementierung.UserAdministration import User
+from typing import List
+from ExceptionHandler import ExceptionHandler
+from Implementierung.workflow import FrontendVersion
+from Implementierung.workflow.template import Template
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from Implementierung.workflow.workflow_instance import WorkflowInstance
+from Implementierung.workflow.version import Version
 
-class PythonToJSON():
+
+class PythonToJSON:
 
     """
     This class converts all python objects into json data by extracting certain keys and values and dumping them
@@ -10,7 +19,7 @@ class PythonToJSON():
     @staticmethod
     def encode_user(user: User) -> str:
         """
-        extracts all user attributes and dumps them into json object
+        encodes all user attributes and dumps them into json object
 
         Args:
             user(User): user whose attributes are to be encoded
@@ -21,9 +30,9 @@ class PythonToJSON():
         pass
 
     @staticmethod
-    def extract_server(server: Server) -> str:
+    def encode_server(server: Server) -> str:
         """
-        extracts all server attributes and dumps them into json object
+        encodes all server attributes and dumps them into json object
 
         Args:
             server(Server): server whose attributes are to be encoded
@@ -31,12 +40,21 @@ class PythonToJSON():
         Returns:
             String: json-dumped object containing encoded server
         """
-        pass
+        name: str = server.getName()
+        ip_address: str = server.getAddress()
+        status: str = server.getStatus()
+        container_limit: int = server.getContainerLimit()
+        executing: bool = server.isSelectedForExecution()
+        resources: list[tuple[str, str]] = server.getRessources()
+        out_dict: dict = {'serverName': name, 'serverAddress': ip_address, 'serverStatus': status,
+                          'containerLimit': container_limit, 'selectedForExecution': executing,
+                          'serverResources': resources}
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_template(template: Template) -> str:
         """
-        extracts all template attributes and dumps them into json object
+        encodes all template attributes and dumps them into json object
 
         Args:
             template(Template): template whose attributes are to be encoded
@@ -49,7 +67,7 @@ class PythonToJSON():
     @staticmethod
     def encode_wf_instance(wf_instance: WorkflowInstance) -> str:
         """
-        extracts all workflow instance attributes and dumps them into json object
+        encodes all workflow instance attributes and dumps them into json object
 
         Args:
             wf_instance(WorkflowInstance): workflow instance whose attributes are to be encoded
@@ -70,16 +88,27 @@ class PythonToJSON():
         Returns:
             String: json-dumped object containing encoded reduced config file (essentially key value pairs)
         """
-        pass
+        out_dict = dict({'configFileName': reduced_config.get_file_name()})
+        key_value_pairs: List[(str, str)] = reduced_config.get_key_value_pairs()
+        out_dict.update({'keyValuePairs': key_value_pairs})
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
-    def encode_versions(versions: list[Version]) -> str:
+    def encode_versions(versions: List[FrontendVersion]) -> str:
         """
         extracts all version attributes of each version and dumps them into one json object
         Args:
-            versions(Version[]): array of versions whose attributes are to be encoded
+            versions(str[]): array of version numbers
 
         Returns:
             String: json-dumped object containing encoded versions
         """
-        pass
+        all_versions = []
+        for version in versions:
+            version_dict = dict()
+            version_dict.update({'versionNote': version.getNote()})
+            version_dict.update({'versionNumber': version.getVersionNumber()})
+            version_dict.update({'parameterChanges': version.getParameterChanges()})
+            all_versions.append(version_dict)
+        out_dict: dict = {'versions': all_versions}
+        return ExceptionHandler.success(out_dict)
