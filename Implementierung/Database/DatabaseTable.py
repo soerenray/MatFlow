@@ -96,13 +96,13 @@ class DatabaseData:
 
 
 
-    def delete(del):
+    def delete(remove):
         """Delete rows in a table of the database.
 
         Do nothing if nothing fit the deletion query.
 
         Args:
-            del(str): mysql-query to delete something
+            remove(str): mysql-query to delete something
 
         Returns:
             void

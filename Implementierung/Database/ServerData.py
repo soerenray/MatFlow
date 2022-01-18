@@ -41,3 +41,5 @@ class ServerData:
             Server: server from database
 
         """
+        return
+    
