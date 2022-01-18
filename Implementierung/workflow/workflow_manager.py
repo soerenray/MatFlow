@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, Tuple
+from workflow.frontend_version import FrontendVersion
 from workflow.template import Template
 from workflow.reduced_config_file import ReducedConfigFile
 
@@ -16,16 +17,15 @@ class WorkflowManager:
         raise Exception("Call get_instance()")
 
     @classmethod
-    def get_instance(cls, self):
+    def get_instance(cls):
         """Returns the singleton object of the WorkflowManager class.
 
             Returns the singleton object if already existing otherwise calls the private constructor.
             """
-        if self.__instance is None:
-            print('Creating new instance')
-            self.__instance = self.__new__(self)
-            # Put any initialization here.
-        return self.__instance
+        if cls.__instance is None:
+            # Creating new instance
+            cls.__instance = cls.__new__(cls)
+        return cls.__instance
 
     def create_template(self, template: Template):
         """Causes the creation of a new template entry in the database.
@@ -105,7 +105,7 @@ class WorkflowManager:
         pass
 
     def get_key_value_pairs_from_config_file(
-            self, workflow_instance_name: str, config_file_name: str) -> List[Tuple[str, str]]:
+            self, workflow_instance_name: str, config_file_name: str) -> ReducedConfigFile:
         """Returns the collection of all key value pairs in the specified config-file.
 
         Requests the desired config-file from the current version of the named workflow instance from the database.
@@ -136,6 +136,22 @@ class WorkflowManager:
             version_note (str): Note about the new version given by the user
 
         """
+        pass
+
+    def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
+        """Returns a detailed overview of all versions of the given workflow instance.
+
+                Requests information about all the versions of the given workflow instance from the database.
+                Afterwards calculates the difference to the predecessor for every version and returns that information
+                in combination with the version numbers and version notes.
+
+                Args:
+                    workflow_instance_name (str): The identifier of the workflow instance
+
+                Returns:
+                    List[FrontendVersion]: The list version objects that contain the required information
+
+                """
         pass
 
     def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
