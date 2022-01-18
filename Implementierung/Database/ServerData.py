@@ -1,5 +1,8 @@
+import DatabaseTable
 class ServerData:
     __instance = None
+    databaseTable = DatabaseTable.get_instance()
+
 
     @staticmethod
     def get_instance():
@@ -12,3 +15,8 @@ class ServerData:
             #throw exception
         else:
             ServerData.__instance = self
+
+    def write_Server(server):
+
+
+    def get_Server():
