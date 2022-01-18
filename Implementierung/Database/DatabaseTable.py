@@ -70,6 +70,18 @@ class DatabaseData:
 
 
     def set(create):
+        """Set new values into tables in database.
+
+        Throw error if value already exists,
+        or if values are in violation with something
+
+        Args:
+            create(str): mysql-query for setting new value(s)
+
+        Returns:
+            void
+
+        """
         db = mysql.connector.connect(
             host='localhost',
             database='world',
@@ -85,9 +97,44 @@ class DatabaseData:
 
 
     def delete(del):
+        """Delete rows in a table of the database.
+
+        Do nothing if nothing fit the deletion query.
+
+        Args:
+            del(str): mysql-query to delete something
+
+        Returns:
+            void
+
+        """
+
 
     def modify(change):
+        """Modify values in database.
+
+        Throw error if query was not able to be read.
+
+        Args:
+            change(str): mysql-query to change values
+
+        Returns:
+            void
+
+        """
+
 
     def get(query):
+        """Search for value(s) in database.
+
+        Throw error if no entry found in database.
+
+        Args:
+            query(str): mysql-query to get value(s)
+
+        Returns:
+            str: answer of the database
+
+        """
 
 

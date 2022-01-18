@@ -17,6 +17,27 @@ class ServerData:
             ServerData.__instance = self
 
     def write_Server(server):
+        """Write new Server into database.
+
+        Throw error if ip already exists.
+
+        Args:
+            server(Server): new server
+
+        Returns:
+            void
+
+        """
 
 
     def get_Server():
+        """Get server in database.
+
+        NOTE:   Currently there is no intention of storing multiple servers to connect to,
+                as such, no argument is needed to get the one(1) that is in the database
+
+
+        Returns:
+            Server: server from database
+
+        """
