@@ -22,10 +22,10 @@ class WorkflowManager:
 
             Returns the singleton object if already existing otherwise calls the private constructor.
             """
-        if WorkflowManager.__instance is None:
+        if cls.__instance is None:
             # Creating new instance
-            WorkflowManager.__instance = WorkflowManager.__new__(cls)
-        return WorkflowManager.__instance
+            cls.__instance = cls.__new__(cls)
+        return cls.__instance
 
     def create_template(self, template: Template):
         """Causes the creation of a new template entry in the database.
