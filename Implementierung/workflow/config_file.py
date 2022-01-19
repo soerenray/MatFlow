@@ -53,6 +53,13 @@ class ConfigFile(ReducedConfigFile):
         Args:
             updated_file (ReducedConfigFile): The updated reduced version of the file
         """
+        if self.get_file_name() != updated_file.get_file_name(): # for some reason file name and update name don't match
+            raise Exception("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
+                            + updated_file.get_file_name() + " don't match.")
+        else:  # if the names match we can apply the changes
+            changes = self.__find_changes(updated_file)
+            self.__write_changes_to_file(changes)
+
     # private methods
 
     def __extract_key_value_pairs_from_file(self) -> List[Tuple[str, str]]:

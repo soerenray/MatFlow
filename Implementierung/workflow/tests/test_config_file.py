@@ -16,7 +16,8 @@ class TestConfigFile(TestCase):
 
         # restore the content of test1
 
-        backup_file1 = open(Path("test_files/config_file/test1backUp.conf"))
+        self.back_up_path = Path("test_files/config_file/test1backUp.conf")
+        backup_file1 = open(self.back_up_path)
         self.config1_contend = backup_file1.read()
         backup_file1.close()
 
@@ -93,6 +94,42 @@ class TestWriteChangesToFile(TestConfigFile):
     def test_valid_changes(self):
         changes = self.config1._ConfigFile__find_changes(self.config1_update)  # we tested this method above
         self.config1._ConfigFile__write_changes_to_file(changes)  # update list empty
+
+        expected_file = open(self.path1_updated)
+        expected = expected_file.read()
+        expected_file.close()
+
+        actual_file = open(self.config1.get_file())
+        actual = actual_file.read()
+        actual_file.close()
+
+        self.assertEqual(expected, actual)
+
+
+class ApplyChanges(TestConfigFile):
+    def test_no_changes(self):
+        self.config1.apply_changes(self.config1)
+        # there are no changes so the file should be unchanged
+
+        expected = self.config1_contend
+
+        actual_file = open(self.config1.get_file())
+        actual = actual_file.read()
+        actual_file.close()
+
+        self.assertEqual(expected, actual)
+
+    def test_update_wrong_name(self):
+        # the ReducedConfigFile that represents the update should definitely have the same name as the present file
+        wrong_name = ConfigFile("wrong_name", self.path1_updated)
+        expected_msg = "Internal Error: Names of the file: " + self.config1.get_file_name() + \
+                       " and the update: " + wrong_name.get_file_name() + " don't match."
+        with self.assertRaises(Exception) as context:
+            self.config1.apply_changes(wrong_name)
+        self.assertTrue(expected_msg in str(context.exception))
+
+    def test_valid_changes(self):
+        self.config1.apply_changes(self.config1_update)
 
         expected_file = open(self.path1_updated)
         expected = expected_file.read()
