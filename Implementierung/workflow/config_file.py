@@ -53,6 +53,13 @@ class ConfigFile(ReducedConfigFile):
         Args:
             updated_file (ReducedConfigFile): The updated reduced version of the file
         """
+        if self.get_file_name() != updated_file.get_file_name(): # for some reason file name and update name don't match
+            raise Exception("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
+                            + updated_file.get_file_name() + " don't match.")
+        else:  # if the names match we can apply the changes
+            changes = self.__find_changes(updated_file)
+            self.__write_changes_to_file(changes)
+
     # private methods
 
     def __extract_key_value_pairs_from_file(self) -> List[Tuple[str, str]]:
@@ -78,11 +85,38 @@ class ConfigFile(ReducedConfigFile):
 
     def __find_changes(self, updated_file: ReducedConfigFile) -> List[Tuple[str, str, str, str]]:
         """
-        Compares the key value file
+        Compares the key-value-pairs of a given ReducedConfig file to those of self. That means the first given pair is
+        compared to the first pair of the self, both second pairs are compared and so on. Pairs of pairs that don't
+        match up are returned in a list of format (old_key, new_key, old_value, new_value)
+        If the lists are of different length an internal exception is thrown.
         """
-        pass
+        if len(self.get_key_value_pairs()) == len(updated_file.get_key_value_pairs()):
+            result = []
+            for old_pair, new_pair in zip(self.get_key_value_pairs(), updated_file.get_key_value_pairs()):
+                if old_pair != new_pair:  # otherwise, there is no change
+                    result.append((old_pair[0], new_pair[0], old_pair[1], new_pair[1]))
+            return result
+        else:
+            raise Exception("Internal Error: Wrong amount of update-pairs in " + self.get_file_name())
 
     def __write_changes_to_file(self, changes: List[Tuple[str, str, str, str]]):
         """
-        comment
+        Takes a list of format (old_key, new_key, old_value, new_value) and replaces the old pairs in the file of the
+        self with the corresponding new pairs. In this process the contents of the whole file are loaded into the 
+        working memory.
+        An error is thrown if one of the old pairs isn't found in the file.
         """
+        if changes:  # there has to be at least one change
+            file = open(self.get_file())
+            content = file.read()
+            file.close()
+            for old_key, new_key, old_value, new_value in changes:
+                old_line = old_key + " = " + old_value + ";"
+                if old_line not in content:
+                    raise Exception("Internal Error: Pair: " + str((old_key, old_value)) +
+                                    "doesn't occur in file: " + self.get_file_name())
+                new_line = new_key + " = " + new_value + ";"
+                content = content.replace(old_line, new_line)
+            file = open(self.get_file(), "w")
+            file.write(content)
+            file.close()
