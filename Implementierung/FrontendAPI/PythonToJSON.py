@@ -1,3 +1,8 @@
+import os
+from pathlib import Path
+
+from werkzeug.utils import secure_filename
+from base64 import b64encode
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User
 from typing import List
@@ -64,12 +69,17 @@ class PythonToJSON:
             template(Template): template whose attributes are to be encoded
 
         Returns:
-            String: json-dumped object containing encoded template
+            List[str]: all the needed information to upload file
         """
+        out_dict: dict = dict()
         name: str = template.get_name()
-        file = template.get_dag_definition_file()
-        # TODO file
-        return ExceptionHandler.success({'templateName': name, 'dagDefinitionFile': file})
+        out_dict.update({'templateName': name})
+        # path to file
+        file_path: Path = template.get_dag_definition_file()
+        with open(file_path, "rb") as file:
+            out_dict.update({'dagDefinitionFile': b64encode(file.read())})
+        os.remove(file_path)
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_wf_instance(wf_instance: WorkflowInstance) -> str:
@@ -96,8 +106,10 @@ class PythonToJSON:
             String: json-dumped object containing encoded reduced config file (essentially key value pairs)
         """
         out_dict = dict({'configFileName': reduced_config.get_file_name()})
-        key_value_pairs: List[(str, str)] = reduced_config.get_key_value_pairs()
-        out_dict.update({'keyValuePairs': key_value_pairs})
+        key_value_pairs_path: Path = reduced_config.get_key_value_pairs()
+        with open(key_value_pairs_path, "rb") as file:
+            out_dict.update({'keyValuePairs': b64encode(file.read())})
+        os.remove(key_value_pairs_path)
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -119,3 +131,8 @@ class PythonToJSON:
             all_versions.append(version_dict)
         out_dict: dict = {'versions': all_versions}
         return ExceptionHandler.success(out_dict)
+
+    @classmethod
+    def encode_dag(cls, file_path):
+        # TODO
+        pass
