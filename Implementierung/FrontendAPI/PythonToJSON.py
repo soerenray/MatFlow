@@ -1,3 +1,8 @@
+import os
+from pathlib import Path
+
+from werkzeug.utils import secure_filename
+from base64 import b64encode
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User
 from typing import List
@@ -10,24 +15,28 @@ from Implementierung.workflow.version import Version
 
 
 class PythonToJSON:
-
     """
     This class converts all python objects into json data by extracting certain keys and values and dumping them
     into a json object.
     """
 
     @staticmethod
-    def encode_user(user: User) -> str:
+    def encode_users(users: List[User]) -> str:
         """
         encodes all user attributes and dumps them into json object
 
         Args:
-            user(User): user whose attributes are to be encoded
+            users(List[User]): users whose attributes are to be encoded
 
         Returns:
             String: json-dumped object containing encoded user
         """
-        pass
+
+        out_dict = {}
+        for user in users:
+            out_dict.update({'userName': user.getUsername(), 'userStatus': user.getStatus(), 'userPrivilege':
+                            user.getPrivilege()})
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_server(server: Server) -> str:
@@ -60,9 +69,15 @@ class PythonToJSON:
             template(Template): template whose attributes are to be encoded
 
         Returns:
-            String: json-dumped object containing encoded template
+            List[str]: all the needed information to upload file
         """
-        pass
+        out_dict: dict = dict()
+        name: str = template.get_name()
+        out_dict.update({'templateName': name})
+        # path to file
+        file_path: Path = template.get_dag_definition_file()
+        out_dict.update(PythonToJSON.encode_file(file_path, 'dagDefinitionFile'))
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_wf_instance(wf_instance: WorkflowInstance) -> str:
@@ -89,8 +104,8 @@ class PythonToJSON:
             String: json-dumped object containing encoded reduced config file (essentially key value pairs)
         """
         out_dict = dict({'configFileName': reduced_config.get_file_name()})
-        key_value_pairs: List[(str, str)] = reduced_config.get_key_value_pairs()
-        out_dict.update({'keyValuePairs': key_value_pairs})
+        key_value_pairs_path: Path = reduced_config.get_key_value_pairs()
+        out_dict.update(PythonToJSON.encode_file(key_value_pairs_path, 'keyValuePairs'))
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -112,3 +127,11 @@ class PythonToJSON:
             all_versions.append(version_dict)
         out_dict: dict = {'versions': all_versions}
         return ExceptionHandler.success(out_dict)
+
+    @staticmethod
+    def encode_file(file_path: Path, key: str) -> dict:
+        out_dict: dict = dict()
+        with open(file_path, "rb") as file:
+            out_dict.update({key: b64encode(file.read())})
+        os.remove(file_path)
+        return out_dict

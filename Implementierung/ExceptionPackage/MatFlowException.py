@@ -24,14 +24,12 @@ class MatFlowException(Exception):
              int: the status code
         """
 
+
 class UserExistsException(MatFlowException):
 
     """
     This is an exception that is thrown when a user does not exist.
     """
-
-    __status_code: int = 601
-
 
     def __init__(self, message: str):
         """
@@ -40,7 +38,8 @@ class UserExistsException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(UserExistsException, self).__init__(message, __status_code)
+        self.__status_code = 601
+        super(UserExistsException, self).__init__(message, self.__status_code)
 
 
 class DoubleTemplateNameException(MatFlowException):
@@ -49,9 +48,6 @@ class DoubleTemplateNameException(MatFlowException):
     This is an exception that is thrown when the desired template name already exists.
     """
 
-    __status_code: int = 602
-
-
     def __init__(self, message: str):
         """
         constructs a new DoubleTemplateNameException
@@ -59,7 +55,8 @@ class DoubleTemplateNameException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(DoubleTemplateNameException, self).__init__(message, __status_code)
+        self.__status_code = 602
+        super(DoubleTemplateNameException, self).__init__(message, self.__status_code)
 
 
 class InvalidDagFileException(MatFlowException):
@@ -68,9 +65,6 @@ class InvalidDagFileException(MatFlowException):
     This is an exception that is thrown when the dag definition file is not correct (when dag file is finished coding).
     """
 
-    __status_code: int = 603
-
-
     def __init__(self, message: str):
         """
         constructs a new InvalidDagFileException
@@ -78,16 +72,15 @@ class InvalidDagFileException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(InvalidDagFileException, self).__init__(message, __status_code)
+        self.__status_code = 603
+        super(InvalidDagFileException, self).__init__(message, self.__status_code)
+
 
 class DoubleWorkflowInstanceNameException(MatFlowException):
 
     """
     This is an exception that is thrown when the desired workflow instance name already exists.
     """
-
-    __status_code: int = 604
-
 
     def __init__(self, message: str):
         """
@@ -96,7 +89,8 @@ class DoubleWorkflowInstanceNameException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(DoubleWorkflowInstanceNameException, self).__init__(message, __status_code)
+        self.__status_code = 604
+        super(DoubleWorkflowInstanceNameException, self).__init__(message, self.__status_code)
 
 
 class EmptyConfigFolderException(MatFlowException):
@@ -105,9 +99,6 @@ class EmptyConfigFolderException(MatFlowException):
     This is an exception that is thrown when the config folder is empty, meaning that no config can be selected.
     """
 
-    __status_code: int = 605
-
-
     def __init__(self, message: str):
         """
         constructs a new EmptyConfigFolderException
@@ -115,7 +106,8 @@ class EmptyConfigFolderException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(EmptyConfigFolderException, self).__init__(message, __status_code)
+        self.__status_code = 605
+        super(EmptyConfigFolderException, self).__init__(message, self.__status_code)
 
 
 class WorkflowInstanceRunningException(MatFlowException):
@@ -124,9 +116,6 @@ class WorkflowInstanceRunningException(MatFlowException):
     This is an exception that is thrown when the workflow instance is already running.
     """
 
-    __status_code: int = 606
-
-
     def __init__(self, message: str):
         """
         constructs a new WorkflowInstanceRunningException
@@ -134,7 +123,8 @@ class WorkflowInstanceRunningException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(WorkflowInstanceRunningException, self).__init__(message, __status_code)
+        self.__status_code = 606
+        super(WorkflowInstanceRunningException, self).__init__(message, self.__status_code)
 
 
 class UnrepresentableDagException(MatFlowException):
@@ -144,9 +134,6 @@ class UnrepresentableDagException(MatFlowException):
     (when dag file editing is in progress (JUST preview)).
     """
 
-    __status_code: int = 608
-
-
     def __init__(self, message: str):
         """
         constructs a new UnrepresentableDagException
@@ -154,6 +141,24 @@ class UnrepresentableDagException(MatFlowException):
         Args:
             message: The message that is displayed when this exception is thrown.
         """
-        super(UnrepresentableDagException, self).__init__(message, __status_code)
+        self.__status_code = 608
+        super(UnrepresentableDagException, self).__init__(message, self.__status_code)
+
+
+class LoginException(MatFlowException):
+
+    """
+    This is an exception that is thrown when the login failed.
+    """
+
+    def __init__(self, message: str):
+        """
+        constructs a new LoginException
+
+        Args:
+            message: The message that is displayed when this exception is thrown.
+        """
+        self.__status_code = 609
+        super(LoginException, self).__init__(message, self.__status_code)
 
 
