@@ -76,9 +76,7 @@ class PythonToJSON:
         out_dict.update({'templateName': name})
         # path to file
         file_path: Path = template.get_dag_definition_file()
-        with open(file_path, "rb") as file:
-            out_dict.update({'dagDefinitionFile': b64encode(file.read())})
-        os.remove(file_path)
+        out_dict.update(PythonToJSON.encode_file(file_path, 'dagDefinitionFile'))
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -107,9 +105,7 @@ class PythonToJSON:
         """
         out_dict = dict({'configFileName': reduced_config.get_file_name()})
         key_value_pairs_path: Path = reduced_config.get_key_value_pairs()
-        with open(key_value_pairs_path, "rb") as file:
-            out_dict.update({'keyValuePairs': b64encode(file.read())})
-        os.remove(key_value_pairs_path)
+        out_dict.update(PythonToJSON.encode_file(key_value_pairs_path, 'keyValuePairs'))
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -132,7 +128,10 @@ class PythonToJSON:
         out_dict: dict = {'versions': all_versions}
         return ExceptionHandler.success(out_dict)
 
-    @classmethod
-    def encode_dag(cls, file_path):
-        # TODO
-        pass
+    @staticmethod
+    def encode_file(file_path: Path, key: str) -> dict:
+        out_dict: dict = dict()
+        with open(file_path, "rb") as file:
+            out_dict.update({key: b64encode(file.read())})
+        os.remove(file_path)
+        return out_dict

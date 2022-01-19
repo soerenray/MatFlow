@@ -9,7 +9,6 @@ from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from flask import request
 
-
 class JSONToPython:
 
     """
@@ -59,17 +58,16 @@ class JSONToPython:
         return server
 
     @staticmethod
-    def extract_template(json_details: str) -> Template:
+    def extract_template(request_details: request) -> Template:
         """
         extracts json details and builds a new Template based off of these json details
 
         Args:
-            json_details(String): contains encoded template
+            request_details(String): contains encoded template
 
         Returns:
             Template: decoded template object
         """
-        # TODO
         pass
 
     @staticmethod
@@ -83,7 +81,8 @@ class JSONToPython:
         Returns:
             ReducedConfigFile[]: array of reduced config files
         """
-        save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path))
+        save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path,
+                                                             'config'))
         uploaded_files: List[FileStorage] = request_details.files.getlist("file[]")
         counter = 0
         for config in uploaded_files:
@@ -104,9 +103,12 @@ class JSONToPython:
             request_details(request): contains dag definition file
 
         """
+
         dag_file: FileStorage = request_details.files['file']
         filename: str = secure_filename(dag_file.filename)
-        file_path: str = os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path, filename)
+        save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path,
+                                                             'dag_file'))
+        file_path: str = os.path.join(save_dir, filename)
         dag_file.save(file_path)
         return Path(file_path)
 

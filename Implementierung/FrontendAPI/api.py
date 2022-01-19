@@ -5,19 +5,14 @@ from typing import List
 
 from flask import Flask, request
 from waitress import serve
-from werkzeug.wrappers import BaseRequest
-from Implementierung.Database.ServerData import ServerData
 from Implementierung.ExceptionPackage.matflowexception import MatFlowException
 from Implementierung.workflow import FrontendVersion, ReducedConfigFile, Template
-from Implementierung.workflow.workflow_instance import WorkflowInstance
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from JSONToPython import JSONToPython
 from PythonToJSON import PythonToJSON
 from ExceptionHandler import ExceptionHandler
 from Implementierung.HardwareAdministration import Server, Hardware_Controller
 from Implementierung.UserAdministration import User, UserController
-from werkzeug.utils import secure_filename
-from flask import send_from_directory
 
 # according to Flask docs this command should be on modular level
 app = Flask('FrontendAPI')
@@ -33,15 +28,17 @@ class FrontendAPI:
     communicate with this api through json calls.
     """
 
-    # __app = None
+    # not in instance scope due to static methods (are **required** for flask)
+    # Due to the fact that api method calls with parameters are not possible
+    # all parameters are fetched via the flask request object (as suggested by docs)
     __instance = None
     workflow_manager: WorkflowManager = WorkflowManager.get_instance()
     user_controller: UserController = UserController()
     hardware_controller: Hardware_Controller = Hardware_Controller()
 
     def __init__(self):
+        # all "instantiations" should be called over get_frontend_api
         raise RuntimeError("Call get_frontend_api()")
-        # self.get_frontend_api()
 
     @classmethod
     def get_frontend_api(cls):
@@ -63,7 +60,7 @@ class FrontendAPI:
         app.run(debug='true')
 
     @staticmethod
-    @app.route('/')
+    @app.route('/', methods=['GET', 'POST'])
     def default_get():
         return ExceptionHandler.success(dict())
 
@@ -379,9 +376,9 @@ class FrontendAPI:
         Returns:
             File: picture of dag in .png format
         """
-        template: Template = JSONToPython.extract_template(request)
+        template: Template = FrontendAPI.workflow_manager.get_template_from_name(request.args.get('templateName'))
         file_path: Path = FrontendAPI.workflow_manager.get_dag_representation_from_template(template)
-        return PythonToJSON.encode_dag(file_path)
+        return ExceptionHandler.success(PythonToJSON.encode_file(file_path, 'dagPicture'))
 
 
 ###################################
