@@ -1,8 +1,8 @@
-class ParameterChange():
+class ParameterChange:
     """
     This class represents the change of a key-value pair.
-    It contains the old aswell as the new version of both the key aswell as the value.
-    Furthermore it holds the name of the file the change was made in.
+    It contains the old as well as the new version of both the key and the value.
+    Furthermore, it holds the name of the file the change was made in.
     """
     def __init__(self, old_key: str, new_key: str, old_value: str, new_value: str, config_file_name: str):
         """Constructor of class ParameterChange.
@@ -20,9 +20,9 @@ class ParameterChange():
         self.__new_value = new_value
         self.__config_file_name = config_file_name
 
-    #getter
+    # getter
 
-    def get_old_key(self)-> str:
+    def get_old_key(self) -> str:
         """Gets the old key of the key-value-pair.
 
         Returns:
@@ -30,7 +30,7 @@ class ParameterChange():
         """
         return self.__old_key
 
-    def get_new_key(self)-> str:
+    def get_new_key(self) -> str:
         """Gets the new key of the key-value-pair.
 
         Returns:
@@ -38,7 +38,7 @@ class ParameterChange():
         """
         return self.__new_key
 
-    def get_old_value(self)-> str:
+    def get_old_value(self) -> str:
         """Gets the old value of the key-value-pair.
 
         Returns:
@@ -46,7 +46,7 @@ class ParameterChange():
         """
         return self.__old_value
 
-    def get_new_value(self)-> str:
+    def get_new_value(self) -> str:
         """Gets the new value of the key-value-pair.
 
         Returns:
@@ -54,7 +54,7 @@ class ParameterChange():
         """
         return self.__new_value
 
-    def get_config_file_name(self)-> str:
+    def get_config_file_name(self) -> str:
         """Gets the name of the config file the change was made in.
 
         Returns:
@@ -62,13 +62,13 @@ class ParameterChange():
         """
         return self.__config_file_name
 
-    #setter
+    # setter
 
     def set_old_key(self, old_key: str):
         """Sets the old_key attribute of the object.
 
         Args:
-            old_key (str): New old key of the key-value-pair
+            old_key (str): Updated old key of the key-value-pair
         """
         self.__old_key = old_key
 
@@ -76,7 +76,7 @@ class ParameterChange():
         """Sets the new_key attribute of the object.
 
         Args:
-            new_key (str): New new key of the key-value-pair
+            new_key (str): Updated new key of the key-value-pair
         """
         self.__new_key = new_key
 
@@ -84,7 +84,7 @@ class ParameterChange():
         """Sets the old_value attribute of the object.
 
         Args:
-            old_value (str): New old value of the key-value-pair
+            old_value (str): Updated old value of the key-value-pair
         """
         self.__old_value = old_value
 
@@ -92,7 +92,7 @@ class ParameterChange():
         """Sets the new_value attribute of the object.
 
         Args:
-            new_value (str): New new value of the key-value-pair
+            new_value (str): Updated new value of the key-value-pair
         """
         self.__new_value = new_value
 
@@ -103,4 +103,3 @@ class ParameterChange():
             config_file_name (str): The name of the config file
         """
         self.__config_file_name = config_file_name
-
