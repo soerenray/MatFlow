@@ -6,19 +6,7 @@ class CreateTemplate {
     private _templateFolder: File
     private _dagFile: File
 
-    /**
-    *
-    * @param templatesName The templatesName
-    * @param chosenTemplateName The chosenTemplateName
-    * @param templateFolder The templateFolder
-    * @param dagFile The dagFile
-    */
-    constructor(templatesName: string[], chosenTemplateName: string, templateFolder: File, dagFile: File,) {
-        this._templatesName = templatesName
-        this._chosenTemplateName = chosenTemplateName
-        this._templateFolder = templateFolder
-        this._dagFile = dagFile
-    }
+    constructor() {}
 
     /**
     * Gets the templatesName
@@ -85,3 +73,5 @@ class CreateTemplate {
         this._dagFile = dagFile
     }
 }
+
+export default CreateTemplate
