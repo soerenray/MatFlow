@@ -4,7 +4,7 @@
   </v-app>
 </template>
 
-<script>
+<script lang='ts'>
 import CreateWorkflowInstance from './View/CreateWorkflowInstance.vue'
 
 export default {
