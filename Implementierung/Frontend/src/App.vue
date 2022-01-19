@@ -1,9 +1,9 @@
 <template>
   <v-app>
     <!--
-    <create-workflow-instance></create-workflow-instance>
-    -->
     <create-template></create-template>
+    -->
+    <create-workflow-instance></create-workflow-instance>
   </v-app>
 </template>
 
