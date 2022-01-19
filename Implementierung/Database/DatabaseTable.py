@@ -27,11 +27,12 @@ class DatabaseData:
 
     def __init__(self):
         if DatabaseData.__instance != None:
-            #throw exception
+            return #throw exception
         else:
             DatabaseData.__instance = self
+            return
 
-"""maybe outsource to config file? https://overiq.com/mysql-connector-python-101/connecting-to-mysql-using-connector-python/
+    """maybe outsource to config file? https://overiq.com/mysql-connector-python-101/connecting-to-mysql-using-connector-python/
     db = mysql.connector.connect(
         host='localhost',
         database='world',
@@ -42,7 +43,7 @@ class DatabaseData:
 
 
 
-    def initialise():
+    def initialise(no):
         """Initialisation of Database if not already done beforehand.
 
         Go through every table that has to be set up in the database."""
@@ -56,17 +57,15 @@ class DatabaseData:
         ConfFile_Init = ""
         ResultFile_Init = ""
 
-
-
         db = mysql.connector.connect(
             host='localhost',
-            database='world',
+            database='databaseshema',
             user='root',
             password='12345',
             port='3306'
         )
-        cursor = db.cursor
-
+        cursor = db.cursor()
+        cursor.execute(server_Init)
 
 
     def set(create):
@@ -84,7 +83,7 @@ class DatabaseData:
         """
         db = mysql.connector.connect(
             host='localhost',
-            database='world',
+            database='databaseshema',
             user='root',
             password='12345',
             port='3306'
@@ -138,3 +137,40 @@ class DatabaseData:
         """
 
 
+print("TEST IN DatabaseTable. DComment out if not neede/crahses program because no Databaseconnection could be established")
+
+
+db = mysql.connector.connect(
+            host='localhost',
+            database='databaseshema',
+            user='root',
+            password='12345',
+            port='3306'
+        )
+
+print("Connection ID:", db.connection_id)
+print(db)
+
+a = DatabaseData.get_instance()
+DatabaseData.initialise()
+
+
+tablecreate = "CREATE TABLE binarySave (ID INT NOT NULL AUTO_INCREMENT, "
+
+workflowcreate = "CREATE TABLE Workflow (name varchar(255), dag varchar(500), PRIMARY KEY (name))"
+
+folderfilecreate = "CREATE TABLE Folderfile (wfname varchar(255), file_ID varchar(50), file varchar(500), PRIMARY KEY (wfname, file_ID), FOREIGN KEY (wfname) REFERENCES Workflow(name))"
+
+cursor = db.cursor()
+cursor.execute(workflowcreate)
+cursor.execute(folderfilecreate)
+print("success creation")
+
+
+
+
+
+
+
+
+print("End of DatabaseTable output check!")
