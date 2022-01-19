@@ -33,11 +33,11 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "Implementierung/Frontend/src/**/*.ts",
+    "Implementierung/Frontend/src/**/*.tsx",
+    "Implementierung/Frontend/src/**/*.vue",
+    "Implementierung/Frontend/tests/**/*.ts",
+    "Implementierung/Frontend/tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

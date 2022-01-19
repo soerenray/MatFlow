@@ -21,7 +21,7 @@
               <v-select :items="folder" label="config-file folder"> </v-select>
             </v-col>
             <v-col>
-              <v-btn fab small color="#58D68D"><v-icon>add</v-icon></v-btn>
+              <v-btn fab small color="#58D68D" style='padding-right:0.75px, padding-top:0.75px'><plus-icon :size="30"/></v-btn>
             </v-col>
           </v-row>
         </div>
