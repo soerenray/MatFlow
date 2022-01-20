@@ -50,22 +50,22 @@ class TestFindChanges(TestConfigFile):
 
         to_little_pairs = ReducedConfigFile("toShort", [("key", "value")])
         with self.assertRaises(Exception) as context:
-            self.config1._ConfigFile__find_changes(to_little_pairs)
+            self.config1.find_changes(to_little_pairs)
         self.assertTrue(expected_msg in str(context.exception))
 
         to_many_pairs = ReducedConfigFile(
             "toShort", [("key", "value"), ("key", "value"), ("key", "value"), ("key", "value"), ("key", "value")])
         with self.assertRaises(Exception) as context:
-            self.config1._ConfigFile__find_changes(to_many_pairs)
+            self.config1.find_changes(to_many_pairs)
         self.assertTrue(expected_msg in str(context.exception))
 
     def test_no_changes(self):
         # we expect an empty list
-        self.assertFalse(self.config1._ConfigFile__find_changes(self.config1))
+        self.assertFalse(self.config1.find_changes(self.config1))
 
     def test_valid_changes(self):
         expected = [("find", "i_was", "this_pair", "replaced"), ("three", "four", "3", "4")]
-        actual = self.config1._ConfigFile__find_changes(self.config1_update)
+        actual = self.config1.find_changes(self.config1_update)
         self.assertEqual(expected, actual)
 
 
