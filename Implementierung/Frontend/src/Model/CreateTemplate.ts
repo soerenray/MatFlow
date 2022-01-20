@@ -13,12 +13,13 @@ class CreateTemplate {
     * @param templateFolder The templateFolder
     * @param dagFile The dagFile
     */
-    constructor(templatesName: string[], chosenTemplateName: string, templateFolder: File, dagFile: File,) {
+    constructor(templatesName: string[] = [], chosenTemplateName: string = '', templateFolder: File = new File([], "emptyFile", { type: 'application/zip' }), dagFile: File = new File([], "emptyFile", { type: 'application/zip' }),) {
         this._templatesName = templatesName
         this._chosenTemplateName = chosenTemplateName
         this._templateFolder = templateFolder
         this._dagFile = dagFile
     }
+
 
     /**
     * Gets the templatesName
@@ -85,3 +86,5 @@ class CreateTemplate {
         this._dagFile = dagFile
     }
 }
+
+export default CreateTemplate

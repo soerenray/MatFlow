@@ -41,7 +41,7 @@ let createWorkflowInstanceObject = new CreateWorkflowInstance()
 export default {
   data: function () {
     return {
-      templates: ["MyNewTemplate"],
+      templates: createWorkflowInstanceObject.templatesName,
       folder: ["Empty Folder", "Config-Folder"],
       selectedDrowpnItem: "create workflow-instance from template",
       dropwDown: ["import worfklow", "create workflow-instance from template"],

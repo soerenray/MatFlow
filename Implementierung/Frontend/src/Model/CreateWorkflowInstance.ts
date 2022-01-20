@@ -7,7 +7,22 @@ class CreateWorkflowInstance {
     private _selectedTemplateName: string
     private _workflowInstanceName: string
 
-    constructor() {}
+    /**
+    *
+    * @param templatesName The templatesName
+    * @param configFolder The configFolder
+    * @param workflowInstanceFolder The workflowInstanceFolder
+    * @param selectedTemplateName The selectedTemplateName
+    * @param workflowInstanceName The workflowInstanceName
+    */
+    constructor(templatesName: string[] = [], configFolder: File = new File([], "emptyFile", { type: 'application/zip' }), workflowInstanceFolder: File = new File([], "emptyFile", { type: 'application/zip' }), selectedTemplateName: string = '', workflowInstanceName: string = '',) {
+        this._templatesName = templatesName
+        this._configFolder = configFolder
+        this._workflowInstanceFolder = workflowInstanceFolder
+        this._selectedTemplateName = selectedTemplateName
+        this._workflowInstanceName = workflowInstanceName
+    }
+
 
     /**
     * Gets the templatesName
