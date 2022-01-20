@@ -8,7 +8,7 @@ import FileRestoreIcon from 'vue-material-design-icons/FileRestore.vue'
 
 Vue.component('plus-icon', PlusIcon);
 Vue.component('file-document-outline-icon', FileDocumentOutlineIcon)
-Vue.component('file-restore-icon', FileRestoreIcon )
+Vue.component('file-restore-icon', FileRestoreIcon)
 
 Vue.config.productionTip = false
 

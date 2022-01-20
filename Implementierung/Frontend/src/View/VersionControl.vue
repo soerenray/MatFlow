@@ -7,37 +7,36 @@
             :headers="headers"
             :items="versionsTableObject"
             item-key="name"
-            :search="search"
           >
-            <template v-slot:[`item.workspace`]="{}"
-              ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
-            ></template>
-            <template v-slot:[`item.veraenderteParameter`]="{}"
-              ><v-btn icon>
+            <template v-slot:[`item.parameterChanges`]="{ item }">
+              <v-btn icon>
                 <v-dialog v-model="dialoge" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn icon v-bind="attrs" v-on="on">
+                    <v-btn
+                      @click="handleEvent(item)"
+                      icon
+                      v-bind="attrs"
+                      v-on="on"
+                    >
                       <file-document-outline-icon></file-document-outline-icon>
                     </v-btn>
                   </template>
-                  <!-- Seperate file: KeyValuePairs -->
-                  <!-- 
-                  <v-card>
-                    <v-data-table
-                      :headers="headers2"
-                      :items="parameterChanges"
-                      item-key="oldValue"
-                    ></v-data-table>
-                  </v-card> -->
+                  <key-value-pairs
+                    :parameter-changes="
+                      getKeyValuePairsByVersionNumber(
+                        selectedItem.versionNumber
+                      )
+                    "
+                  ></key-value-pairs>
                 </v-dialog>
-              </v-btn></template
-            >
+              </v-btn>
+            </template>
+            <template v-slot:[`item.workspace`]="{}"
+              ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
+            ></template>
             <template v-slot:top>
-              <v-text-field
-                v-model="search"
-                label="Search notes"
-                class="mx-4"
-              ></v-text-field>
+              <!-- Can be implemented in the future -->
+              <v-text-field label="Search notes" class="mx-4"></v-text-field>
             </template>
           </v-data-table>
         </v-card>
@@ -47,8 +46,11 @@
 </template>
 
 <script lang='ts'>
+import { version } from "vue/types/umd";
 import Version from "../Classes/Version";
 import VersionControl from "../Model/VersionControl";
+
+import KeyValuePairs from "./KeyValuePairs.vue";
 
 interface VersionsTableObject {
   versionNumber: string;
@@ -60,29 +62,43 @@ let versionControlObject = new VersionControl();
 export default {
   data: function () {
     return {
-      search: "",
-      dialoge: "",
-      headers2: [
-        { text: "Parameter/ value old", value: "oldValue" },
-        { text: "Parameter/ value new", value: "newValue" },
-      ],
+      dialoge: false,
+      selectedVersion: "",
+      selectedItem: {},
       headers: [
         { text: "Version number", value: "versionNumber" },
         { text: "Version notes", value: "versionNote" },
-        { text: "Changed parameters", value: "veraenderteParameter" },
+        { text: "Changed parameters", value: "parameterChanges" },
         { text: "Load into current workspace", value: "workspace" },
       ],
-      parameterChanges: [
-        { oldValue: "key1: Ipsom lorum", newValue: "key1: lorem ipsum" },
-        { oldValue: "key1: xy", newValue: "key2: xy" },
-        { oldValue: "key3: 5.0 5.0", newValue: "key3: 'text'" },
-      ],
     };
+  },
+  components: {
+    KeyValuePairs,
+  },
+  methods: {
+    handleEvent: function (selectedItem: any) {
+      this.selectedItem = selectedItem;
+    },
+    getKeyValuePairsByVersionNumber: function (
+      versionNumber: string
+    ): Array<[string, string]> {
+      let keyValuePairs = new Array<[string, string]>(["", ""]);
+      let temp = versionControlObject.versions.find(
+        (version: Version): Boolean => {
+          return version.versionNumber === versionNumber;
+        }
+      );
+      if (temp !== undefined) {
+        keyValuePairs = temp.parameterChanges;
+      }
+      return keyValuePairs;
+    },
   },
   computed: {
     versionsTableObject: {
       get: function (): Array<VersionsTableObject> {
-        return versionControlObject.versions.map<VersionsTableObject>(
+        return versionControlObject.versions.map(
           (version: Version): VersionsTableObject => {
             return {
               versionNumber: version.versionNumber,
