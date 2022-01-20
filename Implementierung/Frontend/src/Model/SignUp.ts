@@ -57,7 +57,7 @@ class SignUp {
 
     /**
     * Sets the value of _userPasswordRepeated
-    * @param userPassword The new value of _userPasswordRepeated
+    * @param userPasswordRepeated The new value of _userPasswordRepeated
     */
      public set userPasswordRepeated(userPasswordRepeated: string) {
         this._userPasswordRepeated = userPasswordRepeated
