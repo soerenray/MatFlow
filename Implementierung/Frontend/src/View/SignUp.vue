@@ -1,6 +1,5 @@
 <template>
   <v-app :style="{ background: '#B5EEF6' }">
-    <!-- <v-layout align-center justify-center style="border: 15px solid green"> -->
     <v-layout justify-center align-center>
       <v-card width="800px" height="400px">
         <v-card-title class="justify-center">
@@ -8,10 +7,29 @@
         </v-card-title>
         <v-card-text>
           <v-col>
-            <v-row> <v-text-field label="email-address"></v-text-field></v-row>
-            <v-row> <v-text-field label="password"></v-text-field></v-row>
             <v-row>
-              <v-text-field label="repeat password"></v-text-field
+              <v-text-field
+                v-model="userName"
+                label="email-address"
+              ></v-text-field
+            ></v-row>
+            <v-row>
+              <v-text-field
+                v-model="userPassword"
+                label="password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+              ></v-text-field
+            ></v-row>
+            <v-row>
+              <v-text-field
+                label="repeat password"
+                v-model="userPasswordRepeated"
+                :type="showPasswordRepeated ? 'text' : 'password'"
+                :append-icon="showPasswordRepeated ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPasswordRepeated = !showPasswordRepeated"
+              ></v-text-field
             ></v-row>
           </v-col>
           <v-row>
@@ -37,16 +55,41 @@
   </v-app>
 </template>
 
-<script>
+<script lang='ts'>
+import SignUp from "../Model/SignUp";
+
+let signUpObject = new SignUp();
+
 export default {
-    name: 'SignUp',
-    computed: {
-        userName: {
-
-        },
-        userPassword: {
-
-        }
-    }
+  name: "SignUp",
+  data: () => {
+    return { showPassword: false, showPasswordRepeated: false };
+  },
+  computed: {
+    userName: {
+      get: function (): string {
+        return signUpObject.userName;
+      },
+      set: function (userName: string) {
+        signUpObject.userName = userName;
+      },
+    },
+    userPassword: {
+      get: function (): string {
+        return signUpObject.userPassword;
+      },
+      set: function (userPassword: string) {
+        signUpObject.userPassword = userPassword;
+      },
+    },
+    userPasswordRepeated: {
+      get: function (): string {
+        return signUpObject.userPasswordRepeated;
+      },
+      set: function (userPasswordRepeated: string) {
+        signUpObject.userPasswordRepeated = userPasswordRepeated;
+      },
+    },
+  },
 };
 </script>
