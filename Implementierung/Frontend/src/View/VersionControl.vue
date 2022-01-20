@@ -5,7 +5,7 @@
         <v-card width="1000px">
           <v-data-table
             :headers="headers"
-            :items="versionTableObject"
+            :items="versionsTableObject"
             item-key="name"
             :search="search"
           >
@@ -20,15 +20,18 @@
                       <file-document-outline-icon></file-document-outline-icon>
                     </v-btn>
                   </template>
+                  <!-- Seperate file: KeyValuePairs -->
+                  <!-- 
                   <v-card>
                     <v-data-table
                       :headers="headers2"
                       :items="parameterChanges"
                       item-key="oldValue"
                     ></v-data-table>
-                  </v-card>
-                </v-dialog> </v-btn
-            ></template>
+                  </v-card> -->
+                </v-dialog>
+              </v-btn></template
+            >
             <template v-slot:top>
               <v-text-field
                 v-model="search"
@@ -77,7 +80,7 @@ export default {
     };
   },
   computed: {
-    versionTableObject: {
+    versionsTableObject: {
       get: function (): Array<VersionsTableObject> {
         return versionControlObject.versions.map<VersionsTableObject>(
           (version: Version): VersionsTableObject => {
