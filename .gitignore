@@ -332,6 +332,9 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
+# Pycharm dirs
+__pycache__
+
 =======
 .DS_Store
 .idea/

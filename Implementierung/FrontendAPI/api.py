@@ -5,8 +5,10 @@ from typing import List
 
 from flask import Flask, request
 from waitress import serve
-from Implementierung.ExceptionPackage.matflowexception import MatFlowException
-from Implementierung.workflow import FrontendVersion, ReducedConfigFile, Template
+from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
+from Implementierung.workflow.frontend_version import FrontendVersion
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from Implementierung.workflow.template import Template
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from JSONToPython import JSONToPython
 from PythonToJSON import PythonToJSON
@@ -186,7 +188,7 @@ class FrontendAPI:
         """
         try:
             FrontendAPI.workflow_manager.set_active_version_through_number(request.args.get('workflowInstanceName'),
-                                                               request.args.get('versionNumber'))
+                                                                           request.args.get('versionNumber'))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
