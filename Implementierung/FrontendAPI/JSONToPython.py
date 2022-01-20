@@ -8,6 +8,7 @@ from Implementierung.UserAdministration import User, UserController
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from flask import request
+import keys
 
 class JSONToPython:
 
@@ -19,7 +20,7 @@ class JSONToPython:
     """
 
     parent_path: Path = Path(os.getcwd()).parent
-    temp_in_path: str = os.path.join(parent_path, 'temp_in')
+    temp_in_path: str = os.path.join(parent_path, keys.temp_in_name)
 
     @staticmethod
     def extract_user(request_details: request) -> User:
@@ -32,7 +33,7 @@ class JSONToPython:
         Returns:
             User: decoded user object
         """
-        user_name: str = request_details.args.get('userName')
+        user_name: str = request_details.args.get(keys.user_name)
         controller: UserController = UserController()
         user: User = controller.getUser(user_name)
         return user
@@ -48,12 +49,12 @@ class JSONToPython:
         Returns:
             Server: decoded server object
         """
-        name: str = request_details.args.get('serverName')
-        ip_address: str = request_details.args.get('serverAddress')
-        status: str = request_details.args.get('serverStatus')
-        container_limit: int = request_details.args.get('containerLimit')
-        resources: List[Tuple[str, str]] = request_details.args.get('serverResources')
-        executing: bool = request_details.args.get('selectedForExecution')
+        name: str = request_details.args.get(keys.server_name)
+        ip_address: str = request_details.args.get(keys.server_address_name)
+        status: str = request_details.args.get(keys.user_status_name)
+        container_limit: int = int(request_details.args.get(keys.container_limit_name))
+        resources: List[Tuple[str, str]] = request_details.args.get(keys.server_resources_name)
+        executing: bool = bool(request_details.args.get(keys.selected_for_execution_name))
         server: Server = Server(name, ip_address, status, container_limit, executing, resources)
         return server
 
@@ -82,11 +83,11 @@ class JSONToPython:
             ReducedConfigFile[]: array of reduced config files
         """
         save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path,
-                                                             'config'))
-        uploaded_files: List[FileStorage] = request_details.files.getlist("file[]")
+                                                             keys.config_save_path))
+        uploaded_files: List[FileStorage] = request_details.files.getlist(keys.files_key)
         counter = 0
         for config in uploaded_files:
-            name: str = request.args.get('configFileName')[counter]
+            name: str = request.args.get(keys.config_file_name)[counter]
             file_path: str = os.path.join(save_dir, name)
             uploaded_files[counter].save(file_path)
             reduced_config: ReducedConfigFile = ReducedConfigFile(name, file_path)
@@ -104,10 +105,10 @@ class JSONToPython:
 
         """
 
-        dag_file: FileStorage = request_details.files['file']
+        dag_file: FileStorage = request_details.files[keys.file_key]
         filename: str = secure_filename(dag_file.filename)
         save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path,
-                                                             'dag_file'))
+                                                             keys.dag_save_path))
         file_path: str = os.path.join(save_dir, filename)
         dag_file.save(file_path)
         return Path(file_path)
@@ -120,7 +121,7 @@ class JSONToPython:
         created_dir: bool = False
         counter: int = 0
         while not created_dir:
-            try_path: str = os.path.join(path, "_", str(counter))
+            try_path: str = os.path.join(path, keys.underscore, str(counter))
             if os.path.isdir(try_path):
                 created_dir = True
                 os.makedirs(try_path)

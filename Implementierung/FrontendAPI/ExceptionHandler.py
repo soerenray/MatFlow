@@ -1,5 +1,5 @@
 import json
-from Implementierung.ExceptionPackage.matflowexception import MatFlowException
+from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
 
 
 class ExceptionHandler:
@@ -36,6 +36,6 @@ class ExceptionHandler:
 
     @staticmethod
     def send_status_code(status_code: int, unfinished_dict: dict) -> dict:
-        status_code_dict: dict = {'status_code': status_code}
+        status_code_dict: dict = {'statusCode': status_code}
         unfinished_dict.update(status_code_dict)
         return unfinished_dict
