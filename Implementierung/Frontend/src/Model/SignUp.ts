@@ -1,15 +1,18 @@
 class SignUp {
     private _userName: string
     private _userPassword: string
+    private _userPasswordRepeated: string
 
     /**
     *
     * @param userName The userName
     * @param userPassword The userPassword
+    * @param userPasswordRepeated The userPasswordRepeated
     */
-    constructor(userName: string, userPassword: string,) {
+    constructor(userName: string = '', userPassword: string = '', userPasswordRepeated: string = '',) {
         this._userName = userName
         this._userPassword = userPassword
+        this._userPasswordRepeated = userPasswordRepeated
     }
 
     /**
@@ -28,6 +31,13 @@ class SignUp {
         return this._userPassword
     }
 
+    /**
+    * Gets the userPasswordRepeated
+    * @returns _userPasswordRepeated
+    */
+     public get userPasswordRepeated(): string {
+        return this._userPasswordRepeated
+    }
 
     /**
     * Sets the value of _userName
@@ -44,4 +54,14 @@ class SignUp {
     public set userPassword(userPassword: string) {
         this._userPassword = userPassword
     }
+
+    /**
+    * Sets the value of _userPasswordRepeated
+    * @param userPasswordRepeated The new value of _userPasswordRepeated
+    */
+     public set userPasswordRepeated(userPasswordRepeated: string) {
+        this._userPasswordRepeated = userPasswordRepeated
+    }
 }
+
+export default SignUp

@@ -36,7 +36,9 @@ let workflowInstancesName: string[] = ['workflowInstance1', 'workflowInstance2']
 let conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1'], ['key2', 'val2']])
 
 // pullVersionsWithWorkflowInstanceName
-let versions: Version[] = [new Version('1.1', 'changed value of key1', [['key1', 'val2']]), new Version('1.1.1', 'reverted previous change', [['key1', 'val1']])]
+let versions: Version[] = [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
+["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
+["key3: 5.0 5.0", "key3: 'text'"]])]
 
 // pullUsers
 let users: User[] = [new User('name1', 'status1', 'privilege1'), new User('name2', 'status2', 'privilege2')]
