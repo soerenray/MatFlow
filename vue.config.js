@@ -1,9 +1,10 @@
 const path = require('path')
 
 module.exports = {
+  lintOnSave: false,
   pages: {
     index: {
-      entry: 'Implementierung/Frontend/src/main.js',
+      entry: 'Implementierung/Frontend/src/main.ts',
       template: 'Implementierung/Frontend/public/index.html'
     }
   },
