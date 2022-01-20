@@ -1,17 +1,17 @@
 import os
 from pathlib import Path
-
 from werkzeug.utils import secure_filename
 from base64 import b64encode
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User
 from typing import List
 from ExceptionHandler import ExceptionHandler
-from Implementierung.workflow import FrontendVersion
+from Implementierung.workflow import frontend_version
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.workflow_instance import WorkflowInstance
 from Implementierung.workflow.version import Version
+import keys
 
 
 class PythonToJSON:
@@ -34,8 +34,8 @@ class PythonToJSON:
 
         out_dict = {}
         for user in users:
-            out_dict.update({'userName': user.getUsername(), 'userStatus': user.getStatus(), 'userPrivilege':
-                            user.getPrivilege()})
+            out_dict.update({keys.user_name: user.getUsername(), keys.user_status_name: user.getStatus(),
+                             keys.user_privilege_name: user.getPrivilege()})
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -55,9 +55,9 @@ class PythonToJSON:
         container_limit: int = server.getContainerLimit()
         executing: bool = server.isSelectedForExecution()
         resources: list[tuple[str, str]] = server.getRessources()
-        out_dict: dict = {'serverName': name, 'serverAddress': ip_address, 'serverStatus': status,
-                          'containerLimit': container_limit, 'selectedForExecution': executing,
-                          'serverResources': resources}
+        out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
+                          keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
+                          keys.server_resources_name: resources}
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -73,10 +73,10 @@ class PythonToJSON:
         """
         out_dict: dict = dict()
         name: str = template.get_name()
-        out_dict.update({'templateName': name})
+        out_dict.update({keys.template_name: name})
         # path to file
         file_path: Path = template.get_dag_definition_file()
-        out_dict.update(PythonToJSON.encode_file(file_path, 'dagDefinitionFile'))
+        out_dict.update(PythonToJSON.encode_file(file_path, keys.dag_definition_name))
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -103,9 +103,9 @@ class PythonToJSON:
         Returns:
             String: json-dumped object containing encoded reduced config file (essentially key value pairs)
         """
-        out_dict = dict({'configFileName': reduced_config.get_file_name()})
+        out_dict = dict({keys.config_file_name: reduced_config.get_file_name()})
         key_value_pairs_path: Path = reduced_config.get_key_value_pairs()
-        out_dict.update(PythonToJSON.encode_file(key_value_pairs_path, 'keyValuePairs'))
+        out_dict.update(PythonToJSON.encode_file(key_value_pairs_path, keys.key_value_pairs_name))
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
@@ -121,15 +121,25 @@ class PythonToJSON:
         all_versions = []
         for version in versions:
             version_dict = dict()
-            version_dict.update({'versionNote': version.getNote()})
-            version_dict.update({'versionNumber': version.getVersionNumber()})
-            version_dict.update({'parameterChanges': version.getParameterChanges()})
+            version_dict.update({keys.version_note_name: version.getNote()})
+            version_dict.update({keys.version_number_name: version.getVersionNumber()})
+            version_dict.update({keys.parameter_changes_name: version.getParameterChanges()})
             all_versions.append(version_dict)
-        out_dict: dict = {'versions': all_versions}
+        out_dict: dict = {keys.versions_name: all_versions}
         return ExceptionHandler.success(out_dict)
 
     @staticmethod
     def encode_file(file_path: Path, key: str) -> dict:
+        """
+        encodes a file in base64 encoding
+
+        Args:
+            file_path(Path): path to file
+            key(String): key for json object
+
+        Returns:
+            dictionary with encoded file
+        """
         out_dict: dict = dict()
         with open(file_path, "rb") as file:
             out_dict.update({key: b64encode(file.read())})

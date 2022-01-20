@@ -162,3 +162,12 @@ class LoginException(MatFlowException):
         super(LoginException, self).__init__(message, self.__status_code)
 
 
+class InternalException:
+    """
+    Exception for dev purposes
+    """
+    def __init__(self, message: str):
+        self.__status_code = 666
+        super(InternalException, self).__init__(message, self.__status_code)
+
+
