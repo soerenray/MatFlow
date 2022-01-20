@@ -9,7 +9,7 @@
           <v-col>
             <v-row>
               <v-text-field
-                v-model="emailAddress"
+                v-model="userName"
                 label="email-address"
               ></v-text-field
             ></v-row>
@@ -54,12 +54,12 @@ export default {
     };
   },
   computed: {
-    emailAddress: {
+    userName: {
       get: function (): string {
         return logInObject.userName;
       },
-      set: function (emailAddress: string) {
-        logInObject.userName = emailAddress;
+      set: function (userName: string) {
+        logInObject.userName = userName;
       },
     },
     userPassword: {

@@ -4,9 +4,9 @@
     <create-template></create-template>
     <create-workflow-instance></create-workflow-instance>
     <version-control></version-control>
-    <sign-up></sign-up>
-    -->
     <log-in></log-in>
+    -->
+    <sign-up></sign-up>
   </v-app>
 </template>
 
