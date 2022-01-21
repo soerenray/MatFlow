@@ -1,20 +1,18 @@
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+import ConfigFile from "../Classes/ConfigFile"
 
 class ChooseConfigFile {
     private _workflowIntancesAndConfigFilesNames: Array<[string, string[]]>
-    private _selectedWorkflowInstance: string
-    private _selectedConfigFile: string
+    private _chosenConfigFile: ConfigFile
 
     /**
     *
     * @param workflowIntancesAndConfigFilesNames The workflowIntancesAndConfigFilesNames
-    * @param selectedWorkflowInstance The selectedWorkflowInstance
-    * @param selectedConfigFile The selectedConfigFile
+    * @param chosenConfigFile The chosenConfigFile
     */
-    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]>, selectedWorkflowInstance: string, selectedConfigFile: string,) {
+    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]> = [], chosenConfigFile: ConfigFile = new ConfigFile('',[]),) {
         this._workflowIntancesAndConfigFilesNames = workflowIntancesAndConfigFilesNames
-        this._selectedWorkflowInstance = selectedWorkflowInstance
-        this._selectedConfigFile = selectedConfigFile
+        this._chosenConfigFile = chosenConfigFile
     }
 
     /**
@@ -27,19 +25,12 @@ class ChooseConfigFile {
     }
 
     /**
-    * Gets the selectedWorkflowInstance
-    * @returns _selectedWorkflowInstance
+    * Gets the chosenConfigFile
+    * @returns _chosenConfigFile
     */
-    public get selectedWorkflowInstance(): string {
-        return this._selectedWorkflowInstance
-    }
-
-    /**
-    * Gets the selectedConfigFile
-    * @returns _selectedConfigFile
-    */
-    public get selectedConfigFile(): string {
-        return this._selectedConfigFile
+    public get chosenConfigFile(): ConfigFile {
+        this._chosenConfigFile = BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName()
+        return this._chosenConfigFile
     }
 
     /**
@@ -51,18 +42,10 @@ class ChooseConfigFile {
     }
 
     /**
-    * Sets the value of _selectedWorkflowInstance
-    * @param selectedWorkflowInstance The new value of _selectedWorkflowInstance
+    * Sets the value of _chosenConfigFile
+    * @param chosenConfigFile The new value of _chosenConfigFile
     */
-    public set selectedWorkflowInstance(selectedWorkflowInstance: string) {
-        this._selectedWorkflowInstance = selectedWorkflowInstance
-    }
-
-    /**
-    * Sets the value of _selectedConfigFile
-    * @param selectedConfigFile The new value of _selectedConfigFile
-    */
-    public set selectedConfigFile(selectedConfigFile: string) {
-        this._selectedConfigFile = selectedConfigFile
+    public set chosenConfigFile(chosenConfigFile: ConfigFile) {
+        this._chosenConfigFile = chosenConfigFile
     }
 }
