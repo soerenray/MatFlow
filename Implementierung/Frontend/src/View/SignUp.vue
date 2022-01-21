@@ -34,7 +34,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-dialog v-model="dialoge" max-width="500px">
+            <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn color="primary" dark v-bind="attrs" v-on="on">
                   Open Dialog
@@ -63,7 +63,7 @@ let signUpObject = new SignUp();
 export default {
   name: "SignUp",
   data: () => {
-    return { showPassword: false, showPasswordRepeated: false };
+    return { showPassword: false, showPasswordRepeated: false, dialog: false };
   },
   computed: {
     userName: {

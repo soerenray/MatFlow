@@ -12,7 +12,7 @@
                 {{ instance.name }}
               </v-btn>
             </v-col>
-            <v-col v-if="instance.colored" style="background-color: #A9CCE3">
+            <v-col v-if="instance.colored" style="background-color: #a9cce3">
               <v-btn large text>
                 {{ instance.name }}
               </v-btn>
@@ -32,7 +32,7 @@
                 {{ configFile.name }}
               </v-btn>
             </v-col>
-            <v-col v-if="configFile.colored" style="background-color: #A3E4D7">
+            <v-col v-if="configFile.colored" style="background-color: #a3e4d7">
               <v-btn large text>
                 {{ configFile.name }}
               </v-btn>
@@ -42,70 +42,45 @@
         </v-card>
       </div>
       <div style="padding-left: 40 px; padding-top: 20px">
-        <v-card style="background-color: #F7F9F9" width="700px" height="50px">
-          <v-row>
-            <div style="padding-left: 20px; padding-top: 5px">
-              <v-btn color="yellow">revert all files</v-btn>
-            </div>
-            <v-spacer></v-spacer>
-            <div style="padding-right: 20px; padding-top: 5px">
-              <v-btn color="blue">Create new version</v-btn>
-            </div>
-          </v-row>
-        </v-card>
-        <edit-confifile :keyValuePairs="configFileValues"></edit-confifile>
-        <v-card>
-          <v-row>
-            <div
-              style="
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-left: 20px;
-              "
-            >
-              <v-btn color="red"> Revert changes </v-btn>
-            </div>
-            <v-spacer></v-spacer>
-            <div
-              style="
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 20px;
-              "
-            >
-              <v-btn color="#28B463"> Apply changes </v-btn>
-            </div>
-          </v-row>
-        </v-card>
+        <edit-confifile v-on:changeAllKeyValuePairs='changeAllKeyValuePairs' :keyValuePairs="keyValuePairs"></edit-confifile>
       </div>
     </v-row>
   </v-app>
 </template>
 <script lang='ts'>
 import EditConfifile from "./EditConfigFile.vue";
-import ChooseConfigFile from '../Model/ChooseConfigFile'
+import ChooseConfigFile from "../Model/ChooseConfigFile";
 
-let chooseConfigFileObject = new ChooseConfigFile()
+let chooseConfigFileObject = new ChooseConfigFile();
+
+interface keyValuePairsWithColorInterface {
+  originalKeyName: string;
+  keyName: string;
+  keyValue: string;
+  color1: string;
+  color2: string;
+}
 
 export default {
   components: {
     EditConfifile,
   },
   methods: {
-      changeKeyValuePair(newKeyValuePair: object) {
-          let keyValuePairToChange = this.configFileValues.find((keyValuePair: object) => {
-              keyValuePair.name === newKeyValuePair.originalKeyName
-          })
-          if(keyValuePairToChange !== undefined) {
-              keyValuePairToChange.name = newKeyValuePair.name
-              keyValuePairToChange.value = newKeyValuePair.value
-          }
-      },
-      changeAllKeyValuePairs(newKeyValuePairs: object[]) {
-          newKeyValuePairs.forEach(newKeyValuePair => {
-              this.changeKeyValuePair(newKeyValuePair)
-          });
+    changeKeyValuePair(newKeyValuePair: keyValuePairsWithColorInterface) {
+      let keyValuePairToChangeIndex = this.keyValuePairs.map((keyValuePair: [string,string]) => {
+        return keyValuePair[0]
+      }).indexOf(newKeyValuePair.originalKeyName)
+      if (keyValuePairToChangeIndex !== undefined) {
+        this.keyValuePairs[keyValuePairToChangeIndex][0] = newKeyValuePair.keyName;
+        this.keyValuePairs[keyValuePairToChangeIndex][1] = newKeyValuePair.keyValue;
+        console.log(this.keyValuePairs)
       }
+    },
+    changeAllKeyValuePairs(newKeyValuePairs: keyValuePairsWithColorInterface[]) {
+      newKeyValuePairs.forEach((newKeyValuePair) => {
+        this.changeKeyValuePair(newKeyValuePair);
+      });
+    },
   },
   data: function () {
     return {
@@ -126,29 +101,12 @@ export default {
         { colored: false, name: "configFile7" },
         { colored: true, name: "configFile8" },
       ],
-      configFileValues: [
-        {
-          name: "Key1",
-          value: "lorem ipsum",
-        },
-        {
-          name: "Key2",
-          value: "[val1,val2,val3,val4]",
-        },
-        {
-          name: "Key3",
-          value: "50. 50. 50.",
-        },
-        {
-          name: "Key4",
-          value: "Value 1 #It could also be Value 2",
-        },
-        {
-          name: "Key5",
-          value: "function() {}",
-        },
-      ],
     };
+  },
+  computed: {
+    keyValuePairs: function (): Array<[string, string]> {
+      return chooseConfigFileObject.chosenConfigFile.keyValuePairs;
+    },
   },
 };
 </script>
