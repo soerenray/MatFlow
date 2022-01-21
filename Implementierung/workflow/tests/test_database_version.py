@@ -1,3 +1,4 @@
+from typing import List
 from unittest import TestCase
 from pathlib import Path
 from workflow.database_version import DatabaseVersion
@@ -11,6 +12,28 @@ class TestDatabaseVersion(TestCase):
         configs_dir1 = Path(self.base_path + "changed_files")
         version_number = VersionNumber("1.1")
         self.version1 = DatabaseVersion(version_number, "", configs_dir1)
+
+
+class ParameterChangeMatcher:
+    # class for comparing lists of ParameterChange objects
+    expected: List[ParameterChange]
+
+    def __init__(self, expected):
+        self.expected = expected
+
+    def __eq__(self, other: List[ParameterChange]):
+        if len(self.expected) != len(other):
+            return False
+        else:
+            for exp, act in zip(self.expected, other):
+                if not (exp.get_old_key() == act.get_old_key() and
+                        exp.get_new_key() == act.get_new_key() and
+                        exp.get_old_value() == act.get_old_value() and
+                        exp.get_new_value() == act.get_new_value() and
+                        exp.get_config_file_name() == act.get_config_file_name()):
+                    return False
+            return True
+
 
 
 class TestGetFrontendVersion(TestDatabaseVersion):
@@ -68,5 +91,4 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         actual = frontend_version.get_changes()
 
         # Assert
-        # TODO comparing ParameterChanges doesn't work
-        self.assertEqual(expected, actual)
+        self.assertEqual(ParameterChangeMatcher(expected), actual)
