@@ -14,7 +14,7 @@ class VersionControl {
     * @param workflowInstanceName The workflowInstanceName
     * @param workflowInstancesName The workflowInstancesName
     */
-    constructor(tableHeaders: object[], versions: Version[], workflowInstanceName: string, workflowInstancesName: string[]) {
+    constructor(tableHeaders: object[] = [], versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
         this._tableHeaders = tableHeaders
         this._versions = versions
         this._workflowInstanceName = workflowInstanceName
@@ -87,3 +87,5 @@ class VersionControl {
         this._workflowInstancesName = workflowInstancesName
     }
 }
+
+export default VersionControl

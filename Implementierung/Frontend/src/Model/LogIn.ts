@@ -1,4 +1,4 @@
-class Login {
+class LogIn {
     private _userName: string
     private _userPassword: string
 
@@ -7,7 +7,7 @@ class Login {
     * @param userName The userName
     * @param userPassword The userPassword
     */
-    constructor(userName: string, userPassword: string,) {
+    constructor(userName: string = '', userPassword: string = '',) {
         this._userName = userName
         this._userPassword = userPassword
     }
@@ -45,3 +45,5 @@ class Login {
         this._userPassword = userPassword
     }
 }
+
+export default LogIn
