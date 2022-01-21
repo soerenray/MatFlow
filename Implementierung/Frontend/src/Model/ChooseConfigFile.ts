@@ -10,7 +10,7 @@ class ChooseConfigFile {
     * @param workflowIntancesAndConfigFilesNames The workflowIntancesAndConfigFilesNames
     * @param chosenConfigFile The chosenConfigFile
     */
-    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]> = [], chosenConfigFile: ConfigFile = new ConfigFile('',[]),) {
+    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]> = [], chosenConfigFile: ConfigFile = new ConfigFile(),) {
         this._workflowIntancesAndConfigFilesNames = workflowIntancesAndConfigFilesNames
         this._chosenConfigFile = chosenConfigFile
     }
@@ -29,7 +29,7 @@ class ChooseConfigFile {
     * @returns _chosenConfigFile
     */
     public get chosenConfigFile(): ConfigFile {
-        this._chosenConfigFile = BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName()
+        this._chosenConfigFile = BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName('','')
         return this._chosenConfigFile
     }
 
@@ -49,3 +49,5 @@ class ChooseConfigFile {
         this._chosenConfigFile = chosenConfigFile
     }
 }
+
+export default ChooseConfigFile
