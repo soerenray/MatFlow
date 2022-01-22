@@ -6,6 +6,9 @@ class Template:
     This class represents a workflow template.
     It contains the identifying name of the template as well as a dag-definition-file.
     """
+    __name: str
+    __dag_definition_file: Path
+
     def __init__(self, name: str, dag_definition_file: Path):
         """Constructor of class Template.
 

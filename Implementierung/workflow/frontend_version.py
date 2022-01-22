@@ -1,13 +1,15 @@
 from typing import List
-from workflow.version import Version
-from workflow.version_number import VersionNumber
-from workflow.parameter_change import ParameterChange
+from .version import Version
+from .version_number import VersionNumber
+from .parameter_change import ParameterChange
 
 
 class FrontendVersion(Version):
     """
     This class inherits from Version and is specialized to satisfy the need for information of the client application.
     """
+    __changes: List[ParameterChange]
+
     def __init__(self, version_number: VersionNumber, note: str, changes: List[ParameterChange]):
         """Constructor of class FrontendVersion.
 

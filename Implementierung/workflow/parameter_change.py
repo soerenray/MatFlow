@@ -4,6 +4,12 @@ class ParameterChange:
     It contains the old as well as the new version of both the key and the value.
     Furthermore, it holds the name of the file the change was made in.
     """
+    __old_key: str
+    __new_key: str
+    __old_value: str
+    __new_value: str
+    __config_file_name: str
+
     def __init__(self, old_key: str, new_key: str, old_value: str, new_value: str, config_file_name: str):
         """Constructor of class ParameterChange.
 

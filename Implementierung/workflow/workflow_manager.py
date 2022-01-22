@@ -1,8 +1,10 @@
 from pathlib import Path
 from typing import List, Tuple
-from workflow.frontend_version import FrontendVersion
-from workflow.template import Template
-from workflow.reduced_config_file import ReducedConfigFile
+from .frontend_version import FrontendVersion
+from .database_version import DatabaseVersion
+from .template import Template
+from .reduced_config_file import ReducedConfigFile
+from .config_file import ConfigFile
 
 
 class WorkflowManager:
@@ -164,5 +166,21 @@ class WorkflowManager:
             workflow_instance_name (str): The name of the workflow instance of which the active version shall be changed
             version_number (str): The number of the new active version
 
+        """
+        pass
+
+    # private methods
+    def __apply_changes_to_all(self, old_files: List[ConfigFile], updates: List[ReducedConfigFile]):
+        """
+        This method iterates through all files and calls the apply_changes method.
+        An Error is thrown if the count of files and updates doesn't match or the names missmatch
+        """
+        pass
+
+    def __get_old_files_for_all_versions(self, versions: List[DatabaseVersion]) -> List[Tuple[DatabaseVersion, Path]]:
+        """
+        This method iterates through all versions and attaches the old iterations of the files that where changed by the
+        version. This is done by copying the files into a separate directory and attaching the path. To find the old
+        iterations of the file the algorithm accesses the predecessor version.
         """
         pass

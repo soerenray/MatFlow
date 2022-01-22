@@ -5,6 +5,9 @@ class ReducedConfigFile:
     """
     This class holds all information to represent a config-file in the frontend.
     """
+    __file_name: str
+    __key_value_pairs: List[Tuple[str, str]]
+
     def __init__(self, file_name: str, key_value_pairs: List[Tuple[str, str]]):
         """Constructor of class ReducedConfigFile.
 
