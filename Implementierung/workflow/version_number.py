@@ -1,5 +1,6 @@
 from typing import List, Pattern
 import re
+from ExceptionPackage.MatFlowException import InternalException
 
 
 class VersionNumber:
@@ -18,7 +19,7 @@ class VersionNumber:
         """
         p: Pattern[str] = re.compile('1(\.[1-9][0-9]*)*')
         if not p.fullmatch(number):
-            raise Exception("Internal Error: " + number + " isn't a valid version number.")
+            raise InternalException("Internal Error: " + number + " isn't a valid version number.")
         self.__number = number
 
     # getter
@@ -52,7 +53,7 @@ class VersionNumber:
             VersionNumber: The predecessor version number
         """
         if self.get_number() == "1":
-            raise Exception("Internal Error: Version '1' has no predecessor.")
+            raise InternalException("Internal Error: Version '1' has no predecessor.")
 
         # otherwise, the version number has a predecessor
         version_number_components: List[str] = self.get_number().split(".")

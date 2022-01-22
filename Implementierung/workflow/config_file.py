@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List, Tuple, TextIO
 from .reduced_config_file import ReducedConfigFile
+from ExceptionPackage.MatFlowException import InternalException
 
 
 class ConfigFile(ReducedConfigFile):
@@ -57,7 +58,7 @@ class ConfigFile(ReducedConfigFile):
         """
         if self.get_file_name() != updated_file.get_file_name():
             # for some reason file name and update name don't match
-            raise Exception("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
+            raise InternalException("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
                             + updated_file.get_file_name() + " don't match.")
         else:  # if the names match we can apply the changes
             changes: List[Tuple[str, str, str, str]] = self.find_changes(updated_file)
@@ -77,7 +78,7 @@ class ConfigFile(ReducedConfigFile):
                     result.append((old_pair[0], new_pair[0], old_pair[1], new_pair[1]))
             return result
         else:
-            raise Exception("Internal Error: Wrong amount of update-pairs in " + self.get_file_name())
+            raise InternalException("Internal Error: Wrong amount of update-pairs in " + self.get_file_name())
 
     # private methods
 
@@ -116,7 +117,7 @@ class ConfigFile(ReducedConfigFile):
             for old_key, new_key, old_value, new_value in changes:
                 old_line: str = old_key + " = " + old_value + ";"
                 if old_line not in content:
-                    raise Exception("Internal Error: Pair: " + str((old_key, old_value)) +
+                    raise InternalException("Internal Error: Pair: " + str((old_key, old_value)) +
                                     "doesn't occur in file: " + self.get_file_name())
                 new_line: str = new_key + " = " + new_value + ";"
                 content = content.replace(old_line, new_line)

@@ -7,6 +7,7 @@ from workflow.version_number import VersionNumber
 from workflow.frontend_version import FrontendVersion
 from workflow.config_file import ConfigFile
 from .parameter_change import ParameterChange
+from ExceptionPackage.MatFlowException import InternalException
 
 
 class DatabaseVersion(Version):
@@ -67,18 +68,18 @@ class DatabaseVersion(Version):
 
         # first check the count of elements in both lists
         if len(new_files) > len(old_files):
-            raise Exception("Internal Error: Too little comparison files for version " +
-                            self.get_version_number().get_number())
+            raise InternalException("Internal Error: Too little comparison files for version " +
+                                    self.get_version_number().get_number())
         elif len(new_files) < len(old_files):
-            raise Exception("Internal Error: Too many comparison files for version " +
-                            self.get_version_number().get_number())
+            raise InternalException("Internal Error: Too many comparison files for version " +
+                                    self.get_version_number().get_number())
 
         # then sort and compare them
         new_files.sort()
         old_files.sort()
         if new_files != old_files:
-            raise Exception("Internal Error: Wrong comparison files for version " +
-                            self.get_version_number().get_number())
+            raise InternalException("Internal Error: Wrong comparison files for version " +
+                                    self.get_version_number().get_number())
 
         # the file names match now we can start the actual comparison
         parameter_changes: List[ParameterChange] = []  # the distinct changes go in here
