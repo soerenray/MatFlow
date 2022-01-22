@@ -1,4 +1,3 @@
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 import ConfigFile from "../Classes/ConfigFile"
 
 class ChooseConfigFile {
@@ -29,7 +28,6 @@ class ChooseConfigFile {
     * @returns _workflowIntancesAndConfigFilesNames
     */
     public get workflowIntancesAndConfigFilesNames(): Array<[string, string[]]> {
-        this._workflowIntancesAndConfigFilesNames = BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName()
         return this._workflowIntancesAndConfigFilesNames
     }
 
@@ -38,7 +36,6 @@ class ChooseConfigFile {
     * @returns _chosenConfigFile
     */
     public get chosenConfigFile(): ConfigFile {
-        this._chosenConfigFile = BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName('', '')
         return this._chosenConfigFile
     }
 

@@ -151,18 +151,12 @@ export default {
         chooseConfigFileObject.selectedConfigFileName = selectedConfigFileName;
       },
     },
-    choosenConfigFile: {
-      get: function (): ChooseConfigFile {
-        BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-          this.selectedWorkflowInstanceName,
-          this.selectedConfigFileName
-        );
+    configFile: {
+      // no setter since the config files will be pulled from the server and not defined in the frontend application
+      get: function (): ConfigFile {
+        return chooseConfigFileObject.chosenConfigFile
       },
-      set: function (chosenConfigFile: ConfigFile) {},
     },
-    // choosenConfigFile: function(): ConfigFile {
-    // return BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(this.selectedWorkflowInstanceName, this.selectedConfigFileName)
-    // },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the $data property
