@@ -2,16 +2,17 @@ from typing import List
 from unittest import TestCase
 from pathlib import Path
 from workflow.database_version import DatabaseVersion
+from workflow.frontend_version import FrontendVersion
 from workflow.version_number import VersionNumber
 from workflow.parameter_change import ParameterChange
 
 
 class TestDatabaseVersion(TestCase):
     def setUp(self):
-        self.base_path = "test_files/database_version/"
-        configs_dir1 = Path(self.base_path + "changed_files")
-        version_number = VersionNumber("1.1")
-        self.version1 = DatabaseVersion(version_number, "", configs_dir1)
+        self.base_path: str = "test_files/database_version/"
+        configs_dir1: Path = Path(self.base_path + "changed_files")
+        version_number: VersionNumber = VersionNumber("1.1")
+        self.version1: DatabaseVersion = DatabaseVersion(version_number, "", configs_dir1)
 
 
 class ParameterChangeMatcher:
@@ -41,8 +42,8 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # there are too little files to compare
 
         # Arrange
-        comparison_files = Path(self.base_path + "too_little_files")
-        expected_msg = \
+        comparison_files: Path = Path(self.base_path + "too_little_files")
+        expected_msg: str = \
             "Internal Error: Too little comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
@@ -54,8 +55,8 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # there are too many files to compare
 
         # Arrange
-        comparison_files = Path(self.base_path + "too_many_files")
-        expected_msg = \
+        comparison_files: Path = Path(self.base_path + "too_many_files")
+        expected_msg: str = \
             "Internal Error: Too many comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
@@ -67,8 +68,8 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # the names of the comparison files don't match
 
         # Arrange
-        comparison_files = Path(self.base_path + "wrong_files")
-        expected_msg = \
+        comparison_files: Path = Path(self.base_path + "wrong_files")
+        expected_msg: str = \
             "Internal Error: Wrong comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
@@ -80,14 +81,14 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # the case in witch there are valid comparison files
 
         # Arrange
-        comparison_files = Path(self.base_path + "previous_files")
+        comparison_files: Path = Path(self.base_path + "previous_files")
 
         # Act
-        expected = [ParameterChange("key3", "i_was", "value3", "changed", "test1.conf"),
-                    ParameterChange("key5", "key55", "value5", "value5", "test2.conf"),
-                    ParameterChange("key6", "key6", "value6", "6", "test2.conf")]
-        frontend_version = self.version1.get_frontend_version(comparison_files)
-        actual = frontend_version.get_changes()
+        expected: List[ParameterChange] = [ParameterChange("key3", "i_was", "value3", "changed", "test1.conf"),
+                                           ParameterChange("key5", "key55", "value5", "value5", "test2.conf"),
+                                           ParameterChange("key6", "key6", "value6", "6", "test2.conf")]
+        frontend_version: FrontendVersion = self.version1.get_frontend_version(comparison_files)
+        actual: List[ParameterChange] = frontend_version.get_changes()
 
         # Assert
         self.assertEqual(ParameterChangeMatcher(expected), actual)

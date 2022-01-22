@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Pattern
 import re
 
 
@@ -6,6 +6,8 @@ class VersionNumber:
     """
     This class represents string expressions that are valid version numbers
     """
+    __number: str
+
     def __init__(self, number: str):
         """Translates correct string expressions into VersionNumber objects
 
@@ -14,8 +16,8 @@ class VersionNumber:
         Args:
             number (str): The version number
         """
-        p = re.compile('1([.([1-9][0-9]*])*')
-        if not p.match(number):
+        p: Pattern[str] = re.compile('1(\.[1-9][0-9]*)*')
+        if not p.fullmatch(number):
             raise Exception("Internal Error: " + number + " isn't a valid version number.")
         self.__number = number
 
@@ -49,6 +51,16 @@ class VersionNumber:
         Returns:
             VersionNumber: The predecessor version number
         """
+        if self.get_number() == "1":
+            raise Exception("Internal Error: Version '1' has no predecessor.")
+
+        # otherwise, the version number has a predecessor
+        version_number_components: List[str] = self.get_number().split(".")
+        version_number_components.pop(len(version_number_components)-1)  # remove last component of the version number
+        point_seperator: str = "."
+        predecessor_str: str = point_seperator.join(version_number_components)  # reconnect the components
+        return VersionNumber(predecessor_str)
+
     def get_successor(self, existing_version_numbers: List[str]):
         """
         Builds the smallest subsequent version number that doesn't exist yet.
@@ -59,3 +71,10 @@ class VersionNumber:
         Returns:
             VersionNumber: The new subsequent version number
         """
+        successor_postfix: int = 1
+        while True:
+            possible_successor: str = self.get_number() + "." + str(successor_postfix)
+            if not existing_version_numbers.__contains__(possible_successor):
+                return VersionNumber(possible_successor)
+            successor_postfix += 1  # otherwise, we try the next option
+
