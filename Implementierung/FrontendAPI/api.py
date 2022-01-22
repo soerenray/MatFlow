@@ -10,9 +10,9 @@ from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.workflow_manager import WorkflowManager
-from JSONToPython import JSONToPython
-from PythonToJSON import PythonToJSON
-from ExceptionHandler import ExceptionHandler
+from .JSONToPython import JSONToPython
+from .PythonToJSON import PythonToJSON
+from .ExceptionHandler import ExceptionHandler
 from Implementierung.HardwareAdministration import Server, Hardware_Controller
 from Implementierung.UserAdministration import User, UserController
 import keys
