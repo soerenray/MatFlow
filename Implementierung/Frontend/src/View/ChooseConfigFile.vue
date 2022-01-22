@@ -6,12 +6,25 @@
           <v-btn text>Workflow-instances names:</v-btn>
         </v-card>
         <v-card>
-          <div v-for="instance in workflowInstance" :key="instance.name">
-            <v-col @click='selectedWorkflowInstanceName=instance.name' v-if="selectedWorkflowInstanceName!=instance.name">
-                {{ instance.name }}
+          <div
+            v-for="workflowInstanceName in workflowInstancesName"
+            :key="workflowInstanceName"
+          >
+            <v-col
+              @click="
+                selectedWorkflowInstanceNameAndDeselectConfigFileName(
+                  workflowInstanceName
+                )
+              "
+              v-if="selectedWorkflowInstanceName != workflowInstanceName"
+            >
+              {{ workflowInstanceName }}
             </v-col>
-            <v-col v-if="selectedWorkflowInstanceName==instance.name" style="background-color: #a9cce3">
-                {{ instance.name }}
+            <v-col
+              v-if="selectedWorkflowInstanceName == workflowInstanceName"
+              style="background-color: #a9cce3"
+            >
+              {{ workflowInstanceName }}
             </v-col>
             <v-divider></v-divider>
           </div>
@@ -22,19 +35,19 @@
           <v-btn text>Config-file names:</v-btn>
         </v-card>
         <v-card>
-          <div v-for="configFile in configFiles" :key="configFile.name">
+          <div v-for="configFileName in configFilesName" :key="configFileName">
             <v-col
-              @click="selectedConfigFileName = configFile.name"
-              v-if="selectedConfigFileName != configFile.name"
+              @click="selectedConfigFileName = configFileName"
+              v-if="selectedConfigFileName != configFileName"
             >
-              {{ configFile.name }}
+              {{ configFileName }}
             </v-col>
             <v-col
-              v-if="selectedConfigFileName == configFile.name"
+              v-if="selectedConfigFileName == configFileName"
               style="background-color: #a9cce3"
             >
               <!-- style="background-color: #a3e4d7" -->
-              {{ configFile.name }}
+              {{ configFileName }}
             </v-col>
             <v-divider></v-divider>
           </div>
@@ -77,13 +90,10 @@ export default {
           return keyValuePair[0];
         })
         .indexOf(newKeyValuePair.originalKeyName);
-      if (keyValuePairToChangeIndex !== undefined) {
-        this.keyValuePairs[keyValuePairToChangeIndex][0] =
-          newKeyValuePair.keyName;
-        this.keyValuePairs[keyValuePairToChangeIndex][1] =
-          newKeyValuePair.keyValue;
-        console.log(this.keyValuePairs);
-      }
+      this.keyValuePairs[keyValuePairToChangeIndex][0] =
+        newKeyValuePair.keyName;
+      this.keyValuePairs[keyValuePairToChangeIndex][1] =
+        newKeyValuePair.keyValue;
     },
     changeAllKeyValuePairs(
       newKeyValuePairs: keyValuePairsWithColorInterface[]
@@ -92,31 +102,34 @@ export default {
         this.changeKeyValuePair(newKeyValuePair);
       });
     },
+    selectedWorkflowInstanceNameAndDeselectConfigFileName(
+      selectedWorkflowInstanceName: string
+    ) {
+      this.selectedWorkflowInstanceName = selectedWorkflowInstanceName;
+      this.selectedConfigFileName = "";
+    },
   },
   data: function () {
-    return {
-      workflowInstance: [
-        { colored: true, name: "WorkflowInstance1" },
-        { colored: false, name: "WorkflowInstance2" },
-        { colored: false, name: "WorkflowInstance3" },
-        { colored: false, name: "WorkflowInstance4" },
-        { colored: false, name: "WorkflowInstance5" },
-      ],
-      configFiles: [
-        { colored: false, name: "configFile1" },
-        { colored: true, name: "configFile2" },
-        { colored: true, name: "configFile3" },
-        { colored: false, name: "configFile4" },
-        { colored: true, name: "configFile5" },
-        { colored: false, name: "configFile6" },
-        { colored: false, name: "configFile7" },
-        { colored: true, name: "configFile8" },
-      ],
-    };
+    return {};
   },
   computed: {
     keyValuePairs: function (): Array<[string, string]> {
       return chooseConfigFileObject.chosenConfigFile.keyValuePairs;
+    },
+    workflowInstancesName: function (): string[] {
+      return chooseConfigFileObject.workflowIntancesAndConfigFilesNames.map(
+        (x) => x[0]
+      );
+    },
+    configFilesName: function (): string[] {
+      let indexOfSelectedWorkflowInstanceName =
+        this.workflowInstancesName.indexOf(this.selectedWorkflowInstanceName);
+      if (indexOfSelectedWorkflowInstanceName === -1) {
+        return [];
+      }
+      return chooseConfigFileObject.workflowIntancesAndConfigFilesNames[
+        indexOfSelectedWorkflowInstanceName
+      ][1];
     },
     selectedWorkflowInstanceName: {
       get: function (): string {
@@ -140,7 +153,6 @@ export default {
     // Vue is oberserving data in the $data property
     // Vue.observable has to be used to make an object outside of data reactive: https://v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(chooseConfigFileObject);
-    Vue.observable(chooseConfigFileObject.selectedWorkflowInstanceName)
   },
 };
 </script>
