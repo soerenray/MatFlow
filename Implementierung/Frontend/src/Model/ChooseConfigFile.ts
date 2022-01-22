@@ -4,6 +4,7 @@ import ConfigFile from "../Classes/ConfigFile"
 class ChooseConfigFile {
     private _workflowIntancesAndConfigFilesNames: Array<[string, string[]]>
     private _chosenConfigFile: ConfigFile
+    private _updatedConfigFiles: ConfigFile[]
     private _selectedWorkflowInstanceName: string
     private _selectedConfigFileName: string
 
@@ -11,12 +12,14 @@ class ChooseConfigFile {
     *
     * @param workflowIntancesAndConfigFilesNames The workflowIntancesAndConfigFilesNames
     * @param chosenConfigFile The chosenConfigFile
+    * @param updatedConfigFiles The updatedConfigFiles
     * @param selectedWorkflowInstanceName The selectedWorkflowInstanceName
     * @param selectedConfigFileName The selectedConfigFileName
     */
-    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]> = [], chosenConfigFile: ConfigFile = new ConfigFile(), selectedWorkflowInstanceName: string = '', selectedConfigFileName: string = '',) {
+    constructor(workflowIntancesAndConfigFilesNames: Array<[string, string[]]> = [], chosenConfigFile: ConfigFile = new ConfigFile(), updatedConfigFiles: ConfigFile[] = [], selectedWorkflowInstanceName: string = '', selectedConfigFileName: string = '',) {
         this._workflowIntancesAndConfigFilesNames = workflowIntancesAndConfigFilesNames
         this._chosenConfigFile = chosenConfigFile
+        this._updatedConfigFiles = updatedConfigFiles
         this._selectedWorkflowInstanceName = selectedWorkflowInstanceName
         this._selectedConfigFileName = selectedConfigFileName
     }
@@ -37,6 +40,14 @@ class ChooseConfigFile {
     public get chosenConfigFile(): ConfigFile {
         this._chosenConfigFile = BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName('', '')
         return this._chosenConfigFile
+    }
+
+    /**
+    * Gets the updatedConfigFiles
+    * @returns _updatedConfigFiles
+    */
+    public get updatedConfigFiles(): ConfigFile[] {
+        return this._updatedConfigFiles
     }
 
     /**
@@ -69,6 +80,14 @@ class ChooseConfigFile {
     */
     public set chosenConfigFile(chosenConfigFile: ConfigFile) {
         this._chosenConfigFile = chosenConfigFile
+    }
+
+    /**
+    * Sets the value of _updatedConfigFiles
+    * @param updatedConfigFiles The new value of _updatedConfigFiles
+    */
+    public set updatedConfigFiles(updatedConfigFiles: ConfigFile[]) {
+        this._updatedConfigFiles = updatedConfigFiles
     }
 
     /**

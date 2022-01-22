@@ -68,6 +68,8 @@ import Vue from "vue";
 
 import EditConfifile from "./EditConfigFile.vue";
 import ChooseConfigFile from "../Model/ChooseConfigFile";
+import ConfigFile from "../Classes/ConfigFile";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
 let chooseConfigFileObject = new ChooseConfigFile();
 
@@ -116,6 +118,7 @@ export default {
     keyValuePairs: function (): Array<[string, string]> {
       return chooseConfigFileObject.chosenConfigFile.keyValuePairs;
     },
+
     workflowInstancesName: function (): string[] {
       return chooseConfigFileObject.workflowIntancesAndConfigFilesNames.map(
         (x) => x[0]
@@ -148,6 +151,18 @@ export default {
         chooseConfigFileObject.selectedConfigFileName = selectedConfigFileName;
       },
     },
+    choosenConfigFile: {
+      get: function (): ChooseConfigFile {
+        BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+          this.selectedWorkflowInstanceName,
+          this.selectedConfigFileName
+        );
+      },
+      set: function (chosenConfigFile: ConfigFile) {},
+    },
+    // choosenConfigFile: function(): ConfigFile {
+    // return BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(this.selectedWorkflowInstanceName, this.selectedConfigFileName)
+    // },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the $data property
