@@ -1,5 +1,5 @@
 from pathlib import Path
-from workflow.template import Template
+from .template import Template
 
 
 class WorkflowInstance(Template):

@@ -8,7 +8,7 @@ class Version:
     one in the database.
     """
     def __init__(self, version_number: VersionNumber, note: str):
-        """Constructor of class Version.
+        """Constructor of class Version. Raises internal exception if the argument version_number has wrong format
 
         Args:
             version_number (VersionNumber): Number that identifies the new Version

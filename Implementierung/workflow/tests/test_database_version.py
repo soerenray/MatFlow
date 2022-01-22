@@ -35,7 +35,6 @@ class ParameterChangeMatcher:
             return True
 
 
-
 class TestGetFrontendVersion(TestDatabaseVersion):
 
     def test_too_little_files(self):

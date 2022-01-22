@@ -4,7 +4,7 @@ from workflow.version import Version
 from workflow.version_number import VersionNumber
 from workflow.frontend_version import FrontendVersion
 from workflow.config_file import ConfigFile
-from workflow.parameter_change import ParameterChange
+from .parameter_change import ParameterChange
 
 
 class DatabaseVersion(Version):

@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import List, Tuple
-from workflow.reduced_config_file import ReducedConfigFile
+from .reduced_config_file import ReducedConfigFile
 
 
 class ConfigFile(ReducedConfigFile):
