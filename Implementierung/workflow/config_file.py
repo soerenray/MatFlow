@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, TextIO
 from .reduced_config_file import ReducedConfigFile
 
 
@@ -8,6 +8,8 @@ class ConfigFile(ReducedConfigFile):
     This is a subclass of ReducedConfigFile and additionally holds the config-file
     itself as well as the name of the associated workflow instance.
     """
+    __file: Path
+
     def __init__(self, file_name: str, file: Path):
         """Constructor of class ConfigFile.
 
@@ -58,7 +60,7 @@ class ConfigFile(ReducedConfigFile):
             raise Exception("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
                             + updated_file.get_file_name() + " don't match.")
         else:  # if the names match we can apply the changes
-            changes = self.find_changes(updated_file)
+            changes: List[Tuple[str, str, str, str]] = self.find_changes(updated_file)
             self.__write_changes_to_file(changes)
 
     def find_changes(self, updated_file: ReducedConfigFile) -> List[Tuple[str, str, str, str]]:
@@ -69,7 +71,7 @@ class ConfigFile(ReducedConfigFile):
         If the lists are of different length an internal exception is thrown.
         """
         if len(self.get_key_value_pairs()) == len(updated_file.get_key_value_pairs()):
-            result = []
+            result: List[Tuple[str, str, str, str]] = []
             for old_pair, new_pair in zip(self.get_key_value_pairs(), updated_file.get_key_value_pairs()):
                 if old_pair != new_pair:  # otherwise, there is no change
                     result.append((old_pair[0], new_pair[0], old_pair[1], new_pair[1]))
@@ -85,17 +87,17 @@ class ConfigFile(ReducedConfigFile):
         If such a line is found (key, value) is added to the result list.
         The method is used to initialize the attribute self.key_value_pairs.
         """
-        result = []
+        result: List[Tuple[str, str]] = []
         with self.__file.open() as file:
-            lines = file.readlines()
+            lines: List[str] = file.readlines()
             for line in lines:
                 if line[0] != '#':  # otherwise, line is comment
-                    words = line.split(' ')
+                    words: List[str] = line.split(' ')
                     if len(words) >= 3 and words[1] == "=":  # the general expression is met
-                        key = words[0]
-                        value_semicolon = words[2]
+                        key: str = words[0]
+                        value_semicolon: str = words[2]
                         if len(value_semicolon) >= 2 and value_semicolon.__contains__(";"):  # pair is terminated by ';'
-                            value = value_semicolon.split(";")[0]  # only str before ';' is of interest
+                            value: str = value_semicolon.split(";")[0]  # only str before ';' is of interest
                             result.append((key, value))
 
         return result
@@ -108,15 +110,15 @@ class ConfigFile(ReducedConfigFile):
         An error is thrown if one of the old pairs isn't found in the file.
         """
         if changes:  # there has to be at least one change
-            file = open(self.get_file())
-            content = file.read()
+            file: TextIO = open(self.get_file())
+            content: str = file.read()
             file.close()
             for old_key, new_key, old_value, new_value in changes:
-                old_line = old_key + " = " + old_value + ";"
+                old_line: str = old_key + " = " + old_value + ";"
                 if old_line not in content:
                     raise Exception("Internal Error: Pair: " + str((old_key, old_value)) +
                                     "doesn't occur in file: " + self.get_file_name())
-                new_line = new_key + " = " + new_value + ";"
+                new_line: str = new_key + " = " + new_value + ";"
                 content = content.replace(old_line, new_line)
             file = open(self.get_file(), "w")
             file.write(content)

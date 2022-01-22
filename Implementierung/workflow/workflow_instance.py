@@ -7,6 +7,8 @@ class WorkflowInstance(Template):
     This class represents a workflow instance.
     It contains the identifying name of the instance, a dag-definition-file as well as a folder with input files.
     """
+    __config_folder: Path
+
     def __init__(self, name: str, dag_definition_file: Path, config_folder: Path):
         """Constructor of class WorkflowInstance.
 

@@ -7,6 +7,9 @@ class Version:
     It's main task is to switch between the two different representations of versions one in the frontend,
     one in the database.
     """
+    __note: str
+    __version_number: VersionNumber
+
     def __init__(self, version_number: VersionNumber, note: str):
         """Constructor of class Version. Raises internal exception if the argument version_number has wrong format
 

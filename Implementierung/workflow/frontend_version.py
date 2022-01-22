@@ -8,6 +8,8 @@ class FrontendVersion(Version):
     """
     This class inherits from Version and is specialized to satisfy the need for information of the client application.
     """
+    __changes: List[ParameterChange]
+
     def __init__(self, version_number: VersionNumber, note: str, changes: List[ParameterChange]):
         """Constructor of class FrontendVersion.
 
