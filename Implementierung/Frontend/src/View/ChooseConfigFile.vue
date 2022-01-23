@@ -140,13 +140,13 @@ export default {
       selectedConfigFileName: string
     ) {
       this.selectedConfigFileName = selectedConfigFileName;
-      this.chosenConfigFile =
-        BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-          this.selectedWorkflowInstanceName,
-          this.selectedConfigFileName
-        );
-      // Vue does not behave reactive on array's. Therefore the component edit-config-file would not // update properly, when the chosenConfigFile changes
-      this.$forceUpdate();
+      if (this.isConfigFileNameInUpdatedConfigFiles(selectedConfigFileName)) {
+        this.chosenConfigFile =
+          BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+            this.selectedWorkflowInstanceName,
+            this.selectedConfigFileName
+          );
+      }
     },
   },
   computed: {
