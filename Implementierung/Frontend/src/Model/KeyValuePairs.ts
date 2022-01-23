@@ -41,7 +41,6 @@ class KeyValuePairs {
      * @returns true if 'keyName' is not used in keyValuePairs, otherwise false
      */
     private isKeyUniqueInKeyValuePairs(keyValuePairInstance: any, keyName: string,): boolean {
-        console.log(keyValuePairInstance)
         return ((keyValuePairInstance.keyValuePairs.map((keyValuePair: KeyValuePair): string => { return keyValuePair.keyName }).indexOf(keyName) === -1) ? true : false)
     }
 
