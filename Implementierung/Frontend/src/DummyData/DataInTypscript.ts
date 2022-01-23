@@ -35,13 +35,17 @@ let wf2Conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1']])
 let wf2Conf2: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2']])
 let wf2Conf3: ConfigFile = new ConfigFile('conf3', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
 
+function deepCopyConfigFile(configFile: ConfigFile): ConfigFile{
+    return new ConfigFile(JSON.parse(JSON.stringify(configFile.configFileName)), JSON.parse(JSON.stringify(configFile.keyValuePairs)))
+}
+
 function getWfConf(wfConstName: string): ConfigFile {
     switch (wfConstName) {
-        case "wf1Conf1": return wf1Conf1
-        case "wf1Conf2": return wf1Conf2
-        case "wf2Conf1": return wf2Conf1
-        case "wf2Conf2": return wf2Conf2
-        case "wf2Conf3": return wf2Conf3
+        case "wf1Conf1": return deepCopyConfigFile(wf1Conf1)
+        case "wf1Conf2": return deepCopyConfigFile(wf1Conf2)
+        case "wf2Conf1": return deepCopyConfigFile(wf2Conf1)
+        case "wf2Conf2": return deepCopyConfigFile(wf2Conf2)
+        case "wf2Conf3": return deepCopyConfigFile(wf2Conf3)
         default: return new ConfigFile()
     }
 }
