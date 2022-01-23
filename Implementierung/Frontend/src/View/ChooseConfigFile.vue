@@ -76,24 +76,13 @@ export default {
     EditConfigFile,
   },
   methods: {
-    changeKeyValuePair(newKeyValuePair: [string, string], index: number) {
-      this.keyValuePairs[index][0] = newKeyValuePair[0];
-      this.keyValuePairs[index][1] = newKeyValuePair[1];
-    },
     changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
-      newKeyValuePairs.forEach(
-        (newKeyValuePair: [string, string], index: number) => {
-          this.changeKeyValuePair(newKeyValuePair, index);
+      this.chosenConfigFile.keyValuePairs.forEach(
+        (keyValuePair: [string, string], index: number) => {
+          keyValuePair[0] = newKeyValuePairs[index][0];
+          keyValuePair[1] = newKeyValuePairs[index][1];
         }
       );
-      this.addConfigFileToUpdatedConfigFiles(this.chosenConfigFile);
-    },
-    addConfigFileToUpdatedConfigFiles(configFile: ConfigFile) {
-      let isConfigFileInUpdatedConfigFiles =
-        this.isConfigFileNameInUpdatedConfigFiles(configFile.configFileName);
-      if (!isConfigFileInUpdatedConfigFiles) {
-        this.updatedConfigFiles.push(configFile);
-      }
     },
     colorForConfigFileName: function (configFileName: string): string {
       if (this.selectedConfigFileName === configFileName) {
@@ -123,7 +112,7 @@ export default {
       }
       return configFile;
     },
-    updatedConfigFilesToBackendServer() {
+    pushUpdatedConfigFilesToBackendServer() {
       BackendServerCommunicator.pushConfigFilesWithWorkflowInstanceName(
         chooseConfigFileObject.updatedConfigFiles,
         this.selectedWorkflowInstanceName
@@ -140,14 +129,19 @@ export default {
       selectedConfigFileName: string
     ) {
       this.selectedConfigFileName = selectedConfigFileName;
-      if (!this.isConfigFileNameInUpdatedConfigFiles(selectedConfigFileName)) {
+      if (
+        !this.isConfigFileNameInUpdatedConfigFiles(this.selectedConfigFileName)
+      ) {
         this.chosenConfigFile =
           BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName
           );
+        this.updatedConfigFiles.push(this.chosenConfigFile);
       } else {
-        this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(selectedConfigFileName)
+        this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(
+          selectedConfigFileName
+        );
       }
     },
   },

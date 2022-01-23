@@ -23,6 +23,7 @@ class BackendServerCommunicator {
             }
             return getWfConf('wf1Conf2')
         } else if (workflowInstanceName === "workflowInstance2") {
+            console.log(configFileName)
             if (configFileName === "conf1") {
                 return getWfConf('wf2Conf1')
             } else if (configFileName === "conf2") {
@@ -30,6 +31,7 @@ class BackendServerCommunicator {
             }
             return getWfConf('wf2Conf3')
         }
+        return new ConfigFile()
     }
     public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
         if (workflowInstanceName === "workflowInstance1") {

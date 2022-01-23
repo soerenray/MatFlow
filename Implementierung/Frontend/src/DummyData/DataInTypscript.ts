@@ -28,14 +28,12 @@ let workflowInstancesNameAndConfigFilesName: Array<[string, string[]]> = [
     ]]
 ]
 
-
-
 //pullConfigFileWithConfigFileNameWithWorkflowIsntanceName
 let wf1Conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1'], ['key2', 'val2']])
 let wf1Conf2: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
-let wf2Conf1: ConfigFile = new ConfigFile('conf3', [['key1', 'val1']])
-let wf2Conf2: ConfigFile = new ConfigFile('conf1', [['key1', 'val1'], ['key2', 'val2']])
-let wf2Conf3: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
+let wf2Conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1']])
+let wf2Conf2: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2']])
+let wf2Conf3: ConfigFile = new ConfigFile('conf3', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
 
 function getWfConf(wfConstName: string): ConfigFile {
     switch (wfConstName) {
