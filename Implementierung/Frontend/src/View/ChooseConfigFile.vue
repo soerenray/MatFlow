@@ -52,8 +52,9 @@
       </div>
       <div style="padding-left: 40 px; padding-top: 20px">
         <edit-config-file
-          v-on:editConfigFileEVENTS="editConfigFileEVENTS"
-          :keyValuePairs="keyValuePairs"
+          v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+          :fileName="selectedConfigFileName"
+          :keyValuePairsFromParent="keyValuePairs"
         ></edit-config-file>
       </div>
     </v-row>
@@ -74,13 +75,6 @@ export default {
   components: {
     EditConfigFile,
   },
-  // "methods" are created later then "data"
-  created: function () {
-    this.$data.editConfigFileEVENTS = [
-      this.changeAllKeyValuePairs,
-      this.revertAllChanges,
-    ];
-  },
   methods: {
     changeKeyValuePair(newKeyValuePair: [string, string], index: number) {
       this.keyValuePairs[index][0] = newKeyValuePair[0];
@@ -93,10 +87,6 @@ export default {
         }
       );
       this.addConfigFileToUpdatedConfigFiles(this.chosenConfigFile);
-    },
-    revertAllChanges() {
-      console.log("hi");
-      this.$forceUpdate();
     },
     addConfigFileToUpdatedConfigFiles(configFile: ConfigFile) {
       let isConfigFileInUpdatedConfigFiles =

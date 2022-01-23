@@ -23,13 +23,13 @@
           </v-row>
         </v-card>
         <v-card
-          v-for="keyValuePairWithColor in keyValuePairsWithColor"
-          :key="keyValuePairWithColor.keyName"
+          v-for="(keyValuePair, index) in keyValuePairs"
+          :key="index"
         >
           <v-row>
             <div style="padding-top: 15px; padding-left: 20px">
               <v-text-field
-                v-model="keyValuePairWithColor.keyName"
+                v-model="keyValuePair.keyName"
                 solo
                 dense
               ></v-text-field>
@@ -37,7 +37,7 @@
             <v-spacer></v-spacer>
             <div style="padding-top: 15px; padding-right: 50px">
               <v-text-field
-                v-model="keyValuePairWithColor.keyValue"
+                v-model="keyValuePair.keyValue"
                 style="width: 400px"
                 dense
               ></v-text-field>
@@ -53,7 +53,7 @@
                 padding-left: 20px;
               "
             >
-              <v-btn color="red" @click="revertAllChanges">
+              <v-btn color="red" @click="initialiseKeyValuePairs">
                 Revert changes
               </v-btn>
             </div>
@@ -77,74 +77,61 @@
 </template>
 
 <script lang='ts'>
-interface keyValuePairWithColorInterface {
-  _privateKeyName: string;
-  isKeyInKeyValuPairsWithColorUnique: Function;
-  keyName: string;
-  keyValue: string;
-  color1: string;
-  color2: string;
+import Vue from "vue";
+import KeyValuePairs from "../Model/KeyValuePairs";
+
+let keyValuePairsObject = new KeyValuePairs();
+
+interface KeyValuePair {
+    _keyName: string,
+    keyValuePairInstance: any,
+    keyName: string,
+    keyValue: string,
 }
 
 export default {
   // details: https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
   props: {
-    keyValuePairs: {
+    keyValuePairsFromParent: {
       type: Array as () => Array<[string, string]>,
     },
+    // Vue type-syntax
+    fileName: String,
   },
   methods: {
     changeAllKeyValuePairs() {
-      let keyValuePairsWithoutColor = this.keyValuePairsWithColor.map(
-        (
-          keyValuePairWithColor: keyValuePairWithColorInterface
-        ): [string, string] => {
-          return [
-            keyValuePairWithColor.keyName,
-            keyValuePairWithColor.keyValue,
-          ];
-        }
-      );
-      this.$emit("editConfigFileEVENTS[0]", keyValuePairsWithoutColor);
+        let keyValuePairsAsTupleArray = this.keyValuePairs.map((keyValuePair: KeyValuePair): [string, string] => {
+            return [keyValuePair.keyName, keyValuePair.keyValue]
+        })
+        this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray)
     },
-    revertAllChanges() {
-        console.log("revert all changes in deitConfigFile")
-      this.$emit("editConfigFileEVENTS[1]");
-    },
-    isKeyInKeyValuPairsWithColorUnique(key: string): boolean {
-      return this.keyValuePairsWithColor
-        .map(
-          (keyValuePairWithColor: keyValuePairWithColorInterface): string => {
-            return keyValuePairWithColor.keyName;
+    initialiseKeyValuePairs() {
+      this.keyValuePairs = [];
+      if (this.fileName !== "") {
+        this.keyValuePairsFromParent.forEach(
+          (keyValuePair: [string, string]) => {
+            keyValuePairsObject.addKeyValuePair(keyValuePair);
           }
-        )
-        .indexOf(key) === -1
-        ? true
-        : false;
+        );
+      }
     },
   },
   computed: {
-    keyValuePairsWithColor: function (): keyValuePairWithColorInterface[] {
-      let keyValuePairsWithColorArray = Array<keyValuePairWithColorInterface>();
-      this.keyValuePairs.forEach((keyValuePair: [string, string]) => {
-        keyValuePairsWithColorArray.push({
-          _privateKeyName: keyValuePair[0],
-          isKeyInKeyValuPairsWithColorUnique:
-            this.isKeyInKeyValuPairsWithColorUnique,
-          get keyName(): string {
-            return this._privateKeyName;
-          },
-          set keyName(newKeyName: string) {
-            if (this.isKeyInKeyValuPairsWithColorUnique(newKeyName)) {
-              this._privateKeyName = newKeyName;
-            }
-          },
-          keyValue: keyValuePair[1],
-          color1: "#000000",
-          color2: "#000000",
-        });
-      });
-      return keyValuePairsWithColorArray;
+    keyValuePairs: {
+      get(): Array<KeyValuePair> {
+        return keyValuePairsObject.keyValuePairs;
+      },
+      set(keyValuePairs: Array<KeyValuePair>) {
+        keyValuePairsObject.keyValuePairs = keyValuePairs;
+      },
+    },
+  },
+  beforeCreate: function () {
+    Vue.observable(keyValuePairsObject);
+  },
+  watch: {
+    fileName: function () {
+      this.initialiseKeyValuePairs();
     },
   },
 };
