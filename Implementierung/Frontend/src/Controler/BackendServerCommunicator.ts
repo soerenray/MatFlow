@@ -4,7 +4,7 @@ import Server from '../Classes/Server'
 import Version from '../Classes/Version'
 import Template from '../Classes/Template'
 
-import { templateNames, workflowInstancesNameAndConfigFilesName, conf1, conf2, conf3, versions, users } from '../DummyData/DataInTypscript'
+import { templateNames, workflowInstancesNameAndConfigFilesName, wf1Conf1, wf1Conf2, wf2Conf1, wf2Conf2, wf2Conf3, versions, users, } from '../DummyData/DataInTypscript'
 
 class BackendServerCommunicator {
     public constructor() { }
@@ -18,12 +18,19 @@ class BackendServerCommunicator {
     public static pullTemplateWithName(templateName: string): Template { return }
     public static pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
     public static pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
-        if (configFileName === 'conf1') {
-            return conf1
-        } else if (configFileName === 'conf2') {
-            return conf2
+        if (workflowInstanceName === "workflowInstance1") {
+            if (configFileName === "conf1") {
+                return wf1Conf1
+            }
+            return wf1Conf2
+        } else if (workflowInstanceName === "workflowInstance2") {
+            if (configFileName === "conf1") {
+                return wf2Conf1
+            } else if (configFileName === "conf2") {
+                return wf2Conf2
+            }
+            return wf2Conf3
         }
-        return conf3
     }
     public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void { return }
     public static pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
