@@ -140,12 +140,14 @@ export default {
       selectedConfigFileName: string
     ) {
       this.selectedConfigFileName = selectedConfigFileName;
-      if (this.isConfigFileNameInUpdatedConfigFiles(selectedConfigFileName)) {
+      if (!this.isConfigFileNameInUpdatedConfigFiles(selectedConfigFileName)) {
         this.chosenConfigFile =
           BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName
           );
+      } else {
+        this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(selectedConfigFileName)
       }
     },
   },
