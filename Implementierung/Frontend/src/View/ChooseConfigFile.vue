@@ -42,9 +42,8 @@
                   configFileName
                 )
               "
-              :style="{ background: colorForConfigFileName(configFileName)}"
+              :style="{ background: colorForConfigFileName(configFileName) }"
             >
-              <!-- style="background-color:green" -->
               {{ configFileName }}
             </v-col>
             <v-divider></v-divider>
@@ -53,7 +52,7 @@
       </div>
       <div style="padding-left: 40 px; padding-top: 20px">
         <edit-config-file
-          v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+          v-on:editConfigFileEVENTS="editConfigFileEVENTS"
           :keyValuePairs="keyValuePairs"
         ></edit-config-file>
       </div>
@@ -71,29 +70,33 @@ import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
 let chooseConfigFileObject = new ChooseConfigFile();
 
-interface keyValuePairsWithColorInterface {
-  originalKeyName: string;
-  keyName: string;
-  keyValue: string;
-  color1: string;
-  color2: string;
-}
-
 export default {
   components: {
     EditConfigFile,
   },
+  // "methods" are created later then "data"
+  created: function () {
+    this.$data.editConfigFileEVENTS = [
+      this.changeAllKeyValuePairs,
+      this.revertAllChanges,
+    ];
+  },
   methods: {
-    changeKeyValuePair(newKeyValuePair: keyValuePairsWithColorInterface) {
-      let keyValuePairToChangeIndex = this.keyValuePairs
-        .map((keyValuePair: [string, string]) => {
-          return keyValuePair[0];
-        })
-        .indexOf(newKeyValuePair.originalKeyName);
-      this.keyValuePairs[keyValuePairToChangeIndex][0] =
-        newKeyValuePair.keyName;
-      this.keyValuePairs[keyValuePairToChangeIndex][1] =
-        newKeyValuePair.keyValue;
+    changeKeyValuePair(newKeyValuePair: [string, string], index: number) {
+      this.keyValuePairs[index][0] = newKeyValuePair[0];
+      this.keyValuePairs[index][1] = newKeyValuePair[1];
+    },
+    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
+      newKeyValuePairs.forEach(
+        (newKeyValuePair: [string, string], index: number) => {
+          this.changeKeyValuePair(newKeyValuePair, index);
+        }
+      );
+      this.addConfigFileToUpdatedConfigFiles(this.chosenConfigFile);
+    },
+    revertAllChanges() {
+      console.log("hi");
+      this.$forceUpdate();
     },
     addConfigFileToUpdatedConfigFiles(configFile: ConfigFile) {
       let isConfigFileInUpdatedConfigFiles =
@@ -109,14 +112,6 @@ export default {
         return "#a3e4d7";
       }
       return "#FFFFFF";
-    },
-    changeAllKeyValuePairs(
-      newKeyValuePairs: keyValuePairsWithColorInterface[]
-    ) {
-      newKeyValuePairs.forEach((newKeyValuePair) => {
-        this.changeKeyValuePair(newKeyValuePair);
-      });
-      this.addConfigFileToUpdatedConfigFiles(this.chosenConfigFile)
     },
     isConfigFileNameInUpdatedConfigFiles(configFileName: string): boolean {
       return this.updatedConfigFiles
@@ -149,16 +144,14 @@ export default {
           this.selectedWorkflowInstanceName,
           this.selectedConfigFileName
         );
+      // Vue does not behave reactive on array's. Therefore the component edit-config-file would not // update properly, when the chosenConfigFile changes
+      this.$forceUpdate();
     },
-  },
-  data: function () {
-    return {};
   },
   computed: {
     keyValuePairs: function (): Array<[string, string]> {
-      return chooseConfigFileObject.chosenConfigFile.keyValuePairs;
+      return this.chosenConfigFile.keyValuePairs;
     },
-
     workflowInstancesName: function (): string[] {
       return chooseConfigFileObject.workflowIntancesAndConfigFilesNames.map(
         (x) => x[0]
@@ -209,8 +202,10 @@ export default {
     },
   },
   beforeCreate: function () {
-    // Vue is oberserving data in the $data property
-    // Vue.observable has to be used to make an object outside of data reactive: https://v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    // Vue is oberserving data in the $data property.
+    // The object choosenConfigFileObject wouldn't update, when the parameters are
+    // initialized in data
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(chooseConfigFileObject);
     chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
       BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName();

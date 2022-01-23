@@ -28,7 +28,11 @@
         >
           <v-row>
             <div style="padding-top: 15px; padding-left: 20px">
-              <v-text-field v-model="keyValuePairWithColor.keyName" solo dense></v-text-field>
+              <v-text-field
+                v-model="keyValuePairWithColor.keyName"
+                solo
+                dense
+              ></v-text-field>
             </div>
             <v-spacer></v-spacer>
             <div style="padding-top: 15px; padding-right: 50px">
@@ -49,7 +53,9 @@
                 padding-left: 20px;
               "
             >
-              <v-btn color="red"> Revert changes </v-btn>
+              <v-btn color="red" @click="revertAllChanges">
+                Revert changes
+              </v-btn>
             </div>
             <v-spacer></v-spacer>
             <div
@@ -71,8 +77,9 @@
 </template>
 
 <script lang='ts'>
-interface keyValuePairsWithColorInterface {
-  originalKeyName: string;
+interface keyValuePairWithColorInterface {
+  _privateKeyName: string;
+  isKeyInKeyValuPairsWithColorUnique: Function;
   keyName: string;
   keyValue: string;
   color1: string;
@@ -86,25 +93,52 @@ export default {
       type: Array as () => Array<[string, string]>,
     },
   },
-  data() {
-    return {};
-  },
   methods: {
-    changeKeyValuePair(keyValuePair: keyValuePairsWithColorInterface) {
-      this.$emit("changeKeyValuePair", keyValuePair);
-    },
     changeAllKeyValuePairs() {
-      this.$emit("changeAllKeyValuePairs", this.keyValuePairsWithColor);
+      let keyValuePairsWithoutColor = this.keyValuePairsWithColor.map(
+        (
+          keyValuePairWithColor: keyValuePairWithColorInterface
+        ): [string, string] => {
+          return [
+            keyValuePairWithColor.keyName,
+            keyValuePairWithColor.keyValue,
+          ];
+        }
+      );
+      this.$emit("editConfigFileEVENTS[0]", keyValuePairsWithoutColor);
+    },
+    revertAllChanges() {
+        console.log("revert all changes in deitConfigFile")
+      this.$emit("editConfigFileEVENTS[1]");
+    },
+    isKeyInKeyValuPairsWithColorUnique(key: string): boolean {
+      return this.keyValuePairsWithColor
+        .map(
+          (keyValuePairWithColor: keyValuePairWithColorInterface): string => {
+            return keyValuePairWithColor.keyName;
+          }
+        )
+        .indexOf(key) === -1
+        ? true
+        : false;
     },
   },
   computed: {
-    keyValuePairsWithColor: function (): keyValuePairsWithColorInterface[] {
-      let keyValuePairsWithColorArray =
-        Array<keyValuePairsWithColorInterface>();
+    keyValuePairsWithColor: function (): keyValuePairWithColorInterface[] {
+      let keyValuePairsWithColorArray = Array<keyValuePairWithColorInterface>();
       this.keyValuePairs.forEach((keyValuePair: [string, string]) => {
         keyValuePairsWithColorArray.push({
-          originalKeyName: keyValuePair[0],
-          keyName: keyValuePair[0],
+          _privateKeyName: keyValuePair[0],
+          isKeyInKeyValuPairsWithColorUnique:
+            this.isKeyInKeyValuPairsWithColorUnique,
+          get keyName(): string {
+            return this._privateKeyName;
+          },
+          set keyName(newKeyName: string) {
+            if (this.isKeyInKeyValuPairsWithColorUnique(newKeyName)) {
+              this._privateKeyName = newKeyName;
+            }
+          },
           keyValue: keyValuePair[1],
           color1: "#000000",
           color2: "#000000",
