@@ -22,10 +22,7 @@
             </div>
           </v-row>
         </v-card>
-        <v-card
-          v-for="(keyValuePair, index) in keyValuePairs"
-          :key="index"
-        >
+        <v-card v-for="(keyValuePair, index) in keyValuePairs" :key="index">
           <v-row>
             <div style="padding-top: 15px; padding-left: 20px">
               <v-text-field
@@ -83,10 +80,10 @@ import KeyValuePairs from "../Model/KeyValuePairs";
 let keyValuePairsObject = new KeyValuePairs();
 
 interface KeyValuePair {
-    _keyName: string,
-    keyValuePairInstance: any,
-    keyName: string,
-    keyValue: string,
+  _keyName: string;
+  keyValuePairInstance: any;
+  keyName: string;
+  keyValue: string;
 }
 
 export default {
@@ -100,17 +97,19 @@ export default {
   },
   methods: {
     changeAllKeyValuePairs() {
-        let keyValuePairsAsTupleArray = this.keyValuePairs.map((keyValuePair: KeyValuePair): [string, string] => {
-            return [keyValuePair.keyName, keyValuePair.keyValue]
-        })
-        this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray)
+      let keyValuePairsAsTupleArray = this.keyValuePairs.map(
+        (keyValuePair: KeyValuePair): [string, string] => {
+          return [keyValuePair.keyName, keyValuePair.keyValue];
+        }
+      );
+      this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray);
     },
     initialiseKeyValuePairs() {
-      this.keyValuePairs = [];
+      keyValuePairsObject.keyValuePairs = [];
       if (this.fileName !== "") {
         this.keyValuePairsFromParent.forEach(
-          (keyValuePair: [string, string]) => {
-            keyValuePairsObject.addKeyValuePair(keyValuePair);
+          (keyValuePairFromParent: [string, string]) => {
+            keyValuePairsObject.addKeyValuePair(keyValuePairFromParent);
           }
         );
       }

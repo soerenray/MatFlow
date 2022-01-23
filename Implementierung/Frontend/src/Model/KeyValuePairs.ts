@@ -53,13 +53,12 @@ class KeyValuePairs {
             this._keyValuePairs.push({
                 keyValuePairInstance: this,
                 _keyName: keyValuePair[0],
-                keyValue: keyValuePair[0],
+                keyValue: keyValuePair[1],
                 get keyName(): string {
                     return this._keyName
                 },
                 set keyName(newKeyName: string) {
                     if (this.keyValuePairInstance.isKeyUniqueInKeyValuePairs(this.keyValuePairInstance, newKeyName,)) {
-                        console.log('changeKey')
                         this._keyName = newKeyName
                     }
                 },

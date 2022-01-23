@@ -112,7 +112,18 @@ export default {
         ? false
         : true;
     },
-    updateConfigFilesOnBackendServer() {
+    getConfigFileFromUpdatedConfigFiles(configFileName: string): ConfigFile {
+      let configFile = this.updatedConfigFiles.find(
+        (configFile: ConfigFile) => {
+          return configFileName === configFile.configFileName;
+        }
+      );
+      if (configFile === undefined) {
+        return new ConfigFile();
+      }
+      return configFile;
+    },
+    updatedConfigFilesToBackendServer() {
       BackendServerCommunicator.pushConfigFilesWithWorkflowInstanceName(
         chooseConfigFileObject.updatedConfigFiles,
         this.selectedWorkflowInstanceName
@@ -161,8 +172,20 @@ export default {
       get: function (): ConfigFile {
         return chooseConfigFileObject.chosenConfigFile;
       },
+      // The class ChoosenConfigFile has only one config file. Therefore it has to be checked if the configFile is udpated already
       set: function (chosenConfigFile: ConfigFile) {
-        chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
+        if (
+          this.isConfigFileNameInUpdatedConfigFiles(
+            chosenConfigFile.configFileName
+          )
+        ) {
+          chooseConfigFileObject.chosenConfigFile =
+            this.getConfigFileFromUpdatedConfigFiles(
+              chosenConfigFile.configFileName
+            );
+        } else {
+          chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
+        }
       },
     },
     updatedConfigFiles: {
