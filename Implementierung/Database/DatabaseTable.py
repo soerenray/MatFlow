@@ -1,35 +1,19 @@
-
-""" Erinnerung für mich
-def func(arg1, arg2):
-    ""(")Summary line.
-
-    Extended description of function.
-
-    Args:
-        arg1 (int): Description of arg1
-        arg2 (str): Description of arg2
-
-    Returns:
-        bool: Description of return value
-
-    ""(")
-    return True"""
-
 import mysql.connector
-class DatabaseData:
+
+class DatabaseTable:
     __instance = None
 
     @staticmethod
     def get_instance():
-        if DatabaseData.__instance == None:
-            DatabaseData()
-        return DatabaseData.__instance
+        if DatabaseTable.__instance == None:
+            DatabaseTable()
+        return DatabaseTable.__instance
 
     def __init__(self):
-        if DatabaseData.__instance != None:
+        if DatabaseTable.__instance != None:
             return #throw exception
         else:
-            DatabaseData.__instance = self
+            DatabaseTable.__instance = self
             return
 
     """maybe outsource to config file? https://overiq.com/mysql-connector-python-101/connecting-to-mysql-using-connector-python/
@@ -42,20 +26,11 @@ class DatabaseData:
     )"""
 
 
+    def get_Database_Connection(self):
+        """Connect to MySQL Database and return connection.
 
-    def initialise(no):
-        """Initialisation of Database if not already done beforehand.
+        Parameters are set."""
 
-        Go through every table that has to be set up in the database."""
-        server_Init = "CREATE TABLE Server (ip varchar(50) PRIMARY KEY,name varchar(255) NOT NULL)"
-        Workflow_Template_Init = ""
-        FolderFile_Init = ""
-        Workflow_Init = ""
-        Version_Init = ""
-        ActiveVersion_Init = ""
-        Versionfile_Init = ""
-        ConfFile_Init = ""
-        ResultFile_Init = ""
 
         db = mysql.connector.connect(
             host='localhost',
@@ -64,11 +39,11 @@ class DatabaseData:
             password='12345',
             port='3306'
         )
-        cursor = db.cursor()
-        cursor.execute(server_Init)
+        return db
 
 
-    def set(create):
+
+    def set(self, create):
         """Set new values into tables in database.
 
         Throw error if value already exists,
@@ -93,9 +68,7 @@ class DatabaseData:
 
         cursor.execute(create)
 
-
-
-    def delete(remove):
+    def delete(self, remove):
         """Delete rows in a table of the database.
 
         Do nothing if nothing fit the deletion query.
@@ -109,7 +82,7 @@ class DatabaseData:
         """
 
 
-    def modify(change):
+    def modify(self, change):
         """Modify values in database.
 
         Throw error if query was not able to be read.
@@ -123,7 +96,7 @@ class DatabaseData:
         """
 
 
-    def get(query):
+    def get(self, query):
         """Search for value(s) in database.
 
         Throw error if no entry found in database.
@@ -137,34 +110,47 @@ class DatabaseData:
         """
 
 
-print("TEST IN DatabaseTable. DComment out if not neede/crahses program because no Databaseconnection could be established")
+    def setup_Database(self):
+        """first setup of tables in the database.
+
+        Establish connection to Database with set parameters.
+        Read queries from external file "Database_Table_Setup.txt" and execute.
+
+        Print error, but don't crash if tables are already up
+        """
+        #connection to database
+        db = self.get_Database_Connection()
+        cursor = db.cursor()
+
+        #queries outsourced to avoid overly long lines in code
+        databaseSetupFile = open("Database_Table_Setup.txt", 'r')
+        databaseSetup = databaseSetupFile.read().replace("\n", "").split(";")
+
+        # actual queries
+
+        for line in databaseSetup:
+            if line == "":  # end of file
+                break
+
+            # avoid error on double execution
+            try:
+                cursor.execute(line + ";")
+                # print("success creation: " +line)           #debugging
+            except mysql.connector.Error as err:
+                print(err)
+
+        #close connection
+        cursor.close()
+        db.close()
+
+#
+
+print("TEST IN DatabaseTable. Comment out if not neede/crahses program because no Databaseconnection could be established")
 
 
-db = mysql.connector.connect(
-            host='localhost',
-            database='databaseshema',
-            user='root',
-            password='12345',
-            port='3306'
-        )
+dTable = DatabaseTable()
+dTable.setup_Database()
 
-print("Connection ID:", db.connection_id)
-print(db)
-
-a = DatabaseData.get_instance()
-DatabaseData.initialise()
-
-
-tablecreate = "CREATE TABLE binarySave (ID INT NOT NULL AUTO_INCREMENT, "
-
-workflowcreate = "CREATE TABLE Workflow (name varchar(255), dag varchar(500), PRIMARY KEY (name))"
-
-folderfilecreate = "CREATE TABLE Folderfile (wfname varchar(255), file_ID varchar(50), file varchar(500), PRIMARY KEY (wfname, file_ID), FOREIGN KEY (wfname) REFERENCES Workflow(name))"
-
-cursor = db.cursor()
-cursor.execute(workflowcreate)
-cursor.execute(folderfilecreate)
-print("success creation")
 
 
 
