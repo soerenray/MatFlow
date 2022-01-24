@@ -51,7 +51,7 @@
         </v-card>
       </div>
       <div style="padding-left: 40 px; padding-top: 20px">
-        <edit-config-file
+        <edit-key-value-pairs
           ref="editConfigFile"
           v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
           v-on:pushUpdatedConfigFilesToBackendServer="
@@ -60,7 +60,7 @@
           v-on:resetChoosenConfigFileObject="resetChoosenConfigFileObject"
           :fileName="selectedConfigFileName"
           :keyValuePairsFromParent="keyValuePairs"
-        ></edit-config-file>
+        ></edit-key-value-pairs>
       </div>
     </v-row>
   </v-app>
@@ -69,7 +69,7 @@
 <script lang='ts'>
 import Vue from "vue";
 
-import EditConfigFile from "./EditConfigFile.vue";
+import EditKeyValuePairs from "./EditKeyValuePairs.vue";
 import ChooseConfigFile from "../Model/ChooseConfigFile";
 import ConfigFile from "../Classes/ConfigFile";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
@@ -78,7 +78,7 @@ let chooseConfigFileObject = new ChooseConfigFile();
 
 export default {
   components: {
-    EditConfigFile,
+    EditKeyValuePairs,
   },
   methods: {
     changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {

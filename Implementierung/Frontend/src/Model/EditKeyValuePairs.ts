@@ -7,7 +7,7 @@ interface KeyValuePair {
     keyValue: string,
 }
 
-class KeyValuePairs {
+class EditKeyValuePairs {
     private _keyValuePairs: Array<KeyValuePair>
 
     /**
@@ -67,4 +67,4 @@ class KeyValuePairs {
     }
 }
 
-export default KeyValuePairs
+export default EditKeyValuePairs
