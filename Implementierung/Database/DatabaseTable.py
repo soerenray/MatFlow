@@ -31,7 +31,6 @@ class DatabaseTable:
 
         Parameters are set."""
 
-
         db = mysql.connector.connect(
             host='localhost',
             database='databaseshema',
@@ -56,17 +55,24 @@ class DatabaseTable:
             void
 
         """
-        db = mysql.connector.connect(
-            host='localhost',
-            database='databaseshema',
-            user='root',
-            password='12345',
-            port='3306'
-        )
-
+        # connect to database
+        db = self.get_Database_Connection()
         cursor = db.cursor()
 
-        cursor.execute(create)
+        try:
+            cursor.execute(create)
+        except mysql.connector.Error as err:
+            # handle exception
+            print(err)  # tmp for debugging
+
+        # disconnect from database
+        cursor.close()
+        db.close()
+
+
+
+
+
 
     def delete(self, remove):
         """Delete rows in a table of the database.
@@ -80,6 +86,19 @@ class DatabaseTable:
             void
 
         """
+        # connect to database
+        db = self.get_Database_Connection()
+        cursor = db.cursor()
+
+        try:
+            cursor.execute(remove)
+        except mysql.connector.Error as err:
+            #handle exception
+            print(err)  #tmp for debugging
+
+        # disconnect from database
+        cursor.close()
+        db.close()
 
 
     def modify(self, change):
@@ -94,6 +113,19 @@ class DatabaseTable:
             void
 
         """
+        # connect to database
+        db = self.get_Database_Connection()
+        cursor = db.cursor()
+
+        try:
+            cursor.execute(change)
+        except mysql.connector.Error as err:
+            # handle exception
+            print(err)  # tmp for debugging
+
+        # disconnect from database
+        cursor.close()
+        db.close()
 
 
     def get(self, query):
@@ -108,6 +140,19 @@ class DatabaseTable:
             str: answer of the database
 
         """
+        # connect to database
+        db = self.get_Database_Connection()
+        cursor = db.cursor()
+
+        try:
+            cursor.execute(query)
+        except mysql.connector.Error as err:
+            # handle exception
+            print(err)  # tmp for debugging
+
+        # disconnect from database
+        cursor.close()
+        db.close()
 
 
     def setup_Database(self):
@@ -137,7 +182,7 @@ class DatabaseTable:
                 cursor.execute(line + ";")
                 # print("success creation: " +line)           #debugging
             except mysql.connector.Error as err:
-                print(err)
+                print(err)  # tmp for debugging
 
         #close connection
         cursor.close()
@@ -145,18 +190,12 @@ class DatabaseTable:
 
 #
 
-print("TEST IN DatabaseTable. Comment out if not neede/crahses program because no Databaseconnection could be established")
+print("TEST IN DatabaseTable  START")
+print("Comment out if not needed/crahses program because no Databaseconnection could be established")
 
 
 dTable = DatabaseTable()
 dTable.setup_Database()
 
 
-
-
-
-
-
-
-
-print("End of DatabaseTable output check!")
+print("TEST IN DatabaseTable END!")
