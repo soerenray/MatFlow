@@ -16,7 +16,7 @@ class ServerData:
         else:
             ServerData.__instance = self
 
-    def write_Server(server):
+    def write_Server(self, server):
         """Write new Server into database.
 
         Throw error if ip already exists.
@@ -30,7 +30,7 @@ class ServerData:
         """
 
 
-    def get_Server():
+    def get_Server(self):
         """Get server in database.
 
         NOTE:   Currently there is no intention of storing multiple servers to connect to,
