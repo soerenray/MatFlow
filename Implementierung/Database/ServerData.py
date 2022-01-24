@@ -1,7 +1,7 @@
 import DatabaseTable
 class ServerData:
     __instance = None
-    databaseTable = DatabaseTable.get_instance()
+    databaseTable = DatabaseTable.DatabaseTable.get_instance()
 
 
     @staticmethod
@@ -13,6 +13,7 @@ class ServerData:
     def __init__(self):
         if ServerData.__instance != None:
             #throw exception
+            a = 12
         else:
             ServerData.__instance = self
 
@@ -26,7 +27,6 @@ class ServerData:
 
         Returns:
             void
-
         """
 
 
@@ -36,10 +36,29 @@ class ServerData:
         NOTE:   Currently there is no intention of storing multiple servers to connect to,
                 as such, no argument is needed to get the one(1) that is in the database
 
-
         Returns:
-            Server: server from database
-
+            string[]: 2-element list with format [<IP>,<Name>]
         """
-        return
-    
+        query = "SELECT * FROM Server;"
+        data = self.databaseTable.get(query)
+        if not data:
+            #throw exception no entry
+            return data
+
+        return data
+
+
+
+def class_debugging():
+    print("TEST IN ServerData START")
+    print("Comment out if not needed/crahses program because no Databaseconnection could be established")
+
+
+    sData = ServerData()
+    test = sData.get_Server()
+    print(test)
+
+
+    print("TEST IN ServerData END!")
+
+class_debugging()

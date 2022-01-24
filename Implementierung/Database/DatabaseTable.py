@@ -65,9 +65,13 @@ class DatabaseTable:
             # handle exception
             print(err)  # tmp for debugging
 
+        data = cursor.fetchall()
+
         # disconnect from database
         cursor.close()
         db.close()
+
+        return data
 
 
 
@@ -144,15 +148,20 @@ class DatabaseTable:
         db = self.get_Database_Connection()
         cursor = db.cursor()
 
+
         try:
             cursor.execute(query)
         except mysql.connector.Error as err:
             # handle exception
             print(err)  # tmp for debugging
 
+        data = cursor.fetchall()
+
         # disconnect from database
         cursor.close()
         db.close()
+
+        return data
 
 
     def setup_Database(self):
@@ -190,12 +199,15 @@ class DatabaseTable:
 
 #
 
-print("TEST IN DatabaseTable  START")
-print("Comment out if not needed/crahses program because no Databaseconnection could be established")
+def init_tests():
+    print("TEST IN DatabaseTable START")
+    print("Comment out if not needed/crahses program because no Databaseconnection could be established")
 
 
-dTable = DatabaseTable()
-dTable.setup_Database()
+    dTable = DatabaseTable()
+    dTable.setup_Database()
 
 
-print("TEST IN DatabaseTable END!")
+    print("TEST IN DatabaseTable END!")
+
+#init()
