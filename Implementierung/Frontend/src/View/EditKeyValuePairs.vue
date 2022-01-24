@@ -53,9 +53,9 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import KeyValuePairs from "../Model/KeyValuePairs";
+import EditKeyValuePairs from "../Model/EditKeyValuePairs";
 
-let keyValuePairsObject = new KeyValuePairs();
+let editKeyValuePairsObject = new EditKeyValuePairs();
 
 interface KeyValuePair {
   _keyName: string;
@@ -90,11 +90,11 @@ export default {
       this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray);
     },
     initialiseKeyValuePairs() {
-      keyValuePairsObject.keyValuePairs = [];
+      editKeyValuePairsObject.keyValuePairs = [];
       if (this.fileName !== "") {
         this.keyValuePairsFromParent.forEach(
           (keyValuePairFromParent: [string, string]) => {
-            keyValuePairsObject.addKeyValuePair(keyValuePairFromParent);
+            editKeyValuePairsObject.addKeyValuePair(keyValuePairFromParent);
           }
         );
       }
@@ -103,15 +103,15 @@ export default {
   computed: {
     keyValuePairs: {
       get(): Array<KeyValuePair> {
-        return keyValuePairsObject.keyValuePairs;
+        return editKeyValuePairsObject.keyValuePairs;
       },
       set(keyValuePairs: Array<KeyValuePair>) {
-        keyValuePairsObject.keyValuePairs = keyValuePairs;
+        editKeyValuePairsObject.keyValuePairs = keyValuePairs;
       },
     },
   },
   beforeCreate: function () {
-    Vue.observable(keyValuePairsObject);
+    Vue.observable(editKeyValuePairsObject);
   },
   watch: {
     fileName: function () {
