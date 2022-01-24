@@ -30,6 +30,7 @@
           <v-row>
             <div style="padding-top: 15px; padding-left: 20px">
               <v-text-field
+                @input="changeAllKeyValuePairs"
                 v-model="keyValuePair.keyName"
                 solo
                 dense
