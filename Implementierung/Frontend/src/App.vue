@@ -3,22 +3,24 @@
     <!--
     <create-template></create-template>
     <create-workflow-instance></create-workflow-instance>
-    <version-control></version-control>
     <log-in></log-in>
-    -->
     <sign-up></sign-up>
+    <version-control></version-control>
+    -->
+    <choose-config-file></choose-config-file>
   </v-app>
 </template>
 
 <script lang='ts'>
-import CreateWorkflowInstance from './View/CreateWorkflowInstance.vue'
-import CreateTemplate from './View/CreateTemplate.vue'
-import VersionControl from './View/VersionControl.vue'
-import SignUp from './View/SignUp.vue'
-import LogIn from './View/LogIn.vue'
+import CreateWorkflowInstance from "./View/CreateWorkflowInstance.vue";
+import CreateTemplate from "./View/CreateTemplate.vue";
+import VersionControl from "./View/VersionControl.vue";
+import SignUp from "./View/SignUp.vue";
+import LogIn from "./View/LogIn.vue";
+import ChooseConfigFile from "./View/ChooseConfigFile.vue";
 
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     CreateWorkflowInstance,
@@ -26,6 +28,7 @@ export default {
     VersionControl,
     SignUp,
     LogIn,
+    ChooseConfigFile,
   },
 
   data: () => ({

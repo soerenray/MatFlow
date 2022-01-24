@@ -29,8 +29,8 @@ export default {
     };
   },
   computed: {
-    parameterChangesTableObject: function (): Object[] {
-      return this.parameterChanges.map((x: [string,string]): Object => {
+    parameterChangesTableObject: function (): object[] {
+      return this.parameterChanges.map((x: [string,string]): object => {
         return { oldValue: x[0], newValue: x[1] };
       });
     },
