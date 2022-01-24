@@ -15,7 +15,7 @@ class TemplateData:
             TemplateData.__instance = self
 
 
-    def create_Template(template):
+    def create_Template(self, template):
         """Create new template.
 
         Extended description of function.
@@ -30,7 +30,7 @@ class TemplateData:
 
 
 
-    def get_Template_Name():
+    def get_Template_Name(self):
         """Return all template names.
 
         Extended description of function.
@@ -42,7 +42,7 @@ class TemplateData:
 
 
 
-    def get_Template_By_Name(name):
+    def get_Template_By_Name(self, name):
         """Return a template.
 
         Search in Database for @name and construct a Template object if name exists.

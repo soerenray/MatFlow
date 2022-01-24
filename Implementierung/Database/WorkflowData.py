@@ -15,7 +15,7 @@ class WorkflowData:
             WorkflowData.__instance = self
 
 
-    def create_Workflow_Instance_From_Template(tName, wfName, confFold):
+    def create_Workflow_Instance_From_Template(self, tName, wfName, confFold):
         """Create a new instance of a worflow by using the dag-File of a Template with the Version set to 1.
 
         Extended description of function.
@@ -31,7 +31,7 @@ class WorkflowData:
         """
 
 
-    def get_Names_Of_Workflows_And_Config_Files():
+    def get_Names_Of_Workflows_And_Config_Files(self):
         """Return all Worflow names and the names of their corresponding config files.
 
         Extended description of function.
@@ -42,7 +42,7 @@ class WorkflowData:
         """
 
 
-    def create_New_Version_Of_Worlkflow_Instance(wfName, newVersion, oldVersionNr):
+    def create_New_Version_Of_Worlkflow_Instance(self, wfName, newVersion, oldVersionNr):
         """Create a new Version of an existing Workflow with changed config Files.
 
         Extended description of function.
@@ -58,8 +58,23 @@ class WorkflowData:
         """
 
 
-    def get_Config_File_From_Workflow_Instance(wfName, confName):
+    def get_Config_File_From_Workflow_Instance(self, wfName, confName, version):
         """Return single config file from a workflow.
+
+        Extended description of function.
+
+        Args:
+            wfName(str): name of workflow
+            confName(str): name of config file
+            version(str): version identifier
+
+        Returns:
+            File: searched conf File
+
+        """
+
+    def get_Config_File_From_Active_Workflow_Instance(self, wfName, confName):
+        """Return single config file from active version of a workflow.
 
         Extended description of function.
 
@@ -72,8 +87,7 @@ class WorkflowData:
 
         """
 
-
-    def get_Database_Versions_Of_Workflow_Instance(wfName):
+    def get_Database_Versions_Of_Workflow_Instance(self, wfName):
         """Return all DatabaseVersions of a worflow.
 
         Extended description of function.
@@ -87,7 +101,7 @@ class WorkflowData:
         """
 
 
-    def set_Active_Version_Through_Number(wfName, version):
+    def set_Active_Version_Through_Number(self, wfName, version):
         """Set the active version of a workflow.
 
         Extended description of function.
@@ -102,7 +116,7 @@ class WorkflowData:
         """
 
 
-    def get_Active_Version_Of_Workflow_Instance(wfName):
+    def get_Active_Version_Of_Workflow_Instance(self, wfName):
         """Return workflow set as active in Database.
 
         Extended description of function.
@@ -115,7 +129,7 @@ class WorkflowData:
 
         """
 
-    def get_Version_Numbers_Of_Workflow_Instance(wfName):
+    def get_Version_Numbers_Of_Workflow_Instance(self, wfName):
         """Return all versions of a workflow.
 
         Extended description of function.
