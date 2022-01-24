@@ -19,27 +19,38 @@ class BackendServerCommunicator {
     public static pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
         if (workflowInstanceName === "workflowInstance1") {
             if (configFileName === "conf1") {
-                return getWfConf('wf1Conf1')
+                return getWfConf('wf1conf1')
             }
-            return getWfConf('wf1Conf2')
+            return getWfConf('wf1conf2')
         } else if (workflowInstanceName === "workflowInstance2") {
             if (configFileName === "conf1") {
-                return getWfConf('wf2Conf1')
+                return getWfConf('wf2conf1')
             } else if (configFileName === "conf2") {
-                return getWfConf('wf2Conf2')
+                return getWfConf('wf2conf2')
             }
-            return getWfConf('wf2Conf3')
+            return getWfConf('wf2conf3')
         }
         return new ConfigFile()
     }
     public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
+        console.log(configFiles)
         if (workflowInstanceName === "workflowInstance1") {
-            setWfConf('wf1Conf1', configFiles[0])
-            setWfConf('wf1Conf2', configFiles[1])
+            if (configFiles[0]) {
+                setWfConf('wf1' + configFiles[0].configFileName, configFiles[0])
+            }
+            if (configFiles[1]) {
+                setWfConf('wf1' + configFiles[1].configFileName, configFiles[1])
+            }
         } else if (workflowInstanceName === "workflowInstance2") {
-            setWfConf('wf2Conf1', configFiles[0])
-            setWfConf('wf2Conf2', configFiles[1])
-            setWfConf('wf2Conf3', configFiles[2])
+            if (configFiles[0]) {
+                setWfConf('wf2' + configFiles[0].configFileName, configFiles[0])
+            }
+            if (configFiles[1]) {
+                setWfConf('wf2' + configFiles[1].configFileName, configFiles[1])
+            }
+            if (configFiles[2]) {
+                setWfConf('wf2' + configFiles[2].configFileName, configFiles[2])
+            }
         }
     }
     public static pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }

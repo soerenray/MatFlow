@@ -14,11 +14,15 @@
         <v-card style="background-color: #f7f9f9" width="700px" height="50px">
           <v-row>
             <div style="padding-left: 20px; padding-top: 5px">
-              <v-btn color="yellow">revert all files</v-btn>
+              <v-btn @click="resetChoosenConfigFileObject" color="yellow"
+                >Pull files from Server</v-btn
+              >
             </div>
             <v-spacer></v-spacer>
             <div style="padding-right: 20px; padding-top: 5px">
-              <v-btn color="blue">Create new version</v-btn>
+              <v-btn @click="pushUpdatedConfigFilesToBackendServer" color="blue"
+                >Create new version</v-btn
+              >
             </div>
           </v-row>
         </v-card>
@@ -96,6 +100,13 @@ export default {
     fileName: String,
   },
   methods: {
+    resetChoosenConfigFileObject() {
+      this.$emit("resetChoosenConfigFileObject");
+    },
+    pushUpdatedConfigFilesToBackendServer() {
+      this.changeAllKeyValuePairs();
+      this.$emit("pushUpdatedConfigFilesToBackendServer");
+    },
     changeAllKeyValuePairs() {
       let keyValuePairsAsTupleArray = this.keyValuePairs.map(
         (keyValuePair: KeyValuePair): [string, string] => {
@@ -130,6 +141,9 @@ export default {
   },
   watch: {
     fileName: function () {
+      this.initialiseKeyValuePairs();
+    },
+    keyValuePairsFromParent: function () {
       this.initialiseKeyValuePairs();
     },
   },

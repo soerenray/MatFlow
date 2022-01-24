@@ -52,7 +52,12 @@
       </div>
       <div style="padding-left: 40 px; padding-top: 20px">
         <edit-config-file
+          ref="editConfigFile"
           v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+          v-on:pushUpdatedConfigFilesToBackendServer="
+            pushUpdatedConfigFilesToBackendServer
+          "
+          v-on:resetChoosenConfigFileObject="resetChoosenConfigFileObject"
           :fileName="selectedConfigFileName"
           :keyValuePairsFromParent="keyValuePairs"
         ></edit-config-file>
@@ -114,8 +119,28 @@ export default {
     },
     pushUpdatedConfigFilesToBackendServer() {
       BackendServerCommunicator.pushConfigFilesWithWorkflowInstanceName(
-        chooseConfigFileObject.updatedConfigFiles,
+        this.updatedConfigFiles,
         this.selectedWorkflowInstanceName
+      );
+    },
+    resetChoosenConfigFileObject() {
+      chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
+        BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName();
+      this.updatedConfigFiles = [];
+      this.chosenConfigFile =
+        this.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+          this.selectedWorkflowInstanceName,
+          this.selectedConfigFileName
+        );
+      this.updatedConfigFiles.push(this.chosenConfigFile);
+    },
+    pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+      workflowInstanceName: string,
+      configFileName: string
+    ): ConfigFile {
+      return BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+        workflowInstanceName,
+        configFileName
       );
     },
     setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
@@ -124,6 +149,7 @@ export default {
       this.selectedWorkflowInstanceName = selectedWorkflowInstanceName;
       this.selectedConfigFileName = "";
       this.updatedConfigFiles = [];
+      this.chosenConfigFile = new ConfigFile();
     },
     setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
       selectedConfigFileName: string
@@ -140,7 +166,7 @@ export default {
         this.updatedConfigFiles.push(this.chosenConfigFile);
       } else {
         this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(
-          selectedConfigFileName
+          this.selectedConfigFileName
         );
       }
     },
@@ -168,20 +194,8 @@ export default {
       get: function (): ConfigFile {
         return chooseConfigFileObject.chosenConfigFile;
       },
-      // The class ChoosenConfigFile has only one config file. Therefore it has to be checked if the configFile is udpated already
       set: function (chosenConfigFile: ConfigFile) {
-        if (
-          this.isConfigFileNameInUpdatedConfigFiles(
-            chosenConfigFile.configFileName
-          )
-        ) {
-          chooseConfigFileObject.chosenConfigFile =
-            this.getConfigFileFromUpdatedConfigFiles(
-              chosenConfigFile.configFileName
-            );
-        } else {
-          chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
-        }
+        chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
       },
     },
     updatedConfigFiles: {
@@ -211,7 +225,7 @@ export default {
     },
   },
   beforeCreate: function () {
-    // Vue is oberserving data in the $data property.
+    // Vue is oberserving data in the data property.
     // The object choosenConfigFileObject wouldn't update, when the parameters are
     // initialized in data
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
