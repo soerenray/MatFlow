@@ -38,37 +38,11 @@
             <v-spacer></v-spacer>
             <div style="padding-top: 15px; padding-right: 50px">
               <v-text-field
+                @input="changeAllKeyValuePairs"
                 v-model="keyValuePair.keyValue"
                 style="width: 400px"
                 dense
               ></v-text-field>
-            </div>
-          </v-row>
-        </v-card>
-        <v-card>
-          <v-row>
-            <div
-              style="
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-left: 20px;
-              "
-            >
-              <v-btn color="red" @click="initialiseKeyValuePairs">
-                Revert changes
-              </v-btn>
-            </div>
-            <v-spacer></v-spacer>
-            <div
-              style="
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 20px;
-              "
-            >
-              <v-btn color="#28B463" @click="changeAllKeyValuePairs">
-                Apply changes
-              </v-btn>
             </div>
           </v-row>
         </v-card>

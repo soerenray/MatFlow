@@ -33,7 +33,6 @@ class BackendServerCommunicator {
         return new ConfigFile()
     }
     public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
-        console.log(configFiles)
         if (workflowInstanceName === "workflowInstance1") {
             if (configFiles[0]) {
                 setWfConf('wf1' + configFiles[0].configFileName, configFiles[0])

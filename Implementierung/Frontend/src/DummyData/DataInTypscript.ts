@@ -40,8 +40,6 @@ function deepCopyConfigFile(configFile: ConfigFile): ConfigFile {
 }
 
 function getWfConf(wfConstName: string): ConfigFile {
-    // console.log("wfConstName",wfConstName)
-    // console.log(wf2Conf3)
     switch (wfConstName) {
         case "wf1conf1": return deepCopyConfigFile(wf1Conf1)
         case "wf1conf2": return deepCopyConfigFile(wf1Conf2)
