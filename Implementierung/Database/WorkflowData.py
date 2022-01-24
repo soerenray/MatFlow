@@ -58,8 +58,23 @@ class WorkflowData:
         """
 
 
-    def get_Config_File_From_Workflow_Instance(self, wfName, confName):
+    def get_Config_File_From_Workflow_Instance(self, wfName, confName, version):
         """Return single config file from a workflow.
+
+        Extended description of function.
+
+        Args:
+            wfName(str): name of workflow
+            confName(str): name of config file
+            version(str): version identifier
+
+        Returns:
+            File: searched conf File
+
+        """
+
+    def get_Config_File_From_Active_Workflow_Instance(self, wfName, confName):
+        """Return single config file from active version of a workflow.
 
         Extended description of function.
 
@@ -71,7 +86,6 @@ class WorkflowData:
             File: searched conf File
 
         """
-
 
     def get_Database_Versions_Of_Workflow_Instance(self, wfName):
         """Return all DatabaseVersions of a worflow.
