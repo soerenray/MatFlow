@@ -17,7 +17,7 @@ class TestVersionNumber(TestCase):
             expected_msg: str = "Internal Error: " + number + " isn't a valid version number."
             with self.assertRaises(InternalException) as context:
                 VersionNumber(number)
-            self.assertTrue(expected_msg in context.exception)
+            self.assertTrue(expected_msg in str(context.exception))
 
     def test_valid_get_predecessor(self):
         # Arrange

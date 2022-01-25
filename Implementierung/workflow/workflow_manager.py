@@ -23,7 +23,7 @@ class WorkflowManager:
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
     __workflow_data: WorkflowData = WorkflowData.get_instance()
-    __versions_base_directory: str = ""  # TODO
+    __versions_base_directory: Path = ""  # TODO
 
     def __init__(self):
         raise Exception("Call get_instance()")
@@ -131,7 +131,7 @@ class WorkflowManager:
             List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
-        file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+        file_path: Path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
             workflow_instance_name, config_file_name)
         return ConfigFile(config_file_name, file_path)
 
@@ -154,7 +154,8 @@ class WorkflowManager:
             VersionNumber(self.__workflow_data.get_Active_Version_Of_Workflow_Instance(workflow_instance_name))
 
         # calculate the new version number from the current one
-        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance()
+        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance(
+            workflow_instance_name)
         new_version_number: VersionNumber = current_version_number.get_successor(existing_version_numbers)
 
         # create directory for the new version
@@ -166,7 +167,8 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__workflow_data.get_Config_File_From_Workflow_Instance(workflow_instance_name, file_name)
+            file_path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
+                workflow_instance_name, file_name)
             old_files.append(file_path)
 
         # copy the old files into the new directory
@@ -184,7 +186,7 @@ class WorkflowManager:
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
         new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
         self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(
-            workflow_instance_name, DatabaseVersion, current_version_number.get_number())
+            workflow_instance_name, new_version, current_version_number.get_number())
 
     def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
         """Returns a detailed overview of all versions of the given workflow instance.
@@ -219,7 +221,7 @@ class WorkflowManager:
                 comparison_files: List[Tuple[str, Path]] = []
                 for file_name in file_names:
                     file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
-                        workflow_instance_name, file_name)  # TODO predecessor version has to be part of the call
+                        workflow_instance_name, file_name, predecessor_number.get_number())
                     comparison_files.append((file_name, file_path))
 
                 # calculate the FrontendVersion and put it into the result list
