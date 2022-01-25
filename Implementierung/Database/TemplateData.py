@@ -1,6 +1,9 @@
-import DatabaseTable
+from Implementierung.Database.DatabaseTable import DatabaseTable
+
+
 class TemplateData:
     __instance = None
+    databaseTable = DatabaseTable.get_instance()
 
     @staticmethod
     def get_instance():
@@ -13,7 +16,6 @@ class TemplateData:
             raise Exception("This class is a singleton!")
         else:
             TemplateData.__instance = self
-
 
     def create_Template(self, template):
         """Create new template.
@@ -28,8 +30,6 @@ class TemplateData:
 
         """
 
-
-
     def get_Template_Name(self):
         """Return all template names.
 
@@ -37,10 +37,14 @@ class TemplateData:
 
         Returns:
             str[]: list of all template names; empty list if none exist
-
         """
+        query = "SELECT name FROM Workflowtemplate;"  # get all entries
+        data = self.databaseTable.get(query)
+        if not data:
+            # throw exception no entry?
+            return data
 
-
+        return data
 
     def get_Template_By_Name(self, name):
         """Return a template.

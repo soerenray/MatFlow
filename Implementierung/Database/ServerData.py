@@ -1,11 +1,11 @@
-import DatabaseTable
+from Implementierung.Database.DatabaseTable import DatabaseTable
 
 from Implementierung.HardwareAdministration.Server import Server
 
 
 class ServerData:
     __instance = None
-    databaseTable = DatabaseTable.DatabaseTable.get_instance()
+    databaseTable = DatabaseTable.get_instance()
 
     @staticmethod
     def get_instance():

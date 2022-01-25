@@ -1,4 +1,4 @@
-import DatabaseTable
+from Implementierung.Database.DatabaseTable import DatabaseTable
 class WorkflowData:
     __instance = None
 
