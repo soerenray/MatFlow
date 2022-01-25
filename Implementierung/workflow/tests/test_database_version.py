@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from unittest import TestCase
 from pathlib import Path
 from workflow.database_version import DatabaseVersion
@@ -43,12 +43,14 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # there are too little files to compare
 
         # Arrange
-        comparison_files: Path = Path(self.base_path + "too_little_files")
+        comparison_names: List[str] = ["test2.conf"]
+        comparison_paths: List[Path] = [Path(self.base_path + "too_many_files/test2.conf")]
+        comparison_files: List[Tuple[str, Path]] = list(zip(comparison_names, comparison_paths))
         expected_msg: str = \
             "Internal Error: Too little comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(InternalException) as context:
+        with self.assertRaises(Exception) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -56,12 +58,16 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # there are too many files to compare
 
         # Arrange
-        comparison_files: Path = Path(self.base_path + "too_many_files")
+        comparison_names: List[str] = ["test1.conf", "test2.conf", "test3.conf"]
+        comparison_paths: List[Path] = [Path(self.base_path + "too_many_files/test1.conf"),
+                                        Path(self.base_path + "too_many_files/test2.conf"),
+                                        Path(self.base_path + "too_many_files/test3.conf")]
+        comparison_files: List[Tuple[str, Path]] = list(zip(comparison_names, comparison_paths))
         expected_msg: str = \
             "Internal Error: Too many comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(InternalException) as context:
+        with self.assertRaises(Exception) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -69,12 +75,15 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # the names of the comparison files don't match
 
         # Arrange
-        comparison_files: Path = Path(self.base_path + "wrong_files")
+        comparison_names: List[str] = ["test1.conf", "test3.conf"]
+        comparison_paths: List[Path] = [Path(self.base_path + "wrong_files/test1.conf"),
+                                        Path(self.base_path + "wrong_files/test3.conf")]
+        comparison_files: List[Tuple[str, Path]] = list(zip(comparison_names, comparison_paths))
         expected_msg: str = \
             "Internal Error: Wrong comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(InternalException) as context:
+        with self.assertRaises(Exception) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -82,7 +91,10 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # the case in witch there are valid comparison files
 
         # Arrange
-        comparison_files: Path = Path(self.base_path + "previous_files")
+        comparison_names: List[str] = ["test1.conf", "test2.conf"]
+        comparison_paths: List[Path] = [Path(self.base_path + "previous_files/test1.conf"),
+                                        Path(self.base_path + "previous_files/test2.conf")]
+        comparison_files: List[Tuple[str, Path]] = list(zip(comparison_names, comparison_paths))
 
         # Act
         expected: List[ParameterChange] = [ParameterChange("key3", "i_was", "value3", "changed", "test1.conf"),

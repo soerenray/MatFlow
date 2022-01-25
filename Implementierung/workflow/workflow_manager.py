@@ -1,4 +1,5 @@
 import os
+from os import listdir
 from shutil import copy
 from pathlib import Path
 from typing import List, Tuple
@@ -178,6 +179,8 @@ class WorkflowManager:
             changed_file: ConfigFile = ConfigFile(file_name, version_dir / file_name)
             changed_file.apply_changes(update)
 
+        # make new files read-only? TODO
+
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
         new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
         self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(
@@ -197,7 +200,33 @@ class WorkflowManager:
                     List[FrontendVersion]: The list version objects that contain the required information
 
                 """
-        pass
+        # request to database to get a DatabaseVersion object for every version
+        versions: List[DatabaseVersion] = \
+            self.__workflow_data.get_Database_Versions_Of_Workflow_Instance(workflow_instance_name)
+
+        # create result buffer
+        frontend_versions: List[FrontendVersion] = []
+
+        # iterate through all versions
+        for version in versions:
+            # find out the predecessor version
+            if version.get_version_number().get_number() != "1":
+                predecessor_number: VersionNumber = version.get_version_number().get_predecessor()
+                changed_dir: Path = version.get_changed_config_files()
+                file_names: List[str] = listdir(changed_dir)
+
+                # get the unchanged file for all changed files
+                comparison_files: List[Tuple[str, Path]] = []
+                for file_name in file_names:
+                    file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+                        workflow_instance_name, file_name)  # TODO predecessor version has to be part of the call
+                    comparison_files.append((file_name, file_path))
+
+                # calculate the FrontendVersion and put it into the result list
+                frontend_versions.append(version.get_frontend_version(comparison_files))
+
+        # return result
+        return frontend_versions
 
     def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
         """Changes the active version of a workflow instance in the database.
@@ -213,12 +242,6 @@ class WorkflowManager:
         pass
 
     # private methods
-    def __apply_changes_to_all(self, old_files: List[ConfigFile], updates: List[ReducedConfigFile]):
-        """
-        This method iterates through all files and calls the apply_changes method.
-        An Error is thrown if the count of files and updates doesn't match or the names missmatch
-        """
-        pass
 
     def __get_old_files_for_all_versions(self, versions: List[DatabaseVersion]) -> List[Tuple[DatabaseVersion, Path]]:
         """
