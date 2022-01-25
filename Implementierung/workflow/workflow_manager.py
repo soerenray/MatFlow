@@ -87,7 +87,7 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        pass
+        return self.__template_data.get_Template_Name()  # TODO gets easier if the dag files lie in the file system
 
     def get_template_from_name(self, template_name: str) -> Template:
         """Returns template identified by the given name.
@@ -101,7 +101,8 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        pass
+        return self.__template_data.get_Template_By_Name(template_name)
+        # TODO implementation changes if dag files are in the file system
 
     def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
         """Returns the names of all workflow instances as well as the names of the associated config-files
