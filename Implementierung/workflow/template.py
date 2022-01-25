@@ -67,4 +67,3 @@ class Template:
     def __dag_definition_file_is_valid(file_path: Path) -> bool:
         # TODO better implementation
         return True
-    

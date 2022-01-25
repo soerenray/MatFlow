@@ -1,5 +1,7 @@
 from pathlib import Path
+from os import listdir
 from .template import Template
+from ExceptionPackage.MatFlowException import EmptyConfigFolderException
 
 
 class WorkflowInstance(Template):
@@ -22,6 +24,8 @@ class WorkflowInstance(Template):
 
         """
         super().__init__(name, dag_definition_file)
+        if not listdir(config_folder):  # the config folder is empty
+            raise EmptyConfigFolderException("")  # TODO
         self.__config_folder = config_folder
 
     # getter
