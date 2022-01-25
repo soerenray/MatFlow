@@ -5,7 +5,7 @@ CREATE TABLE Server (
 );
 
 CREATE TABLE WorkflowTemplate (
-   template_ID INTEGER,
+   template_ID INTEGER AUTO_INCREMENT,
    name varchar(255),
    dag varchar(255),
    PRIMARY KEY (template_ID)
@@ -26,7 +26,7 @@ CREATE TABLE FolderFile (
 );
 
 CREATE TABLE Version (
-   ID INTEGER,
+   ID INTEGER AUTO_INCREMENT,
    wfName varchar(255) NOT NULL,
    version varchar(127) NOT NULL,
    note varchar(1000),
