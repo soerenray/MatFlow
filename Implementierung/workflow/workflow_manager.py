@@ -1,4 +1,7 @@
 import os
+import shutil
+
+import requests
 from os import listdir
 from shutil import copy
 from pathlib import Path
@@ -9,7 +12,8 @@ from .template import Template
 from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
 from .version_number import VersionNumber
-import ExceptionPackage.MatFlowException
+from .workflow_instance import WorkflowInstance
+from ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException
 from Database.TemplateData import TemplateData
 from Database.WorkflowData import WorkflowData
 
@@ -23,7 +27,9 @@ class WorkflowManager:
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
     __workflow_data: WorkflowData = WorkflowData.get_instance()
-    __versions_base_directory: Path = ""  # TODO
+    __versions_base_directory: Path = Path("")  # TODO
+    __template_base_directory: Path = Path("")  # TODO
+    __airflow_address: str = "http://localhost:8080/"  # TODO
 
     def __init__(self):
         raise Exception("Call get_instance()")
@@ -53,8 +59,15 @@ class WorkflowManager:
             DoubleTemplateNameException: If the name of the given template isn't a valid identifier
 
         """
-        # TODO implementation changes if dag files are in the file system
-        return self.__template_data.create_Template(template)
+        # make sure the template name wasn't used before
+        if listdir(self.__template_base_directory).__contains__(template.get_name() + ".py"):
+            raise DoubleTemplateNameException("")
+
+        # now safe the new dag definition file in the template folder
+        new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
+        shutil.copyfile(template.get_dag_definition_file(), new_path)
+        # maybe make the file ro TODO
+
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
@@ -66,6 +79,14 @@ class WorkflowManager:
             config_files (Path): Contains all the files needed for the execution of the workflow
 
         """
+        # get the template object corresponding to the name
+        template: Template = self.__template_data.get_Template_By_Name(template_name)
+
+        # try to create a WorkflowInstance object and try to add it to the database
+        workflow_instance: WorkflowInstance = WorkflowInstance(
+            workflow_instance_name, template.get_dag_definition_file(), config_files)  # maybe EmptyDagFolderException
+        # self.__workflow_data.create_Workflow_Instance_From_Template() TODO
+        # overwrite dag_id in the dag definition file
         pass
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
@@ -91,8 +112,8 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        # TODO gets easier if the dag files lie in the file system
-        return self.__template_data.get_Template_Name()
+        file_names: List[str] = listdir(self.__template_base_directory)  # still has name extensions
+        return [os.path.splitext(file_name)[0] for file_name in file_names]  # removed extensions
 
     def get_template_from_name(self, template_name: str) -> Template:
         """Returns template identified by the given name.
@@ -106,8 +127,11 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        # TODO implementation changes if dag files are in the file system
-        return self.__template_data.get_Template_By_Name(template_name)
+        if not listdir(self.__template_base_directory).__contains__(template_name + ".py"):
+            raise InternalException("Internal Error: Selected template: " + template_name + " doesn't exist.")
+        # otherwise, the template is available
+        template_path: Path = self.__template_base_directory / (template_name + ".py")
+        return Template(template_name, template_path)
 
     def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
         """Returns the names of all workflow instances as well as the names of the associated config-files
@@ -247,14 +271,9 @@ class WorkflowManager:
             version_number (str): The number of the new active version
 
         """
-        pass
-
-    # private methods
-
-    def __get_old_files_for_all_versions(self, versions: List[DatabaseVersion]) -> List[Tuple[DatabaseVersion, Path]]:
-        """
-        This method iterates through all versions and attaches the old iterations of the files that where changed by the
-        version. This is done by copying the files into a separate directory and attaching the path. To find the old
-        iterations of the file the algorithm accesses the predecessor version.
-        """
+        # first check if the instance is currently running
+        dag_request = requests.get(self.__airflow_address + "api/v1/dags/{dag_id}/details")
+        # TODO
+        # if not tell database to change the active version
+        self.__workflow_data.set_Active_Version_Through_Number(workflow_instance_name, version_number)
         pass
