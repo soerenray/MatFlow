@@ -63,19 +63,16 @@ class DatabaseTable:
             cursor.execute(create)
         except mysql.connector.Error as err:
             # handle exception
+            print("ERROR")
             print(err)  # tmp for debugging
 
-        data = cursor.fetchall()
-
+        # commit changes
+        db.commit()
         # disconnect from database
         cursor.close()
         db.close()
 
-        return data
-
-
-
-
+        return
 
 
     def delete(self, remove):
@@ -97,9 +94,12 @@ class DatabaseTable:
         try:
             cursor.execute(remove)
         except mysql.connector.Error as err:
-            #handle exception
-            print(err)  #tmp for debugging
+            # handle exception
+            print("ERROR")
+            print(err)  # tmp for debugging
 
+        # commit changes
+        db.commit()
         # disconnect from database
         cursor.close()
         db.close()
@@ -125,8 +125,11 @@ class DatabaseTable:
             cursor.execute(change)
         except mysql.connector.Error as err:
             # handle exception
+            print("ERROR")
             print(err)  # tmp for debugging
 
+        # commit changes
+        db.commit()
         # disconnect from database
         cursor.close()
         db.close()
@@ -210,4 +213,4 @@ def init_tests():
 
     print("TEST IN DatabaseTable END!")
 
-#init()
+#init_tests()
