@@ -4,13 +4,13 @@ class TemplateData:
 
     @staticmethod
     def get_instance():
-        if TemplateData.__instance == None:
+        if TemplateData.__instance is None:
             TemplateData()
         return TemplateData.__instance
 
     def __init__(self):
-        if TemplateData.__instance != None:
-            #throw exception
+        if TemplateData.__instance is not None:
+            raise Exception("This class is a singleton!")
         else:
             TemplateData.__instance = self
 

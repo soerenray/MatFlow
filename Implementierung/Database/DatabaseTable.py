@@ -5,13 +5,13 @@ class DatabaseTable:
 
     @staticmethod
     def get_instance():
-        if DatabaseTable.__instance == None:
+        if DatabaseTable.__instance is None:
             DatabaseTable()
         return DatabaseTable.__instance
 
     def __init__(self):
-        if DatabaseTable.__instance != None:
-            return #throw exception
+        if DatabaseTable.__instance is not None:
+            raise Exception("This class is a singleton!")
         else:
             DatabaseTable.__instance = self
             return

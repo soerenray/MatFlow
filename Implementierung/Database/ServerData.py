@@ -9,14 +9,13 @@ class ServerData:
 
     @staticmethod
     def get_instance():
-        if ServerData.__instance == None:
+        if ServerData.__instance is None:
             ServerData()
         return ServerData.__instance
 
     def __init__(self):
-        if ServerData.__instance != None:
-            #throw exception
-            a = 12
+        if ServerData.__instance is not None:
+            raise Exception("This class is a singleton!")
         else:
             ServerData.__instance = self
 

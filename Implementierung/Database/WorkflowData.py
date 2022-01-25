@@ -4,13 +4,13 @@ class WorkflowData:
 
     @staticmethod
     def get_instance():
-        if WorkflowData.__instance == None:
+        if WorkflowData.__instance is None:
             WorkflowData()
         return WorkflowData.__instance
 
     def __init__(self):
-        if WorkflowData.__instance != None:
-            #throw exception
+        if WorkflowData.__instance is not None:
+            raise Exception("This class is a singleton!")
         else:
             WorkflowData.__instance = self
 
