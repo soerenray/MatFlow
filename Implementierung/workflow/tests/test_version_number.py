@@ -1,6 +1,7 @@
 from typing import List
 from unittest import TestCase
 from workflow.version_number import VersionNumber
+from ExceptionPackage.MatFlowException import InternalException
 
 
 class TestVersionNumber(TestCase):
@@ -14,9 +15,9 @@ class TestVersionNumber(TestCase):
 
         for number in invalid_numbers:
             expected_msg: str = "Internal Error: " + number + " isn't a valid version number."
-            with self.assertRaises(Exception) as context:
+            with self.assertRaises(InternalException) as context:
                 VersionNumber(number)
-            self.assertTrue(expected_msg in str(context.exception))
+            self.assertTrue(expected_msg in context.exception)
 
     def test_valid_get_predecessor(self):
         # Arrange
@@ -38,7 +39,7 @@ class TestVersionNumber(TestCase):
         expected_msg: str = "Internal Error: Version '1' has no predecessor."
 
         # Act + Assert
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             vn.get_predecessor()
         self.assertTrue(expected_msg in str(context.exception))
 

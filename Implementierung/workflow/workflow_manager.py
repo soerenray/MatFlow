@@ -1,3 +1,6 @@
+import os
+from os import listdir
+from shutil import copy
 from pathlib import Path
 from typing import List, Tuple
 from .frontend_version import FrontendVersion
@@ -5,6 +8,10 @@ from .database_version import DatabaseVersion
 from .template import Template
 from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
+from .version_number import VersionNumber
+import ExceptionPackage.MatFlowException
+from Database.TemplateData import TemplateData
+from Database.WorkflowData import WorkflowData
 
 
 class WorkflowManager:
@@ -14,6 +21,9 @@ class WorkflowManager:
     """
     # exceptions are missing TODO
     __instance = None
+    __template_data: TemplateData = TemplateData.get_instance()
+    __workflow_data: WorkflowData = WorkflowData.get_instance()
+    __versions_base_directory: str = ""  # TODO
 
     def __init__(self):
         raise Exception("Call get_instance()")
@@ -98,13 +108,12 @@ class WorkflowManager:
 
         Forwards the request to the database.
 
-
         Returns:
             List[List[str]]: A two-dimensional array where the inner arrays start with the name of the template which
             is followed by the names of the associated config-files
 
         """
-        pass
+        return self.__workflow_data.get_Names_Of_Workflows_And_Config_Files()
 
     def get_key_value_pairs_from_config_file(
             self, workflow_instance_name: str, config_file_name: str) -> ReducedConfigFile:
@@ -122,7 +131,9 @@ class WorkflowManager:
             List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
-        pass
+        file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+            workflow_instance_name, config_file_name)
+        return ConfigFile(config_file_name, file_path)
 
     def create_new_version_of_workflow_instance(
             self, workflow_instance_name: str, changed_files: List[ReducedConfigFile], version_note: str):
@@ -138,7 +149,42 @@ class WorkflowManager:
             version_note (str): Note about the new version given by the user
 
         """
-        pass
+        # request current version from database
+        current_version_number: VersionNumber = \
+            VersionNumber(self.__workflow_data.get_Active_Version_Of_Workflow_Instance(workflow_instance_name))
+
+        # calculate the new version number from the current one
+        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance()
+        new_version_number: VersionNumber = current_version_number.get_successor(existing_version_numbers)
+
+        # create directory for the new version
+        workflow_dir: Path = self.__versions_base_directory / workflow_instance_name  # this dir should already exist
+        version_dir: Path = workflow_dir / new_version_number.get_number()
+        os.makedirs(version_dir)  # create new dir
+
+        # request changed files from the predecessor version
+        old_files: List[Path] = []
+        for file in changed_files:
+            file_name = file.get_file_name()
+            file_path = self.__workflow_data.get_Config_File_From_Workflow_Instance(workflow_instance_name, file_name)
+            old_files.append(file_path)
+
+        # copy the old files into the new directory
+        for file in old_files:
+            copy(file, version_dir)
+
+        # apply all the changes to the files in the new directory
+        for update in changed_files:
+            file_name: str = update.get_file_name()
+            changed_file: ConfigFile = ConfigFile(file_name, version_dir / file_name)
+            changed_file.apply_changes(update)
+
+        # make new files read-only? TODO
+
+        # create new DatabaseVersion object and make createVersion-request in the WorkflowData
+        new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
+        self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(
+            workflow_instance_name, DatabaseVersion, current_version_number.get_number())
 
     def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
         """Returns a detailed overview of all versions of the given workflow instance.
@@ -154,7 +200,33 @@ class WorkflowManager:
                     List[FrontendVersion]: The list version objects that contain the required information
 
                 """
-        pass
+        # request to database to get a DatabaseVersion object for every version
+        versions: List[DatabaseVersion] = \
+            self.__workflow_data.get_Database_Versions_Of_Workflow_Instance(workflow_instance_name)
+
+        # create result buffer
+        frontend_versions: List[FrontendVersion] = []
+
+        # iterate through all versions
+        for version in versions:
+            # find out the predecessor version
+            if version.get_version_number().get_number() != "1":
+                predecessor_number: VersionNumber = version.get_version_number().get_predecessor()
+                changed_dir: Path = version.get_changed_config_files()
+                file_names: List[str] = listdir(changed_dir)
+
+                # get the unchanged file for all changed files
+                comparison_files: List[Tuple[str, Path]] = []
+                for file_name in file_names:
+                    file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+                        workflow_instance_name, file_name)  # TODO predecessor version has to be part of the call
+                    comparison_files.append((file_name, file_path))
+
+                # calculate the FrontendVersion and put it into the result list
+                frontend_versions.append(version.get_frontend_version(comparison_files))
+
+        # return result
+        return frontend_versions
 
     def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
         """Changes the active version of a workflow instance in the database.
@@ -170,12 +242,6 @@ class WorkflowManager:
         pass
 
     # private methods
-    def __apply_changes_to_all(self, old_files: List[ConfigFile], updates: List[ReducedConfigFile]):
-        """
-        This method iterates through all files and calls the apply_changes method.
-        An Error is thrown if the count of files and updates doesn't match or the names missmatch
-        """
-        pass
 
     def __get_old_files_for_all_versions(self, versions: List[DatabaseVersion]) -> List[Tuple[DatabaseVersion, Path]]:
         """

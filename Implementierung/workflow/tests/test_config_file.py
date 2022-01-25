@@ -3,6 +3,7 @@ from unittest import TestCase
 from pathlib import Path
 from workflow.config_file import ConfigFile
 from workflow.reduced_config_file import ReducedConfigFile
+from ExceptionPackage.MatFlowException import InternalException
 
 
 class TestConfigFile(TestCase):
@@ -58,13 +59,13 @@ class TestFindChanges(TestConfigFile):
         expected_msg: str = "Internal Error: Wrong amount of update-pairs in " + self.config1.get_file_name()
 
         to_little_pairs: ReducedConfigFile = ReducedConfigFile("toShort", [("key", "value")])
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.config1.find_changes(to_little_pairs)
         self.assertTrue(expected_msg in str(context.exception))
 
         to_many_pairs: ReducedConfigFile = ReducedConfigFile(
             "toShort", [("key", "value"), ("key", "value"), ("key", "value"), ("key", "value"), ("key", "value")])
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.config1.find_changes(to_many_pairs)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -86,7 +87,7 @@ class TestWriteChangesToFile(TestConfigFile):
             "Internal Error: Pair: " + str(missing_pair) + "doesn't occur in file: " + self.config1.get_file_name()
 
         missing_pair_update = [("i'm", "new_key", "missing", "new_value")]
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.config1._ConfigFile__write_changes_to_file(missing_pair_update)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -102,7 +103,7 @@ class TestWriteChangesToFile(TestConfigFile):
         self.assertEqual(expected, actual)  # the test file isn't too big, so we can compare the strings
 
     def test_valid_changes(self):
-        changes: object = self.config1._ConfigFile__find_changes(self.config1_update)  # we tested this method above
+        changes: object = self.config1.find_changes(self.config1_update)  # we tested this method above
         self.config1._ConfigFile__write_changes_to_file(changes)  # update list empty
 
         expected_file: TextIO = open(self.path1_updated)
@@ -134,7 +135,7 @@ class ApplyChanges(TestConfigFile):
         wrong_name: ConfigFile = ConfigFile("wrong_name", self.path1_updated)
         expected_msg: str = "Internal Error: Names of the file: " + self.config1.get_file_name() + \
                             " and the update: " + wrong_name.get_file_name() + " don't match."
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.config1.apply_changes(wrong_name)
         self.assertTrue(expected_msg in str(context.exception))
 
