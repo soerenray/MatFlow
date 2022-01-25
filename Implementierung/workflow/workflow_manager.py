@@ -49,8 +49,12 @@ class WorkflowManager:
             template (Template): Template object that provides all necessary information for creating
             a new workflow template.
 
+        Raises:
+            DoubleTemplateNameException: If the name of the given template isn't a valid identifier
+
         """
-        pass
+        # TODO implementation changes if dag files are in the file system
+        return self.__template_data.create_Template(template)
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
@@ -87,7 +91,8 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        return self.__template_data.get_Template_Name()  # TODO gets easier if the dag files lie in the file system
+        # TODO gets easier if the dag files lie in the file system
+        return self.__template_data.get_Template_Name()
 
     def get_template_from_name(self, template_name: str) -> Template:
         """Returns template identified by the given name.
@@ -101,8 +106,8 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        return self.__template_data.get_Template_By_Name(template_name)
         # TODO implementation changes if dag files are in the file system
+        return self.__template_data.get_Template_By_Name(template_name)
 
     def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
         """Returns the names of all workflow instances as well as the names of the associated config-files
