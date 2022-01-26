@@ -69,7 +69,10 @@ class JSONToPython:
         Returns:
             Template: decoded template object
         """
-        pass
+        name: str = request_details.args.get(keys.template_name)
+        file_path: Path = JSONToPython.extract_dag_file(request_details)
+        template: Template = Template(name, file_path)
+        return template
 
     @staticmethod
     def extract_configs(request_details: request) -> str:
