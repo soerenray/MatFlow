@@ -1,4 +1,5 @@
 from pathlib import Path
+from ExceptionPackage.MatFlowException import InvalidDagFileException
 
 
 class Template:
@@ -20,6 +21,8 @@ class Template:
             instantiated from this template
         """
         self.__name = name
+        if not Template.__dag_definition_file_is_valid(dag_definition_file):
+            raise InvalidDagFileException("")  # TODO
         self.__dag_definition_file = dag_definition_file
 
     # getter
@@ -57,3 +60,10 @@ class Template:
             dag_definition_file (Path): The Path of the new dag definition file
         """
         self.__dag_definition_file = dag_definition_file
+
+    # static methods
+
+    @staticmethod
+    def __dag_definition_file_is_valid(file_path: Path) -> bool:
+        # TODO better implementation
+        return True

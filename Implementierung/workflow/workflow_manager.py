@@ -1,6 +1,8 @@
+import errno
 import os
+import requests
 from os import listdir
-from shutil import copy
+from shutil import copy, copytree
 from pathlib import Path
 from typing import List, Tuple
 from .frontend_version import FrontendVersion
@@ -9,7 +11,9 @@ from .template import Template
 from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
 from .version_number import VersionNumber
-import ExceptionPackage.MatFlowException
+from .workflow_instance import WorkflowInstance
+from ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
+    DoubleWorkflowInstanceNameException
 from Database.TemplateData import TemplateData
 from Database.WorkflowData import WorkflowData
 
@@ -23,7 +27,11 @@ class WorkflowManager:
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
     __workflow_data: WorkflowData = WorkflowData.get_instance()
-    __versions_base_directory: str = ""  # TODO
+    __versions_base_directory: Path = Path("")  # TODO
+    __template_base_directory: Path = Path("")  # TODO
+    __airflow_dag_folder: Path = Path("") # TODO
+    __airflow_address: str = "http://localhost:8080/"  # TODO
+    __initial_version_note = "initial version"
 
     def __init__(self):
         raise Exception("Call get_instance()")
@@ -49,8 +57,18 @@ class WorkflowManager:
             template (Template): Template object that provides all necessary information for creating
             a new workflow template.
 
+        Raises:
+            DoubleTemplateNameException: If the name of the given template isn't a valid identifier
+
         """
-        pass
+        # make sure the template name wasn't used before
+        if listdir(self.__template_base_directory).__contains__(template.get_name() + ".py"):
+            raise DoubleTemplateNameException("")
+
+        # now safe the new dag definition file in the template folder
+        new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
+        copy(template.get_dag_definition_file(), new_path)
+        # maybe make the file ro TODO
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
@@ -62,7 +80,36 @@ class WorkflowManager:
             config_files (Path): Contains all the files needed for the execution of the workflow
 
         """
-        pass
+        # get the template object corresponding to the name
+        template_path: Path = self.__template_base_directory / (template_name + ".py")
+        template: Template = Template(template_name, template_path)
+
+        # check if the workflow_instance_name is already used
+        existing_names: List[str] = listdir(self.__versions_base_directory)
+        if template_name in existing_names:  # otherwise, the name is a valid identifier
+            raise DoubleWorkflowInstanceNameException("")
+
+        # try to create a WorkflowInstance object
+        workflow_instance: WorkflowInstance = WorkflowInstance(
+            workflow_instance_name, template.get_dag_definition_file(), config_files)  # maybe EmptyDagFolderException
+
+        # now we create a new directory for the instance and the initial version
+        instance_path: Path = self.__versions_base_directory / workflow_instance_name
+        dag_path: Path = instance_path / (workflow_instance_name + ".py")
+        version_path: Path = instance_path / "1"
+        copy(template.get_dag_definition_file(), dag_path)  # copy dag definition file
+        self.__copy_whole_dir(config_files, version_path)  # copy config-directory
+
+        # create version "1" and add it to the database
+        initial_version: DatabaseVersion = DatabaseVersion(
+            VersionNumber("1"), self.__initial_version_note, version_path)
+        # those calls might be changed TODO
+        self.__workflow_data.create_Workflow_Instance_From_Template(template_name, workflow_instance_name, version_path)
+        self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(workflow_instance_name, initial_version, "")
+
+        # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
+        workflow_instance.activate_instance(self.__airflow_dag_folder)
+        # -> write "activate_instance" in WorkflowInstance
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph
@@ -76,7 +123,7 @@ class WorkflowManager:
             Path: Image with visual representation of the given dag
 
         """
-        pass
+        return Path("workflow/tests/dummy_dag.png")  # TODO this is only a dummy implementation
 
     def get_template_names(self) -> List[str]:
         """Returns the names of all templates.
@@ -87,7 +134,8 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        pass
+        file_names: List[str] = listdir(self.__template_base_directory)  # still has name extensions
+        return [os.path.splitext(file_name)[0] for file_name in file_names]  # removed extensions
 
     def get_template_from_name(self, template_name: str) -> Template:
         """Returns template identified by the given name.
@@ -101,7 +149,11 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        pass
+        if not listdir(self.__template_base_directory).__contains__(template_name + ".py"):
+            raise InternalException("Internal Error: Selected template: " + template_name + " doesn't exist.")
+        # otherwise, the template is available
+        template_path: Path = self.__template_base_directory / (template_name + ".py")
+        return Template(template_name, template_path)
 
     def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
         """Returns the names of all workflow instances as well as the names of the associated config-files
@@ -131,7 +183,7 @@ class WorkflowManager:
             List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
-        file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+        file_path: Path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
             workflow_instance_name, config_file_name)
         return ConfigFile(config_file_name, file_path)
 
@@ -154,7 +206,8 @@ class WorkflowManager:
             VersionNumber(self.__workflow_data.get_Active_Version_Of_Workflow_Instance(workflow_instance_name))
 
         # calculate the new version number from the current one
-        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance()
+        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance(
+            workflow_instance_name)
         new_version_number: VersionNumber = current_version_number.get_successor(existing_version_numbers)
 
         # create directory for the new version
@@ -166,7 +219,8 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__workflow_data.get_Config_File_From_Workflow_Instance(workflow_instance_name, file_name)
+            file_path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
+                workflow_instance_name, file_name)
             old_files.append(file_path)
 
         # copy the old files into the new directory
@@ -184,7 +238,7 @@ class WorkflowManager:
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
         new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
         self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(
-            workflow_instance_name, DatabaseVersion, current_version_number.get_number())
+            workflow_instance_name, new_version, current_version_number.get_number())
 
     def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
         """Returns a detailed overview of all versions of the given workflow instance.
@@ -219,7 +273,7 @@ class WorkflowManager:
                 comparison_files: List[Tuple[str, Path]] = []
                 for file_name in file_names:
                     file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
-                        workflow_instance_name, file_name)  # TODO predecessor version has to be part of the call
+                        workflow_instance_name, file_name, predecessor_number.get_number())
                     comparison_files.append((file_name, file_path))
 
                 # calculate the FrontendVersion and put it into the result list
@@ -239,14 +293,21 @@ class WorkflowManager:
             version_number (str): The number of the new active version
 
         """
+        # first check if the instance is currently running
+        dag_request = requests.get(self.__airflow_address + "api/v1/dags/{dag_id}/details")
+        # TODO
+        # if not tell database to change the active version
+        self.__workflow_data.set_Active_Version_Through_Number(workflow_instance_name, version_number)
         pass
 
     # private methods
 
-    def __get_old_files_for_all_versions(self, versions: List[DatabaseVersion]) -> List[Tuple[DatabaseVersion, Path]]:
-        """
-        This method iterates through all versions and attaches the old iterations of the files that where changed by the
-        version. This is done by copying the files into a separate directory and attaching the path. To find the old
-        iterations of the file the algorithm accesses the predecessor version.
-        """
-        pass
+    @staticmethod
+    def __copy_whole_dir(src: Path, dst: Path):
+        try:
+            copytree(src, dst)  # recursive copying of subdirectories
+        except OSError as exc:
+            if exc.errno in (errno.ENOTDIR, errno.EINVAL):  # the method raises error if src is a file
+                copy(src, dst)  # then we transfer that file with copy
+            else:
+                raise

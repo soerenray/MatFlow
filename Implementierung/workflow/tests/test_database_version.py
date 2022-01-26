@@ -50,7 +50,7 @@ class TestGetFrontendVersion(TestDatabaseVersion):
             "Internal Error: Too little comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -67,7 +67,7 @@ class TestGetFrontendVersion(TestDatabaseVersion):
             "Internal Error: Too many comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 
@@ -83,7 +83,7 @@ class TestGetFrontendVersion(TestDatabaseVersion):
             "Internal Error: Wrong comparison files for version " + self.version1.get_version_number().get_number()
 
         # Act + Assert
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(InternalException) as context:
             self.version1.get_frontend_version(comparison_files)
         self.assertTrue(expected_msg in str(context.exception))
 

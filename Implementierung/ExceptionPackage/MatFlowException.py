@@ -162,7 +162,7 @@ class LoginException(MatFlowException):
         super(LoginException, self).__init__(message, self.__status_code)
 
 
-class InternalException:
+class InternalException(MatFlowException):
     """
     Exception for dev purposes
     """
