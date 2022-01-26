@@ -10,6 +10,7 @@ from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from flask import request
 import keys
 
+
 class JSONToPython:
 
     """
@@ -88,13 +89,12 @@ class JSONToPython:
         save_dir: str = JSONToPython.create_dir(os.path.join(JSONToPython.parent_path, JSONToPython.temp_in_path,
                                                              keys.config_save_path))
         uploaded_files: List[FileStorage] = request_details.files.getlist(keys.files_key)
-        counter = 0
-        for config in uploaded_files:
+        # TODO dump in dir
+        for counter in range(len(uploaded_files)):
             name: str = request.args.get(keys.config_file_name)[counter]
             file_path: str = os.path.join(save_dir, name)
             uploaded_files[counter].save(file_path)
             reduced_config: ReducedConfigFile = ReducedConfigFile(name, file_path)
-            counter += 1
 
         return save_dir
 
@@ -126,7 +126,6 @@ class JSONToPython:
         while not created_dir:
             try_path: str = os.path.join(path, keys.underscore, str(counter))
             if os.path.isdir(try_path):
-                created_dir = True
                 os.makedirs(try_path)
                 return try_path
             counter += 1
