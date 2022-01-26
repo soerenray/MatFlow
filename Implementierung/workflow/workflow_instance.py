@@ -17,9 +17,8 @@ class WorkflowInstance(Template):
         Only works if the referenced dag definition file is valid.
 
         Args:
-            name (str): The name of the new template
-            dag_definition_file (Path): Path of the file which defines the behavior of workflows
-            instantiated from this template
+            name (str): The name of the new workflow instance
+            dag_definition_file (Path): Path of the file which defines the behavior of the workflow instance
             config_folder (Path): Path to a directory of input files needed for executing the workflow
 
         """
@@ -49,3 +48,15 @@ class WorkflowInstance(Template):
 
         """
         self.__config_folder = config_folder
+
+    # other methods
+
+    def activate_instance(self, dags_folder: Path):
+        """Performs changes to the dag_definition_file such that the dag_id inside the file matches the name of the
+        WorkflowInstance object. After that the file is copied to the given path
+
+        Args:
+            dags_folder (Path): The path where the changed dag definition file belongs
+
+        """
+        pass  # TODO

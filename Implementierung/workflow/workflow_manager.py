@@ -1,9 +1,8 @@
+import errno
 import os
-import shutil
-
 import requests
 from os import listdir
-from shutil import copy
+from shutil import copy, copytree
 from pathlib import Path
 from typing import List, Tuple
 from .frontend_version import FrontendVersion
@@ -13,7 +12,8 @@ from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
 from .version_number import VersionNumber
 from .workflow_instance import WorkflowInstance
-from ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException
+from ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
+    DoubleWorkflowInstanceNameException
 from Database.TemplateData import TemplateData
 from Database.WorkflowData import WorkflowData
 
@@ -29,7 +29,9 @@ class WorkflowManager:
     __workflow_data: WorkflowData = WorkflowData.get_instance()
     __versions_base_directory: Path = Path("")  # TODO
     __template_base_directory: Path = Path("")  # TODO
+    __airflow_dag_folder: Path = Path("") # TODO
     __airflow_address: str = "http://localhost:8080/"  # TODO
+    __initial_version_note = "initial version"
 
     def __init__(self):
         raise Exception("Call get_instance()")
@@ -65,9 +67,8 @@ class WorkflowManager:
 
         # now safe the new dag definition file in the template folder
         new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
-        shutil.copyfile(template.get_dag_definition_file(), new_path)
+        copy(template.get_dag_definition_file(), new_path)
         # maybe make the file ro TODO
-
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
@@ -80,14 +81,35 @@ class WorkflowManager:
 
         """
         # get the template object corresponding to the name
-        template: Template = self.__template_data.get_Template_By_Name(template_name)
+        template_path: Path = self.__template_base_directory / (template_name + ".py")
+        template: Template = Template(template_name, template_path)
 
-        # try to create a WorkflowInstance object and try to add it to the database
+        # check if the workflow_instance_name is already used
+        existing_names: List[str] = listdir(self.__versions_base_directory)
+        if template_name in existing_names:  # otherwise, the name is a valid identifier
+            raise DoubleWorkflowInstanceNameException("")
+
+        # try to create a WorkflowInstance object
         workflow_instance: WorkflowInstance = WorkflowInstance(
             workflow_instance_name, template.get_dag_definition_file(), config_files)  # maybe EmptyDagFolderException
-        # self.__workflow_data.create_Workflow_Instance_From_Template() TODO
-        # overwrite dag_id in the dag definition file
-        pass
+
+        # now we create a new directory for the instance and the initial version
+        instance_path: Path = self.__versions_base_directory / workflow_instance_name
+        dag_path: Path = instance_path / (workflow_instance_name + ".py")
+        version_path: Path = instance_path / "1"
+        copy(template.get_dag_definition_file(), dag_path)  # copy dag definition file
+        self.__copy_whole_dir(config_files, version_path)  # copy config-directory
+
+        # create version "1" and add it to the database
+        initial_version: DatabaseVersion = DatabaseVersion(
+            VersionNumber("1"), self.__initial_version_note, version_path)
+        # those calls might be changed TODO
+        self.__workflow_data.create_Workflow_Instance_From_Template(template_name, workflow_instance_name, version_path)
+        self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(workflow_instance_name, initial_version, "")
+
+        # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
+        workflow_instance.activate_instance(self.__airflow_dag_folder)
+        # -> write "activate_instance" in WorkflowInstance
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph
@@ -277,3 +299,15 @@ class WorkflowManager:
         # if not tell database to change the active version
         self.__workflow_data.set_Active_Version_Through_Number(workflow_instance_name, version_number)
         pass
+
+    # private methods
+
+    @staticmethod
+    def __copy_whole_dir(src: Path, dst: Path):
+        try:
+            copytree(src, dst)  # recursive copying of subdirectories
+        except OSError as exc:
+            if exc.errno in (errno.ENOTDIR, errno.EINVAL):  # the method raises error if src is a file
+                copy(src, dst)  # then we transfer that file with copy
+            else:
+                raise

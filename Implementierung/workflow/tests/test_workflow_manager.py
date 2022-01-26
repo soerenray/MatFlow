@@ -1,3 +1,5 @@
+import filecmp
+from pathlib import Path
 from typing import Union, Any
 from unittest import TestCase
 from workflow.workflow_manager import WorkflowManager
@@ -18,3 +20,10 @@ class TestCreateNewVersion(TestWorkflowManager):
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
     pass
+
+class TestCopyWholeDir(TestWorkflowManager):
+    base_dir: Path = Path("test_files/workflow_manager/copyWholeDir")
+
+
+def are_dir_trees_equal(dir1: Path, dir2: Path) -> bool:
+    dirs_cmp = filecmp.dircmp(dir1, dir2)
