@@ -1,13 +1,13 @@
 <template>
   <v-app>
     <!--
+    -->
+    <choose-config-file></choose-config-file>
     <create-template></create-template>
     <create-workflow-instance></create-workflow-instance>
     <log-in></log-in>
     <sign-up></sign-up>
     <version-control></version-control>
-    -->
-    <choose-config-file></choose-config-file>
   </v-app>
 </template>
 
