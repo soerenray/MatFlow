@@ -37,7 +37,7 @@ class ServerData:
         # insert values
         query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_adress, name)
         # execute
-        data = self.databaseTable.set(query,)
+        data = self.databaseTable.set(query)
         return data
 
 
