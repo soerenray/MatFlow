@@ -4,12 +4,12 @@ from base64 import b64encode
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User
 from typing import List, Tuple
-from ExceptionHandler import ExceptionHandler
+from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.workflow_instance import WorkflowInstance
-import keys
+from Implementierung.FrontendAPI import keys
 
 # TODO Key Value Pairs discuss
 
