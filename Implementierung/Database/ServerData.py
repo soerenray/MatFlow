@@ -32,10 +32,10 @@ class ServerData:
         """
         # get values
         name = server.getName()
-        ip_adress = server.getAddress()
+        ip_address = server.getAddress()
 
         # insert values
-        query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_adress, name)
+        query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_address, name)
         # execute
         data = self.databaseTable.set(query)
         return data
