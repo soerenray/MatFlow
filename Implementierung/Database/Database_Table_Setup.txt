@@ -41,7 +41,7 @@ CREATE TABLE ActiveVersion (
 );
 
 CREATE TABLE ConfFile (
-   confKey INTEGER NOT NULL,
+   confKey INTEGER NOT NULL AUTO_INCREMENT,
    file varchar(255) NOT NULL,
    PRIMARY KEY (confKey)
 );
@@ -56,9 +56,7 @@ CREATE TABLE VersionFile (
 );
 
 CREATE TABLE ResultFile (
-   versionID INTEGER,
-   filesID INTEGER NOT NULL,
+   filesID INTEGER NOT NULL AUTO_INCREMENT,
    file varchar(255),
-   PRIMARY KEY (versionID, filesID),
-   FOREIGN KEY (versionID) REFERENCES Version(ID)
+   PRIMARY KEY (filesID)
 );
