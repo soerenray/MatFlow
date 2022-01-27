@@ -3,12 +3,13 @@ from typing import List, Tuple
 import os
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User, UserController
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from flask import request
-import keys
+from Implementierung.FrontendAPI import keys
 
 
 class JSONToPython:
