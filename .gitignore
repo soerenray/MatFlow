@@ -6,6 +6,9 @@
 #dummy script to check if airflow import works and python interpreter is right
 test.py
 
+# filter out files in pycache directory
+*.pyc
+
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -305,7 +308,35 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.toptal.com/developers/gitignore/api/latex
+
+node_modules
+/dist
+
+
+# local env files
+.env.local
+.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Pycharm dirs
+__pycache__
+
 =======
 .DS_Store
 .idea/
 >>>>>>> project_setup
+
