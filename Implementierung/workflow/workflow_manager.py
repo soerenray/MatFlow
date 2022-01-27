@@ -296,6 +296,9 @@ class WorkflowManager:
         # first check if the instance is currently running
         dag_request = requests.get(self.__airflow_address + "api/v1/dags/{dag_id}/details")
         # TODO
+
+        # TODO current_conf-Ordner anpassen
+
         # if not tell database to change the active version
         self.__workflow_data.set_Active_Version_Through_Number(workflow_instance_name, version_number)
         pass
@@ -304,6 +307,8 @@ class WorkflowManager:
 
     @staticmethod
     def __copy_whole_dir(src: Path, dst: Path):
+        # this method shall copy all contents in src and copy them to the dst directory.
+        # before the call the dst directory itself must not exist
         try:
             copytree(src, dst)  # recursive copying of subdirectories
         except OSError as exc:
