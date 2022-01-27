@@ -1,17 +1,17 @@
 import os
 from pathlib import Path
-from werkzeug.utils import secure_filename
 from base64 import b64encode
 from Implementierung.HardwareAdministration import Server
 from Implementierung.UserAdministration import User
-from typing import List
+from typing import List, Tuple
 from ExceptionHandler import ExceptionHandler
-from Implementierung.workflow import frontend_version
+from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.workflow_instance import WorkflowInstance
-from Implementierung.workflow.version import Version
 import keys
+
+# TODO Key Value Pairs discuss
 
 
 class PythonToJSON:
@@ -54,7 +54,7 @@ class PythonToJSON:
         status: str = server.getStatus()
         container_limit: int = server.getContainerLimit()
         executing: bool = server.isSelectedForExecution()
-        resources: list[tuple[str, str]] = server.getRessources()
+        resources: List[Tuple[str, str]] = server.getRessources()
         out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
                           keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
                           keys.server_resources_name: resources}
@@ -121,9 +121,9 @@ class PythonToJSON:
         all_versions = []
         for version in versions:
             version_dict = dict()
-            version_dict.update({keys.version_note_name: version.getNote()})
-            version_dict.update({keys.version_number_name: version.getVersionNumber()})
-            version_dict.update({keys.parameter_changes_name: version.getParameterChanges()})
+            version_dict.update({keys.version_note_name: version.get_note()})
+            version_dict.update({keys.version_number_name: version.get_version_number()})
+            version_dict.update({keys.parameter_changes_name: version.get_changes()})
             all_versions.append(version_dict)
         out_dict: dict = {keys.versions_name: all_versions}
         return ExceptionHandler.success(out_dict)
