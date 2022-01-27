@@ -1,11 +1,11 @@
 from typing import List, Tuple
 from unittest import TestCase
 from pathlib import Path
-from workflow.database_version import DatabaseVersion
-from workflow.frontend_version import FrontendVersion
-from workflow.version_number import VersionNumber
-from workflow.parameter_change import ParameterChange
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.workflow.database_version import DatabaseVersion
+from Implementierung.workflow.frontend_version import FrontendVersion
+from Implementierung.workflow.version_number import VersionNumber
+from Implementierung.workflow.parameter_change import ParameterChange
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class TestDatabaseVersion(TestCase):

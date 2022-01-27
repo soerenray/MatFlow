@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List, Tuple, TextIO
-from .reduced_config_file import ReducedConfigFile
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class ConfigFile(ReducedConfigFile):
