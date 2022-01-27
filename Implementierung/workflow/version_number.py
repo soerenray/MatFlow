@@ -1,6 +1,6 @@
 from typing import List, Pattern
 import re
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class VersionNumber:

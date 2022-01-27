@@ -1,5 +1,5 @@
 from pathlib import Path
-from ExceptionPackage.MatFlowException import InvalidDagFileException
+from Implementierung.ExceptionPackage.MatFlowException import InvalidDagFileException
 
 
 class Template:

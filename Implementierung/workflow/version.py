@@ -1,4 +1,4 @@
-from .version_number import VersionNumber
+from Implementierung.workflow.version_number import VersionNumber
 
 
 class Version:

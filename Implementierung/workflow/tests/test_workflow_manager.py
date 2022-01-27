@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Union, Any
 from unittest import TestCase
-# from workflow.workflow_manager import WorkflowManager
+from Implementierung.workflow.workflow_manager import WorkflowManager
 
 
 class TestWorkflowManager(TestCase):

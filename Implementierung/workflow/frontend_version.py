@@ -1,7 +1,7 @@
 from typing import List
-from .version import Version
-from .version_number import VersionNumber
-from .parameter_change import ParameterChange
+from Implementierung.workflow.version import Version
+from Implementierung.workflow.version_number import VersionNumber
+from Implementierung.workflow.parameter_change import ParameterChange
 
 
 class FrontendVersion(Version):

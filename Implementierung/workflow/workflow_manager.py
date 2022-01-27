@@ -11,11 +11,11 @@ from .template import Template
 from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
 from .version_number import VersionNumber
-from .workflow_instance import WorkflowInstance
-from ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
+from Implementierung.workflow.workflow_instance import WorkflowInstance
+from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
     DoubleWorkflowInstanceNameException
-from Database.TemplateData import TemplateData
-from Database.WorkflowData import WorkflowData
+from Implementierung.Database.TemplateData import TemplateData
+from Implementierung.Database.WorkflowData import WorkflowData
 
 
 class WorkflowManager:

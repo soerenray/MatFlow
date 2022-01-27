@@ -1,7 +1,7 @@
 from pathlib import Path
 from os import listdir
-from .template import Template
-from ExceptionPackage.MatFlowException import EmptyConfigFolderException
+from Implementierung.workflow.template import Template
+from Implementierung.ExceptionPackage.MatFlowException import EmptyConfigFolderException
 
 
 class WorkflowInstance(Template):
