@@ -1,7 +1,7 @@
 from typing import List
 from unittest import TestCase
-from workflow.version_number import VersionNumber
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.workflow.version_number import VersionNumber
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class TestVersionNumber(TestCase):

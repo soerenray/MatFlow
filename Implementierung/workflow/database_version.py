@@ -2,12 +2,12 @@ from pathlib import Path
 from os import listdir
 from typing import List, Tuple
 
-from workflow.version import Version
-from workflow.version_number import VersionNumber
-from workflow.frontend_version import FrontendVersion
-from workflow.config_file import ConfigFile
-from .parameter_change import ParameterChange
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.workflow.version import Version
+from Implementierung.workflow.version_number import VersionNumber
+from Implementierung.workflow.frontend_version import FrontendVersion
+from Implementierung.workflow.config_file import ConfigFile
+from Implementierung.workflow.parameter_change import ParameterChange
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class DatabaseVersion(Version):

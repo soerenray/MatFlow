@@ -1,9 +1,9 @@
 from typing import TextIO, List, Tuple
 from unittest import TestCase
 from pathlib import Path
-from workflow.config_file import ConfigFile
-from workflow.reduced_config_file import ReducedConfigFile
-from ExceptionPackage.MatFlowException import InternalException
+from Implementierung.workflow.config_file import ConfigFile
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
 class TestConfigFile(TestCase):
