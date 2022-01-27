@@ -20,6 +20,7 @@ class WorkflowData:
             WorkflowData.__instance = self
 
     def create_wf_instance(self, wf_name, dag_file):
+        # TODO replace values to    wf_in: WorkflowInstance, conf_dir: Path
         """Create a new instance of a workflow by using the dag-File of a Template with the Version set to 1.
 
         Extended description of function.
