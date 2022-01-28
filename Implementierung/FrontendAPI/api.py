@@ -340,7 +340,6 @@ class FrontendAPI:
             contemporary_template: Template = JSONToPython.extract_template(request)
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = FrontendAPI.workflow_manager.get_dag_representation_from_template(contemporary_template)
-            # TODO delete contemporary template
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
