@@ -19,45 +19,80 @@ class WorkflowData:
         else:
             WorkflowData.__instance = self
 
-    def create_wf_instance(self, wf_name, dag_file):
-        # TODO replace values to    wf_in: WorkflowInstance, conf_dir: Path
+    def create_wf_instance(self, wf_in: WorkflowInstance, conf_dir: Path):
+        # TODO replace values to
         """Create a new instance of a workflow by using the dag-File of a Template with the Version set to 1.
 
-        Extended description of function.
+        Check for duplicate workflow, only then create new entry. Throw error if workflow name is already taken.
 
         Args:
-            t_name(str): name of template
-            wf_name(str): NEW name of a workflow
-            confFold(str[]): paths of the config-folder files
+            wf_in(WorkflowInstance): new workflow
+            conf_dir(Path): path of folder with all .conf files for this workflow
 
         Returns:
             void
         """
+
+        # extract values
+        wf_name = wf_in.get_name()
+        dag_file = wf_in.get_dag_definition_file()
+        #  get all files in conf_dir as string
+        conf_file_list = []
+        for file in conf_dir.iterdir():
+            conf_file_list.append(str(file))
+        print(conf_file_list)
+
+        other_file_list = []
+        for file in wf_in.get_config_folder().iterdir():
+            other_file_list.append(str(file))
+        print(other_file_list)
+
         # check if workflow already exists
         workflow_exists_query = "SELECT name from Workflow WHERE name = '{}'".format(wf_name)
+
         # TODO return exception
         # and return if workflow name already exists
-        if not self.databaseTable.check_for(workflow_exists_query):
-            print("checkpoint1")
+        if self.databaseTable.check_for(workflow_exists_query):
+            print("workflow already exists")
             return
 
         # create workflow entry
         workflow_query = "INSERT INTO Workflow (name, dag) VALUES ('{}', '{}')".format(wf_name, dag_file)
         self.databaseTable.set(workflow_query)
+
         # create version entry
         version_query = "INSERT INTO Version (wfName, version, note) VALUES ('{}', '{}', '{}')".format(wf_name, "1", "")
         self.databaseTable.set(version_query)
 
         # get key of version number
         get_version_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(wf_name, "1")
-        number = self.databaseTable.get(get_version_key_query)[0]
-        print("Index is " + number + "!")
+        number = self.databaseTable.get(get_version_key_query)
+        # number is ["(x,)"] and has to be made into x alone (x <= int)
+        number = str(number[0]).replace('(', "").replace(')', "").replace(",", "")
 
-        # TODO continue implementation
+        # create all file entries for non-conf-files
+        folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES ('{}', '{}')"
+        for file_path in other_file_list:
+            self.databaseTable.set(folderfile_query.format(wf_name, file_path))
 
-        # execute
-        # data = self.databaseTable.set(query)
-        return data
+        # create all file entries for conf-files
+        conffile_set_query = "INSERT INTO ConfFile (file) VALUES ('{}')"
+        conffile_get_key_query = "SELECT confKey FROM ConfFile WHERE file = '{}'"
+        versionfile_set_query = "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ('{}', '{}', '{}')"
+        for file_path in conf_file_list:
+            # injection into ConfFile
+            self.databaseTable.set(conffile_set_query.format(file_path))
+
+            # get index of new entry & format into usable index
+            # all names are unique in a workflow
+            file_key = self.databaseTable.get(conffile_get_key_query.format(file_path))
+            file_key = str(file_key[0]).replace('(', "").replace(')', "").replace(",", "")
+
+            # injection into VersionFile
+            filename = Path(file_path).name
+            self.databaseTable.set(versionfile_set_query.format(number, filename, file_key))
+
+        return
 
     # TODO return dictionary
     def get_Names_Of_Workflows_And_Config_Files(self):
@@ -175,7 +210,8 @@ def class_debugging():
 
     wfData = WorkflowData()
     # dummy data
-    data = wfData.create_wf_instance("workflowName3", "dag1 filepath")
+    testworkflow = WorkflowInstance("workflow4", Path("./Testfile1.txt"), Path("."))
+    data = wfData.create_wf_instance(testworkflow, Path("."))
     print(data)  # should be 'None'
 
     # retrieve dummy data
@@ -185,4 +221,4 @@ def class_debugging():
     print("TEST IN WorkflowData END!")
 
 
-#class_debugging()
+class_debugging()
