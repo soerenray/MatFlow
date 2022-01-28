@@ -1,5 +1,13 @@
+from __future__ import annotations
+from flask import request
 from pathlib import Path
 from Implementierung.ExceptionPackage.MatFlowException import InvalidDagFileException
+from Implementierung.FrontendAPI import keys, utilities
+from werkzeug.datastructures import FileStorage
+from werkzeug.utils import secure_filename
+import os
+
+from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
 
 class Template:
@@ -67,3 +75,52 @@ class Template:
     def __dag_definition_file_is_valid(file_path: Path) -> bool:
         # TODO better implementation
         return True
+
+    @classmethod
+    def extract_template(cls, request_details: request) -> Template:
+        """
+        extracts json details and builds a new Template based off of these json details
+
+        Args:
+            request_details(String): contains encoded template
+
+        Returns:
+            Template: decoded template object
+        """
+        name: str = request_details.args.get(keys.template_name)
+        file_path: Path = cls.extract_dag_file(request_details)
+        template: Template = Template(name, file_path)
+        return template
+
+    @classmethod
+    def extract_dag_file(cls, request_details: request) -> Path:
+        """
+        extracts json details and saves the dag definition file to the hard drive
+
+        Args:
+            request_details(request): contains dag definition file
+
+        """
+
+        dag_file: FileStorage = request_details.files[keys.file_key]
+        filename: str = secure_filename(dag_file.filename)
+        save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, keys.temp_in_path,
+                                                          keys.dag_save_path))
+        file_path: str = os.path.join(save_dir, filename)
+        dag_file.save(file_path)
+        return Path(file_path)
+
+    def encode_template(self) -> str:
+        """
+        encodes all template attributes and dumps them into json object
+
+        Returns:
+            List[str]: all the needed information to upload file
+        """
+        out_dict: dict = dict()
+        name: str = self.get_name()
+        out_dict.update({keys.template_name: name})
+        # path to file
+        file_path: Path = self.get_dag_definition_file()
+        out_dict.update(utilities.encode_file(file_path, keys.dag_definition_name))
+        return ExceptionHandler.success(out_dict)
