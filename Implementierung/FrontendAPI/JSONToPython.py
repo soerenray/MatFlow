@@ -130,5 +130,3 @@ class JSONToPython:
                 os.makedirs(try_path)
                 return try_path
             counter += 1
-
-# TODO ReducedConfig

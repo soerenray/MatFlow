@@ -146,4 +146,4 @@ class PythonToJSON:
         os.remove(file_path)
         return out_dict
 
-# TODO WorkflowInstance, ReducedConfig, Version, file
+# TODO WorkflowInstance, Version, file

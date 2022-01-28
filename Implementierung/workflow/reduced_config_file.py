@@ -1,4 +1,8 @@
+from __future__ import annotations
 from typing import List, Tuple
+from flask import request
+from Implementierung.FrontendAPI import keys
+from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
 
 class ReducedConfigFile:
@@ -58,3 +62,31 @@ class ReducedConfigFile:
 
         """
         self.__key_value_pairs = key_value_pairs
+
+    def encode_config(self) -> str:
+        """
+        extracts all reduced_config attributes and dumps them into json object
+
+        Returns:
+            String: json-dumped object containing encoded reduced config file (essentially key value pairs)
+        """
+        out_dict = dict({keys.config_file_name: self.get_file_name()})
+        key_value_pairs: List[Tuple[str, str]] = self.get_key_value_pairs()
+        out_dict.update({keys.key_value_pairs_name: key_value_pairs})
+        return ExceptionHandler.success(out_dict)
+
+    @classmethod
+    def extract_configs(cls, request_details: request) -> ReducedConfigFile:
+        """
+        extracts json details and builds a new ReducedConfigFile array based off of these json details
+
+        Args:
+            request_details(request): contains encoded reduced config files
+
+        Returns:
+            ReducedConfigFile: the extracted reduced config file
+        """
+        name: str = request.args.get(keys.config_file_name)
+        key_value_pairs: List[Tuple[str, str]] = request.args.get(keys.key_value_pairs_name)
+        reduced_config: ReducedConfigFile = ReducedConfigFile(name, key_value_pairs)
+        return reduced_config
