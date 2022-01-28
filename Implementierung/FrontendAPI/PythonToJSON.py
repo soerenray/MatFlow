@@ -145,5 +145,3 @@ class PythonToJSON:
             out_dict.update({key: b64encode(file.read())})
         os.remove(file_path)
         return out_dict
-
-# TODO WorkflowInstance, Version, file

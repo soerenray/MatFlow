@@ -14,7 +14,6 @@ version_number_name: str = "versionNumber"
 version_note_name: str = "versionNote"
 config_file_name: str = "configFileName"
 versions_name: str = "versions"
-parameter_changes_name: str = "parameterChanges"
 key_value_pairs_name: str = "keyValuePairs"
 
 workflow_instance_names: str = "workflowInstanceNames"
