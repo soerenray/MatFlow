@@ -7,7 +7,7 @@
           <v-col>
             <v-text-field
               label="Name of the template"
-              v-model='chosenTemplateName'
+              v-model="chosenTemplateName"
               hide-details="auto"
             ></v-text-field>
           </v-col>
@@ -33,10 +33,12 @@
             </v-radio-group>
           </v-col>
           <v-col>
-            <v-row>
-              <v-btn style="margin-top: 25px" color="blue">Edit</v-btn>
-              <div style="padding-left: 80px; margin-top: 25px">
-                <v-btn @click="pressSendButton" small color="#58D68D"><send-icon></send-icon></v-btn>
+            <v-row style='padding-top: 25px'>
+              <v-btn color="blue">Edit</v-btn>
+              <div style="padding-left: 25px">
+                <v-btn @click="pressSendButton" color="#58D68D"
+                  ><send-icon></send-icon
+                ></v-btn>
               </div>
             </v-row>
           </v-col>
@@ -57,18 +59,18 @@ const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createTemplateObject = new CreateTemplate();
 
 export default {
-  name: 'CreateTemplate',
+  name: "CreateTemplate",
   data: function () {
     return {};
   },
   methods: {
     pressSendButton() {
-      this.pushTemplateObjectToBackend()
-      this.resetView()
+      this.pushTemplateObjectToBackend();
+      this.resetView();
     },
     resetView() {
-      backendServerCommunicatorObject.pullTemplatesName()
-      createTemplateObject.setObjectToDefaultValues()
+      backendServerCommunicatorObject.pullTemplatesName();
+      createTemplateObject.setObjectToDefaultValues();
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(
