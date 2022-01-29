@@ -73,14 +73,14 @@ import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import WorkflowInstance from "../Classes/WorkflowInstance";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
-const createWorkflowInstanceObject = new CreateWorkflowInstance();
+const createWorkflowInstanceObject = new CreateWorkflowInstance(
+  ["import worfklow", "create workflow-instance from template"],
+  "create workflow-instance from template"
+);
 
 export default {
   data: function () {
-    return {
-      selectedDrowpnItem: "create workflow-instance from template",
-      dropwDown: ["import worfklow", "create workflow-instance from template"],
-    };
+    return {};
   },
   methods: {
     pressSendButton() {
@@ -93,7 +93,10 @@ export default {
       createWorkflowInstanceObject.setObjectToDefaultValues();
     },
     pushCreateWorkflowInstanceFromTemplate() {
-      if (this.selectedDrowpnItem == "create workflow-instance from template") {
+      if (
+        createWorkflowInstanceObject.selectedDrowpnItem ==
+        "create workflow-instance from template"
+      ) {
         backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
           this.createWorkflowInstanceObject()
         );
