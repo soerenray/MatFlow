@@ -35,7 +35,8 @@
                 small
                 color="#58D68D"
                 style="padding-right:0.75px, padding-top:0.75px"
-                ><send-icon/></v-btn>
+                ><send-icon
+              /></v-btn>
             </v-col>
           </v-row>
         </div>
@@ -55,8 +56,9 @@
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
+import WorkflowInstance from '../Classes/WorkflowInstance';
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createWorkflowInstanceObject = new CreateWorkflowInstance();
 
 export default {
@@ -65,6 +67,20 @@ export default {
       selectedDrowpnItem: "create workflow-instance from template",
       dropwDown: ["import worfklow", "create workflow-instance from template"],
     };
+  },
+  methods: {
+    pressSendButton() {
+      this.push();
+      this.resetView();
+    },
+    resetView() {
+    },
+    pushCreateWorkflowInstanceFromTemplate() {
+      backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(this.createWorkflowInstanceObject())
+    },
+    createWorkflowInstanceObject(): WorkflowInstance {
+
+    }
   },
   computed: {
     templatesName: {
