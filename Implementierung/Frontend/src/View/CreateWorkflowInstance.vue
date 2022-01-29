@@ -53,9 +53,12 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-let createWorkflowInstanceObject = new CreateWorkflowInstance();
+const backendServerCommunicatorObject = new BackendServerCommunicator()
+const createWorkflowInstanceObject = new CreateWorkflowInstance();
 
 export default {
   data: function () {
@@ -110,6 +113,15 @@ export default {
           worklfowInstanceName;
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // The object choosenConfigFileObject wouldn't update, when the parameters are
+    // initialized in data
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(createWorkflowInstanceObject);
+    createWorkflowInstanceObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
   },
 };
 </script>
