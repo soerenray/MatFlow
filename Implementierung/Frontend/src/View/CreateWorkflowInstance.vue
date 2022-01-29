@@ -11,7 +11,7 @@
             <v-col>
               <v-text-field
                 label="Name of the workflow-instance"
-                v-model='workflowInstanceName'
+                v-model="workflowInstanceName"
                 hide-details="auto"
               ></v-text-field>
             </v-col>
@@ -34,7 +34,7 @@
               <v-btn
                 fab
                 small
-                @click='pressSendButton'
+                @click="pressSendButton"
                 color="#58D68D"
                 style="padding-right:0.75px, padding-top:0.75px"
                 ><send-icon
@@ -43,12 +43,24 @@
           </v-row>
         </div>
       </div>
-      <div v-if="selectedDrowpnItem == 'import worfklow-instance'">
-        <v-file-input
-          v-model="workflowInstanceFolder"
-          accept="application/zip"
-          label="Workflow-folder"
-        ></v-file-input>
+      <div v-if="selectedDrowpnItem == 'import worfklow'">
+        <v-row>
+          <v-col>
+            <v-file-input
+              v-model="workflowInstanceFolder"
+              accept="application/zip"
+              label="Workflow-folder"
+            ></v-file-input
+          ></v-col>
+          <v-col>
+            <v-btn
+              fab
+              small
+              @click="pressSendButton"
+              color="#58D68D"
+              style="padding-right:0.75px, padding-top:0.75px"
+              ><send-icon /></v-btn></v-col
+        ></v-row>
       </div>
     </v-card>
   </v-app>
