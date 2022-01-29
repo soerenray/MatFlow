@@ -94,7 +94,7 @@ export default {
     },
     pushCreateWorkflowInstanceFromTemplate() {
       if (
-        createWorkflowInstanceObject.selectedDrowpnItem ==
+        createWorkflowInstanceObject.selectedDropDownItem ==
         "create workflow-instance from template"
       ) {
         backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
