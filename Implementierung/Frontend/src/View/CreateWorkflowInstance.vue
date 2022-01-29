@@ -35,8 +35,7 @@
                 small
                 color="#58D68D"
                 style="padding-right:0.75px, padding-top:0.75px"
-                ><plus-icon :size="30"
-              /></v-btn>
+                ><send-icon/></v-btn>
             </v-col>
           </v-row>
         </div>
