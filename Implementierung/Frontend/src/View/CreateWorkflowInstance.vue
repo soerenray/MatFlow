@@ -11,6 +11,7 @@
             <v-col>
               <v-text-field
                 label="Name of the workflow-instance"
+                v-model='workflowInstanceName'
                 hide-details="auto"
               ></v-text-field>
             </v-col>
@@ -33,6 +34,7 @@
               <v-btn
                 fab
                 small
+                @click='pressSendButton'
                 color="#58D68D"
                 style="padding-right:0.75px, padding-top:0.75px"
                 ><send-icon
@@ -72,6 +74,8 @@ export default {
     pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
+      createWorkflowInstanceObject.templatesName =
+        backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
       createWorkflowInstanceObject.setObjectToDefaultValues();
