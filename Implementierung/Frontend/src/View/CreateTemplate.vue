@@ -7,6 +7,7 @@
           <v-col>
             <v-text-field
               label="Name of the template"
+              v-model='chosenTemplateName'
               hide-details="auto"
             ></v-text-field>
           </v-col>
@@ -56,6 +57,7 @@ const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createTemplateObject = new CreateTemplate();
 
 export default {
+  name: 'CreateTemplate',
   data: function () {
     return {};
   },
@@ -66,6 +68,7 @@ export default {
     },
     resetView() {
       backendServerCommunicatorObject.pullTemplatesName()
+      createTemplateObject.setObjectToDefaultValues()
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(

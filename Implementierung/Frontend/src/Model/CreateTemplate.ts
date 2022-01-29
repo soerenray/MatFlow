@@ -84,9 +84,9 @@ class CreateTemplate {
     }
 
     /**
-     * set's the default values of the class (the values that will be used, if the constructor is called with no input)
+     * sets the default values of the class to the instance (the values that will be used, if the constructor is called with no input)
      */
-    public setDefaultValues() {
+    public setObjectToDefaultValues() {
         this._templatesName = []
         this._chosenTemplateName = ''
         this._templateFolder = new File([], "emptyFile", { type: 'application/zip' })
