@@ -33,9 +33,9 @@
           </v-col>
           <v-col>
             <v-row>
-              <v-btn style='margin-top: 25px' color="blue">Edit</v-btn>
+              <v-btn style="margin-top: 25px" color="blue">Edit</v-btn>
               <div style="padding-left: 80px; margin-top: 25px">
-                <v-btn fab small color="#58D68D"><send-icon></send-icon></v-btn>
+                <v-btn @click="pressSendButton" small color="#58D68D"><send-icon></send-icon></v-btn>
               </div>
             </v-row>
           </v-col>
@@ -49,6 +49,7 @@
 <script lang='ts'>
 import Vue from "vue";
 import CreateTemplate from "../Model/CreateTemplate";
+import Template from "../Classes/Template";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
@@ -56,8 +57,35 @@ const createTemplateObject = new CreateTemplate();
 
 export default {
   data: function () {
-    return {
-    };
+    return {};
+  },
+  methods: {
+    pressSendButton() {
+      this.pushTemplateObjectToBackend()
+      this.resetView()
+    },
+    resetView() {
+      backendServerCommunicatorObject.pullTemplatesName()
+    },
+    pushTemplateObjectToBackend() {
+      backendServerCommunicatorObject.pushCreateTemplate(
+        this.createTemplateObject()
+      );
+    },
+    createTemplateObject(): Template {
+      return new Template(
+        this.templateBlueprintFile(),
+        createTemplateObject.chosenTemplateName
+      );
+    },
+    templateBlueprintFile(): File {
+      if (createTemplateObject.templateFolder.name !== "emptyFile") {
+        return createTemplateObject.templateFolder;
+      } else if (createTemplateObject.templateFolder.name !== "emptyFile") {
+        return createTemplateObject.templateFolder;
+      }
+      return new File([], "emptyFile", { type: "application/zip" });
+    },
   },
   computed: {
     templatesName: {

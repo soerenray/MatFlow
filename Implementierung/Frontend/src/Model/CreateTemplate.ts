@@ -82,6 +82,13 @@ class CreateTemplate {
     public set dagFile(dagFile: File) {
         this._dagFile = dagFile
     }
+
+    public setDefaultValues() {
+        this._templatesName = []
+        this._chosenTemplateName = ''
+        this._templateFolder = new File([], "emptyFile", { type: 'application/zip' })
+        this._dagFile = new File([], "emptyFile", { type: 'application/zip' })
+    }
 }
 
 export default CreateTemplate
