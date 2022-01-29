@@ -74,7 +74,7 @@ export default {
       this.resetView();
     },
     resetView() {
-      createWorkflowInstanceObject.setObjectToDefaultValues()
+      createWorkflowInstanceObject.setObjectToDefaultValues();
     },
     pushCreateWorkflowInstanceFromTemplate() {
       if (this.selectedDrowpnItem == "create workflow-instance from template") {
@@ -87,7 +87,12 @@ export default {
         );
       }
     },
-    createWorkflowInstanceObject(): WorkflowInstance {},
+    createWorkflowInstanceObject(): WorkflowInstance {
+      return new WorkflowInstance(
+        createWorkflowInstanceObject.workflowInstanceFolder,
+        createWorkflowInstanceObject.workflowInstanceName
+      );
+    },
   },
   computed: {
     templatesName: {
