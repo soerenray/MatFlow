@@ -1,7 +1,6 @@
 <template>
-  <v-app>a
+  <v-app>
     <router-view/>
-    b
   </v-app>
 </template>
 
