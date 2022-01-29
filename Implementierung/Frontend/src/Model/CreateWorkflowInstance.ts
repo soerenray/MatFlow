@@ -102,6 +102,17 @@ class CreateWorkflowInstance {
     public set workflowInstanceName(workflowInstanceName: string) {
         this._workflowInstanceName = workflowInstanceName
     }
+
+    /**
+    * sets the default values of the class to the instance (the values that will be used, if the constructor is called with no input)
+    */
+    public setObjectToDefaultValues() {
+        this._templatesName = []
+        this._configFolder = new File([], "emptyFile", { type: 'application/zip' })
+        this._workflowInstanceFolder = new File([], "emptyFile", { type: 'application/zip' })
+        this.selectedTemplateName = ''
+        this._workflowInstanceName = ''
+    }
 }
 
 export default CreateWorkflowInstance
