@@ -7,7 +7,7 @@
           <v-col>
             <v-text-field
               label="Name of the template"
-              v-model="templatesName"
+              v-model="newTemplateName"
               hide-details="auto"
             ></v-text-field>
           </v-col>
@@ -93,6 +93,14 @@ export default {
     },
   },
   computed: {
+    newTemplateName: {
+      get: function() {
+        return createTemplateObject.newTemplateName
+      },
+      set: function(newTemplateName: string) {
+        createTemplateObject.newTemplateName = newTemplateName
+      }
+    },
     templatesName: {
       get: function () {
         return createTemplateObject.templatesName;
