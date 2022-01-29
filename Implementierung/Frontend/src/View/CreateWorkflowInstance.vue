@@ -3,20 +3,26 @@
     <v-card>
       <v-card-title> Create new workflow-instance </v-card-title>
       <div style="padding-left: 20px">
-        <v-select :items="dropwDown" v-model="selectedDrowpnItem"></v-select>
+        <v-select
+          :items="dropDownCreateOrImportWokflowInstance"
+          v-model="selectedDropDownItem"
+        ></v-select>
         <div
-          v-if="selectedDrowpnItem == 'create workflow-instance from template'"
+          v-if="
+            selectedDropDownItem == 'create workflow-instance from template'
+          "
         >
           <v-row>
             <v-col>
               <v-text-field
                 label="Name of the workflow-instance"
+                v-model="workflowInstanceName"
                 hide-details="auto"
               ></v-text-field>
             </v-col>
             <v-col>
               <v-select
-                :items="templates"
+                :items="templatesName"
                 v-model="selectedTemplateName"
                 label="choose template"
               >
@@ -33,20 +39,33 @@
               <v-btn
                 fab
                 small
+                @click="pressSendButton"
                 color="#58D68D"
                 style="padding-right:0.75px, padding-top:0.75px"
-                ><plus-icon :size="30"
+                ><send-icon
               /></v-btn>
             </v-col>
           </v-row>
         </div>
       </div>
-      <div v-if="selectedDrowpnItem == 'import worfklow-instance'">
-        <v-file-input
-          v-model="workflowInstanceFolder"
-          accept="application/zip"
-          label="Workflow-folder"
-        ></v-file-input>
+      <div v-if="selectedDropDownItem == 'import worfklow'">
+        <v-row>
+          <v-col>
+            <v-file-input
+              v-model="workflowInstanceFolder"
+              accept="application/zip"
+              label="Workflow-folder"
+            ></v-file-input
+          ></v-col>
+          <v-col>
+            <v-btn
+              fab
+              small
+              @click="pressSendButton"
+              color="#58D68D"
+              style="padding-right:0.75px, padding-top:0.75px"
+              ><send-icon /></v-btn></v-col
+        ></v-row>
       </div>
     </v-card>
   </v-app>
@@ -56,20 +75,68 @@
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
+import WorkflowInstance from "../Classes/WorkflowInstance";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
-const createWorkflowInstanceObject = new CreateWorkflowInstance();
+const backendServerCommunicatorObject = new BackendServerCommunicator();
+const createWorkflowInstanceObject = new CreateWorkflowInstance(
+  ["import worfklow", "create workflow-instance from template"],
+  "create workflow-instance from template"
+);
 
 export default {
   data: function () {
-    return {
-      templates: createWorkflowInstanceObject.templatesName,
-      folder: ["Empty Folder", "Config-Folder"],
-      selectedDrowpnItem: "create workflow-instance from template",
-      dropwDown: ["import worfklow", "create workflow-instance from template"],
-    };
+    return {};
+  },
+  methods: {
+    pressSendButton() {
+      this.pushCreateWorkflowInstanceFromTemplate();
+      this.resetView();
+      createWorkflowInstanceObject.templatesName =
+        backendServerCommunicatorObject.pullTemplatesName();
+    },
+    resetView() {
+      createWorkflowInstanceObject.setObjectToDefaultValues();
+    },
+    pushCreateWorkflowInstanceFromTemplate() {
+      if (
+        createWorkflowInstanceObject.selectedDropDownItem ==
+        "create workflow-instance from template"
+      ) {
+        backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
+          this.createWorkflowInstanceObject()
+        );
+      } else {
+        backendServerCommunicatorObject.pushExistingWorkflowInstance(
+          createWorkflowInstanceObject.workflowInstanceFolder
+        );
+      }
+    },
+    createWorkflowInstanceObject(): WorkflowInstance {
+      return new WorkflowInstance(
+        createWorkflowInstanceObject.workflowInstanceFolder,
+        createWorkflowInstanceObject.workflowInstanceName
+      );
+    },
   },
   computed: {
+    dropDownCreateOrImportWokflowInstance: {
+      get: function (): string[] {
+        return createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance;
+      },
+      set: function (dropDownCreateOrImportWokflowInstance: string[]) {
+        createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance =
+          dropDownCreateOrImportWokflowInstance;
+      },
+    },
+    selectedDropDownItem: {
+      get: function (): string {
+        return createWorkflowInstanceObject.selectedDropDownItem;
+      },
+      set: function (selectedDropDownItem: string) {
+        createWorkflowInstanceObject.selectedDropDownItem =
+          selectedDropDownItem;
+      },
+    },
     templatesName: {
       get: function (): string[] {
         return createWorkflowInstanceObject.templatesName;
