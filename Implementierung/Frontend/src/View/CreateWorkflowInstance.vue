@@ -56,7 +56,7 @@
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import WorkflowInstance from '../Classes/WorkflowInstance';
+import WorkflowInstance from "../Classes/WorkflowInstance";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createWorkflowInstanceObject = new CreateWorkflowInstance();
@@ -70,17 +70,24 @@ export default {
   },
   methods: {
     pressSendButton() {
-      this.push();
+      this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
     },
     resetView() {
+      createWorkflowInstanceObject.setObjectToDefaultValues()
     },
     pushCreateWorkflowInstanceFromTemplate() {
-      backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(this.createWorkflowInstanceObject())
+      if (this.selectedDrowpnItem == "create workflow-instance from template") {
+        backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
+          this.createWorkflowInstanceObject()
+        );
+      } else {
+        backendServerCommunicatorObject.pushExistingWorkflowInstance(
+          createWorkflowInstanceObject.workflowInstanceFolder
+        );
+      }
     },
-    createWorkflowInstanceObject(): WorkflowInstance {
-
-    }
+    createWorkflowInstanceObject(): WorkflowInstance {},
   },
   computed: {
     templatesName: {
