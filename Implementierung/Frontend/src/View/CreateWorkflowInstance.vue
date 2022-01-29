@@ -3,9 +3,14 @@
     <v-card>
       <v-card-title> Create new workflow-instance </v-card-title>
       <div style="padding-left: 20px">
-        <v-select :items="dropwDown" v-model="selectedDrowpnItem"></v-select>
+        <v-select
+          :items="dropDownCreateOrImportWokflowInstance"
+          v-model="selectedDropDownItem"
+        ></v-select>
         <div
-          v-if="selectedDrowpnItem == 'create workflow-instance from template'"
+          v-if="
+            selectedDropDownItem == 'create workflow-instance from template'
+          "
         >
           <v-row>
             <v-col>
@@ -43,7 +48,7 @@
           </v-row>
         </div>
       </div>
-      <div v-if="selectedDrowpnItem == 'import worfklow'">
+      <div v-if="selectedDropDownItem == 'import worfklow'">
         <v-row>
           <v-col>
             <v-file-input
@@ -114,6 +119,24 @@ export default {
     },
   },
   computed: {
+    dropDownCreateOrImportWokflowInstance: {
+      get: function (): string[] {
+        return createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance;
+      },
+      set: function (dropDownCreateOrImportWokflowInstance: string[]) {
+        createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance =
+          dropDownCreateOrImportWokflowInstance;
+      },
+    },
+    selectedDropDownItem: {
+      get: function (): string {
+        return createWorkflowInstanceObject.selectedDropDownItem;
+      },
+      set: function (selectedDropDownItem: string) {
+        createWorkflowInstanceObject.selectedDropDownItem =
+          selectedDropDownItem;
+      },
+    },
     templatesName: {
       get: function (): string[] {
         return createWorkflowInstanceObject.templatesName;
