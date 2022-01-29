@@ -7,6 +7,7 @@ user_privilege_name: str = "userPrivilege"
 password_name: str = "password"
 repeat_password_name: str = "repeatPassword"
 user_name = "userName"
+all_users = "users"
 
 template_name: str = "templateName"
 workflow_instance_name: str = "workflowInstanceName"
@@ -20,6 +21,9 @@ key_value_pairs_name: str = "keyValuePairs"
 workflow_instance_names: str = "workflowInstanceNames"
 config_file_names: str = "configFileNames"
 template_names: str = "templateNames"
+config_files: str = "configFiles"
+
+names_and_configs: str = "workflowInstanceConfigNames"
 
 dag_picture_name: str = "dagPicture"
 dag_definition_name: str = "dagDefinitionFile"
