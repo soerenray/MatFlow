@@ -16,7 +16,7 @@
             </v-col>
             <v-col>
               <v-select
-                :items="templates"
+                :items="templatesName"
                 v-model="selectedTemplateName"
                 label="choose template"
               >
@@ -62,8 +62,6 @@ const createWorkflowInstanceObject = new CreateWorkflowInstance();
 export default {
   data: function () {
     return {
-      templates: createWorkflowInstanceObject.templatesName,
-      folder: ["Empty Folder", "Config-Folder"],
       selectedDrowpnItem: "create workflow-instance from template",
       dropwDown: ["import worfklow", "create workflow-instance from template"],
     };
