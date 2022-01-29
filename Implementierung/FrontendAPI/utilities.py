@@ -1,5 +1,5 @@
 import os
-from base64 import b64encode
+from base64 import b64encode, b64decode
 from pathlib import Path
 import keys
 
@@ -37,3 +37,17 @@ def encode_file(file_path: Path, key: str) -> dict:
         out_dict.update({key: b64encode(file.read())})
     os.remove(file_path)
     return out_dict
+
+
+def decode_file(encoded_file: str):
+    """
+    decodes a file in base64 encoding
+
+    Args:
+        encoded_file(str): encoded file
+
+    Returns:
+        decoded file
+    """
+    return b64decode(encoded_file)
+

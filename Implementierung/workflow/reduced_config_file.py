@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List, Tuple
 from flask import request
 from Implementierung.FrontendAPI import keys
-from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
+import json
 
 
 class ReducedConfigFile:
@@ -76,7 +76,7 @@ class ReducedConfigFile:
         return out_dict
 
     @classmethod
-    def extract_configs(cls, request_details: request) -> ReducedConfigFile:
+    def extract_config(cls, request_details: request) -> ReducedConfigFile:
         """
         extracts json details and builds a new ReducedConfigFile array based off of these json details
 
@@ -86,7 +86,8 @@ class ReducedConfigFile:
         Returns:
             ReducedConfigFile: the extracted reduced config file
         """
-        name: str = request.args.get(keys.config_file_name)
-        key_value_pairs: List[Tuple[str, str]] = request.args.get(keys.key_value_pairs_name)
+        decoded_json: dict = json.loads(request_details.get_json())
+        name: str = decoded_json[keys.config_file_name]
+        key_value_pairs: List[Tuple[str, str]] = decoded_json[keys.key_value_pairs_name]
         reduced_config: ReducedConfigFile = ReducedConfigFile(name, key_value_pairs)
         return reduced_config

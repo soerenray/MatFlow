@@ -6,8 +6,7 @@ from Implementierung.FrontendAPI import keys, utilities
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import os
-
-from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
+import json
 
 
 class Template:
@@ -87,22 +86,25 @@ class Template:
         Returns:
             Template: decoded template object
         """
-        name: str = request_details.args.get(keys.template_name)
-        file_path: Path = cls.extract_dag_file(request_details)
+        decoded_json = json.loads(request_details.get_json())
+        name: str = decoded_json[keys.template_name]
+        file_path: Path = cls.extract_dag_file(decoded_json)
         template: Template = Template(name, file_path)
         return template
 
     @classmethod
-    def extract_dag_file(cls, request_details: request) -> Path:
+    def extract_dag_file(cls, decoded_json: dict) -> Path:
         """
-        extracts json details and saves the dag definition file to the hard drive
+        saves the dag definition file to the hard drive
 
         Args:
-            request_details(request): contains dag definition file
+            decoded_json(dict): contains dag definition file and template name
 
+        Returns:
+            path to saved file
         """
 
-        dag_file: FileStorage = request_details.files[keys.file_key]
+        dag_file = utilities.decode_file(decoded_json[keys.file_key])
         filename: str = secure_filename(dag_file.filename)
         save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, keys.temp_in_path,
                                                           keys.dag_save_path))
@@ -122,5 +124,5 @@ class Template:
         out_dict.update({keys.template_name: name})
         # path to file
         file_path: Path = self.get_dag_definition_file()
-        out_dict.update(utilities.encode_file(file_path, keys.dag_definition_name))
+        out_dict.update({keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name)})
         return out_dict
