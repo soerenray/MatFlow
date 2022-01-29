@@ -53,9 +53,12 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-let createWorkflowInstanceObject = new CreateWorkflowInstance();
+const backendServerCommunicatorObject = new BackendServerCommunicator()
+const createWorkflowInstanceObject = new CreateWorkflowInstance();
 
 export default {
   data: function () {
@@ -67,13 +70,12 @@ export default {
     };
   },
   computed: {
-    selectedTemplateName: {
-      get: function (): string {
-        return createWorkflowInstanceObject.selectedTemplateName;
+    templatesName: {
+      get: function (): string[] {
+        return createWorkflowInstanceObject.templatesName;
       },
-      set: function (selectedTemplateName: string) {
-        createWorkflowInstanceObject.selectedTemplateName =
-          selectedTemplateName;
+      set: function (templatesName: string[]) {
+        createWorkflowInstanceObject.templatesName = templatesName;
       },
     },
     configFolder: {
@@ -93,6 +95,33 @@ export default {
           workflowInstanceFolder;
       },
     },
+    selectedTemplateName: {
+      get: function (): string {
+        return createWorkflowInstanceObject.selectedTemplateName;
+      },
+      set: function (selectedTemplateName: string) {
+        createWorkflowInstanceObject.selectedTemplateName =
+          selectedTemplateName;
+      },
+    },
+    workflowInstanceName: {
+      get: function (): string {
+        return createWorkflowInstanceObject.workflowInstanceName;
+      },
+      set: function (worklfowInstanceName: string) {
+        createWorkflowInstanceObject.workflowInstanceName =
+          worklfowInstanceName;
+      },
+    },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // The object choosenConfigFileObject wouldn't update, when the parameters are
+    // initialized in data
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(createWorkflowInstanceObject);
+    createWorkflowInstanceObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
   },
 };
 </script>
