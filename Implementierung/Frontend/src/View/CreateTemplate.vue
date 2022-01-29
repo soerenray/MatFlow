@@ -33,9 +33,9 @@
           </v-col>
           <v-col>
             <v-row>
-              <v-btn color="blue">Edit</v-btn>
-              <div style="padding-left: 80px">
-                <v-btn fab small color="#58D68D"><plus-icon></plus-icon></v-btn>
+              <v-btn style='margin-top: 25px' color="blue">Edit</v-btn>
+              <div style="padding-left: 80px; margin-top: 25px">
+                <v-btn fab small color="#58D68D"><send-icon></send-icon></v-btn>
               </div>
             </v-row>
           </v-col>
@@ -47,9 +47,12 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import CreateTemplate from "../Model/CreateTemplate";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-let createTemplateObject = new CreateTemplate();
+const backendServerCommunicatorObject = new BackendServerCommunicator();
+const createTemplateObject = new CreateTemplate();
 
 export default {
   data: function () {
@@ -58,6 +61,14 @@ export default {
     };
   },
   computed: {
+    templatesName: {
+      get: function () {
+        return createTemplateObject.templatesName;
+      },
+      set: function (templatesName: string[]) {
+        createTemplateObject.templatesName = templatesName;
+      },
+    },
     chosenTemplateName: {
       get: function (): string {
         return createTemplateObject.chosenTemplateName;
@@ -82,6 +93,15 @@ export default {
         createTemplateObject.dagFile = dagFile;
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // The object choosenConfigFileObject wouldn't update, when the parameters are
+    // initialized in data
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(createTemplateObject);
+    createTemplateObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
   },
 };
 </script>
