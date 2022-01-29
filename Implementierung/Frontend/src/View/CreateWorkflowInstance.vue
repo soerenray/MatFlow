@@ -67,13 +67,12 @@ export default {
     };
   },
   computed: {
-    selectedTemplateName: {
-      get: function (): string {
-        return createWorkflowInstanceObject.selectedTemplateName;
+    templatesName: {
+      get: function (): string[] {
+        return createWorkflowInstanceObject.templatesName;
       },
-      set: function (selectedTemplateName: string) {
-        createWorkflowInstanceObject.selectedTemplateName =
-          selectedTemplateName;
+      set: function (templatesName: string[]) {
+        createWorkflowInstanceObject.templatesName = templatesName;
       },
     },
     configFolder: {
@@ -91,6 +90,24 @@ export default {
       set: function (workflowInstanceFolder: File) {
         createWorkflowInstanceObject.workflowInstanceFolder =
           workflowInstanceFolder;
+      },
+    },
+    selectedTemplateName: {
+      get: function (): string {
+        return createWorkflowInstanceObject.selectedTemplateName;
+      },
+      set: function (selectedTemplateName: string) {
+        createWorkflowInstanceObject.selectedTemplateName =
+          selectedTemplateName;
+      },
+    },
+    workflowInstanceName: {
+      get: function (): string {
+        return createWorkflowInstanceObject.workflowInstanceName;
+      },
+      set: function (worklfowInstanceName: string) {
+        createWorkflowInstanceObject.workflowInstanceName =
+          worklfowInstanceName;
       },
     },
   },
