@@ -14,6 +14,7 @@ class BackendServerCommunicator {
     public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
     public pushCreateTemplate(template: Template): void { return }
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
+    public pushExistingWorkflowInstance(workflowInstanceAsZip: File): void { return }
     public pullTemplatesName(): string[] { return templateNames }
     public pullTemplateWithName(templateName: string): Template { return }
     public pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
