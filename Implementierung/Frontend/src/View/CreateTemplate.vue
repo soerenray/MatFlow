@@ -71,6 +71,8 @@ export default {
     resetView() {
       backendServerCommunicatorObject.pullTemplatesName();
       createTemplateObject.setObjectToDefaultValues();
+      createTemplateObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(
