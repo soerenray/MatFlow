@@ -12,7 +12,7 @@
           </v-col>
           <v-col>
             <v-select
-              :items="templates"
+              :items="templatesName"
               v-model="chosenTemplateName"
               label="use predefined template"
             >
@@ -57,7 +57,6 @@ const createTemplateObject = new CreateTemplate();
 export default {
   data: function () {
     return {
-      templates: createTemplateObject.templatesName,
     };
   },
   computed: {
