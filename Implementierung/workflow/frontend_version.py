@@ -1,4 +1,7 @@
 from typing import List
+
+from Implementierung.FrontendAPI import keys
+from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 from Implementierung.workflow.version import Version
 from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.parameter_change import ParameterChange
@@ -41,3 +44,16 @@ class FrontendVersion(Version):
             changes (list[ParameterChange]): The new list of changes
         """
         self.__changes = changes
+
+    def encode_version(self) -> dict:
+        """
+        encodes all version attributes and dumps them into one json object
+
+        Returns:
+            String: json-dumped object containing encoded versions
+        """
+        out_dict: dict = dict()
+        out_dict.update({keys.version_note_name: self.get_note()})
+        out_dict.update({keys.version_number_name: self.get_version_number()})
+        out_dict.update({keys.frontend_versions_changes: self.get_changes()})
+        return out_dict

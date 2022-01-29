@@ -110,7 +110,7 @@ class Template:
         dag_file.save(file_path)
         return Path(file_path)
 
-    def encode_template(self) -> str:
+    def encode_template(self) -> dict:
         """
         encodes all template attributes and dumps them into json object
 
@@ -123,4 +123,4 @@ class Template:
         # path to file
         file_path: Path = self.get_dag_definition_file()
         out_dict.update(utilities.encode_file(file_path, keys.dag_definition_name))
-        return ExceptionHandler.success(out_dict)
+        return out_dict

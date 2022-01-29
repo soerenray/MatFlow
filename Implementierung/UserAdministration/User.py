@@ -78,7 +78,7 @@ class User:
         user: User = User(user_name, status, privilege, password)
         return user
 
-    def encode_user(self) -> str:
+    def encode_user(self) -> dict:
         """
         encodes all user attributes and dumps them into json object
 
@@ -86,7 +86,7 @@ class User:
             String: json-dumped object containing encoded user
         """
 
-        out_dict: dict = {}
+        out_dict: dict = dict()
         out_dict.update({keys.user_name: self.getUsername(), keys.user_status_name: self.getStatus(),
                          keys.user_privilege_name: self.getPrivilege()})
-        return ExceptionHandler.success(out_dict)
+        return out_dict
