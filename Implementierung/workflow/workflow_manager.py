@@ -62,7 +62,7 @@ class WorkflowManager:
 
         """
         # make sure the template name wasn't used before
-        if listdir(self.__template_base_directory).__contains__(template.get_name() + ".py"):
+        if template.get_name() + ".py" in listdir(self.__template_base_directory):
             raise DoubleTemplateNameException("")
 
         # now safe the new dag definition file in the template folder
@@ -86,30 +86,35 @@ class WorkflowManager:
 
         # check if the workflow_instance_name is already used
         existing_names: List[str] = listdir(self.__versions_base_directory)
-        if template_name in existing_names:  # otherwise, the name is a valid identifier
+        if workflow_instance_name in existing_names:  # otherwise, the name is a valid identifier
             raise DoubleWorkflowInstanceNameException("")
 
         # try to create a WorkflowInstance object
         workflow_instance: WorkflowInstance = WorkflowInstance(
             workflow_instance_name, template.get_dag_definition_file(), config_files)  # maybe EmptyDagFolderException
 
-        # now we create a new directory for the instance and the initial version
+        # now we create a new directory for the instance
         instance_path: Path = self.__versions_base_directory / workflow_instance_name
         dag_path: Path = instance_path / (workflow_instance_name + ".py")
-        version_path: Path = instance_path / "1"
         copy(template.get_dag_definition_file(), dag_path)  # copy dag definition file
-        self.__copy_whole_dir(config_files, version_path)  # copy config-directory
 
-        # create version "1" and add it to the database
-        initial_version: DatabaseVersion = DatabaseVersion(
-            VersionNumber("1"), self.__initial_version_note, version_path)
-        # those calls might be changed TODO
-        self.__workflow_data.create_Workflow_Instance_From_Template(template_name, workflow_instance_name, version_path)
-        self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(workflow_instance_name, initial_version, "")
+        # under that dir we create another called "current_conf" that contains all files for the execution
+        # the version of the file always matches the current version of the wf instance
+        current_conf_path: Path = instance_path / "current_conf"
+        self.__copy_files_with_extension(config_files, current_conf_path, "")
+
+        # also, one dir for the initial version that contains only the '.conf'-files
+        version_path: Path = instance_path / "1"
+        self.__copy_files_with_extension(config_files, version_path, ".conf")
+
+        # update the conf-dir-path of the workflow instance to the permanent location
+        # + make a request to the database to add the new instance
+        workflow_instance.set_config_folder(current_conf_path)
+        self.__workflow_data.create_wf_instance(workflow_instance, version_path)
 
         # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
         workflow_instance.activate_instance(self.__airflow_dag_folder)
-        # -> write "activate_instance" in WorkflowInstance
+        # TODO -> write "activate_instance" in WorkflowInstance
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph
@@ -306,13 +311,13 @@ class WorkflowManager:
     # private methods
 
     @staticmethod
-    def __copy_whole_dir(src: Path, dst: Path):
-        # this method shall copy all contents in src and copy them to the dst directory.
+    def __copy_files_with_extension(src: Path, dst: Path, extension: str):
+        # this method shall copy all files under src (we assume the dir is flat) with the given file extension
         # before the call the dst directory itself must not exist
-        try:
-            copytree(src, dst)  # recursive copying of subdirectories
-        except OSError as exc:
-            if exc.errno in (errno.ENOTDIR, errno.EINVAL):  # the method raises error if src is a file
-                copy(src, dst)  # then we transfer that file with copy
-            else:
-                raise
+        # if extension == "" files with any extensions are copied
+
+        # create dst directory
+        os.mkdir(dst)
+        for file in os.listdir(src):
+            if extension == "" or os.path.splitext(file)[1] == extension:
+                copy(src/file, dst)

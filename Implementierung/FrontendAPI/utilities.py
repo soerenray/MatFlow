@@ -1,7 +1,7 @@
 import os
 from base64 import b64encode
 from pathlib import Path
-import keys
+from Implementierung.FrontendAPI import keys
 
 
 parent_path: Path = Path(os.path.dirname(__file__))

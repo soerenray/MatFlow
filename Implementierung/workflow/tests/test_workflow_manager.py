@@ -4,6 +4,8 @@ import shutil
 from pathlib import Path
 from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
+from Implementierung.workflow.template import Template
+from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException
 
 
 class TestWorkflowManager(TestCase):
@@ -14,9 +16,43 @@ class TestWorkflowManager(TestCase):
 
 
 class TestCreateTemplate(TestWorkflowManager):
-    # for this method I don't even need a mock
+    def setUp(self):
+        # clear template folder
+        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
+        self.dag_file_t1: Path = self.base_path / "tpl1.py"
+        self.t1: Template = Template("t1", self.dag_file_t1)
+
+    # create valid template
+    def test_create_valid_template(self):
+        # Act
+        self.w_man.create_template(self.t1)
+
+        # Assert
+        # check if the file was inserted at the right place
+        expected_path: Path = self.w_man._WorkflowManager__template_base_directory / "t1.py"
+        self.assertTrue(os.path.isfile(expected_path))
+        # check if the content of the file was successfully copied
+        self.assertTrue(filecmp.cmp(self.dag_file_t1, expected_path))
+
     # test double template exception
-    pass
+    def test_create_template_twice(self):
+        # Act + Assert
+        self.w_man.create_template(self.t1)
+        self.assertRaises(DoubleTemplateNameException, self.w_man.create_template, self.t1)
+
+    # test creating two differently named templates
+    def test_create_two_templates(self):
+        # Arrange
+        t2: Template = Template("t2", self.dag_file_t1)
+
+        # Act
+        self.w_man.create_template(self.t1)
+        self.w_man.create_template(t2)
+
+        # Assert
+        # check if the expected files exist
+        self.assertTrue("t1.py" in os.listdir(self.w_man._WorkflowManager__template_base_directory))
+        self.assertTrue("t2.py" in os.listdir(self.w_man._WorkflowManager__template_base_directory))
 
 
 class TestCreateNewVersion(TestWorkflowManager):
@@ -27,8 +63,8 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
     pass
 
 
-class TestCopyWholeDir(TestWorkflowManager):
-    base_path_copy_whole_dir: Path = Path("test_files/workflow_manager/copyWholeDir")
+class TestCopyFilesWithExtension(TestWorkflowManager):
+    base_path_copy_whole_dir: Path = Path("test_files/workflow_manager/copyFilesWithExtension")
     dst_dir: Path = base_path_copy_whole_dir / "dst"
 
     def setUp(self):
@@ -92,27 +128,39 @@ class TestCopyWholeDir(TestWorkflowManager):
         src_path: Path = self.base_path_copy_whole_dir / "src1"
 
         # Act
-        self.w_man._WorkflowManager__copy_whole_dir(src_path, self.dst_dir)
+        self.w_man._WorkflowManager__copy_files_with_extension(src_path, self.dst_dir, "")
 
         # Assert
         self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
 
-    def test_dir_with_subdir(self):
+# this is no longer ment to work, the src directory has to be flat
+#    def test_dir_with_subdir(self):
+#        # Arrange
+#        src_path: Path = self.base_path_copy_whole_dir / "src2"
+#
+#        # Act
+#        self.w_man._WorkflowManager__copy_files_with_extension(src_path, self.dst_dir, "")
+#
+#        # Assert
+#        self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
+
+    def test_dir_with_files(self):
         # Arrange
-        src_path: Path = self.base_path_copy_whole_dir / "src2"
+        src_path: Path = self.base_path_copy_whole_dir / "src3"
+        src_extension_filtered: Path = self.base_path_copy_whole_dir / "src3_extension"
 
         # Act
-        self.w_man._WorkflowManager__copy_whole_dir(src_path, self.dst_dir)
+        self.w_man._WorkflowManager__copy_files_with_extension(src_path, self.dst_dir, ".conf")
 
         # Assert
-        self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
+        self.assertTrue(are_dir_trees_equal(src_extension_filtered, self.dst_dir))
 
-    def test_dir_with_subdir_and_files(self):
+    def test_copy_any_files(self):
         # Arrange
         src_path: Path = self.base_path_copy_whole_dir / "src3"
 
         # Act
-        self.w_man._WorkflowManager__copy_whole_dir(src_path, self.dst_dir)
+        self.w_man._WorkflowManager__copy_files_with_extension(src_path, self.dst_dir, "")
 
         # Assert
         self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
