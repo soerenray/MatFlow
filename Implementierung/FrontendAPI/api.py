@@ -4,14 +4,14 @@ from typing import List
 from flask import Flask, request
 from waitress import serve
 from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
+from Implementierung.FrontendAPI import utilities
 from Implementierung.UserAdministration.UserController import UserController
 from Implementierung.UserAdministration.User import User
 from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
+from Implementierung.workflow.version import Version
 from Implementierung.workflow.workflow_manager import WorkflowManager
-from .JSONToPython import JSONToPython
-from .PythonToJSON import PythonToJSON
 from .ExceptionHandler import ExceptionHandler
 from Implementierung.HardwareAdministration.Hardware_Controller import Hardware_Controller
 from Implementierung.HardwareAdministration.Server import Server
@@ -35,9 +35,11 @@ class FrontendAPI:
     # Due to the fact that api method calls with parameters are not possible
     # all parameters are fetched via the flask request object (as suggested by docs)
     __instance = None
+    # we only have one server in system, and it needs to be pre-registered
+    server: Server = Server()
     workflow_manager: WorkflowManager = WorkflowManager.get_instance()
     user_controller: UserController = UserController()
-    hardware_controller: Hardware_Controller = Hardware_Controller()
+    hardware_controller: Hardware_Controller = Hardware_Controller(server)
 
     def __init__(self):
         # all "instantiations" should be called over get_frontend_api
@@ -78,8 +80,8 @@ class FrontendAPI:
         Returns:
             String: json-dumped object containing the above described information
         """
-        encoded_server: str = PythonToJSON.encode_server(FrontendAPI.hardware_controller.getServer())
-        return encoded_server
+        encoded_server: dict = Server.encode_server(FrontendAPI.hardware_controller.getServer())
+        return ExceptionHandler.success(encoded_server)
 
     @staticmethod
     @app.route('/set_server_details', methods=['PUT'])
@@ -92,7 +94,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            server: Server = JSONToPython.extract_server(request.get_json())
+            server: Server = Server.extract_server(request.get_json())
             FrontendAPI.hardware_controller.writeServer(server)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -108,7 +110,8 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
-        return PythonToJSON.encode_users(FrontendAPI.user_controller.getAllUsersAndDetails())
+        # TODO Rückgabe mit Nils abchecken
+        return ExceptionHandler.success(FrontendAPI.user_controller.getAllUsersAndDetails())
 
     @staticmethod
     @app.route('/set_user_details', methods=['PUT'])
@@ -120,7 +123,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
 
-        user: User = JSONToPython.extract_user(request)
+        user: User = User.extract_user(request)
         user.setStatus(request.args.get(keys.user_status_name))
         user.setPrivilege(request.args.get(keys.user_privilege_name))
         try:
@@ -139,7 +142,7 @@ class FrontendAPI:
         Returns:
             String: response indicating successful request
         """
-        user: User = JSONToPython.extract_user(request)
+        user: User = User.extract_user(request)
         try:
             FrontendAPI.user_controller.deleteUser(user)
         except MatFlowException as exception:
@@ -156,9 +159,12 @@ class FrontendAPI:
         Returns:
             String: json-dumped object which contains all encoded versions
         """
+        out_dict = dict()
         versions: List[FrontendVersion] = FrontendAPI.workflow_manager.get_versions_from_workflow_instance(
             request.args.get(keys.workflow_instance_name))
-        return PythonToJSON.encode_versions(versions)
+        for version in versions:
+            out_dict.update(version.encode_version())
+        return ExceptionHandler.success(out_dict)
 
     @staticmethod
     @app.route('/replace_wf_instance_active_version', methods=['PUT'])
@@ -190,6 +196,7 @@ class FrontendAPI:
         """
         wf_instance_name: str = request.args.get(keys.workflow_instance_name)
         version_note: str = request.args.get(keys.version_note_name)
+        # TODO Hier jeweils Listen
         configs_path: Path = Path(JSONToPython.extract_configs(request))
         try:
             FrontendAPI.workflow_manager.create_new_version_of_workflow_instance(wf_instance_name,
@@ -212,7 +219,7 @@ class FrontendAPI:
         file: ReducedConfigFile = \
             FrontendAPI.workflow_manager.get_key_value_pairs_from_config_file(
                 request.args.get(keys.workflow_instance_name), request.args.get(keys.config_file_name))
-        return PythonToJSON.encode_config(file)
+        return ExceptionHandler.success(file.encode_config())
 
     @staticmethod
     @app.route('/create_workflow_instance', methods=['POST'])
@@ -225,6 +232,7 @@ class FrontendAPI:
         """
         wf_instance_name: str = request.args.get(keys.workflow_instance_name)
         template_name: str = request.args.get(keys.template_name)
+        # TODO hier auch Schleife
         files: Path = Path(JSONToPython.extract_configs(request))
         try:
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(template_name, wf_instance_name, files)
@@ -243,6 +251,7 @@ class FrontendAPI:
         Returns:
             String: json-dumped object containing all workflow instance names and config file names
         """
+        # TODO andere Konvention
         wf_instances: List[str] = FrontendAPI.workflow_manager.get_names_of_workflows_and_config_files()[0]
         configs: List[str] = FrontendAPI.workflow_manager.get_names_of_workflows_and_config_files()[1]
         out_dict = {keys.workflow_instance_names: wf_instances, keys.config_file_names: configs}
@@ -258,7 +267,8 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            FrontendAPI.user_controller.login(request.args.get(keys.user_name), request.args.get(keys.password_name))
+            FrontendAPI.user_controller.loginUser(request.args.get(keys.user_name),
+                                                  request.args.get(keys.password_name))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
@@ -274,9 +284,9 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            FrontendAPI.user_controller.createUser(userName=request.args.get(keys.user_name),
-                                                   password=request.args.get(keys.password_name),
-                                                   repeatPassword=request.args.get(keys.repeat_password_name))
+            FrontendAPI.user_controller.createUser(request.args.get(keys.user_name),
+                                                   request.args.get(keys.password_name),
+                                                   request.args.get(keys.repeat_password_name))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
@@ -292,7 +302,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            template: Template = JSONToPython.extract_template(request)
+            template: Template = Template.extract_template(request)
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -325,7 +335,7 @@ class FrontendAPI:
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
-            return PythonToJSON.encode_template(template)
+            return ExceptionHandler.success(Template.encode_template(template))
 
     @staticmethod
     @app.route('/get_graph_for_temporary_template', methods=['GET'])
@@ -337,13 +347,13 @@ class FrontendAPI:
             File: picture of dag in .png format
         """
         try:
-            contemporary_template: Template = JSONToPython.extract_template(request)
+            contemporary_template: Template = Template.extract_template(request)
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = FrontendAPI.workflow_manager.get_dag_representation_from_template(contemporary_template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
-            return ExceptionHandler.success(PythonToJSON.encode_file(file_path, keys.dag_picture_name))
+            return ExceptionHandler.success(utilities.encode_file(file_path, keys.dag_picture_name))
 
 
 ###################################

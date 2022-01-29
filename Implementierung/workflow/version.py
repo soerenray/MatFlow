@@ -1,5 +1,3 @@
-from Implementierung.FrontendAPI import keys
-from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 from Implementierung.workflow.version_number import VersionNumber
 
 
@@ -57,15 +55,3 @@ class Version:
             note (str): The new note
         """
         self.__note = note
-
-    def encode_version(self) -> str:
-        """
-        encodes all version attributes and dumps them into one json object
-
-        Returns:
-            String: json-dumped object containing encoded versions
-        """
-        out_dict: dict = dict()
-        out_dict.update({keys.version_note_name: self.get_note()})
-        out_dict.update({keys.version_number_name: self.get_version_number()})
-        return ExceptionHandler.success(out_dict)

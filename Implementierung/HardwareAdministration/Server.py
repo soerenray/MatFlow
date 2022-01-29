@@ -94,7 +94,7 @@ class Server:
         server: Server = Server(name, ip_address, status, container_limit, executing, resources)
         return server
 
-    def encode_server(self) -> str:
+    def encode_server(self) -> dict:
         """
         encodes all server attributes and dumps them into json object
 
@@ -110,6 +110,6 @@ class Server:
         out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
                           keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
                           keys.server_resources_name: resources}
-        return ExceptionHandler.success(out_dict)
+        return out_dict
 
 

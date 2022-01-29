@@ -63,7 +63,7 @@ class ReducedConfigFile:
         """
         self.__key_value_pairs = key_value_pairs
 
-    def encode_config(self) -> str:
+    def encode_config(self) -> dict:
         """
         extracts all reduced_config attributes and dumps them into json object
 
@@ -73,7 +73,7 @@ class ReducedConfigFile:
         out_dict = dict({keys.config_file_name: self.get_file_name()})
         key_value_pairs: List[Tuple[str, str]] = self.get_key_value_pairs()
         out_dict.update({keys.key_value_pairs_name: key_value_pairs})
-        return ExceptionHandler.success(out_dict)
+        return out_dict
 
     @classmethod
     def extract_configs(cls, request_details: request) -> ReducedConfigFile:

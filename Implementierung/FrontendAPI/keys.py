@@ -14,6 +14,7 @@ version_number_name: str = "versionNumber"
 version_note_name: str = "versionNote"
 config_file_name: str = "configFileName"
 versions_name: str = "versions"
+frontend_versions_changes: str = "parameterChanges"
 key_value_pairs_name: str = "keyValuePairs"
 
 workflow_instance_names: str = "workflowInstanceNames"
@@ -46,4 +47,5 @@ dag_save_path: str = "dag_file"
 underscore: str = "_"
 
 temp_in_path: str = os.path.join(utilities.parent_path, temp_in_name)
+
 
