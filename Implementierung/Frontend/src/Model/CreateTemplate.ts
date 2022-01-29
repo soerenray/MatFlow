@@ -83,6 +83,9 @@ class CreateTemplate {
         this._dagFile = dagFile
     }
 
+    /**
+     * set's the default values of the class (the values that will be used, if the constructor is called with no input)
+     */
     public setDefaultValues() {
         this._templatesName = []
         this._chosenTemplateName = ''
