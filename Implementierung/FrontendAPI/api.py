@@ -1,11 +1,11 @@
 from __future__ import annotations
-
 from pathlib import Path
 from typing import List
-
 from flask import Flask, request
 from waitress import serve
 from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
+from Implementierung.UserAdministration.UserController import UserController
+from Implementierung.UserAdministration.User import User
 from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
@@ -13,8 +13,8 @@ from Implementierung.workflow.workflow_manager import WorkflowManager
 from .JSONToPython import JSONToPython
 from .PythonToJSON import PythonToJSON
 from .ExceptionHandler import ExceptionHandler
-from Implementierung.HardwareAdministration import Server, Hardware_Controller
-from Implementierung.UserAdministration import User, UserController
+from Implementierung.HardwareAdministration.Hardware_Controller import Hardware_Controller
+from Implementierung.HardwareAdministration.Server import Server
 import keys
 
 # according to Flask docs this command should be on modular level
@@ -340,7 +340,6 @@ class FrontendAPI:
             contemporary_template: Template = JSONToPython.extract_template(request)
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = FrontendAPI.workflow_manager.get_dag_representation_from_template(contemporary_template)
-            # TODO delete contemporary template
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:

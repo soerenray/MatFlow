@@ -1,3 +1,7 @@
+import os
+from pathlib import Path
+from Implementierung.FrontendAPI import utilities
+
 user_status_name: str = "userStatus"
 user_privilege_name: str = "userPrivilege"
 password_name: str = "password"
@@ -10,7 +14,6 @@ version_number_name: str = "versionNumber"
 version_note_name: str = "versionNote"
 config_file_name: str = "configFileName"
 versions_name: str = "versions"
-parameter_changes_name: str = "parameterChanges"
 key_value_pairs_name: str = "keyValuePairs"
 
 workflow_instance_names: str = "workflowInstanceNames"
@@ -41,4 +44,6 @@ config_save_path: str = "config"
 dag_save_path: str = "dag_file"
 
 underscore: str = "_"
+
+temp_in_path: str = os.path.join(utilities.parent_path, temp_in_name)
 

@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 class DatabaseTable:
     __instance = None
 
@@ -25,8 +26,7 @@ class DatabaseTable:
         port='3306'
     )"""
 
-
-    def get_Database_Connection(self):
+    def get_database_connection(self):
         """Connect to MySQL Database and return connection.
 
         Parameters are set."""
@@ -39,8 +39,6 @@ class DatabaseTable:
             port='3306'
         )
         return db
-
-
 
     def set(self, create):
         """Set new values into tables in database.
@@ -56,7 +54,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_Database_Connection()
+        db = self.get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -74,25 +72,24 @@ class DatabaseTable:
 
         return
 
-
-    def delete(self, remove):
+    def delete(self, remove_query):
         """Delete rows in a table of the database.
 
         Do nothing if nothing fit the deletion query.
 
         Args:
-            remove(str): mysql-query to delete something
+            remove_query(str): mysql-query to delete something
 
         Returns:
             void
 
         """
         # connect to database
-        db = self.get_Database_Connection()
+        db = self.get_database_connection()
         cursor = db.cursor()
 
         try:
-            cursor.execute(remove)
+            cursor.execute(remove_query)
         except mysql.connector.Error as err:
             # handle exception
             print("ERROR")
@@ -103,7 +100,6 @@ class DatabaseTable:
         # disconnect from database
         cursor.close()
         db.close()
-
 
     def modify(self, change):
         """Modify values in database.
@@ -118,7 +114,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_Database_Connection()
+        db = self.get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -134,7 +130,6 @@ class DatabaseTable:
         cursor.close()
         db.close()
 
-
     def get(self, query):
         """Search for value(s) in database.
 
@@ -144,13 +139,12 @@ class DatabaseTable:
             query(str): mysql-query to get value(s)
 
         Returns:
-            str: answer of the database
+            list[str]: answer of the database
 
         """
         # connect to database
-        db = self.get_Database_Connection()
+        db = self.get_database_connection()
         cursor = db.cursor()
-
 
         try:
             cursor.execute(query)
@@ -164,28 +158,59 @@ class DatabaseTable:
         cursor.close()
         db.close()
 
+        print(data)
         return data
 
+    def check_for(self, query) -> bool:
+        """Check if at least one(1) entry already exists for given SELECT-query
 
-    def setup_Database(self):
+        Args:
+            query(str): mysql-query to get check
+
+        Returns:
+            bool: true if existing value >= 1
+
+        """
+        # connect to database
+        db = self.get_database_connection()
+        cursor = db.cursor()
+
+        try:
+            cursor.execute(query)
+        except mysql.connector.Error as err:
+            # handle exception
+            print(err)  # tmp for debugging
+
+        data = False
+        if cursor.fetchone():
+            data = True
+
+        # disconnect from database
+        cursor.close()
+        db.close()
+
+        return data
+
+    def setup_database(self):
         """first setup of tables in the database.
 
         Establish connection to Database with set parameters.
         Read queries from external file "Database_Table_Setup.txt" and execute.
 
         Print error, but don't crash if tables are already up
+
         """
-        #connection to database
-        db = self.get_Database_Connection()
+        # connection to database
+        db = self.get_database_connection()
         cursor = db.cursor()
 
-        #queries outsourced to avoid overly long lines in code
-        databaseSetupFile = open("Database_Table_Setup.txt", 'r')
-        databaseSetup = databaseSetupFile.read().replace("\n", "").split(";")
+        # queries outsourced to avoid overly long lines in code
+        database_setup_file = open("Database_Table_Setup.txt", 'r')
+        database_setup = database_setup_file.read().replace("\n", "").split(";")
 
         # actual queries
 
-        for line in databaseSetup:
+        for line in database_setup:
             if line == "":  # end of file
                 break
 
@@ -196,9 +221,10 @@ class DatabaseTable:
             except mysql.connector.Error as err:
                 print(err)  # tmp for debugging
 
-        #close connection
+        # close connection
         cursor.close()
         db.close()
+
 
 #
 
@@ -206,11 +232,23 @@ def init_tests():
     print("TEST IN DatabaseTable START")
     print("Comment out if not needed/crahses program because no Databaseconnection could be established")
 
-
-    dTable = DatabaseTable()
-    dTable.setup_Database()
-
+    d_table = DatabaseTable.get_instance()
+    d_table.setup_database()
 
     print("TEST IN DatabaseTable END!")
 
-#init_tests()
+
+def remove():
+    """helping function for deleting all tables"""
+    d_table = DatabaseTable.get_instance()
+    db = d_table.get_Database_Connection()
+    cursor = db.cursor()
+    remove_str = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
+                 "WorkflowTemplate", "Server"]
+    for rem in remove_str:
+        print("Delete " + rem)
+        tmp = "DROP TABLE {}".format(rem)
+        cursor.execute(tmp)
+
+# init_tests()
+# remove()
