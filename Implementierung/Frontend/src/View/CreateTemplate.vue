@@ -64,7 +64,6 @@ export default {
       },
       set: function (chosenTemplateName: string) {
         createTemplateObject.chosenTemplateName = chosenTemplateName;
-        console.log(createTemplateObject.chosenTemplateName);
       },
     },
     templateFolder: {
