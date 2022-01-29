@@ -74,7 +74,8 @@ import ChooseConfigFile from "../Model/ChooseConfigFile";
 import ConfigFile from "../Classes/ConfigFile";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-let chooseConfigFileObject = new ChooseConfigFile();
+const backendServerCommunicatorObject = new BackendServerCommunicator()
+const chooseConfigFileObject = new ChooseConfigFile();
 
 export default {
   components: {
@@ -118,14 +119,14 @@ export default {
       return configFile;
     },
     pushUpdatedConfigFilesToBackendServer() {
-      BackendServerCommunicator.pushConfigFilesWithWorkflowInstanceName(
+      backendServerCommunicatorObject.pushConfigFilesWithWorkflowInstanceName(
         this.updatedConfigFiles,
         this.selectedWorkflowInstanceName
       );
     },
     resetChoosenConfigFileObject() {
       chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-        BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName();
+        backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
       this.updatedConfigFiles = [];
       this.chosenConfigFile =
         this.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
@@ -138,7 +139,7 @@ export default {
       workflowInstanceName: string,
       configFileName: string
     ): ConfigFile {
-      return BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+      return backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
         workflowInstanceName,
         configFileName
       );
@@ -159,7 +160,7 @@ export default {
         !this.isConfigFileNameInUpdatedConfigFiles(this.selectedConfigFileName)
       ) {
         this.chosenConfigFile =
-          BackendServerCommunicator.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+          backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName
           );
@@ -231,7 +232,7 @@ export default {
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(chooseConfigFileObject);
     chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-      BackendServerCommunicator.pullWorkflowInstancesNameAndConfigFilesName();
+      backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
   },
 };
 </script>

@@ -46,7 +46,6 @@
 </template>
 
 <script lang='ts'>
-import { version } from "vue/types/umd";
 import Version from "../Classes/Version";
 import VersionControl from "../Model/VersionControl";
 

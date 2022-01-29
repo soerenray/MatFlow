@@ -1,5 +1,3 @@
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
-
 class CreateTemplate {
     private _templatesName: string[]
     private _chosenTemplateName: string
@@ -26,7 +24,6 @@ class CreateTemplate {
     * @returns _templatesName
     */
     public get templatesName(): string[] {
-        this._templatesName = BackendServerCommunicator.pullTemplatesName()
         return this._templatesName
     }
 

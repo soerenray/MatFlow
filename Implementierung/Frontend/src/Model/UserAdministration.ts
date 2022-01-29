@@ -1,5 +1,4 @@
 import User from '../Classes/User'
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 
 class UserAdministration {
     private _tableHeaders: object[]
@@ -39,7 +38,6 @@ class UserAdministration {
     * @returns _users
     */
     public get users(): User[] {
-        this._users = BackendServerCommunicator.pullUsers()
         return this._users
     }
 
