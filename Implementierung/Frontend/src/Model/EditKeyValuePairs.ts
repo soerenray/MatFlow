@@ -1,5 +1,3 @@
-//import KeyValuePair from "../Model/KeyValuePair"
-
 interface KeyValuePair {
     _keyName: string,
     keyValuePairInstance: any,

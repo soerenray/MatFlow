@@ -8,15 +8,15 @@ import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getW
 
 class BackendServerCommunicator {
     public constructor() { }
-    public static login(userName: string, userPassword: string): void { return }
-    public static register(userName: string, userPassword: string): void { return }
-    public static pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
-    public static pushCreateTemplate(template: Template): void { return }
-    public static pushCreateWorkflowInstanceFromTemplate(templateName: string, workflowInstanceName: string, configFolder: File): void { return }
-    public static pullTemplatesName(): string[] { return templateNames }
-    public static pullTemplateWithName(templateName: string): Template { return }
-    public static pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
-    public static pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
+    public login(userName: string, userPassword: string): void { return }
+    public register(userName: string, userPassword: string): void { return }
+    public  pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
+    public  pushCreateTemplate(template: Template): void { return }
+    public  pushCreateWorkflowInstanceFromTemplate(templateName: string, workflowInstanceName: string, configFolder: File): void { return }
+    public  pullTemplatesName(): string[] { return templateNames }
+    public  pullTemplateWithName(templateName: string): Template { return }
+    public  pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
+    public  pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
         if (workflowInstanceName === "workflowInstance1") {
             if (configFileName === "conf1") {
                 return getWfConf('wf1conf1')
@@ -32,7 +32,7 @@ class BackendServerCommunicator {
         }
         return new ConfigFile()
     }
-    public static pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
+    public  pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
         if (workflowInstanceName === "workflowInstance1") {
             if (configFiles[0]) {
                 setWfConf('wf1' + configFiles[0].configFileName, configFiles[0])
@@ -52,13 +52,13 @@ class BackendServerCommunicator {
             }
         }
     }
-    public static pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
-    public static pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
-    public static pullUsers(): User[] { return users }
-    public static pushUser(user: User): void { return }
-    public static pushDeleteUser(user: User): void { return }
-    public static pullServers(): Server[] { return }
-    public static pushServer(server: Server): void { return }
+    public  pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
+    public  pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
+    public  pullUsers(): User[] { return users }
+    public  pushUser(user: User): void { return }
+    public  pushDeleteUser(user: User): void { return }
+    public  pullServers(): Server[] { return }
+    public  pushServer(server: Server): void { return }
 }
 
 export default BackendServerCommunicator

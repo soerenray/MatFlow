@@ -1,5 +1,3 @@
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
-
 class CreateWorkflowInstance {
     private _templatesName: string[]
     private _configFolder: File
@@ -29,7 +27,6 @@ class CreateWorkflowInstance {
     * @returns _templatesName
     */
     public get templatesName(): string[] {
-        this._templatesName = BackendServerCommunicator.pullTemplatesName()
         return this._templatesName
     }
 

@@ -1,5 +1,4 @@
 import Version from '../Classes/Version'
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 
 class VersionControl {
     private _tableHeaders: object[]
@@ -34,7 +33,6 @@ class VersionControl {
     * @returns _versions
     */
     public get versions(): Version[] {
-        this._versions = BackendServerCommunicator.pullVersionsWithWorkflowInstanceName(this._workflowInstanceName)
         return this._versions
     }
 
@@ -51,7 +49,6 @@ class VersionControl {
     * @returns _workflowInstancesName
     */
     public get workflowInstancesName(): string[] {
-        this._workflowInstancesName = BackendServerCommunicator.pullWorkflowInstancesName()
         return this._workflowInstancesName
     }
 
