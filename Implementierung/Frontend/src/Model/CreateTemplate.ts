@@ -1,4 +1,5 @@
 class CreateTemplate {
+    private _newTemplateName: string
     private _templatesName: string[]
     private _chosenTemplateName: string
     private _templateFolder: File
@@ -6,12 +7,14 @@ class CreateTemplate {
 
     /**
     *
+    * @param newTemplateName The newTemplateName
     * @param templatesName The templatesName
     * @param chosenTemplateName The chosenTemplateName
     * @param templateFolder The templateFolder
     * @param dagFile The dagFile
     */
-    constructor(templatesName: string[] = [], chosenTemplateName: string = '', templateFolder: File = new File([], "emptyFile", { type: 'application/zip' }), dagFile: File = new File([], "emptyFile", { type: 'application/zip' }),) {
+    constructor(newTemplateName: string = '', templatesName: string[] = [], chosenTemplateName: string = '', templateFolder: File = new File([], "emptyFile", { type: 'application/zip' }), dagFile: File = new File([], "emptyFile", { type: 'application/zip' }),) {
+        this._newTemplateName = newTemplateName
         this._templatesName = templatesName
         this._chosenTemplateName = chosenTemplateName
         this._templateFolder = templateFolder
@@ -19,6 +22,14 @@ class CreateTemplate {
     }
 
 
+    /**
+    * Gets the newTemplateName
+    * @returns _newTemplateName
+    */
+     public get newTemplateName(): string {
+        return this._newTemplateName
+    }
+    
     /**
     * Gets the templatesName
     * @returns _templatesName
@@ -49,6 +60,14 @@ class CreateTemplate {
     */
     public get dagFile(): File {
         return this._dagFile
+    }
+
+    /**
+    * Sets the value of _newTemplateName
+    * @param newTemplateName The new value of _newTemplateName
+    */
+     public set newTemplateName(newTemplateName: string) {
+        this._newTemplateName = newTemplateName
     }
 
     /**

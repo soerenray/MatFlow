@@ -7,7 +7,7 @@
           <v-col>
             <v-text-field
               label="Name of the template"
-              v-model="chosenTemplateName"
+              v-model="templatesName"
               hide-details="auto"
             ></v-text-field>
           </v-col>
