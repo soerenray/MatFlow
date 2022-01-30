@@ -1,7 +1,3 @@
-import os
-from pathlib import Path
-from Implementierung.FrontendAPI import utilities
-
 user_status_name: str = "userStatus"
 user_privilege_name: str = "userPrivilege"
 password_name: str = "password"
@@ -49,7 +45,5 @@ config_save_path: str = "config"
 dag_save_path: str = "dag_file"
 
 underscore: str = "_"
-
-temp_in_path: str = os.path.join(utilities.parent_path, temp_in_name)
 
 

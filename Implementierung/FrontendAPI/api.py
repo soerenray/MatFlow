@@ -17,7 +17,7 @@ from Implementierung.workflow.workflow_manager import WorkflowManager
 from .ExceptionHandler import ExceptionHandler
 from Implementierung.HardwareAdministration.Hardware_Controller import Hardware_Controller
 from Implementierung.HardwareAdministration.Server import Server
-import keys
+import Implementierung.FrontendAPI.keys
 
 # according to Flask docs this command should be on modular level
 app = Flask('FrontendAPI')
