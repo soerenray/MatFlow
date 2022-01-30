@@ -160,7 +160,6 @@ class DatabaseTable:
         cursor.close()
         db.close()
 
-        print(data)
         return data
 
     def check_for(self, query: str) -> bool:
@@ -247,7 +246,7 @@ def remove(tables):
     cursor = db.cursor()
 
     for rem in tables:
-        print("Delete " + rem)
+        print("Delete Table" + rem)
         tmp = "DROP TABLE {}".format(rem)
         cursor.execute(tmp)
 
@@ -268,5 +267,5 @@ table_names = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Versio
                "WorkflowTemplate", "Server"]
 # init_tests()
 # clear_tables(table_names)
-# remove(tables)
+# remove(table_names)
 

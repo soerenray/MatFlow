@@ -5,7 +5,7 @@ from Implementierung.HardwareAdministration.Server import Server
 
 class ServerData:
     __instance = None
-    databaseTable = DatabaseTable.get_instance()
+    __databaseTable = DatabaseTable.get_instance()
 
     @staticmethod
     def get_instance():
@@ -37,7 +37,7 @@ class ServerData:
         # insert values
         query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_address, name)
         # execute
-        self.databaseTable.set(query)
+        self.__databaseTable.set(query)
         return
 
     def get_server(self) -> str:
@@ -53,7 +53,7 @@ class ServerData:
             string[]: 2-element list with format [<IP>,<Name>]
         """
         query = "SELECT * FROM Server;"  # get all entries
-        data = self.databaseTable.get(query)
+        data = self.__databaseTable.get(query)
         if not data:
             # throw exception no entry?
             return data
