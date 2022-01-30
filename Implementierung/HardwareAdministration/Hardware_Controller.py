@@ -1,5 +1,5 @@
 from operator import truediv
-from Server import Server
+from Implementierung.HardwareAdministration.Server import Server
 
 
 class Hardware_Controller:
@@ -8,6 +8,9 @@ class Hardware_Controller:
 # Constructor
     def __init__(self, Server: Server):
         self.Server = Server
+
+    def __init__(self):
+        self.Server = None
 
 # Methods
 
@@ -35,7 +38,7 @@ class Hardware_Controller:
 
     # method that gets a Server and sets the Servers bool "isSelectedForExecution"
     # to True
-    def selectServer(Server)
+    def selectServer(Server):
         Server.isSelectedForExecution = True
         # stuff that happens
         #

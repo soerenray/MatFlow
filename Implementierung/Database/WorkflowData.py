@@ -239,4 +239,5 @@ def class_debugging():
     print("TEST IN WorkflowData END!")
 
 
-class_debugging()
+if __name__ == '__main__':
+    class_debugging()

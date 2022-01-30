@@ -1,10 +1,11 @@
 import os
 from base64 import b64encode, b64decode
 from pathlib import Path
-import keys
+from Implementierung.FrontendAPI import keys
 
 
 parent_path: Path = Path(os.path.dirname(__file__))
+temp_in_path: str = os.path.join(parent_path, keys.temp_in_name)
 
 
 def create_dir(path: str) -> str:
