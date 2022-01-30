@@ -1,8 +1,10 @@
+from Implementierung.ExceptionPackage import MatFlowException
 from Implementierung.Database.DatabaseTable import DatabaseTable
 from Implementierung.workflow.workflow_instance import WorkflowInstance
 from Implementierung.workflow.database_version import DatabaseVersion
 from pathlib import Path
 from typing import Dict, List
+import re
 
 
 class WorkflowData:
@@ -22,7 +24,6 @@ class WorkflowData:
             WorkflowData.__instance = self
 
     def create_wf_instance(self, wf_in: WorkflowInstance, conf_dir: Path):
-        # TODO replace values to
         """Create a new instance of a workflow by using the dag-File of a Template with the Version set to 1.
 
         Check for duplicate workflow, only then create new entry. Throw error if workflow name is already taken.
@@ -50,11 +51,9 @@ class WorkflowData:
         # check if workflow already exists
         workflow_exists_query = "SELECT name from Workflow WHERE name = '{}'".format(wf_name)
 
-        # TODO return exception
-        # and return if workflow name already exists
+        # raise exception if workflow name already exists
         if self.__databaseTable.check_for(workflow_exists_query):
-            print("workflow already exists")
-            return
+            raise MatFlowException.InternalException("ERROR: workflow " + wf_name + " already exists")
 
         # create workflow entry
         workflow_query = "INSERT INTO Workflow (name, dag) VALUES ('{}', '{}')".format(wf_name, dag_file)
@@ -66,9 +65,9 @@ class WorkflowData:
 
         # get key of version number
         get_version_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(wf_name, "1")
-        number = self.__databaseTable.get(get_version_key_query)
-        # number is ["(x,)"] and has to be made into x alone (x <= int)
-        number = str(number[0]).replace('(', "").replace(')', "").replace(",", "")
+        number = self.__databaseTable.get_one(get_version_key_query)
+        # number is "(x,)" and has to be made into x alone (x <= int)
+        number = re.sub('[(),]', '', str(number))
 
         # create all file entries for non-conf-files
         folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES ('{}', '{}')"
@@ -85,12 +84,15 @@ class WorkflowData:
 
             # get index of new entry; format into usable index
             # all names are unique in a workflow folder
-            file_key = self.__databaseTable.get(conffile_get_key_query.format(file_path))
-            file_key = str(file_key[0]).replace('(', "").replace(')', "").replace(",", "")
+            file_key = self.__databaseTable.get_one(conffile_get_key_query.format(file_path))
+            file_key = re.sub('[(),]', '', str(file_key))
 
             # injection into VersionFile
             filename = Path(file_path).name
             self.__databaseTable.set(versionfile_set_query.format(number, filename, file_key))
+
+        # set active
+        self.set_active_version_through_number(wf_name, "1")
 
         return
 
@@ -107,7 +109,7 @@ class WorkflowData:
         workflow_dict: Dict[str, List[Path]] = {}
         # get all existing files with corresponding workflows
         query = "SELECT v.wfName, vf.filename FROM Version v INNER JOIN VersionFile vf ON vf.versionID = v.ID;"
-        raw_data = self.__databaseTable.get(query)
+        raw_data = self.__databaseTable.get_multiple(query)
         print("start dictionary print")
         print(raw_data)
         # build dictionary
@@ -116,10 +118,10 @@ class WorkflowData:
                 workflow_dict[name] = [Path(file_path)]
             else:
                 workflow_dict[name].append(Path(file_path))
-            print("key: " + name + "; value: " + str(file_path))
 
         return workflow_dict
 
+    # TODO Implementierung
     def create_new_version_of_workflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
         """Create a new Version of an existing Workflow with changed config Files.
 
@@ -135,7 +137,8 @@ class WorkflowData:
 
         """
 
-    def get_config_file_from_workflow_instance(self, wf_name: str, conf_name: str, version: str):
+    # TODO Implementierung
+    def get_config_file_from_workflow_instance(self, wf_name: str, conf_name: str, version: str) -> Path:
         """Return single config file from a Workflow.
 
         Extended description of function.
@@ -146,11 +149,12 @@ class WorkflowData:
             version(str): version identifier
 
         Returns:
-            File: searched conf File
+            Path: searched conf File
 
         """
 
-    def get_config_file_from_active_workflow_instance(self, wf_name: str, conf_name: str):
+    # TODO Implementierung
+    def get_config_file_from_active_workflow_instance(self, wf_name: str, conf_name: str) -> Path:
         """Return single config file from active version of a Workflow.
 
         Extended description of function.
@@ -160,12 +164,12 @@ class WorkflowData:
             conf_name(str): name of config file
 
         Returns:
-            File: searched conf File
+            Path: searched conf File
 
         """
 
     # TODO Aufwendig
-    def get_database_versions_of_workflow_instance(self, wf_name: str):
+    def get_database_versions_of_workflow_instance(self, wf_name: str) -> List[DatabaseVersion]:
         """Return all DatabaseVersions of a Workflow.
 
         Extended description of function.
@@ -179,9 +183,8 @@ class WorkflowData:
         """
 
     def set_active_version_through_number(self, wf_name: str, version: str):
-        """Set the active version of a workflow.
-
-        Extended description of function.
+        """Set the active version of a workflow in ActiveVersion table.
+        Can insert new workflow + version into table
 
         Args:
             wf_name(str): name of workflow
@@ -191,20 +194,50 @@ class WorkflowData:
             void
 
         """
+        # check for valid wf_name and version
+        check_query = "SELECT * FROM Version WHERE wfName='{}' AND version='{}'"
+        check_query = check_query.format(wf_name, version)
+        if not self.__databaseTable.check_for(check_query):
+            raise MatFlowException.InternalException("ERROR: Workflow '" + wf_name + "'/Version '" + version +
+                                                     "' does not exist")
 
-    def get_active_version_of_workflow_instance(self, wf_name: str):
-        """Return Workflow set as active in Database.
+        # update ActiveVersion entry
+        try:
+            update_query = "UPDATE ActiveVersion SET version = '{}' WHERE wfName = '{}"
+            update_query = update_query.format(version, wf_name)
+            self.__databaseTable.modify(update_query)
+        except MatFlowException.InternalException as err:
+            try:
+                # chance that workflow is only just created and has no valid entry in ActiveVersion
+                set_query = "INSERT INTO ActiveVersion (wfName, version) VALUES ('{}', '{}')"
+                set_query = set_query.format(wf_name, version)
+                self.__databaseTable.set(set_query)
+            except MatFlowException.InternalException as err:
+                # updating and inserting failed
+                raise MatFlowException.InternalException("ERROR: Can neither set or update active Version.\n" +
+                                                         "MySQL ERROR:" + err.message)
+        return
 
-        Extended description of function.
+    def get_active_version_of_workflow_instance(self, wf_name: str) -> str:
+        """Return Version of Workflow set as active.
 
         Args:
             wf_name(str): name of workflow
 
         Returns:
-            Workflow: Workflow object
+            str: active version identifier
 
         """
+        get_query = "SELECT version FROM ActiveVersion WHERE wfName = '{}'"
+        get_query = get_query.format(wf_name)
+        try:
+            data = self.__databaseTable.get_one(get_query)
+        except MatFlowException.InternalException as err:
+            raise MatFlowException.InternalException("ERROR: data")
 
+        return data[0]
+
+    # TODO Implementierung
     def get_version_numbers_of_workflow_instance(self, wf_name: str):
         """Return all Versions of a workflow.
 
@@ -225,16 +258,25 @@ def class_debugging():
 
     wf_data = WorkflowData()
     # dummy data
-    test_workflow1 = WorkflowInstance("workflow1", Path("./Testfile1.txt"), Path("."))
-    test_workflow2 = WorkflowInstance("workflow2", Path("./Testfile2.txt"), Path("./../workflow"))
-    wf_data.create_wf_instance(test_workflow1, Path("."))
-    wf_data.create_wf_instance(test_workflow2, Path("./../workflow"))
+    test_workflow1 = WorkflowInstance("workflow3", Path("./Testfile1.txt"), Path("."))
+    test_workflow2 = WorkflowInstance("workflow5", Path("./Testfile2.txt"), Path("./../workflow"))
+    try:
+        wf_data.create_wf_instance(test_workflow1, Path("."))
+    except MatFlowException.InternalException as err:
+        print(err)
+    try:
+        wf_data.create_wf_instance(test_workflow2, Path("./../workflow"))
+    except MatFlowException.InternalException as err:
+        print(err)
 
-    wf_data.get_names_of_workflows_and_config_files()
-
+    dictionary = wf_data.get_names_of_workflows_and_config_files()
+    print(dictionary)
     # retrieve dummy data
     # test = wfData.get_Server()
     # print(test)
+
+    data = wf_data.get_active_version_of_workflow_instance("workflow3")
+    print(data)
 
     print("TEST IN WorkflowData END!")
 
