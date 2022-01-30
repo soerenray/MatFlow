@@ -105,7 +105,7 @@ class WorkflowManager:
             VersionNumber("1"), self.__initial_version_note, version_path)
         # those calls might be changed TODO
         self.__workflow_data.create_Workflow_Instance_From_Template(template_name, workflow_instance_name, version_path)
-        self.__workflow_data.create_new_version_of_worlkflow_instance(workflow_instance_name, initial_version, "")
+        self.__workflow_data.create_new_version_of_workflow_instance(workflow_instance_name, initial_version, "")
 
         # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
         workflow_instance.activate_instance(self.__airflow_dag_folder)
@@ -237,7 +237,7 @@ class WorkflowManager:
 
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
         new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
-        self.__workflow_data.create_new_version_of_worlkflow_instance(
+        self.__workflow_data.create_new_version_of_workflow_instance(
             workflow_instance_name, new_version, current_version_number.get_number())
 
     def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:

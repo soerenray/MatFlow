@@ -120,7 +120,7 @@ class WorkflowData:
 
         return workflow_dict
 
-    def create_new_version_of_worlkflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
+    def create_new_version_of_workflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
         """Create a new Version of an existing Workflow with changed config Files.
 
         Extended description of function.
