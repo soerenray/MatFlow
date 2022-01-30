@@ -66,6 +66,7 @@ interface KeyValuePair {
 }
 
 export default {
+  name: "EditKeyValuePairs",
   // details: https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
   props: {
     keyValuePairsFromParent: {

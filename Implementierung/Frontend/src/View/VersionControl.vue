@@ -59,6 +59,7 @@ interface VersionsTableObject {
 let versionControlObject = new VersionControl();
 
 export default {
+  name: "VersionControl",
   data: function () {
     return {
       dialoge: false,

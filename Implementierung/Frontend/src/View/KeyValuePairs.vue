@@ -12,6 +12,7 @@
 
 <script lang='ts'>
 export default {
+  name: "KeyValuePairs",
   // details: https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
   props: {
     parameterChanges: {
@@ -30,7 +31,7 @@ export default {
   },
   computed: {
     parameterChangesTableObject: function (): object[] {
-      return this.parameterChanges.map((x: [string,string]): object => {
+      return this.parameterChanges.map((x: [string, string]): object => {
         return { oldValue: x[0], newValue: x[1] };
       });
     },
