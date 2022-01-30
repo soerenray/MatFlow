@@ -30,14 +30,15 @@ CREATE TABLE Version (
    wfName varchar(255) NOT NULL,
    version varchar(127) NOT NULL,
    note varchar(1000),
-   PRIMARY KEY (ID, wfName, version),
+   PRIMARY KEY (wfName, version),
    FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
 CREATE TABLE ActiveVersion (
-   versionID INTEGER,
-   PRIMARY KEY (versionID),
-   FOREIGN KEY (versionID) REFERENCES Version(ID)
+   wfName varchar(255) NOT NULL,
+   version varchar(127) NOT NULL,
+   PRIMARY KEY (wfName),
+   FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
 CREATE TABLE ConfFile (
