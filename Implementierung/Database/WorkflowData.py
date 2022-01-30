@@ -1,6 +1,8 @@
 from Implementierung.Database.DatabaseTable import DatabaseTable
 from Implementierung.workflow.workflow_instance import WorkflowInstance
+from Implementierung.workflow.database_version import DatabaseVersion
 from pathlib import Path
+from typing import Dict, List
 
 
 class WorkflowData:
@@ -95,8 +97,8 @@ class WorkflowData:
         return
 
     # TODO return dictionary
-    def get_Names_Of_Workflows_And_Config_Files(self):
-        """Return all Worflow names and the names of their corresponding config files.
+    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[str]]:
+        """Return all Workflow names and the names of their corresponding config files.
 
         Extended description of function.
 
@@ -105,7 +107,7 @@ class WorkflowData:
 
         """
 
-    def create_New_Version_Of_Worlkflow_Instance(self, wfName, newVersion, oldVersionNr):
+    def create_new_version_of_worlkflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
         """Create a new Version of an existing Workflow with changed config Files.
 
         Extended description of function.
@@ -120,8 +122,8 @@ class WorkflowData:
 
         """
 
-    def get_Config_File_From_Workflow_Instance(self, wfName, confName, version):
-        """Return single config file from a workflow.
+    def get_config_file_from_workflow_instance(self, wf_name: str, conf_name: str, version: str):
+        """Return single config file from a Workflow.
 
         Extended description of function.
 
@@ -135,8 +137,8 @@ class WorkflowData:
 
         """
 
-    def get_Config_File_From_Active_Workflow_Instance(self, wfName, confName):
-        """Return single config file from active version of a workflow.
+    def get_config_file_from_active_workflow_instance(self, wf_name: str, conf_name: str):
+        """Return single config file from active version of a Workflow.
 
         Extended description of function.
 
@@ -150,7 +152,7 @@ class WorkflowData:
         """
 
     # TODO Aufwendig
-    def get_Database_Versions_Of_Workflow_Instance(self, wfName):
+    def get_database_versions_of_workflow_instance(self, wf_name: str):
         """Return all DatabaseVersions of a worflow.
 
         Extended description of function.
@@ -163,7 +165,7 @@ class WorkflowData:
 
         """
 
-    def set_Active_Version_Through_Number(self, wfName, version):
+    def set_active_version_through_number(self, wf_name: str, version: str):
         """Set the active version of a workflow.
 
         Extended description of function.
@@ -177,7 +179,7 @@ class WorkflowData:
 
         """
 
-    def get_Active_Version_Of_Workflow_Instance(self, wfName):
+    def get_active_version_of_workflow_instance(self, wf_name: str):
         """Return workflow set as active in Database.
 
         Extended description of function.
@@ -190,7 +192,7 @@ class WorkflowData:
 
         """
 
-    def get_Version_Numbers_Of_Workflow_Instance(self, wfName):
+    def get_version_numbers_of_workflow_instance(self, wf_name: str):
         """Return all versions of a workflow.
 
         Extended description of function.
@@ -208,10 +210,10 @@ def class_debugging():
     print("TEST IN WorkflowData START")
     print("Comment out if not needed/crahses program because no Databaseconnection could be established")
 
-    wfData = WorkflowData()
+    wf_data = WorkflowData()
     # dummy data
-    testworkflow = WorkflowInstance("workflow4", Path("./Testfile1.txt"), Path("."))
-    data = wfData.create_wf_instance(testworkflow, Path("."))
+    test_workflow = WorkflowInstance("workflow4", Path("./Testfile1.txt"), Path("."))
+    data = wf_data.create_wf_instance(test_workflow, Path("."))
     print(data)  # should be 'None'
 
     # retrieve dummy data
