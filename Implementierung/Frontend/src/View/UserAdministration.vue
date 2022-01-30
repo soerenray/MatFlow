@@ -50,6 +50,7 @@
 </template>
 <script>
 export default {
+  name: "UserAdministration",
   data: function () {
     return {
       status: ["activated", "suspended", "pending"],

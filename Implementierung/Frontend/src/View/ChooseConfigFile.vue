@@ -74,10 +74,11 @@ import ChooseConfigFile from "../Model/ChooseConfigFile";
 import ConfigFile from "../Classes/ConfigFile";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const chooseConfigFileObject = new ChooseConfigFile();
 
 export default {
+  name: "ChooseConfigFile",
   components: {
     EditKeyValuePairs,
   },

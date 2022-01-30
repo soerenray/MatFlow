@@ -84,6 +84,7 @@ const createWorkflowInstanceObject = new CreateWorkflowInstance(
 );
 
 export default {
+  name: "CreateWorkflowInstance",
   data: function () {
     return {};
   },
