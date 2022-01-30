@@ -97,13 +97,13 @@ class WorkflowData:
         return
 
     # TODO return dictionary
-    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[str]]:
+    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[Path]]:
         """Return all Workflow names and the names of their corresponding config files.
 
         Extended description of function.
 
         Returns:
-            str[][]: of form <[workflow1; file11; file12;{...}],[workflow2, file21;{...}];{...}>
+            Dict[str, List[Path]]: dictionary with workflow names as keys, and lists of Paths of config files as values
 
         """
 
@@ -113,9 +113,9 @@ class WorkflowData:
         Extended description of function.
 
         Args:
-            wfName(str): name of a workflow
-            newVersion(DatabaseVersion): NEW version number
-            oldVersionNr(str): version this one is based on
+            wf_name(str): name of a workflow
+            new_version(DatabaseVersion): NEW version number
+            old_version_nr(str): version this one is based on
 
         Returns:
             void
@@ -128,8 +128,8 @@ class WorkflowData:
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
-            confName(str): name of config file
+            wf_name(str): name of workflow
+            conf_name(str): name of config file
             version(str): version identifier
 
         Returns:
@@ -143,8 +143,8 @@ class WorkflowData:
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
-            confName(str): name of config file
+            wf_name(str): name of workflow
+            conf_name(str): name of config file
 
         Returns:
             File: searched conf File
@@ -153,12 +153,12 @@ class WorkflowData:
 
     # TODO Aufwendig
     def get_database_versions_of_workflow_instance(self, wf_name: str):
-        """Return all DatabaseVersions of a worflow.
+        """Return all DatabaseVersions of a Workflow.
 
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
+            wf_name(str): name of workflow
 
         Returns:
             DatabaseVersion[]: all versions as DatabaseVersion objects
@@ -171,7 +171,7 @@ class WorkflowData:
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
+            wf_name(str): name of workflow
             version(str): name of version to be set
 
         Returns:
@@ -180,12 +180,12 @@ class WorkflowData:
         """
 
     def get_active_version_of_workflow_instance(self, wf_name: str):
-        """Return workflow set as active in Database.
+        """Return Workflow set as active in Database.
 
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
+            wf_name(str): name of workflow
 
         Returns:
             Workflow: Workflow object
@@ -193,12 +193,12 @@ class WorkflowData:
         """
 
     def get_version_numbers_of_workflow_instance(self, wf_name: str):
-        """Return all versions of a workflow.
+        """Return all Versions of a workflow.
 
         Extended description of function.
 
         Args:
-            wfName(str): name of workflow
+            wf_name(str): name of workflow
 
         Returns:
             str[]: sorted list of versions
