@@ -17,6 +17,7 @@ class DatabaseTable:
             DatabaseTable.__instance = self
             return
 
+    # TODO vvv
     """maybe outsource to config file? https://overiq.com/mysql-connector-python-101/connecting-to-mysql-using-connector-python/
     db = mysql.connector.connect(
         host='localhost',
@@ -40,7 +41,7 @@ class DatabaseTable:
         )
         return db
 
-    def set(self, create):
+    def set(self, create: str) -> str:
         """Set new values into tables in database.
 
         Throw error if value already exists,
@@ -61,6 +62,7 @@ class DatabaseTable:
             cursor.execute(create)
         except mysql.connector.Error as err:
             # handle exception
+            # TODO
             print("ERROR")
             print(err)  # tmp for debugging
 
@@ -72,7 +74,7 @@ class DatabaseTable:
 
         return
 
-    def delete(self, remove_query):
+    def delete(self, remove_query: str) -> str:
         """Delete rows in a table of the database.
 
         Do nothing if nothing fit the deletion query.
@@ -101,7 +103,7 @@ class DatabaseTable:
         cursor.close()
         db.close()
 
-    def modify(self, change):
+    def modify(self, change: str) -> str:
         """Modify values in database.
 
         Throw error if query was not able to be read.
@@ -130,7 +132,7 @@ class DatabaseTable:
         cursor.close()
         db.close()
 
-    def get(self, query):
+    def get(self, query: str) -> str:
         """Search for value(s) in database.
 
         Throw error if no entry found in database.
@@ -161,7 +163,7 @@ class DatabaseTable:
         print(data)
         return data
 
-    def check_for(self, query) -> bool:
+    def check_for(self, query: str) -> bool:
         """Check if at least one(1) entry already exists for given SELECT-query
 
         Args:
@@ -238,17 +240,33 @@ def init_tests():
     print("TEST IN DatabaseTable END!")
 
 
-def remove():
+def remove(tables):
     """helping function for deleting all tables"""
     d_table = DatabaseTable.get_instance()
-    db = d_table.get_Database_Connection()
+    db = d_table.get_database_connection()
     cursor = db.cursor()
-    remove_str = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
-                 "WorkflowTemplate", "Server"]
-    for rem in remove_str:
+
+    for rem in tables:
         print("Delete " + rem)
         tmp = "DROP TABLE {}".format(rem)
         cursor.execute(tmp)
 
+
+def clear_tables(tables):
+    """helping function for clearing all tables"""
+    d_table = DatabaseTable.get_instance()
+    db = d_table.get_database_connection()
+    cursor = db.cursor()
+
+    for rem in tables:
+        print("Clear " + rem)
+        tmp = "DELETE FROM {}".format(rem)
+        cursor.execute(tmp)
+
+
+table_names = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
+               "WorkflowTemplate", "Server"]
 # init_tests()
-# remove()
+# clear_tables(table_names)
+# remove(tables)
+

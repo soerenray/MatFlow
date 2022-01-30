@@ -19,7 +19,7 @@ class ServerData:
         else:
             ServerData.__instance = self
 
-    def write_Server(self, server: Server):
+    def write_server(self, server: Server):
         """Write new Server into database.
 
         Throw error if ip already exists.
@@ -37,11 +37,10 @@ class ServerData:
         # insert values
         query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_address, name)
         # execute
-        data = self.databaseTable.set(query)
-        return data
+        self.databaseTable.set(query)
+        return
 
-
-    def get_Server(self):
+    def get_server(self) -> str:
         """Get server in database.
 
         NOTE:   Currently there is no intention of storing multiple servers to connect to,
@@ -53,30 +52,28 @@ class ServerData:
         Returns:
             string[]: 2-element list with format [<IP>,<Name>]
         """
-        query = "SELECT * FROM Server;"     # get all entries
+        query = "SELECT * FROM Server;"  # get all entries
         data = self.databaseTable.get(query)
         if not data:
-            #throw exception no entry?
+            # throw exception no entry?
             return data
 
         return data
-
 
 
 def class_debugging():
     print("TEST IN ServerData START")
     print("Comment out if not needed/crahses program because no Databaseconnection could be established")
 
-    sData = ServerData()
+    s_data = ServerData()
     # dummy data
     server = Server("name1", "adress1", "status1", 42, True, ['no', 'limit'])
-    data = sData.write_Server(server)
-    print(data) #should be 'None'
+    s_data.write_server(server)
 
     # retrieve dummy data
-    test = sData.get_Server()
+    test = s_data.get_server()
     print(test)
 
     print("TEST IN ServerData END!")
 
-#class_debugging()
+# class_debugging()
