@@ -65,9 +65,9 @@ class WorkflowData:
 
         # get key of version number
         get_version_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(wf_name, "1")
-        number = self.__databaseTable.get_one(get_version_key_query)
+        version_key = self.__databaseTable.get_one(get_version_key_query)
         # number is "(x,)" and has to be made into x alone (x <= int)
-        number = re.sub('[(),]', '', str(number))
+        version_key = re.sub('[(),]', '', str(version_key))
 
         # create all file entries for non-conf-files
         folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES ('{}', '{}')"
@@ -89,7 +89,7 @@ class WorkflowData:
 
             # injection into VersionFile
             filename = Path(file_path).name
-            self.__databaseTable.set(versionfile_set_query.format(number, filename, file_key))
+            self.__databaseTable.set(versionfile_set_query.format(version_key, filename, file_key))
 
         # set active
         self.set_active_version_through_number(wf_name, "1")
@@ -121,11 +121,9 @@ class WorkflowData:
 
         return workflow_dict
 
-    # TODO Implementierung
+    # TODO Revision
     def create_new_version_of_workflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
         """Create a new Version of an existing Workflow with changed config Files.
-
-        Extended description of function.
 
         Args:
             wf_name(str): name of a workflow
@@ -136,6 +134,50 @@ class WorkflowData:
             void
 
         """
+        # create new version entry
+        new_version_nr = new_version.get_version_number().get_number()
+        new_entry = "INSERT INTO Version (wfName, version) VALUES ('{}', '{}')"
+        new_entry = new_entry.format(wf_name, new_version_nr)
+        self.__databaseTable.set(new_entry)
+        # get key of version
+        get_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}'"
+        get_key_query = get_key_query.format(wf_name, new_version_nr)
+        version_index = self.__databaseTable.get_one(get_key_query)
+        version_index = re.sub('[(),]', '', str(version_index))
+
+        # get all new file paths
+        new_files = []
+        for file in new_version.get_changed_config_files().iterdir():
+            if file.is_file():
+                new_files.append(file)
+
+        # insert all new files into ConfFile
+        file_insert = "INSERT INTO ConfFile (file) VALUES ('{}')"
+        get_file_key = "SELECT confKey FROM ConfFile WHERE file = '{}'"
+        file_to_version = "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ({},'{}',{})"
+        for file in new_files:
+            # inject new file
+            file_insert_local = file_insert.format(str(file))
+            self.__databaseTable.set(file_insert_local)
+
+            # get key from new file
+            get_file_key_local = get_file_key.format(str(file))
+            file_key = self.__databaseTable.get_one(get_file_key_local)
+            file_key = re.sub('[(),]', '', str(file_key))
+
+            # connect new file and new version
+            file_to_version_local = file_to_version.format(version_index, file.name, file_key)
+            self.__databaseTable.set(file_to_version_local)
+
+        # connect old, not updated files of previous version
+        # query is also saved as 'copy old not updated files -query.txt'
+        copy_old_files = "INSERT INTO VersionFile (versionID, filename, confKey) SELECT newVersion, filename, " \
+                         "confKey	FROM VersionFile	WHERE versionID = 'oldVersion'    AND filename    NOT IN (" \
+                         "Select filename		FROM VersionFile        WHERE versionID = 'newVersion'); "
+        copy_old_files = copy_old_files.replace("newVersion", new_version_nr).replace("oldVersion", old_version_nr)
+        self.__databaseTable.set(copy_old_files)
+
+
 
     # TODO Implementierung
     def get_config_file_from_workflow_instance(self, wf_name: str, conf_name: str, version: str) -> Path:
