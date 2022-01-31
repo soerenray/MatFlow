@@ -21,20 +21,10 @@ class DatabaseTable:
     def get_database_connection(self):
         """Connect to MySQL Database and return connection.
 
-        Parameters are set."""
+        Parameters are set in file mydb.conf."""
 
-        # read from file instead of hardcoding
+        # read from file instead of hard-coding
         return mysql.connector.connect(option_files='mydb.conf')
-
-        # conneccction data
-        db = mysql.connector.connect(
-            host='localhost',
-            database='databaseshema',
-            user='root',
-            password='12345',
-            port='3306'
-        )
-        return db
 
     def set(self, create: str) -> None:
         """Set new values into tables in database.
@@ -293,6 +283,5 @@ def clear_tables(tables):
 table_names = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
                "WorkflowTemplate", "Server"]
 # init_tests()
-clear_tables(table_names)
+# clear_tables(table_names)
 # remove(table_names)
-
