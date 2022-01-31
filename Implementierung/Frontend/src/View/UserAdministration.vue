@@ -17,12 +17,12 @@
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
             ><v-select
-              :items="privilege"
+              :items="item.selectPrivileges"
               v-model="item.userPrivilege"
             ></v-select
           ></template>
           <template v-slot:[`item.status`]="{ item }"
-            ><v-select :items="status" v-model="item.userStatus"></v-select
+            ><v-select :items="selectStatuses" v-model="item.userStatus"></v-select
           ></template>
           <template v-slot:[`item.delete`]="{}">
             <v-btn icon> <delete-icon></delete-icon></v-btn></template
@@ -99,6 +99,14 @@ export default {
         userAdministrationObject.users = users;
       },
     },
+    selectStatuses: {
+      get: function(): string[] {
+        return userAdministrationObject.selectStatuses
+      },
+      set: function(selectStatuses: string[]) {
+        userAdministrationObject.selectStatuses = selectStatuses
+      }
+    }
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
