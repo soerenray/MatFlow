@@ -138,8 +138,6 @@ export default {
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
-    // The object choosenConfigFileObject wouldn't update, when the parameters are
-    // initialized in data
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(createTemplateObject);
     createTemplateObject.templatesName =
