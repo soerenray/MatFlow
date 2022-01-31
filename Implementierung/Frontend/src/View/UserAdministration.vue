@@ -12,10 +12,10 @@
             ><v-text-field :value="item.name"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
-            ><v-select :items="privilege" v-model="item.privilege"></v-select
+            ><v-select :items="privilege" v-model="item.userPrivilege"></v-select
           ></template>
           <template v-slot:[`item.status`]="{ item }"
-            ><v-select :items="status" v-model="item.status"></v-select
+            ><v-select :items="status" v-model="item.userStatus"></v-select
           ></template>
           <template v-slot:[`item.delete`]="{}">
             <v-btn icon> <delete-icon></delete-icon></v-btn></template
