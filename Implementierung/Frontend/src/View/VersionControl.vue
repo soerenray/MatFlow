@@ -136,6 +136,14 @@ export default {
         versionControlObject.workflowInstanceName = workflowInstanceName;
       },
     },
+    workflowInstancesName: {
+      get: function (): string[] {
+        return versionControlObject.workflowInstancesName;
+      },
+      set: function (workflowInstancesName: string[]) {
+        versionControlObject.workflowInstancesName = workflowInstancesName;
+      },
+    },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
