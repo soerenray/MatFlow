@@ -200,12 +200,12 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
 class TestGetTemplateAndNames(TestWorkflowManager):
     def setUp(self):
         # create tree different templates
-        dag_file: Path = self.base_path / "tpl1.py"
-        t1: Template = Template("t1", dag_file)
-        t2: Template = Template("t2", dag_file)
-        t3: Template = Template("t3", dag_file)
+        self.dag_file: Path = self.base_path / "tpl1.py"
+        t1: Template = Template("t1", self.dag_file)
+        self.t2: Template = Template("t2", self.dag_file)
+        t3: Template = Template("t3", self.dag_file)
         self.w_man.create_template(t1)
-        self.w_man.create_template(t2)
+        self.w_man.create_template(self.t2)
         self.w_man.create_template(t3)
 
     def test_get_template_names(self):
@@ -217,6 +217,29 @@ class TestGetTemplateAndNames(TestWorkflowManager):
 
         # Assert
         self.assertEqual(expected_names, actual_names)
+
+    def test_get_template_from_wrong_name(self):
+        # Arrange
+        wrong_name: str = "wrong_template"
+        expected_msg: str = "Internal Error: Selected template: " + wrong_name + " doesn't exist."
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.get_template_from_name(wrong_name)
+        self.assertTrue(expected_msg in str(context.exception))
+
+    def test_get_template_from_name(self):
+        # Arrange
+        template_name: str = "t2"
+        expected_template: Template = self.t2
+
+        # Act
+        actual_template: Template = self.w_man.get_template_from_name(template_name)
+
+        # Assert
+        # compare templates by comparing their attributes
+        self.assertEqual(expected_template.get_name(), actual_template.get_name())
+        self.assertEqual(expected_template.get_dag_definition_file(), actual_template.get_dag_definition_file())
 
 
 class TestCreateNewVersion(TestWorkflowManager):

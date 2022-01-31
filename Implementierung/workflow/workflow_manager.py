@@ -67,7 +67,11 @@ class WorkflowManager:
         # now safe the new dag definition file in the template folder
         new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
         shutil.copy(template.get_dag_definition_file(), new_path)
+
         # maybe make the file ro TODO
+
+        # adjust the attribute of the template
+        template.set_dag_definition_file(new_path)
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
