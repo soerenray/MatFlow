@@ -67,11 +67,6 @@ export default {
       status: ["activated", "suspended", "pending"],
       privilege: ["visitor", "developer", "administrator"],
       dialog: false,
-      users: [
-        { name: "tim", privilege: "visitor", status: "pending" },
-        { name: "marie", privilege: "developer", status: "suspended" },
-        { name: "Carolin", privilege: "administrator", status: "activated" },
-      ],
     };
   },
   computed: {
