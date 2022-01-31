@@ -112,6 +112,14 @@ export default {
         versionControlObject.tableHeaders = tableHeaders;
       },
     },
+    dialogKeyValuePairs: {
+      get: function (): boolean {
+        return versionControlObject.dialogKeyValuePairs;
+      },
+      set: function (dialogKeyValuePairs: boolean) {
+        versionControlObject.dialogKeyValuePairs = dialogKeyValuePairs;
+      },
+    },
     versions: {
       get: function (): Version[] {
         return versionControlObject.versions;
