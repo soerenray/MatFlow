@@ -63,27 +63,13 @@ export default {
   },
   methods: {
     handleEvent: function (selectedVersionObject: any) {
-      this.selectedVersionObject = selectedVersionObject;
+      versionControlObject.selectedVersionObject = selectedVersionObject;
     },
     pullVersionsWithWorkflowInstanceName: function () {
       versionControlObject.versions =
         backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
           ""
         );
-    },
-    getKeyValuePairsByVersionNumber: function (
-      versionNumber: string
-    ): Array<[string, string]> {
-      let keyValuePairs = new Array<[string, string]>(["", ""]);
-      let temp = versionControlObject.versions.find(
-        (version: Version): Boolean => {
-          return version.versionNumber === versionNumber;
-        }
-      );
-      if (temp !== undefined) {
-        keyValuePairs = temp.parameterChanges;
-      }
-      return keyValuePairs;
     },
   },
   computed: {
