@@ -5,10 +5,10 @@
         <v-card width="1000px">
           <v-data-table
             :headers="tableHeaders"
-            :items="versionsTableObject"
+            :items="versionControlObject.versions"
             item-key="name"
           >
-            <template v-slot:[`item.parameterChanges`]="{ item }">
+            <!-- <template v-slot:[`item.parameterChanges`]="{ item }">
               <v-btn icon>
                 <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
@@ -33,7 +33,7 @@
             </template>
             <template v-slot:[`item.workspace`]="{}"
               ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
-            ></template>
+            ></template> -->
           </v-data-table>
         </v-card>
       </v-col>
