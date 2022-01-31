@@ -13,7 +13,7 @@
           :item-key="users.name"
         >
           <template v-slot:[`item.name`]="{ item }"
-            ><v-text-field :value="item.name"></v-text-field
+            ><v-text-field :value="item.userName"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
             ><v-select
