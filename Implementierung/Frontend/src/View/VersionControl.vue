@@ -48,11 +48,6 @@ import Version from "../Classes/Version";
 import VersionControl from "../Model/VersionControl";
 import KeyValuePairs from "./KeyValuePairs.vue";
 
-interface VersionsTableObject {
-  versionNumber: string;
-  versionNote: string;
-}
-
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const versionControlObject = new VersionControl([
   { text: "Version number", value: "versionNumber" },
