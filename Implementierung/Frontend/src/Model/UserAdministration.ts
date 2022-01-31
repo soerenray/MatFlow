@@ -2,18 +2,15 @@ import User from '../Classes/User'
 
 class UserAdministration {
     private _tableHeaders: object[]
-    private _searchedUser: string
     private _users: User[]
 
     /**
     *
     * @param tableHeaders The tableHeaders
-    * @param searchedUser The searchedUser
     * @param users The users
     */
-    constructor(tableHeaders: object[] = [], searchedUser: string = "", users: User[] = [],) {
+    constructor(tableHeaders: object[] = [], users: User[] = [],) {
         this._tableHeaders = tableHeaders
-        this._searchedUser = searchedUser
         this._users = users
     }
 
@@ -23,14 +20,6 @@ class UserAdministration {
     */
     public get tableHeaders(): object[] {
         return this._tableHeaders
-    }
-
-    /**
-    * Gets the searchedUser
-    * @returns _searchedUser
-    */
-    public get searchedUser(): string {
-        return this._searchedUser
     }
 
     /**
@@ -47,14 +36,6 @@ class UserAdministration {
     */
     public set tableHeaders(tableHeaders: object[]) {
         this._tableHeaders = tableHeaders
-    }
-
-    /**
-    * Sets the value of _searchedUser
-    * @param searchedUser The new value of _searchedUser
-    */
-    public set searchedUser(searchedUser: string) {
-        this._searchedUser = searchedUser
     }
 
     /**
