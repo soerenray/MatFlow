@@ -103,6 +103,14 @@ export default {
         versionControlObject.dialogKeyValuePairs = dialogKeyValuePairs;
       },
     },
+    selectedVersionObject: {
+      get: function (): Version {
+        return versionControlObject.selectedVersionObject;
+      },
+      set: function (selectedVersionObject: Version) {
+        versionControlObject.selectedVersionObject = selectedVersionObject;
+      },
+    },
     versions: {
       get: function (): Version[] {
         return versionControlObject.versions;
