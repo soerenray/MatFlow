@@ -7,12 +7,19 @@
     </div>
     <div style="padding-top: 20px">
       <v-card>
-        <v-data-table :headers="tableHeaders" :items="users" :item-key="users.name">
+        <v-data-table
+          :headers="tableHeaders"
+          :items="users"
+          :item-key="users.name"
+        >
           <template v-slot:[`item.name`]="{ item }"
             ><v-text-field :value="item.name"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
-            ><v-select :items="privilege" v-model="item.userPrivilege"></v-select
+            ><v-select
+              :items="privilege"
+              v-model="item.userPrivilege"
+            ></v-select
           ></template>
           <template v-slot:[`item.status`]="{ item }"
             ><v-select :items="status" v-model="item.userStatus"></v-select
@@ -49,6 +56,7 @@
   </v-app>
 </template>
 <script lang="ts">
+import Vue from "vue";
 import User from "../Classes/User";
 import UserAdministration from "../Model/UserAdministration";
 
@@ -71,21 +79,26 @@ export default {
   },
   computed: {
     tableHeaders: {
-      get: function(): object[] {
-        return userAdministrationObject.tableHeaders
+      get: function (): object[] {
+        return userAdministrationObject.tableHeaders;
       },
-      set: function(tableHeaders: object[]) {
-        userAdministrationObject.tableHeaders = tableHeaders
-      }
+      set: function (tableHeaders: object[]) {
+        userAdministrationObject.tableHeaders = tableHeaders;
+      },
     },
     users: {
-      get: function() : User[] {
-        return userAdministrationObject.users
+      get: function (): User[] {
+        return userAdministrationObject.users;
       },
-      set: function(users: User[]) {
-        userAdministrationObject.users = users
-      }
-    }
-  }
+      set: function (users: User[]) {
+        userAdministrationObject.users = users;
+      },
+    },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(userAdministrationObject);
+  },
 };
 </script>
