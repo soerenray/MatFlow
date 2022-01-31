@@ -77,6 +77,9 @@ export default {
     handleEvent: function (selectedItem: any) {
       this.selectedItem = selectedItem;
     },
+    pullVersionsWithWorkflowInstanceName: function() {
+      versionControlObject.versions = backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName('')
+    },
     getKeyValuePairsByVersionNumber: function (
       versionNumber: string
     ): Array<[string, string]> {
