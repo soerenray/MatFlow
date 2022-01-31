@@ -3,7 +3,7 @@
     <v-layout justify-center align-center>
       <v-card width="800px" height="400px">
         <v-card-title class="justify-center">
-          <p>Log-in</p>
+          <p>LogIn</p>
         </v-card-title>
         <v-card-text>
           <v-col>
@@ -29,10 +29,10 @@
             </div>
             <v-row>
               <div style="padding-left: 10px; padding-top: 5px">
-                <a href>register</a>
+                <a href>SignUp</a>
               </div>
               <v-spacer></v-spacer>
-              <v-btn disabled>log-in</v-btn>
+              <v-btn disabled>LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>
