@@ -42,9 +42,11 @@
 </template>
 
 <script lang='ts'>
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 import LogIn from "../Model/LogIn";
 
-let logInObject = new LogIn();
+const backendServerCommunicatorObject = new BackendServerCommunicator()
+const logInObject = new LogIn();
 
 export default {
   name: "LogIn",
