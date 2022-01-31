@@ -42,6 +42,7 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import LogIn from "../Model/LogIn";
 
@@ -75,6 +76,11 @@ export default {
         logInObject.showPassword = showPassword;
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(logInObject);
   },
 };
 </script>
