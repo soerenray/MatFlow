@@ -10,7 +10,7 @@
           >
             <template v-slot:[`item.parameterChanges`]="{ item }">
               <v-btn icon>
-                <!-- <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
+                <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       @click="handleEvent(item)"
@@ -21,14 +21,14 @@
                       <file-document-outline-icon></file-document-outline-icon>
                     </v-btn>
                   </template>
-                  <key-value-pairs
+                  <!-- <key-value-pairs
                     :parameter-changes="
                       getKeyValuePairsByVersionNumber(
-                        selectedItem.versionNumber
+                        selectedVersionObject.versionNumber
                       )
                     "
-                  ></key-value-pairs>
-                </v-dialog> -->
+                  ></key-value-pairs> -->
+                </v-dialog>
               </v-btn>
             </template>
             <template v-slot:[`item.workspace`]="{}"
@@ -62,8 +62,8 @@ export default {
     KeyValuePairs,
   },
   methods: {
-    handleEvent: function (selectedItem: any) {
-      this.selectedItem = selectedItem;
+    handleEvent: function (selectedVersionObject: any) {
+      this.selectedVersionObject = selectedVersionObject;
     },
     pullVersionsWithWorkflowInstanceName: function () {
       versionControlObject.versions =
