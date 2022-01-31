@@ -1,11 +1,14 @@
 import filecmp
 import os
 import shutil
+import mock
 from pathlib import Path
 from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from Implementierung.workflow.template import Template
-from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException
+from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
+    DoubleWorkflowInstanceNameException, EmptyConfigFolderException
+from Implementierung.Database.WorkflowData import WorkflowData
 
 
 class TestWorkflowManager(TestCase):
@@ -53,6 +56,144 @@ class TestCreateTemplate(TestWorkflowManager):
         # check if the expected files exist
         self.assertTrue("t1.py" in os.listdir(self.w_man._WorkflowManager__template_base_directory))
         self.assertTrue("t2.py" in os.listdir(self.w_man._WorkflowManager__template_base_directory))
+
+
+class TestCreateInstanceFromTemplate(TestWorkflowManager):
+    def setUp(self):
+        # create a possible template, that can be used for creation
+        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
+        dag_file_t1: Path = self.base_path / "tpl1.py"
+        self.name_t1: str = "t1"
+        t1: Template = Template("t1", dag_file_t1)
+        self.w_man.create_template(t1)
+
+        # clear the workflow_instance dir after every run
+        delete_dir_content(self.w_man._WorkflowManager__versions_base_directory)
+
+        # set up the base path for the conf folders
+        self.conf_base_path: Path = self.base_path / "conf_folders"
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_unknown_template_name(self, mock_wf_data):
+        # Arrange
+        unknown_name: str = "unknown"
+        conf_folder: Path = self.conf_base_path / "folder1"
+        expected_msg: str = "Internal Error: " + unknown_name + " isn't a known template name."
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.create_workflow_instance_from_template(unknown_name, "instance", conf_folder)
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # test that the database interface wasn't called
+        self.assertFalse(mock_wf_data.create_wf_instance.called)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_valid_only_conf_files(self, mock_wf_data):
+        # a valid creation, the config folder only consisting of conf-files
+        # Arrange
+        instance_name: str = "instance1"
+        conf_folder: Path = self.conf_base_path / "folder1"
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act
+        self.w_man.create_workflow_instance_from_template(self.name_t1, instance_name, conf_folder)
+
+        # Assert
+        # was there a dir for the instance created?
+        expected_instance_path: Path = self.w_man._WorkflowManager__versions_base_directory / instance_name
+        self.assertTrue(os.path.isdir(expected_instance_path))
+
+        # test that the database interface was called
+        self.assertTrue(mock_wf_data.create_wf_instance.called)
+
+        # is there a "current_conf"-dir underneath, mirroring the ingoing folder?
+        expected_path: Path = expected_instance_path / "current_conf"
+        self.assertTrue(os.path.isdir(expected_path))
+        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+
+        # is there a "1"-dir underneath the instance dir that contains only the conf-files of the ingoing folder?
+        expected_path: Path = expected_instance_path / "1"
+        self.assertTrue(os.path.isdir(expected_path))
+        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_empty_config_folder(self, mock_wf_data):
+        # Arrange
+        instance_name: str = "instance1"
+        conf_folder: Path = self.conf_base_path / "empty_folder"
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act + Assert
+        self.assertRaises(EmptyConfigFolderException, self.w_man.create_workflow_instance_from_template,
+                          self.name_t1, instance_name, conf_folder)
+
+        # test that the database interface wasn't called
+        self.assertFalse(mock_wf_data.create_wf_instance.called)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_double_instance_name(self, mock_wf_data):
+        # first repeat 'test_valid_only_conf_files' from above without testing, then try to create the same instance
+        # again -> should raise a DoubleWorkflowInstanceNameException
+        # Arrange
+        instance_name: str = "instance1"
+        conf_folder: Path = self.conf_base_path / "folder1"
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act + Assert
+        # creating the first instance goes well
+        self.w_man.create_workflow_instance_from_template(self.name_t1, instance_name, conf_folder)
+
+        # make sure the database interface was called exactly once
+        self.assertEqual(mock_wf_data.create_wf_instance.call_count, 1)
+
+        # now we expect an exception
+        self.assertRaises(DoubleWorkflowInstanceNameException, self.w_man.create_workflow_instance_from_template,
+                          self.name_t1, instance_name, conf_folder)
+
+        # test that the database interface was only called the first time (the call_count doesn't change)
+        self.assertEqual(mock_wf_data.create_wf_instance.call_count, 1)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_valid_mixed_files(self, mock_wf_data):
+        # a valid creation, the config folder only consisting of conf-files as well as other files
+        # Arrange
+        instance_name: str = "instance2"
+        conf_folder: Path = self.conf_base_path / "folder2"
+        only_conf_dir: Path = self.conf_base_path / "folder1"
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act
+        self.w_man.create_workflow_instance_from_template(self.name_t1, instance_name, conf_folder)
+
+        # Assert
+        # was there a dir for the instance created?
+        expected_instance_path: Path = self.w_man._WorkflowManager__versions_base_directory / instance_name
+        self.assertTrue(os.path.isdir(expected_instance_path))
+
+        # test that the database interface was called
+        self.assertTrue(mock_wf_data.create_wf_instance.called)
+
+        # is there a "current_conf"-dir underneath, mirroring the ingoing folder?
+        expected_path: Path = expected_instance_path / "current_conf"
+        self.assertTrue(os.path.isdir(expected_path))
+        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+
+        # is there a "1"-dir underneath the instance dir that contains only the conf-files of the ingoing folder?
+        expected_path: Path = expected_instance_path / "1"
+        self.assertTrue(os.path.isdir(expected_path))
+        self.assertTrue(are_dir_trees_equal(expected_path, only_conf_dir))
 
 
 class TestCreateNewVersion(TestWorkflowManager):

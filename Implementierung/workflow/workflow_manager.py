@@ -1,8 +1,7 @@
 import errno
 import os
 import requests
-from os import listdir
-from shutil import copy, copytree
+import shutil
 from pathlib import Path
 from typing import List, Tuple, Dict
 from .frontend_version import FrontendVersion
@@ -62,12 +61,12 @@ class WorkflowManager:
 
         """
         # make sure the template name wasn't used before
-        if template.get_name() + ".py" in listdir(self.__template_base_directory):
+        if template.get_name() + ".py" in os.listdir(self.__template_base_directory):
             raise DoubleTemplateNameException("")
 
         # now safe the new dag definition file in the template folder
         new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
-        copy(template.get_dag_definition_file(), new_path)
+        shutil.copy(template.get_dag_definition_file(), new_path)
         # maybe make the file ro TODO
 
     def create_workflow_instance_from_template(
@@ -82,10 +81,12 @@ class WorkflowManager:
         """
         # get the template object corresponding to the name
         template_path: Path = self.__template_base_directory / (template_name + ".py")
+        if not os.path.isfile(template_path):
+            raise InternalException("Internal Error: " + template_name + " isn't a known template name.")
         template: Template = Template(template_name, template_path)
 
         # check if the workflow_instance_name is already used
-        existing_names: List[str] = listdir(self.__versions_base_directory)
+        existing_names: List[str] = os.listdir(self.__versions_base_directory)
         if workflow_instance_name in existing_names:  # otherwise, the name is a valid identifier
             raise DoubleWorkflowInstanceNameException("")
 
@@ -95,8 +96,9 @@ class WorkflowManager:
 
         # now we create a new directory for the instance
         instance_path: Path = self.__versions_base_directory / workflow_instance_name
-        dag_path: Path = instance_path / (workflow_instance_name + ".py")
-        copy(template.get_dag_definition_file(), dag_path)  # copy dag definition file
+        os.mkdir(instance_path)
+        # dag_path: Path = instance_path / (template_name + ".py")
+        shutil.copy(template.get_dag_definition_file(), instance_path)  # copy dag definition file
 
         # under that dir we create another called "current_conf" that contains all files for the execution
         # the version of the file always matches the current version of the wf instance
@@ -139,7 +141,7 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        file_names: List[str] = listdir(self.__template_base_directory)  # still has name extensions
+        file_names: List[str] = os.listdir(self.__template_base_directory)  # still has name extensions
         return [os.path.splitext(file_name)[0] for file_name in file_names]  # removed extensions
 
     def get_template_from_name(self, template_name: str) -> Template:
@@ -154,7 +156,7 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        if not listdir(self.__template_base_directory).__contains__(template_name + ".py"):
+        if not os.listdir(self.__template_base_directory).__contains__(template_name + ".py"):
             raise InternalException("Internal Error: Selected template: " + template_name + " doesn't exist.")
         # otherwise, the template is available
         template_path: Path = self.__template_base_directory / (template_name + ".py")
@@ -230,7 +232,7 @@ class WorkflowManager:
 
         # copy the old files into the new directory
         for file in old_files:
-            copy(file, version_dir)
+            shutil.copy(file, version_dir)
 
         # apply all the changes to the files in the new directory
         for update in changed_files:
@@ -272,7 +274,7 @@ class WorkflowManager:
             if version.get_version_number().get_number() != "1":
                 predecessor_number: VersionNumber = version.get_version_number().get_predecessor()
                 changed_dir: Path = version.get_changed_config_files()
-                file_names: List[str] = listdir(changed_dir)
+                file_names: List[str] = os.listdir(changed_dir)
 
                 # get the unchanged file for all changed files
                 comparison_files: List[Tuple[str, Path]] = []
@@ -302,7 +304,7 @@ class WorkflowManager:
         dag_request = requests.get(self.__airflow_address + "api/v1/dags/{dag_id}/details")
         # TODO
 
-        # TODO current_conf-Ordner anpassen
+        # TODO adjust current_conf-dir
 
         # if not tell database to change the active version
         self.__workflow_data.set_active_version_through_number(workflow_instance_name, version_number)
@@ -320,4 +322,4 @@ class WorkflowManager:
         os.mkdir(dst)
         for file in os.listdir(src):
             if extension == "" or os.path.splitext(file)[1] == extension:
-                copy(src/file, dst)
+                shutil.copy(src/file, dst)
