@@ -65,3 +65,5 @@ class UserAdministration {
         this._users = users
     }
 }
+
+export default UserAdministration
