@@ -44,14 +44,23 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import BackenderServerCommunicator from '../Controler/BackendServerCommunicator'
+import BackenderServerCommunicator from "../Controler/BackendServerCommunicator";
 import SignUp from "../Model/SignUp";
 
-const backendServerCommunicatorObject = new BackenderServerCommunicator()
+const backendServerCommunicatorObject = new BackenderServerCommunicator();
 const signUpObject = new SignUp();
 
 export default {
   name: "SignUp",
+  methods: {
+    pushSignUp() {
+      backendServerCommunicatorObject.pushRegister(
+        signUpObject.userName,
+        signUpObject.userPassword,
+        signUpObject.userPasswordRepeated
+      );
+    },
+  },
   computed: {
     userName: {
       get: function (): string {
@@ -94,10 +103,10 @@ export default {
       },
     },
   },
-    beforeCreate: function () {
-      // Vue is oberserving data in the data property.
-      // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
-      Vue.observable(signUpObject);
-    },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(signUpObject);
+  },
 };
 </script>

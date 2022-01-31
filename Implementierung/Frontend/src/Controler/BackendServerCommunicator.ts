@@ -10,7 +10,7 @@ import WorkflowInstance from '../Classes/WorkflowInstance'
 class BackendServerCommunicator {
     public constructor() { }
     public pushLogIn(userName: string, userPassword: string): void { return }
-    public pushRegister(userName: string, userPassword: string): void { return }
+    public pushRegister(userName: string, userPassword: string, userPasswordRepeated: string): void { return }
     public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
     public pushCreateTemplate(template: Template): void { return }
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
