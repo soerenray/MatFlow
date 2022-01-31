@@ -49,9 +49,6 @@ let signUpObject = new SignUp();
 
 export default {
   name: "SignUp",
-  data: () => {
-    return { showPassword: false, showPasswordRepeated: false };
-  },
   computed: {
     userName: {
       get: function (): string {
