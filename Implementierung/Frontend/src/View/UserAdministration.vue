@@ -52,7 +52,13 @@
 import User from "../Classes/User";
 import UserAdministration from "../Model/UserAdministration";
 
-const userAdministrationObject = new UserAdministration();
+const userAdministrationObject = new UserAdministration([
+  { text: "Username", value: "name" },
+  { text: "User priviliges", value: "privilege" },
+  { text: "Status", value: "status" },
+  { text: "Delete", value: "delete" },
+  { text: "Reset password", value: "password" },
+]);
 
 export default {
   name: "UserAdministration",
@@ -61,13 +67,6 @@ export default {
       status: ["activated", "suspended", "pending"],
       privilege: ["visitor", "developer", "administrator"],
       dialog: false,
-      headers: [
-        { text: "Username", value: "name" },
-        { text: "User priviliges", value: "privilege" },
-        { text: "Status", value: "status" },
-        { text: "Delete", value: "delete" },
-        { text: "Reset password", value: "password" },
-      ],
       users: [
         { name: "tim", privilege: "visitor", status: "pending" },
         { name: "marie", privilege: "developer", status: "suspended" },
