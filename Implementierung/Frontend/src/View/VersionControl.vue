@@ -5,7 +5,7 @@
         <v-card width="1000px">
           <v-data-table
             :headers="tableHeaders"
-            :items="versionControlObject.versions"
+            :items="versions"
             item-key="name"
           >
             <!-- <template v-slot:[`item.parameterChanges`]="{ item }">
