@@ -13,7 +13,7 @@ class UserAdministration {
     * @param selectStatues The selectStatuses
     * @param selectPriviliges The selectPrivliges
     */
-    constructor(tableHeaders: object[] = [], users: User[] = [], selectStatuses: string[] = [], selectPrivileges: string[],) {
+    constructor(tableHeaders: object[] = [], users: User[] = [], selectStatuses: string[] = [], selectPrivileges: string[] = [],) {
         this._tableHeaders = tableHeaders
         this._users = users
         this._selectStatuses = selectStatuses
