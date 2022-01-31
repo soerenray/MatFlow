@@ -112,6 +112,14 @@ export default {
         );
       },
     },
+    tableHeaders: {
+      get: function () {
+        return versionControlObject.tableHeaders;
+      },
+      set: function (tableHeaders: object[]) {
+        versionControlObject.tableHeaders = tableHeaders;
+      },
+    },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
