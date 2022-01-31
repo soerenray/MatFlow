@@ -7,7 +7,7 @@
     </div>
     <div style="padding-top: 20px">
       <v-card>
-        <v-data-table :headers="headers" :items="users" :item-key="users.name">
+        <v-data-table :headers="tableHeaders" :items="users" :item-key="users.name">
           <template v-slot:[`item.name`]="{ item }"
             ><v-text-field :value="item.name"></v-text-field
           ></template>
