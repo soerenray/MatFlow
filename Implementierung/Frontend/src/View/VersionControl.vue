@@ -67,6 +67,12 @@ export default {
           ""
         );
     },
+    pushReplaceActiveVersionOfWorkflowInstance() {
+      backendServerCommunicatorObject.pushReplaceActiveVersionOfWorkflowInstance(
+        this.workflowInstanceName,
+        this.selectedVersionObject.versionNumber
+      );
+    },
   },
   computed: {
     tableHeaders: {
