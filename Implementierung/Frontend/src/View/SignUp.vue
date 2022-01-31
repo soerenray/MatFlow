@@ -34,20 +34,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                  Open Dialog
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title> Registration was successfull </v-card-title>
-                <v-card-text
-                  >Your registration was send to the adminastrator, who will
-                  approve your account.
-                </v-card-text>
-              </v-card>
-            </v-dialog>
+            <v-btn color="primary" dark> Open Dialog </v-btn>
           </v-row>
         </v-card-text>
       </v-card>
@@ -63,7 +50,7 @@ let signUpObject = new SignUp();
 export default {
   name: "SignUp",
   data: () => {
-    return { showPassword: false, showPasswordRepeated: false, dialog: false };
+    return { showPassword: false, showPasswordRepeated: false };
   },
   computed: {
     userName: {
