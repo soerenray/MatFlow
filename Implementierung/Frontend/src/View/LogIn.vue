@@ -32,7 +32,7 @@
                 <a href>SignUp</a>
               </div>
               <v-spacer></v-spacer>
-              <v-btn disabled>LogIn</v-btn>
+              <v-btn color='blue'>LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>
