@@ -243,7 +243,24 @@ class TestGetTemplateAndNames(TestWorkflowManager):
 
 
 class TestCreateNewVersion(TestWorkflowManager):
-    pass
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def setUp(self, mock_wf_data):
+        # create a template first
+        dag_file_t1: Path = self.base_path / "tpl1.py"
+        t1: Template = Template("t1", dag_file_t1)
+        self.w_man.create_template(t1)
+
+        # then create a workflow instance
+        instance_name: str = "instance1"
+        conf_folder: Path = self.base_path / "conf_folders" / "folder2"
+
+        # for the actual creation we use a mock to avoid side effects
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        self.w_man.create_workflow_instance_from_template("t1", instance_name, conf_folder)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_unknown_instance(self, mock_wf_data):
+        pass
 
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
