@@ -17,7 +17,7 @@
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
             ><v-select
-              :items="item.selectPrivileges"
+              :items="selectPrivileges"
               v-model="item.userPrivilege"
             ></v-select
           ></template>
