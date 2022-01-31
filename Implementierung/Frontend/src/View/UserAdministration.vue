@@ -77,6 +77,14 @@ export default {
       set: function(tableHeaders: object[]) {
         userAdministrationObject.tableHeaders = tableHeaders
       }
+    },
+    users: {
+      get: function() : User[] {
+        return userAdministrationObject.users
+      },
+      set: function(users: User[]) {
+        userAdministrationObject.users = users
+      }
     }
   }
 };
