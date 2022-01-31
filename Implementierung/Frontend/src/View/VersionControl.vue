@@ -87,18 +87,6 @@ export default {
     },
   },
   computed: {
-    versionsTableObject: {
-      get: function (): Array<VersionsTableObject> {
-        return versionControlObject.versions.map(
-          (version: Version): VersionsTableObject => {
-            return {
-              versionNumber: version.versionNumber,
-              versionNote: version.versionNote,
-            };
-          }
-        );
-      },
-    },
     tableHeaders: {
       get: function (): object[] {
         return versionControlObject.tableHeaders;
