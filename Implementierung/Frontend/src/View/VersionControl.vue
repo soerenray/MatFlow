@@ -8,9 +8,9 @@
             :items="versions"
             item-key="name"
           >
-            <!-- <template v-slot:[`item.parameterChanges`]="{ item }">
+            <template v-slot:[`item.parameterChanges`]="{ item }">
               <v-btn icon>
-                <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
+                <!-- <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       @click="handleEvent(item)"
@@ -28,12 +28,12 @@
                       )
                     "
                   ></key-value-pairs>
-                </v-dialog>
+                </v-dialog> -->
               </v-btn>
             </template>
             <template v-slot:[`item.workspace`]="{}"
               ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
-            ></template> -->
+            ></template>
           </v-data-table>
         </v-card>
       </v-col>
