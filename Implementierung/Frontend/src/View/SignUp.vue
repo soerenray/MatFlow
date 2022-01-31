@@ -54,7 +54,7 @@ export default {
   name: "SignUp",
   methods: {
     pushSignUp() {
-      backendServerCommunicatorObject.pushRegister(
+      backendServerCommunicatorObject.pushSignUp(
         signUpObject.userName,
         signUpObject.userPassword,
         signUpObject.userPasswordRepeated
