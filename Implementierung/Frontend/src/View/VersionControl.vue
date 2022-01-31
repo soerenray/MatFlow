@@ -120,6 +120,14 @@ export default {
         versionControlObject.tableHeaders = tableHeaders;
       },
     },
+    versions: {
+      get: function () {
+        return versionControlObject.versions;
+      },
+      set: function (versions: Version[]) {
+        versionControlObject.versions;
+      },
+    },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
