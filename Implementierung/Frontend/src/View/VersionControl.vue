@@ -62,7 +62,7 @@ export default {
     KeyValuePairs,
   },
   methods: {
-    handleEvent: function (selectedVersionObject: any) {
+    handleEvent: function (selectedVersionObject: Version) {
       versionControlObject.selectedVersionObject = selectedVersionObject;
     },
     pullVersionsWithWorkflowInstanceName: function () {
