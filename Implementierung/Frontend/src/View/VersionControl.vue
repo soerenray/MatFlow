@@ -54,23 +54,15 @@ interface VersionsTableObject {
 }
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
-const versionControlObject = new VersionControl();
+const versionControlObject = new VersionControl([
+  { text: "Version number", value: "versionNumber" },
+  { text: "Version notes", value: "versionNote" },
+  { text: "Changed parameters", value: "parameterChanges" },
+  { text: "Load into current workspace", value: "workspace" },
+]);
 
 export default {
   name: "VersionControl",
-  data: function () {
-    return {
-      dialoge: false,
-      selectedVersion: "",
-      selectedItem: {},
-      headers: [
-        { text: "Version number", value: "versionNumber" },
-        { text: "Version notes", value: "versionNote" },
-        { text: "Changed parameters", value: "parameterChanges" },
-        { text: "Load into current workspace", value: "workspace" },
-      ],
-    };
-  },
   components: {
     KeyValuePairs,
   },
