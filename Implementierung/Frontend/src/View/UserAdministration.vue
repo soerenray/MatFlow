@@ -57,11 +57,11 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import User from "../Classes/User";
 import UserAdministration from "../Model/UserAdministration";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const userAdministrationObject = new UserAdministration([
   { text: "Username", value: "name" },
   { text: "User priviliges", value: "privilege" },
@@ -101,6 +101,10 @@ export default {
     // Vue is oberserving data in the data property.
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(userAdministrationObject);
+  },
+  created: function () {
+    userAdministrationObject.users =
+      backendServerCommunicatorObject.pullUsers();
   },
 };
 </script>
