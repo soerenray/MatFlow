@@ -47,7 +47,7 @@ class VersionControl {
     * @returns _selectedVersionObject
     */
     public get selectedVersionObject(): Version {
-        return this.selectedVersionObject
+        return this._selectedVersionObject
     }
 
     /**
