@@ -2,6 +2,7 @@ import Version from '../Classes/Version'
 
 class VersionControl {
     private _tableHeaders: object[]
+    private _dialogKeyValuePairs: boolean
     private _versions: Version[]
     private _workflowInstanceName: string
     private _workflowInstancesName: string[]
@@ -9,12 +10,14 @@ class VersionControl {
     /**
     *
     * @param tableHeaders The tableHeaders
+    * @param dialogKeyValuePairs True if the difference of the keyValuePairs should be displayed, false otherwise
     * @param versions The versions
     * @param workflowInstanceName The workflowInstanceName
     * @param workflowInstancesName The workflowInstancesName
     */
-    constructor(tableHeaders: object[] = [], versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
+    constructor(tableHeaders: object[] = [], dialogKeyValuePairs: boolean = false, versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
         this._tableHeaders = tableHeaders
+        this._dialogKeyValuePairs = dialogKeyValuePairs
         this._versions = versions
         this._workflowInstanceName = workflowInstanceName
         this._workflowInstancesName = workflowInstancesName
@@ -26,6 +29,14 @@ class VersionControl {
     */
     public get tableHeaders(): object[] {
         return this._tableHeaders
+    }
+
+    /**
+    * Gets the dialogKeyValuePairs
+    * @returns _dialogKeyValuePairs
+    */
+    public get dialogKeyValuePairs(): boolean {
+        return this._dialogKeyValuePairs
     }
 
     /**
@@ -58,6 +69,14 @@ class VersionControl {
     */
     public set tableHeaders(tableHeaders: object[]) {
         this._tableHeaders = tableHeaders
+    }
+
+    /**
+    * Sets the value of _dialogKeyValuePairs
+    * @param dialogKeyValuePairs The new value of _dialogKeyValuePairs
+    */
+    public set dialogKeyValuePairs(dialogKeyValuePairs: boolean) {
+        this._dialogKeyValuePairs = dialogKeyValuePairs
     }
 
     /**
