@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import List, Tuple
+import json
+from typing import List, Tuple, Type
 
 from flask import request
 
@@ -85,16 +86,17 @@ class Server:
         Returns:
             Server: decoded server object
         """
-        name: str = request_details.args.get(keys.server_name)
-        ip_address: str = request_details.args.get(keys.server_address_name)
-        status: str = request_details.args.get(keys.user_status_name)
-        container_limit: int = int(request_details.args.get(keys.container_limit_name))
-        resources: List[Tuple[str, str]] = request_details.args.get(keys.server_resources_name)
-        executing: bool = bool(request_details.args.get(keys.selected_for_execution_name))
+        decoded_json: dict = json.loads(request_details.get_json())
+        name: str = decoded_json[keys.server_name]
+        ip_address: str = decoded_json[keys.server_address_name]
+        status: str = decoded_json[keys.user_status_name]
+        container_limit: int = int(decoded_json[keys.container_limit_name])
+        resources: Type[List[Tuple[str, str]]] = decoded_json[keys.server_resources_name]
+        executing: bool = bool(decoded_json[keys.selected_for_execution_name])
         server: Server = Server(name, ip_address, status, container_limit, executing, resources)
         return server
 
-    def encode_server(self) -> str:
+    def encode_server(self) -> dict:
         """
         encodes all server attributes and dumps them into json object
 
@@ -110,6 +112,6 @@ class Server:
         out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
                           keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
                           keys.server_resources_name: resources}
-        return ExceptionHandler.success(out_dict)
+        return out_dict
 
 

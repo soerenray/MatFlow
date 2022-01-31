@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import List
 
 from flask import request
@@ -71,14 +72,15 @@ class User:
         Returns:
             User: decoded user object
         """
-        user_name: str = request_details.args.get(keys.user_name)
-        status: str = request_details.args.get(keys.user_status_name)
-        privilege: str = request_details.args.get(keys.user_privilege_name)
-        password: str = request_details.args.get(keys.password_name)
+        decoded_json: dict = json.loads(request_details.get_json())
+        user_name: str = decoded_json[keys.user_name]
+        status: str = decoded_json[keys.user_status_name]
+        privilege: str = decoded_json[keys.user_privilege_name]
+        password: str = decoded_json[keys.password_name]
         user: User = User(user_name, status, privilege, password)
         return user
 
-    def encode_user(self) -> str:
+    def encode_user(self) -> dict:
         """
         encodes all user attributes and dumps them into json object
 
@@ -86,7 +88,7 @@ class User:
             String: json-dumped object containing encoded user
         """
 
-        out_dict: dict = {}
+        out_dict: dict = dict()
         out_dict.update({keys.user_name: self.getUsername(), keys.user_status_name: self.getStatus(),
                          keys.user_privilege_name: self.getPrivilege()})
-        return ExceptionHandler.success(out_dict)
+        return out_dict

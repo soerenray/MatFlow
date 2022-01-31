@@ -4,7 +4,7 @@ import requests
 from os import listdir
 from shutil import copy, copytree
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from .frontend_version import FrontendVersion
 from .database_version import DatabaseVersion
 from .template import Template
@@ -160,7 +160,7 @@ class WorkflowManager:
         template_path: Path = self.__template_base_directory / (template_name + ".py")
         return Template(template_name, template_path)
 
-    def get_names_of_workflows_and_config_files(self) -> List[List[str]]:
+    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[str]]:
         """Returns the names of all workflow instances as well as the names of the associated config-files
 
         Forwards the request to the database.
@@ -170,7 +170,7 @@ class WorkflowManager:
             is followed by the names of the associated config-files
 
         """
-        return self.__workflow_data.get_Names_Of_Workflows_And_Config_Files()
+        return self.__workflow_data.get_names_of_workflows_and_config_files()
 
     def get_key_value_pairs_from_config_file(
             self, workflow_instance_name: str, config_file_name: str) -> ReducedConfigFile:
@@ -188,7 +188,7 @@ class WorkflowManager:
             List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
-        file_path: Path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
+        file_path: Path = self.__workflow_data.get_config_file_from_active_workflow_instance(
             workflow_instance_name, config_file_name)
         return ConfigFile(config_file_name, file_path)
 
@@ -208,10 +208,10 @@ class WorkflowManager:
         """
         # request current version from database
         current_version_number: VersionNumber = \
-            VersionNumber(self.__workflow_data.get_Active_Version_Of_Workflow_Instance(workflow_instance_name))
+            VersionNumber(self.__workflow_data.get_active_version_of_workflow_instance(workflow_instance_name))
 
         # calculate the new version number from the current one
-        existing_version_numbers: List[str] = self.__workflow_data.get_Version_Numbers_Of_Workflow_Instance(
+        existing_version_numbers: List[str] = self.__workflow_data.get_version_numbers_of_workflow_instance(
             workflow_instance_name)
         new_version_number: VersionNumber = current_version_number.get_successor(existing_version_numbers)
 
@@ -224,7 +224,7 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__workflow_data.get_Config_File_From_Active_Workflow_Instance(
+            file_path = self.__workflow_data.get_config_file_from_active_workflow_instance(
                 workflow_instance_name, file_name)
             old_files.append(file_path)
 
@@ -242,7 +242,7 @@ class WorkflowManager:
 
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
         new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
-        self.__workflow_data.create_New_Version_Of_Worlkflow_Instance(
+        self.__workflow_data.create_new_version_of_workflow_instance(
             workflow_instance_name, new_version, current_version_number.get_number())
 
     def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
@@ -261,7 +261,7 @@ class WorkflowManager:
                 """
         # request to database to get a DatabaseVersion object for every version
         versions: List[DatabaseVersion] = \
-            self.__workflow_data.get_Database_Versions_Of_Workflow_Instance(workflow_instance_name)
+            self.__workflow_data.get_database_versions_of_workflow_instance(workflow_instance_name)
 
         # create result buffer
         frontend_versions: List[FrontendVersion] = []
@@ -277,7 +277,7 @@ class WorkflowManager:
                 # get the unchanged file for all changed files
                 comparison_files: List[Tuple[str, Path]] = []
                 for file_name in file_names:
-                    file_path: Path = self.__workflow_data.get_Config_File_From_Workflow_Instance(
+                    file_path: Path = self.__workflow_data.get_config_file_from_workflow_instance(
                         workflow_instance_name, file_name, predecessor_number.get_number())
                     comparison_files.append((file_name, file_path))
 
@@ -305,7 +305,7 @@ class WorkflowManager:
         # TODO current_conf-Ordner anpassen
 
         # if not tell database to change the active version
-        self.__workflow_data.set_Active_Version_Through_Number(workflow_instance_name, version_number)
+        self.__workflow_data.set_active_version_through_number(workflow_instance_name, version_number)
         pass
 
     # private methods
