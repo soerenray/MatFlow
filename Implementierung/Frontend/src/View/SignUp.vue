@@ -34,7 +34,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark> Open Dialog </v-btn>
+            <v-btn color="primary" dark> SignUp </v-btn>
           </v-row>
         </v-card-text>
       </v-card>
