@@ -34,10 +34,6 @@
             <template v-slot:[`item.workspace`]="{}"
               ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
             ></template>
-            <template v-slot:top>
-              <!-- Can be implemented in the future -->
-              <v-text-field label="Search notes" class="mx-4"></v-text-field>
-            </template>
           </v-data-table>
         </v-card>
       </v-col>
