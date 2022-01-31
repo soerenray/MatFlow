@@ -42,9 +42,9 @@
 </template>
 
 <script lang='ts'>
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 import Version from "../Classes/Version";
 import VersionControl from "../Model/VersionControl";
-
 import KeyValuePairs from "./KeyValuePairs.vue";
 
 interface VersionsTableObject {
@@ -52,7 +52,8 @@ interface VersionsTableObject {
   versionNote: string;
 }
 
-let versionControlObject = new VersionControl();
+const backendServerCommunicatorObject = new BackendServerCommunicator()
+const versionControlObject = new VersionControl();
 
 export default {
   name: "VersionControl",
