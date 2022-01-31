@@ -42,7 +42,8 @@
 </template>
 
 <script lang='ts'>
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+import Vue from "vue";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import Version from "../Classes/Version";
 import VersionControl from "../Model/VersionControl";
 import KeyValuePairs from "./KeyValuePairs.vue";
@@ -52,7 +53,7 @@ interface VersionsTableObject {
   versionNote: string;
 }
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const versionControlObject = new VersionControl();
 
 export default {
@@ -77,8 +78,11 @@ export default {
     handleEvent: function (selectedItem: any) {
       this.selectedItem = selectedItem;
     },
-    pullVersionsWithWorkflowInstanceName: function() {
-      versionControlObject.versions = backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName('')
+    pullVersionsWithWorkflowInstanceName: function () {
+      versionControlObject.versions =
+        backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
+          ""
+        );
     },
     getKeyValuePairsByVersionNumber: function (
       versionNumber: string
@@ -108,6 +112,11 @@ export default {
         );
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(versionControlObject);
   },
 };
 </script>
