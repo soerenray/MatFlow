@@ -64,7 +64,7 @@ class UserController:
         elif overrideStatus == "inactive":
             overridePrivilege = None
         overridePayload = {
-               "email": "", "first_name": "", "last_name": "", "roles": [{"name": overridePrivilege}], "username": overrideUsername, "password": overridePassword}
+               "email": ".", "first_name": ".", "last_name": ".", "roles": [{"name": overridePrivilege}], "username": overrideUsername, "password": overridePassword}
         patchOverrideUser = requests.patch(overrideAddress, json = overridePayload, auth = self.getAuth())
         if patchOverrideUser.status_code != 200:
             return "UserExistsException"
@@ -108,7 +108,7 @@ class UserController:
             return "signUpException"
         createUserAddress = "http://localhost:8080/api/v1/users"
         createUserPayload = {
-               "email": "", "first_name": "", "last_name": "", "roles": [{"name": None}], "username": signUpUsername, "password": signUpPassword}
+               "email": ".", "first_name": ".", "last_name": ".", "roles": [{"name": "Public"}], "username": signUpUsername, "password": signUpPassword}
         createUserStatusCode = requests.post(createUserAddress, json =createUserPayload, auth = self.getAuth())
         if createUserStatusCode.status_code != 200:
             return "UserExistsException"
