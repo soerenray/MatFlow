@@ -32,7 +32,7 @@
                 <a href>SignUp</a>
               </div>
               <v-spacer></v-spacer>
-              <v-btn color='blue'>LogIn</v-btn>
+              <v-btn color="blue">LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>
@@ -42,19 +42,14 @@
 </template>
 
 <script lang='ts'>
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import LogIn from "../Model/LogIn";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const logInObject = new LogIn();
 
 export default {
   name: "LogIn",
-  data: () => {
-    return {
-      showPassword: false,
-    };
-  },
   computed: {
     userName: {
       get: function (): string {
@@ -70,6 +65,14 @@ export default {
       },
       set: function (userPassword: string) {
         logInObject.userPassword = userPassword;
+      },
+    },
+    showPassword: {
+      get: function (): boolean {
+        return logInObject.showPassword;
+      },
+      set: function (showPassword: boolean) {
+        logInObject.showPassword = showPassword;
       },
     },
   },
