@@ -10,7 +10,7 @@
           >
             <template v-slot:[`item.parameterChanges`]="{ item }">
               <v-btn icon>
-                <v-dialog v-model="dialog" max-width="600px">
+                <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       @click="handleEvent(item)"
