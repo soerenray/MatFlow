@@ -113,7 +113,7 @@ export default {
       },
     },
     tableHeaders: {
-      get: function () {
+      get: function (): object[] {
         return versionControlObject.tableHeaders;
       },
       set: function (tableHeaders: object[]) {
@@ -121,7 +121,7 @@ export default {
       },
     },
     versions: {
-      get: function () {
+      get: function (): Version[] {
         return versionControlObject.versions;
       },
       set: function (versions: Version[]) {
@@ -129,7 +129,7 @@ export default {
       },
     },
     workflowInstanceName: {
-      get: function () {
+      get: function (): string {
         return versionControlObject.workflowInstanceName;
       },
       set: function (workflowInstanceName: string) {
