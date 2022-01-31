@@ -1,6 +1,8 @@
 import filecmp
 import os
 import shutil
+from typing import List
+
 import mock
 from pathlib import Path
 from unittest import TestCase
@@ -17,11 +19,14 @@ class TestWorkflowManager(TestCase):
     w_man._WorkflowManager__versions_base_directory = base_path / "wf_instances"
     w_man._WorkflowManager__template_base_directory = base_path / "templates"
 
+    def tearDown(self):
+        # clean up dirs after every run
+        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
+        delete_dir_content(self.w_man._WorkflowManager__versions_base_directory)
+
 
 class TestCreateTemplate(TestWorkflowManager):
     def setUp(self):
-        # clear template folder
-        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
         self.dag_file_t1: Path = self.base_path / "tpl1.py"
         self.t1: Template = Template("t1", self.dag_file_t1)
 
@@ -61,14 +66,10 @@ class TestCreateTemplate(TestWorkflowManager):
 class TestCreateInstanceFromTemplate(TestWorkflowManager):
     def setUp(self):
         # create a possible template, that can be used for creation
-        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
         dag_file_t1: Path = self.base_path / "tpl1.py"
         self.name_t1: str = "t1"
         t1: Template = Template("t1", dag_file_t1)
         self.w_man.create_template(t1)
-
-        # clear the workflow_instance dir after every run
-        delete_dir_content(self.w_man._WorkflowManager__versions_base_directory)
 
         # set up the base path for the conf folders
         self.conf_base_path: Path = self.base_path / "conf_folders"
@@ -194,6 +195,28 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         expected_path: Path = expected_instance_path / "1"
         self.assertTrue(os.path.isdir(expected_path))
         self.assertTrue(are_dir_trees_equal(expected_path, only_conf_dir))
+
+
+class TestGetTemplateAndNames(TestWorkflowManager):
+    def setUp(self):
+        # create tree different templates
+        dag_file: Path = self.base_path / "tpl1.py"
+        t1: Template = Template("t1", dag_file)
+        t2: Template = Template("t2", dag_file)
+        t3: Template = Template("t3", dag_file)
+        self.w_man.create_template(t1)
+        self.w_man.create_template(t2)
+        self.w_man.create_template(t3)
+
+    def test_get_template_names(self):
+        # Arrange
+        expected_names: List[str] = ["t1", "t2", "t3"]
+
+        # Act
+        actual_names: List[str] = self.w_man.get_template_names()
+
+        # Assert
+        self.assertEqual(expected_names, actual_names)
 
 
 class TestCreateNewVersion(TestWorkflowManager):
