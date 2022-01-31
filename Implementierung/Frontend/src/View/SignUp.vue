@@ -44,9 +44,11 @@
 
 <script lang='ts'>
 import Vue from "vue";
+import BackenderServerCommunicator from '../Controler/BackendServerCommunicator'
 import SignUp from "../Model/SignUp";
 
-let signUpObject = new SignUp();
+const backendServerCommunicatorObject = new BackenderServerCommunicator()
+const signUpObject = new SignUp();
 
 export default {
   name: "SignUp",
