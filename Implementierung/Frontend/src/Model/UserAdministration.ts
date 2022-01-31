@@ -11,7 +11,7 @@ class UserAdministration {
     * @param searchedUser The searchedUser
     * @param users The users
     */
-    constructor(tableHeaders: object[], searchedUser: string, users: User[],) {
+    constructor(tableHeaders: object[] = [], searchedUser: string = "", users: User[] = [],) {
         this._tableHeaders = tableHeaders
         this._searchedUser = searchedUser
         this._users = users
