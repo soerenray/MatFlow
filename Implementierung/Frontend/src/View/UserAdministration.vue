@@ -62,20 +62,23 @@ import User from "../Classes/User";
 import UserAdministration from "../Model/UserAdministration";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
-const userAdministrationObject = new UserAdministration([
-  { text: "Username", value: "name" },
-  { text: "User priviliges", value: "privilege" },
-  { text: "Status", value: "status" },
-  { text: "Delete", value: "delete" },
-  { text: "Reset password", value: "password" },
-]);
+const userAdministrationObject = new UserAdministration(
+  [
+    { text: "Username", value: "name" },
+    { text: "User priviliges", value: "privilege" },
+    { text: "Status", value: "status" },
+    { text: "Delete", value: "delete" },
+    { text: "Reset password", value: "password" },
+  ],
+  [],
+  ["activated", "suspended", "pending"],
+  ["visitor", "developer", "administrator"]
+);
 
 export default {
   name: "UserAdministration",
   data: function () {
     return {
-      status: ["activated", "suspended", "pending"],
-      privilege: ["visitor", "developer", "administrator"],
       dialog: false,
     };
   },
