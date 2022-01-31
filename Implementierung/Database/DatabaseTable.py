@@ -18,21 +18,15 @@ class DatabaseTable:
             DatabaseTable.__instance = self
             return
 
-    # TODO vvv
-    """maybe outsource to config file? https://overiq.com/mysql-connector-python-101/connecting-to-mysql-using-connector-python/
-    db = mysql.connector.connect(
-        host='localhost',
-        database='world',
-        user='root',
-        password='12345',
-        port='3306'
-    )"""
-
     def get_database_connection(self):
         """Connect to MySQL Database and return connection.
 
         Parameters are set."""
 
+        # read from file instead of hardcoding
+        return mysql.connector.connect(option_files='mydb.conf')
+
+        # conneccction data
         db = mysql.connector.connect(
             host='localhost',
             database='databaseshema',
