@@ -3,6 +3,7 @@ import Version from '../Classes/Version'
 class VersionControl {
     private _tableHeaders: object[]
     private _dialogKeyValuePairs: boolean
+    private _selectedVersionObject: Version
     private _versions: Version[]
     private _workflowInstanceName: string
     private _workflowInstancesName: string[]
@@ -11,13 +12,15 @@ class VersionControl {
     *
     * @param tableHeaders The tableHeaders
     * @param dialogKeyValuePairs True if the difference of the keyValuePairs should be displayed, false otherwise
+    * @param selectedVersionObject The selectedVersionObject
     * @param versions The versions
     * @param workflowInstanceName The workflowInstanceName
     * @param workflowInstancesName The workflowInstancesName
     */
-    constructor(tableHeaders: object[] = [], dialogKeyValuePairs: boolean = false, versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
+    constructor(tableHeaders: object[] = [], dialogKeyValuePairs: boolean = false, selectedVersionObject: Version = new Version(), versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
         this._tableHeaders = tableHeaders
         this._dialogKeyValuePairs = dialogKeyValuePairs
+        this._selectedVersionObject = selectedVersionObject
         this._versions = versions
         this._workflowInstanceName = workflowInstanceName
         this._workflowInstancesName = workflowInstancesName
@@ -37,6 +40,14 @@ class VersionControl {
     */
     public get dialogKeyValuePairs(): boolean {
         return this._dialogKeyValuePairs
+    }
+
+    /**
+    * Gets the selectedVersionObject
+    * @returns _selectedVersionObject
+    */
+    public get selectedVersionObject(): Version {
+        return this.selectedVersionObject
     }
 
     /**
@@ -77,6 +88,14 @@ class VersionControl {
     */
     public set dialogKeyValuePairs(dialogKeyValuePairs: boolean) {
         this._dialogKeyValuePairs = dialogKeyValuePairs
+    }
+
+    /**
+    * Sets the value of _selectedVersionObject
+    * @param selectedVersionObject The new value of _selectedVersionObject
+    */
+    public set selectedVersionObject(selectedVersionObject: Version) {
+        this._selectedVersionObject = selectedVersionObject
     }
 
     /**
