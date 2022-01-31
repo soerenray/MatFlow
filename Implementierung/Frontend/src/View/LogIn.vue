@@ -3,7 +3,7 @@
     <v-layout justify-center align-center>
       <v-card width="800px" height="400px">
         <v-card-title class="justify-center">
-          <p>Log-in</p>
+          <p>LogIn</p>
         </v-card-title>
         <v-card-text>
           <v-col>
@@ -29,10 +29,10 @@
             </div>
             <v-row>
               <div style="padding-left: 10px; padding-top: 5px">
-                <a href>register</a>
+                <a href>SignUp</a>
               </div>
               <v-spacer></v-spacer>
-              <v-btn disabled>log-in</v-btn>
+              <v-btn @click='pushLogIn' color="blue">LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>
@@ -42,16 +42,22 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import LogIn from "../Model/LogIn";
 
-let logInObject = new LogIn();
+const backendServerCommunicatorObject = new BackendServerCommunicator();
+const logInObject = new LogIn();
 
 export default {
   name: "LogIn",
-  data: () => {
-    return {
-      showPassword: false,
-    };
+  methods: {
+    pushLogIn() {
+      backendServerCommunicatorObject.pushLogIn(
+        logInObject.userName,
+        logInObject.userPassword
+      );
+    },
   },
   computed: {
     userName: {
@@ -70,6 +76,19 @@ export default {
         logInObject.userPassword = userPassword;
       },
     },
+    showPassword: {
+      get: function (): boolean {
+        return logInObject.showPassword;
+      },
+      set: function (showPassword: boolean) {
+        logInObject.showPassword = showPassword;
+      },
+    },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(logInObject);
   },
 };
 </script>
