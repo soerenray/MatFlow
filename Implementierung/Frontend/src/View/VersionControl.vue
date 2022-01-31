@@ -28,7 +28,7 @@
               </v-btn>
             </template>
             <template v-slot:[`item.workspace`]="{}"
-              ><v-btn icon><file-restore-icon></file-restore-icon></v-btn
+              ><v-btn @click="pushReplaceActiveVersionOfWorkflowInstance" icon><file-restore-icon></file-restore-icon></v-btn
             ></template>
           </v-data-table>
         </v-card>
