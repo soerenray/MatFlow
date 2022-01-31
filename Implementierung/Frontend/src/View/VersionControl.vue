@@ -28,7 +28,8 @@
               </v-btn>
             </template>
             <template v-slot:[`item.workspace`]="{}"
-              ><v-btn @click="pushReplaceActiveVersionOfWorkflowInstance" icon><file-restore-icon></file-restore-icon></v-btn
+              ><v-btn @click="pushReplaceActiveVersionOfWorkflowInstance" icon
+                ><file-restore-icon></file-restore-icon></v-btn
             ></template>
           </v-data-table>
         </v-card>
@@ -64,7 +65,7 @@ export default {
     pullVersionsWithWorkflowInstanceName: function () {
       versionControlObject.versions =
         backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
-          ""
+          versionControlObject.workflowInstanceName
         );
     },
     pushReplaceActiveVersionOfWorkflowInstance() {
@@ -104,7 +105,7 @@ export default {
         return versionControlObject.versions;
       },
       set: function (versions: Version[]) {
-        versionControlObject.versions;
+        versionControlObject.versions = versions;
       },
     },
     workflowInstanceName: {
