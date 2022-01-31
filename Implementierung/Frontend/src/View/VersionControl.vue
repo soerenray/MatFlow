@@ -13,7 +13,7 @@
                 <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
-                      @click="handleEvent(item)"
+                      @click="selectNewVersionObject(item)"
                       icon
                       v-bind="attrs"
                       v-on="on"
@@ -22,9 +22,7 @@
                     </v-btn>
                   </template>
                   <key-value-pairs
-                    :parameter-changes="
-                      selectedVersionObject.parameterChanges
-                    "
+                    :parameter-changes="selectedVersionObject.parameterChanges"
                   ></key-value-pairs>
                 </v-dialog>
               </v-btn>
@@ -60,7 +58,7 @@ export default {
     KeyValuePairs,
   },
   methods: {
-    handleEvent: function (selectedVersionObject: Version) {
+    selectNewVersionObject: function (selectedVersionObject: Version) {
       versionControlObject.selectedVersionObject = selectedVersionObject;
     },
     pullVersionsWithWorkflowInstanceName: function () {
