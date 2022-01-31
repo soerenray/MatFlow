@@ -21,13 +21,11 @@
                       <file-document-outline-icon></file-document-outline-icon>
                     </v-btn>
                   </template>
-                  <!-- <key-value-pairs
+                  <key-value-pairs
                     :parameter-changes="
-                      getKeyValuePairsByVersionNumber(
-                        selectedVersionObject.versionNumber
-                      )
+                      selectedVersionObject.parameterChanges
                     "
-                  ></key-value-pairs> -->
+                  ></key-value-pairs>
                 </v-dialog>
               </v-btn>
             </template>
