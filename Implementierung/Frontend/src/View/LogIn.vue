@@ -32,7 +32,7 @@
                 <a href>SignUp</a>
               </div>
               <v-spacer></v-spacer>
-              <v-btn color="blue">LogIn</v-btn>
+              <v-btn @click='pushLogIn' color="blue">LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>
@@ -51,6 +51,14 @@ const logInObject = new LogIn();
 
 export default {
   name: "LogIn",
+  methods: {
+    pushLogIn() {
+      backendServerCommunicatorObject.pushLogIn(
+        logInObject.userName,
+        logInObject.userPassword
+      );
+    },
+  },
   computed: {
     userName: {
       get: function (): string {
