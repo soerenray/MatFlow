@@ -48,7 +48,7 @@
     </div>
   </v-app>
 </template>
-<script>
+<script lang="ts">
 import User from "../Classes/User";
 import UserAdministration from "../Model/UserAdministration";
 
@@ -74,5 +74,15 @@ export default {
       ],
     };
   },
+  computed: {
+    tableHeaders: {
+      get: function(): object[] {
+        return userAdministrationObject.tableHeaders
+      },
+      set: function(tableHeaders: object[]) {
+        userAdministrationObject.tableHeaders = tableHeaders
+      }
+    }
+  }
 };
 </script>
