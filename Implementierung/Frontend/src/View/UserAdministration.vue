@@ -27,8 +27,9 @@
               v-model="item.userStatus"
             ></v-select
           ></template>
-          <template v-slot:[`item.delete`]="{}">
-            <v-btn icon> <delete-icon></delete-icon></v-btn></template
+          <template v-slot:[`item.delete`]="{ item }">
+            <v-btn @click="pushDeleteUser(item)" icon>
+              <delete-icon></delete-icon></v-btn></template
           ><template v-slot:[`item.password`]="{}">
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
