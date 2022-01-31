@@ -4,7 +4,7 @@
       <v-col align="center">
         <v-card width="1000px">
           <v-data-table
-            :headers="headers"
+            :headers="tableHeaders"
             :items="versionsTableObject"
             item-key="name"
           >
