@@ -74,6 +74,22 @@ export default {
         signUpObject.userPasswordRepeated = userPasswordRepeated;
       },
     },
+    showPassword: {
+      get: function (): boolean {
+        return signUpObject.showPassword;
+      },
+      set: function (showPassword: boolean) {
+        signUpObject.showPassword = showPassword;
+      },
+    },
+    showPasswordRepeated: {
+      get: function (): boolean {
+        return signUpObject.showPasswordRepeated;
+      },
+      set: function (showPasswordRepeated: boolean) {
+        signUpObject.showPasswordRepeated = showPasswordRepeated;
+      },
+    },
   },
 };
 </script>
