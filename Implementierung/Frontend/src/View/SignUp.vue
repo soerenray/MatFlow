@@ -43,6 +43,7 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import SignUp from "../Model/SignUp";
 
 let signUpObject = new SignUp();
@@ -89,6 +90,11 @@ export default {
       set: function (showPasswordRepeated: boolean) {
         signUpObject.showPasswordRepeated = showPasswordRepeated;
       },
+    },
+    beforeCreate: function () {
+      // Vue is oberserving data in the data property.
+      // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+      Vue.observable(signUpObject);
     },
   },
 };
