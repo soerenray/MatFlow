@@ -85,6 +85,11 @@ export default {
       dialog: false,
     };
   },
+  methods: {
+    pushDeleteUser(user: User) {
+      backendServerCommunicatorObject.pushDeleteUser(user);
+    },
+  },
   computed: {
     tableHeaders: {
       get: function (): object[] {
