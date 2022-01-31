@@ -49,6 +49,11 @@
   </v-app>
 </template>
 <script>
+import User from "../Classes/User";
+import UserAdministration from "../Model/UserAdministration";
+
+const userAdministrationObject = new UserAdministration();
+
 export default {
   name: "UserAdministration",
   data: function () {
