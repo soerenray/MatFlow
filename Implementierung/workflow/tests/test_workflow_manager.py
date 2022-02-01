@@ -9,11 +9,12 @@ from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.database_version import DatabaseVersion
+from Implementierung.workflow.frontend_version import FrontendVersion
+from Implementierung.workflow.parameter_change import ParameterChange
 from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.template import Template
 from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
     DoubleWorkflowInstanceNameException, EmptyConfigFolderException
-from Implementierung.Database.WorkflowData import WorkflowData
 
 
 class TestWorkflowManager(TestCase):
@@ -354,11 +355,11 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         self.w_man._WorkflowManager__versions_base_directory = prepared_folder
         # now the folder is set up
         # now we have to create the DatabaseVersion that are returned from the database mock
-        instance_path: Path = prepared_folder / "instance1"
-        self.ver1: DatabaseVersion = DatabaseVersion(VersionNumber("1"), "", instance_path / "1")
-        self.ver1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1"), "", instance_path / "1_1")
-        self.ver1_2: DatabaseVersion = DatabaseVersion(VersionNumber("1.2"), "", instance_path / "1_2")
-        self.ver1_1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1.1"), "", instance_path / "1_1_1")
+        self.instance_path: Path = prepared_folder / "instance1"
+        self.ver1: DatabaseVersion = DatabaseVersion(VersionNumber("1"), "", self.instance_path / "1")
+        self.ver1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1"), "", self.instance_path / "1_1")
+        self.ver1_2: DatabaseVersion = DatabaseVersion(VersionNumber("1.2"), "", self.instance_path / "1_2")
+        self.ver1_1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1.1"), "", self.instance_path / "1_1_1")
 
     def tearDown(self):
         # now we have to put in the old, empty instance folder
@@ -369,6 +370,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
     def test_unknown_instance(self, mock_wf_data):
         # Arrange
         unknown_instance_name: str = "unknown"
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
         expected_msg: str = "Internal Error: " + unknown_instance_name + " doesn't refer to a wf instance."
 
         # Act + Assert
@@ -378,6 +380,34 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
 
         # make sure the database wasn't called
         self.assertFalse(mock_wf_data.called)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_valid_instance(self, mock_wf_data):
+        # Arrange
+        instance_name: str = "instance1"
+
+        # define small mock function for 'dynamic' return values
+        def file_from_version(wf_name: str, conf_name: str, version: str):
+            if conf_name == "test1" or version in ["1", "1.1"]:
+                return self.instance_path / VersionNumber(version).get_dir_name() / conf_name
+            else:
+                return self.instance_path / VersionNumber(version).get_predecessor().get_dir_name() / conf_name
+
+        mock_wf_data.get_config_file_from_workflow_instance.side_effect = file_from_version
+        mock_wf_data.get_database_versions_of_workflow_instance.return_value = [
+            self.ver1, self.ver1_1, self.ver1_1_1, self.ver1_2]
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act
+        frontend_versions: List[FrontendVersion] = self.w_man.get_versions_from_workflow_instance(instance_name)
+
+        # Assert
+        # we don't have to inspect the FrontendVersions themselves (we tested that in DatabaseVersion)
+        # but rather look that all of them are there in the right order
+        self.assertEqual(3, len(frontend_versions))
+        self.assertEqual("1.1", frontend_versions[0].get_version_number().get_number())
+        self.assertEqual("1.1.1", frontend_versions[1].get_version_number().get_number())
+        self.assertEqual("1.2", frontend_versions[2].get_version_number().get_number())
 
 
 class TestCopyFilesWithExtension(TestWorkflowManager):
