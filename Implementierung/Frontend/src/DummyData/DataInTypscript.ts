@@ -76,6 +76,10 @@ function setWfConf(wfConstName: string, configFile: ConfigFile) {
 
 }
 
+function deleteUser(user: User) {
+    users = users.filter(userInUsers => { user.userName !== userInUsers.userName })
+}
+
 // pullVersionsWithWorkflowInstanceName
 let versions: Version[] = [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
 ["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
@@ -86,4 +90,4 @@ let users: User[] = [new User('name1', 'suspended', 'administrator'), new User('
 
 // pullServers
 // wont be implemented at the moement (time pressure)
-export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users }
+export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser  }
