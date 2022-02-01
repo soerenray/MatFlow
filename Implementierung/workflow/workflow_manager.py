@@ -28,7 +28,7 @@ class WorkflowManager:
     __workflow_data: WorkflowData = WorkflowData.get_instance()
     __versions_base_directory: Path = Path("")  # TODO
     __template_base_directory: Path = Path("")  # TODO
-    __airflow_dag_folder: Path = Path("") # TODO
+    __airflow_dag_folder: Path = Path("")  # TODO
     __airflow_address: str = "http://localhost:8080/"  # TODO
     __initial_version_note = "initial version"
 
@@ -212,6 +212,10 @@ class WorkflowManager:
             version_note (str): Note about the new version given by the user
 
         """
+        # first check if the wf instance exists
+        if workflow_instance_name not in os.listdir(self.__versions_base_directory):
+            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+
         # request current version from database
         current_version_number: VersionNumber = \
             VersionNumber(self.__workflow_data.get_active_version_of_workflow_instance(workflow_instance_name))
@@ -230,9 +234,7 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__workflow_data.get_config_file_from_active_workflow_instance(
-                workflow_instance_name, file_name)
-            old_files.append(file_path)
+            file_path = self.__versions_base_directory / workflow_instance_name / "current_conf" / (file_name + ".conf")
 
         # copy the old files into the new directory
         for file in old_files:
@@ -241,7 +243,7 @@ class WorkflowManager:
         # apply all the changes to the files in the new directory
         for update in changed_files:
             file_name: str = update.get_file_name()
-            changed_file: ConfigFile = ConfigFile(file_name, version_dir / file_name)
+            changed_file: ConfigFile = ConfigFile(file_name, version_dir / (file_name + ".conf"))
             changed_file.apply_changes(update)
 
         # make new files read-only? TODO
@@ -326,4 +328,4 @@ class WorkflowManager:
         os.mkdir(dst)
         for file in os.listdir(src):
             if extension == "" or os.path.splitext(file)[1] == extension:
-                shutil.copy(src/file, dst)
+                shutil.copy(src / file, dst)

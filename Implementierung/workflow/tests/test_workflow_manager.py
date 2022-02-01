@@ -7,6 +7,7 @@ import mock
 from pathlib import Path
 from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
 from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
     DoubleWorkflowInstanceNameException, EmptyConfigFolderException
@@ -251,16 +252,65 @@ class TestCreateNewVersion(TestWorkflowManager):
         self.w_man.create_template(t1)
 
         # then create a workflow instance
-        instance_name: str = "instance1"
-        conf_folder: Path = self.base_path / "conf_folders" / "folder2"
+        self.instance_name: str = "instance1"
+        self.instance_path: Path = self.w_man._WorkflowManager__versions_base_directory / self.instance_name
+        conf_folder: Path = self.base_path / "conf_folders" / "create_version"
 
         # for the actual creation we use a mock to avoid side effects
         self.w_man._WorkflowManager__workflow_data = mock_wf_data
-        self.w_man.create_workflow_instance_from_template("t1", instance_name, conf_folder)
+        self.w_man.create_workflow_instance_from_template("t1", self.instance_name, conf_folder)
+
+        # apart from that we need actual updates for our files in form of ReducedConfigFiles
+        name_config1: str = "test1"
+        name_config2: str = "test2"
+        self.file1_v1_1: ReducedConfigFile = ReducedConfigFile(
+            name_config1, [("i_was", "changed"), ("key2", "value2"), ("me", "too")])
+        self.file2_v1_1: ReducedConfigFile = ReducedConfigFile(
+            name_config2, [("key4", "value4"), ("key55", "value55"), ("key6", "6")])
+        self.file1_v1_2: ReducedConfigFile = ReducedConfigFile(
+            name_config1, [("version", "1_2"), ("key2", "value2"), ("key3", "value3")])
+        self.file1_v1_1_1: ReducedConfigFile = ReducedConfigFile(
+            name_config1, [("version", "1_1_1"), ("key2", "value2"), ("me", "too")])
+        self.version_note: str = "empty note"
 
     @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
     def test_unknown_instance(self, mock_wf_data):
-        pass
+        # Arrange
+        unknown_instance_name: str = "unknown"
+        expected_msg: str = "Internal Error: " + unknown_instance_name + " doesn't refer to a wf instance."
+        mock_wf_data.get_active_version_of_workflow_instance.return_value = "1"
+
+        # insert the mock object in the right attribute
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.create_new_version_of_workflow_instance(
+                unknown_instance_name, [self.file1_v1_1], self.version_note)
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # make sure the database wasn't called
+        self.assertFalse(mock_wf_data.called)
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_create_multiple_versions(self, mock_wf_data):
+        # in this test everything is supposed to go right. versions 1.1, 1.2, 1.1.1 are subsequently created
+        # Arrange v1_1
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        mock_wf_data.get_active_version_of_workflow_instance.return_value = "1"
+        mock_wf_data.get_version_numbers_of_workflow_instance.return_value = ["1"]
+
+        # Act
+        self.w_man.create_new_version_of_workflow_instance(
+            self.instance_name, [self.file1_v1_1, self.file2_v1_1], self.version_note)
+
+        # Assert
+        self.assertTrue(mock_wf_data.create_new_version_of_workflow_instance.called)
+
+        path1_1: Path = self.instance_path / "1_1"
+        os.path.isdir(path1_1)
+        os.path.isfile(path1_1 / "test1")
+        os.path.isfile(path1_1 / "test2")
 
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
