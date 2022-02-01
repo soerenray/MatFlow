@@ -18,7 +18,7 @@ class Server:
     ressources = List[Tuple[str, str]]
 
     #Konstruktor
-    def __init__(self, name: str, address: str, status: str, containerLimit: int, selectedForExecution: bool, ressources =List[Tuple[str, str]]):
+    def __init__(self, name: str, address: str, status: str, containerLimit: int, selectedForExecution: bool, ressources : List[Tuple[str, str]]):
         self.name = name
         self.address = address
         self.status = status
@@ -89,9 +89,9 @@ class Server:
         decoded_json: dict = json.loads(request_details.get_json())
         name: str = decoded_json[keys.server_name]
         ip_address: str = decoded_json[keys.server_address_name]
-        status: str = decoded_json[keys.user_status_name]
+        status: str = decoded_json[keys.server_status_name]
         container_limit: int = int(decoded_json[keys.container_limit_name])
-        resources: Type[List[Tuple[str, str]]] = decoded_json[keys.server_resources_name]
+        resources: List[Tuple[str, str]] = decoded_json[keys.server_resources_name]
         executing: bool = bool(decoded_json[keys.selected_for_execution_name])
         server: Server = Server(name, ip_address, status, container_limit, executing, resources)
         return server

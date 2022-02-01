@@ -48,6 +48,12 @@ class Hardware_Controller:
         #
         #
 
+    def getServer(self) -> Server:
+        return self.Server
+
+    def setServer(self, server: Server):
+        self.Server = server
+
 
 
 
