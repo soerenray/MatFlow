@@ -8,6 +8,8 @@ from pathlib import Path
 from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
+from Implementierung.workflow.database_version import DatabaseVersion
+from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.template import Template
 from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
     DoubleWorkflowInstanceNameException, EmptyConfigFolderException
@@ -346,7 +348,36 @@ class TestCreateNewVersion(TestWorkflowManager):
 
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
-    pass
+    def setUp(self):
+        # we want to work on an instance with multiple versions for that there is a dir prepared
+        prepared_folder: Path = self.base_path / "wf_instances_prepared"
+        self.w_man._WorkflowManager__versions_base_directory = prepared_folder
+        # now the folder is set up
+        # now we have to create the DatabaseVersion that are returned from the database mock
+        instance_path: Path = prepared_folder / "instance1"
+        self.ver1: DatabaseVersion = DatabaseVersion(VersionNumber("1"), "", instance_path / "1")
+        self.ver1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1"), "", instance_path / "1_1")
+        self.ver1_2: DatabaseVersion = DatabaseVersion(VersionNumber("1.2"), "", instance_path / "1_2")
+        self.ver1_1_1: DatabaseVersion = DatabaseVersion(VersionNumber("1.1.1"), "", instance_path / "1_1_1")
+
+    def tearDown(self):
+        # now we have to put in the old, empty instance folder
+        empty_folder: Path = self.base_path / "wf_instances"
+        self.w_man._WorkflowManager__versions_base_directory = empty_folder
+
+    @mock.patch('Implementierung.workflow.workflow_manager.WorkflowData')
+    def test_unknown_instance(self, mock_wf_data):
+        # Arrange
+        unknown_instance_name: str = "unknown"
+        expected_msg: str = "Internal Error: " + unknown_instance_name + " doesn't refer to a wf instance."
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.get_versions_from_workflow_instance(unknown_instance_name)
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # make sure the database wasn't called
+        self.assertFalse(mock_wf_data.called)
 
 
 class TestCopyFilesWithExtension(TestWorkflowManager):

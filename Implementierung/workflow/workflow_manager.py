@@ -268,6 +268,10 @@ class WorkflowManager:
                     List[FrontendVersion]: The list version objects that contain the required information
 
                 """
+        # make sure the instance exists
+        if workflow_instance_name not in os.listdir(self.__versions_base_directory):
+            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+
         # request to database to get a DatabaseVersion object for every version
         versions: List[DatabaseVersion] = \
             self.__workflow_data.get_database_versions_of_workflow_instance(workflow_instance_name)
