@@ -44,6 +44,14 @@ class VersionNumber:
 
     # methods
 
+    def get_dir_name(self) -> str:
+        """Simply returns number but every occurrence of '.' is replaced with '_'. To make the number a valid dir name.
+
+        Returns:
+            str: The dir name for the version
+        """
+        return self.__number.replace(".", "_")
+
     def get_predecessor(self):
         """
         Just cuts of the postfix ".<int>" from the number of self and puts that str into a new VersionNumber object.
@@ -78,4 +86,6 @@ class VersionNumber:
             if not existing_version_numbers.__contains__(possible_successor):
                 return VersionNumber(possible_successor)
             successor_postfix += 1  # otherwise, we try the next option
+
+
 

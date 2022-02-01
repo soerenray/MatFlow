@@ -28,7 +28,7 @@ class WorkflowManager:
     __workflow_data: WorkflowData = WorkflowData.get_instance()
     __versions_base_directory: Path = Path("")  # TODO
     __template_base_directory: Path = Path("")  # TODO
-    __airflow_dag_folder: Path = Path("") # TODO
+    __airflow_dag_folder: Path = Path("")  # TODO
     __airflow_address: str = "http://localhost:8080/"  # TODO
     __initial_version_note = "initial version"
 
@@ -67,7 +67,11 @@ class WorkflowManager:
         # now safe the new dag definition file in the template folder
         new_path: Path = self.__template_base_directory / (template.get_name() + ".py")
         shutil.copy(template.get_dag_definition_file(), new_path)
+
         # maybe make the file ro TODO
+
+        # adjust the attribute of the template
+        template.set_dag_definition_file(new_path)
 
     def create_workflow_instance_from_template(
             self, template_name: str, workflow_instance_name: str, config_files: Path):
@@ -208,6 +212,10 @@ class WorkflowManager:
             version_note (str): Note about the new version given by the user
 
         """
+        # first check if the wf instance exists
+        if workflow_instance_name not in os.listdir(self.__versions_base_directory):
+            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+
         # request current version from database
         current_version_number: VersionNumber = \
             VersionNumber(self.__workflow_data.get_active_version_of_workflow_instance(workflow_instance_name))
@@ -219,15 +227,14 @@ class WorkflowManager:
 
         # create directory for the new version
         workflow_dir: Path = self.__versions_base_directory / workflow_instance_name  # this dir should already exist
-        version_dir: Path = workflow_dir / new_version_number.get_number()
+        version_dir: Path = workflow_dir / new_version_number.get_dir_name()
         os.makedirs(version_dir)  # create new dir
 
         # request changed files from the predecessor version
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__workflow_data.get_config_file_from_active_workflow_instance(
-                workflow_instance_name, file_name)
+            file_path = self.__versions_base_directory / workflow_instance_name / "current_conf" / (file_name + ".conf")
             old_files.append(file_path)
 
         # copy the old files into the new directory
@@ -237,7 +244,7 @@ class WorkflowManager:
         # apply all the changes to the files in the new directory
         for update in changed_files:
             file_name: str = update.get_file_name()
-            changed_file: ConfigFile = ConfigFile(file_name, version_dir / file_name)
+            changed_file: ConfigFile = ConfigFile(file_name, version_dir / (file_name + ".conf"))
             changed_file.apply_changes(update)
 
         # make new files read-only? TODO
@@ -261,6 +268,10 @@ class WorkflowManager:
                     List[FrontendVersion]: The list version objects that contain the required information
 
                 """
+        # make sure the instance exists
+        if workflow_instance_name not in os.listdir(self.__versions_base_directory):
+            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+
         # request to database to get a DatabaseVersion object for every version
         versions: List[DatabaseVersion] = \
             self.__workflow_data.get_database_versions_of_workflow_instance(workflow_instance_name)
@@ -322,4 +333,4 @@ class WorkflowManager:
         os.mkdir(dst)
         for file in os.listdir(src):
             if extension == "" or os.path.splitext(file)[1] == extension:
-                shutil.copy(src/file, dst)
+                shutil.copy(src / file, dst)
