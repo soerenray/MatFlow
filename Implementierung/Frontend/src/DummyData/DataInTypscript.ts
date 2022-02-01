@@ -77,7 +77,7 @@ function setWfConf(wfConstName: string, configFile: ConfigFile) {
 }
 
 function deleteUser(user: User) {
-    users = users.filter(userInUsers => { user.userName !== userInUsers.userName })
+    users = users.filter(userInUsers => { return user.userName !== userInUsers.userName })
 }
 
 // pullVersionsWithWorkflowInstanceName
