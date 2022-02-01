@@ -89,6 +89,7 @@ export default {
   methods: {
     pushDeleteUser(user: User) {
       backendServerCommunicatorObject.pushDeleteUser(user);
+      this.users = backendServerCommunicatorObject.pullUsers();
     },
   },
   computed: {
