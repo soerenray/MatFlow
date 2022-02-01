@@ -227,7 +227,7 @@ class WorkflowManager:
 
         # create directory for the new version
         workflow_dir: Path = self.__versions_base_directory / workflow_instance_name  # this dir should already exist
-        version_dir: Path = workflow_dir / new_version_number.get_number()
+        version_dir: Path = workflow_dir / new_version_number.get_dir_name()
         os.makedirs(version_dir)  # create new dir
 
         # request changed files from the predecessor version
@@ -235,6 +235,7 @@ class WorkflowManager:
         for file in changed_files:
             file_name = file.get_file_name()
             file_path = self.__versions_base_directory / workflow_instance_name / "current_conf" / (file_name + ".conf")
+            old_files.append(file_path)
 
         # copy the old files into the new directory
         for file in old_files:
