@@ -186,5 +186,40 @@ class UserTest(unittest.TestCase):
 
 
 
+    def test_delete_user_call_1(self):
+        with patch.object(User, 'extract_user',return_value= self.user) as mock_method:
+            with patch.object(FrontendAPI.user_controller.__class__, 'deleteUser') as mock_method_2:
+                got = self.app.delete('delete_user', json= json.dumps(self.expected_dict_user_1))
+                retrieved_json: dict = json.loads(got.get_data())
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
+
+    def test_delete_user_call_2(self):
+        with patch.object(User, 'extract_user',return_value= self.user) as mock_method:
+            with patch.object(FrontendAPI.user_controller.__class__, 'deleteUser') as mock_method_2:
+                got = self.app.delete('delete_user', json= json.dumps(self.expected_dict_user_1))
+                retrieved_json: dict = json.loads(got.get_data())
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method_2.call_count > 0
+
+    def test_delete_user_response_fail(self):
+        with patch.object(User, 'extract_user',return_value= self.user) as mock_method:
+            with patch.object(FrontendAPI.user_controller.__class__, 'deleteUser',
+                              side_effect= UserExistsException("scooby not found")) as mock_method:
+                got = self.app.delete('delete_user', json= json.dumps(self.expected_dict_user_1))
+                retrieved_json: dict = json.loads(got.get_data())
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                self.assertEqual(retrieved_json, self.failed_dict)
+
+    def test_delete_user_response_valid(self):
+        with patch.object(User, 'extract_user',return_value= self.user) as mock_method:
+            with patch.object(FrontendAPI.user_controller.__class__, 'deleteUser') as mock_method_2:
+                got = self.app.delete('delete_user', json= json.dumps(self.expected_dict_user_1))
+                retrieved_json: dict = json.loads(got.get_data())
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                self.assertEqual(retrieved_json, success_response)
+
+
+
 if __name__ == '__main__':
     unittest.main()
