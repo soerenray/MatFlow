@@ -300,17 +300,49 @@ class TestCreateNewVersion(TestWorkflowManager):
         mock_wf_data.get_active_version_of_workflow_instance.return_value = "1"
         mock_wf_data.get_version_numbers_of_workflow_instance.return_value = ["1"]
 
-        # Act
+        # Act v1_1
         self.w_man.create_new_version_of_workflow_instance(
             self.instance_name, [self.file1_v1_1, self.file2_v1_1], self.version_note)
 
-        # Assert
+        # Assert v1_1
         self.assertTrue(mock_wf_data.create_new_version_of_workflow_instance.called)
 
+        # Arrange v1_2
+        mock_wf_data.get_active_version_of_workflow_instance.return_value = "1"
+        mock_wf_data.get_version_numbers_of_workflow_instance.return_value = ["1", "1.1"]
+
+        # Act v1_2
+        self.w_man.create_new_version_of_workflow_instance(
+            self.instance_name, [self.file1_v1_2], self.version_note)
+
+        # Assert v1_2
+        self.assertTrue(mock_wf_data.create_new_version_of_workflow_instance.called)
+
+        # Arrange v1_1_1
+        mock_wf_data.get_active_version_of_workflow_instance.return_value = "1.1"
+        mock_wf_data.get_version_numbers_of_workflow_instance.return_value = ["1", "1.1", "1.2"]
+
+        # Act v1_1_1
+        self.w_man.create_new_version_of_workflow_instance(
+            self.instance_name, [self.file1_v1_1_1], self.version_note)
+
+        # Assert v1_1_1
+        self.assertTrue(mock_wf_data.create_new_version_of_workflow_instance.called)
+
+        # Assert Directory and file creations
+        # No need to test all the files internally because that functionality was tested in ConfigFile already
         path1_1: Path = self.instance_path / "1_1"
-        os.path.isdir(path1_1)
-        os.path.isfile(path1_1 / "test1")
-        os.path.isfile(path1_1 / "test2")
+        self.assertTrue(os.path.isdir(path1_1))
+        self.assertTrue(os.path.isfile(path1_1 / "test1.conf"))
+        self.assertTrue(os.path.isfile(path1_1 / "test2.conf"))
+        path1_2: Path = self.instance_path / "1_2"
+        self.assertTrue(os.path.isdir(path1_2))
+        self.assertTrue(os.path.isfile(path1_2 / "test1.conf"))
+        self.assertFalse(os.path.isfile(path1_2 / "test2.conf"))  # this file shouldn't exist, it wasn't changed
+        path1_1_1: Path = self.instance_path / "1_1_1"
+        self.assertTrue(os.path.isdir(path1_1_1))
+        self.assertTrue(os.path.isfile(path1_1_1 / "test1.conf"))
+        self.assertFalse(os.path.isfile(path1_1_1 / "test2.conf"))  # this file shouldn't exist, it wasn't changed
 
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
