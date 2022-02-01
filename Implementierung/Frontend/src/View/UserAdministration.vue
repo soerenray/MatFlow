@@ -7,18 +7,29 @@
     </div>
     <div style="padding-top: 20px">
       <v-card>
-        <v-data-table :headers="headers" :items="users" :item-key="users.name">
+        <v-data-table
+          :headers="tableHeaders"
+          :items="users"
+          :item-key="users.name"
+        >
           <template v-slot:[`item.name`]="{ item }"
-            ><v-text-field :value="item.name"></v-text-field
+            ><v-text-field :value="item.userName"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
-            ><v-select :items="privilege" v-model="item.privilege"></v-select
+            ><v-select
+              :items="selectPrivileges"
+              v-model="item.userPrivilege"
+            ></v-select
           ></template>
           <template v-slot:[`item.status`]="{ item }"
-            ><v-select :items="status" v-model="item.status"></v-select
+            ><v-select
+              :items="selectStatuses"
+              v-model="item.userStatus"
+            ></v-select
           ></template>
-          <template v-slot:[`item.delete`]="{}">
-            <v-btn icon> <delete-icon></delete-icon></v-btn></template
+          <template v-slot:[`item.delete`]="{ item }">
+            <v-btn @click="pushDeleteUser(item)" icon>
+              <delete-icon></delete-icon></v-btn></template
           ><template v-slot:[`item.password`]="{}">
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on, attrs }">
@@ -48,27 +59,81 @@
     </div>
   </v-app>
 </template>
-<script>
+<script lang="ts">
+import Vue from "vue";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
+import User from "../Classes/User";
+import UserAdministration from "../Model/UserAdministration";
+
+const backendServerCommunicatorObject = new BackendServerCommunicator();
+const userAdministrationObject = new UserAdministration(
+  [
+    { text: "Username", value: "name" },
+    { text: "User priviliges", value: "privilege" },
+    { text: "Status", value: "status" },
+    { text: "Delete", value: "delete" },
+    { text: "Reset password", value: "password" },
+  ],
+  [],
+  ["activated", "suspended", "pending"],
+  ["visitor", "developer", "administrator"]
+);
+
 export default {
   name: "UserAdministration",
   data: function () {
     return {
-      status: ["activated", "suspended", "pending"],
-      privilege: ["visitor", "developer", "administrator"],
       dialog: false,
-      headers: [
-        { text: "Username", value: "name" },
-        { text: "User priviliges", value: "privilege" },
-        { text: "Status", value: "status" },
-        { text: "Delete", value: "delete" },
-        { text: "Reset password", value: "password" },
-      ],
-      users: [
-        { name: "tim", privilege: "visitor", status: "pending" },
-        { name: "marie", privilege: "developer", status: "suspended" },
-        { name: "Carolin", privilege: "administrator", status: "activated" },
-      ],
     };
+  },
+  methods: {
+    pushDeleteUser(user: User) {
+      backendServerCommunicatorObject.pushDeleteUser(user);
+      this.users = backendServerCommunicatorObject.pullUsers();
+    },
+  },
+  computed: {
+    tableHeaders: {
+      get: function (): object[] {
+        return userAdministrationObject.tableHeaders;
+      },
+      set: function (tableHeaders: object[]) {
+        userAdministrationObject.tableHeaders = tableHeaders;
+      },
+    },
+    users: {
+      get: function (): User[] {
+        return userAdministrationObject.users;
+      },
+      set: function (users: User[]) {
+        userAdministrationObject.users = users;
+      },
+    },
+    selectStatuses: {
+      get: function (): string[] {
+        return userAdministrationObject.selectStatuses;
+      },
+      set: function (selectStatuses: string[]) {
+        userAdministrationObject.selectStatuses = selectStatuses;
+      },
+    },
+    selectPrivileges: {
+      get: function (): string[] {
+        return userAdministrationObject.selectPrivileges;
+      },
+      set: function (selectPrivileges: string[]) {
+        userAdministrationObject.selectPrivileges = selectPrivileges;
+      },
+    },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(userAdministrationObject);
+  },
+  created: function () {
+    userAdministrationObject.users =
+      backendServerCommunicatorObject.pullUsers();
   },
 };
 </script>
