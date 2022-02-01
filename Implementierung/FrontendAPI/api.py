@@ -82,7 +82,8 @@ class FrontendAPI:
             String: json-dumped object containing the above described information
         """
         try:
-            encoded_server: dict = Server.encode_server(FrontendAPI.hardware_controller.getServer())
+            server: Server = FrontendAPI.hardware_controller.getServer()
+            encoded_server: dict = server.encode_server()
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
