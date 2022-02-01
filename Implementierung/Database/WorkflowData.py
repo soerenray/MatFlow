@@ -23,6 +23,13 @@ class WorkflowData:
         else:
             WorkflowData.__instance = self
 
+    def __get_key_of_workflow_version(self, wf_name: str, version: str) -> str:
+        """ Returns: index of workflow version"""
+        get_version_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(wf_name,
+                                                                                                        version)
+        version_key = self.__databaseTable.get_one(get_version_key_query)
+        return version_key[0]
+
     def create_wf_instance(self, wf_in: WorkflowInstance, conf_dir: Path):
         """Create a new instance of a workflow by using the dag-File of a Template with the Version set to 1.
 
@@ -64,10 +71,7 @@ class WorkflowData:
         self.__databaseTable.set(version_query)
 
         # get key of version number
-        get_version_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(wf_name, "1")
-        version_key = self.__databaseTable.get_one(get_version_key_query)
-        # number is "(x,)" and has to be made into x alone (x <= int)
-        version_key = re.sub('[(),]', '', str(version_key))
+        version_key = self.__get_key_of_workflow_version(wf_name, "1")
 
         # create all file entries for non-conf-files
         folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES ('{}', '{}')"
@@ -85,7 +89,7 @@ class WorkflowData:
             # get index of new entry; format into usable index
             # all names are unique in a workflow folder
             file_key = self.__databaseTable.get_one(conffile_get_key_query.format(file_path))
-            file_key = re.sub('[(),]', '', str(file_key))
+            file_key = file_key[0]
 
             # injection into VersionFile
             filename = Path(file_path).name
@@ -96,7 +100,7 @@ class WorkflowData:
 
         return
 
-    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[Path]]:
+    def get_names_of_workflows_and_config_files(self) -> Dict[str, List[str]]:
         """Return all Workflow names and the names of their corresponding config files.
 
         Extended description of function.
@@ -106,22 +110,20 @@ class WorkflowData:
 
         """
         # define empty dictionary
-        workflow_dict: Dict[str, List[Path]] = {}
+        workflow_dict: Dict[str, List[str]] = {}
         # get all existing files with corresponding workflows
         query = "SELECT v.wfName, vf.filename FROM Version v INNER JOIN VersionFile vf ON vf.versionID = v.ID;"
         raw_data = self.__databaseTable.get_multiple(query)
-        print("start dictionary print")
-        print(raw_data)
         # build dictionary
         for (name, file_path) in raw_data:
             if name not in workflow_dict:
-                workflow_dict[name] = [Path(file_path)]
+                workflow_dict[name] = [file_path]
             else:
-                workflow_dict[name].append(Path(file_path))
+                workflow_dict[name].append(file_path)
 
         return workflow_dict
 
-    # TODO Revision
+    # TODO Revision/Testing needed: 'worked' first try, something's wrong!
     def create_new_version_of_workflow_instance(self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str):
         """Create a new Version of an existing Workflow with changed config Files.
 
@@ -139,11 +141,9 @@ class WorkflowData:
         new_entry = "INSERT INTO Version (wfName, version) VALUES ('{}', '{}')"
         new_entry = new_entry.format(wf_name, new_version_nr)
         self.__databaseTable.set(new_entry)
-        # get key of version
-        get_key_query = "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}'"
-        get_key_query = get_key_query.format(wf_name, new_version_nr)
-        version_index = self.__databaseTable.get_one(get_key_query)
-        version_index = re.sub('[(),]', '', str(version_index))
+        # get keys of versions out of Version table
+        new_version_index = self.__get_key_of_workflow_version(wf_name, new_version_nr)
+        old_version_index = self.__get_key_of_workflow_version(wf_name, old_version_nr)
 
         # get all new file paths
         new_files = []
@@ -163,10 +163,10 @@ class WorkflowData:
             # get key from new file
             get_file_key_local = get_file_key.format(str(file))
             file_key = self.__databaseTable.get_one(get_file_key_local)
-            file_key = re.sub('[(),]', '', str(file_key))
+            file_key = file_key[0]
 
             # connect new file and new version
-            file_to_version_local = file_to_version.format(version_index, file.name, file_key)
+            file_to_version_local = file_to_version.format(new_version_index, file.name, file_key)
             self.__databaseTable.set(file_to_version_local)
 
         # connect old, not updated files of previous version
@@ -174,16 +174,14 @@ class WorkflowData:
         copy_old_files = "INSERT INTO VersionFile (versionID, filename, confKey) SELECT newVersion, filename, " \
                          "confKey	FROM VersionFile	WHERE versionID = 'oldVersion'    AND filename    NOT IN (" \
                          "Select filename		FROM VersionFile        WHERE versionID = 'newVersion'); "
-        copy_old_files = copy_old_files.replace("newVersion", new_version_nr).replace("oldVersion", old_version_nr)
+        copy_old_files = copy_old_files.replace("newVersion", new_version_index).replace("oldVersion",
+                                                                                         old_version_index)
         self.__databaseTable.set(copy_old_files)
 
-
-
-    # TODO Implementierung
     def get_config_file_from_workflow_instance(self, wf_name: str, conf_name: str, version: str) -> Path:
         """Return single config file from a Workflow.
 
-        Extended description of function.
+        Does NOT check if any of the values really exist.
 
         Args:
             wf_name(str): name of workflow
@@ -194,6 +192,15 @@ class WorkflowData:
             Path: searched conf File
 
         """
+        # setup
+        version_key = self.__get_key_of_workflow_version(wf_name, version)
+        get_file_path_query = "SELECT cf.file FROM VersionFile vf INNER JOIN ConfFile cf ON vf.confKey = cf.confKey " \
+                              "WHERE versionID = '{}' AND  filename = '{}' "
+        get_file_path_query = get_file_path_query.format(version_key, conf_name)
+
+        # get path
+        data = self.__databaseTable.get_one(get_file_path_query)
+        return Path(data[0])
 
     # TODO Implementierung
     def get_config_file_from_active_workflow_instance(self, wf_name: str, conf_name: str) -> Path:
@@ -248,7 +255,7 @@ class WorkflowData:
             update_query = "UPDATE ActiveVersion SET version = '{}' WHERE wfName = '{}"
             update_query = update_query.format(version, wf_name)
             self.__databaseTable.modify(update_query)
-        except MatFlowException.InternalException as err:
+        except MatFlowException.InternalException:
             try:
                 # chance that workflow is only just created and has no valid entry in ActiveVersion
                 set_query = "INSERT INTO ActiveVersion (wfName, version) VALUES ('{}', '{}')"
@@ -273,11 +280,11 @@ class WorkflowData:
         get_query = "SELECT version FROM ActiveVersion WHERE wfName = '{}'"
         get_query = get_query.format(wf_name)
         try:
-            data = self.__databaseTable.get_one(get_query)
-        except MatFlowException.InternalException as err:
-            raise MatFlowException.InternalException("ERROR: data")
+            version_id = self.__databaseTable.get_one(get_query)
+        except MatFlowException.InternalException:
+            raise MatFlowException.InternalException("ERROR: workflow '{}' not found".format(wf_name))
 
-        return data[0]
+        return version_id[0]
 
     # TODO Implementierung
     def get_version_numbers_of_workflow_instance(self, wf_name: str):
@@ -320,8 +327,10 @@ def class_debugging():
     data = wf_data.get_active_version_of_workflow_instance("workflow3")
     print(data)
 
+    conf_path = wf_data.get_config_file_from_workflow_instance("workflow3", "mydb.conf", "1")
+    print(conf_path)
+
     print("TEST IN WorkflowData END!")
 
-if __name__ == '__main__':
-    class_debugging()
+# class_debugging()
 
