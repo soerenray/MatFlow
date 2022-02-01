@@ -62,7 +62,7 @@ class UserAdministration {
 
     /**
     * Sets the value of _users
-    * @param tableHeaders The new value of users
+    * @param users The new value of users
     */
     public set users(users: User[]) {
         this._users = users
