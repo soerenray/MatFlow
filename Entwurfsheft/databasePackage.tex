@@ -1,6 +1,6 @@
 \subsubsection{\label{database} Database}
 
-Dieses Paket\ref{fig:database\textunderscorepackage}  kontrolliert alle Daten die in die Datenbank geschrieben werden.
+Dieses Paket\ref{fig:database_package}  kontrolliert alle Daten die in die Datenbank geschrieben werden.
 Entweder sollen Daten in die Datenbank geschrieben werden, oder sie sollen ausgelesen werden. Die Antwort ist dementsprechend entweder leer, die gewünschten Daten, oder, im Fall von Unstimmigkeiten, eine Fehlermeldung.
 
 Da jede Klasse auf dem Singleton Entwurfsmuster aufbaut wurden sämtliche darauf basierenden Parameter und Funktionen weggelassen.
@@ -124,7 +124,8 @@ Return a sortet list of Strings of all Versions of a Workflow.
 \end{methodenv}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%auskommentiert
+\iffalse
 \class{TemplateData}
 Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeinträgen für Workflow\\textunderscore Template arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
@@ -149,11 +150,11 @@ Throw error if name already exists.
 	Template object to convert
 \end{itemize}
 
-\method{getTemplateNames():String[]}
+\method{getTemplateNames():str[]}
 Return a list of all existing Template names.
 List is empty when no Template exists.
 
-\method{getTemplateByNames(name:String):Template}
+\method{getTemplateByNames(name:str):Template}
 Return Template that is asked for.
 Throw error if Template doesn't exist.
 
@@ -164,10 +165,11 @@ Throw error if Template doesn't exist.
 \end{itemize}
 
 \end{methodenv}
+\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \class{ServerData}
-Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeintrag für Server arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
+Diese Klasse ist die Schnittstelle für alle Klassen die auf den Datenbankeinträgen für Server arbeiten wollen. Sie erstellt für jeden Zugriff den passenden Datenbankbefehl und konvertiert die Ergebnisse in das gewünschte Format des Aufrufers.
 Sie wirft bei fehlerhaften Werten eine entsprechende \textbf{MatFlowException}.
 
 Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwurfsmuster entworfen, da so Aufträge an die Datenbank so zentriert gesendet werden können.
@@ -180,29 +182,18 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 
 \begin{methodenv}{Methods}
 	
-\method{set(create: String):String} Create new entry on Database. Try to execute create on Database and return value.
+\method{write\textunderscore server(server: Server): void}
+Write new Server into database.
 
 \smallPara{Parameters}
 \begin{itemize}
-	\item \textbf{create} 
-	a sql query to create an entry
+	\item \textbf{server} 
+	Server object to get data from
 \end{itemize}
 
-\method{delete(del: String):String} Delete an existing entry. Try to execute del on Database and return value.
-
-\smallPara{Parameters}
-\begin{itemize}
-	\item \textbf{del} 
-	a sql query to delete an entry
-\end{itemize}
-
-\method{modify(change: String):String} Modify an existing entry. Try to execute change on Database and return value.
-
-\smallPara{Parameters}
-\begin{itemize}
-	\item \textbf{change} 
-	a sql query to change values
-\end{itemize}
+\method{get\textunderscore server():List[(str, str)]} 
+Get server in database.\\
+NOTE: so far there should be only ever one server in the database, hence why no key is required.
 
 \end{methodenv}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,7 +211,7 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 
 \begin{methodenv}{Methods}
 	
-	\method{set(create: String):String} Create new entry on Database. Try to execute create on Database and return value.
+	\method{set(create: str): str} Create new entry on Database. Try to execute create on Database and return value.
 	
 	\smallPara{Parameters}
 	\begin{itemize}
@@ -228,7 +219,7 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 		a sql query to create an entry
 	\end{itemize}
 	
-	\method{delete(del: String):String} Delete an existing entry. Try to execute del on Database and return value.
+	\method{delete(remove\textunderscore query: str): str} Delete an existing entry. Try to execute del on Database and return value.
 	
 	\smallPara{Parameters}
 	\begin{itemize}
@@ -236,7 +227,7 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 		a sql query to delete an entry
 	\end{itemize}
 	
-	\method{modify(change: String):String} Modify an existing entry. Try to execute change on Database and return value.
+	\method{modify(change: str): str} Modify an existing entry. Try to execute change on Database and return value.
 	
 	\smallPara{Parameters}
 	\begin{itemize}
@@ -244,14 +235,45 @@ Diese Klasse, sowie alle anderen im Paket Database, ist nach dem Singleton Entwu
 		a sql query to change values
 	\end{itemize}
 
-	\method{get(query: String):String} Try to get a specific value, or values and returnit.
+%new function
+	\method{get\textunderscore multiple(query: str): str} 
+	Search for multiple values in database.
 
 	\smallPara{Parameters}
 	\begin{itemize}
 		\item \textbf{query} 
-		a sql query to get information
+		sql query to get information
 	\end{itemize}
-	
+%new function end
+%new function
+\method{get\textunderscore one(query: str): str}
+Search for one(1)/first entry in database.
+
+\smallPara{Parameters}
+\begin{itemize}
+	\item \textbf{query} 
+	a sql query to get information
+\end{itemize}
+%new function end
+%new function
+\method{check\textunderscore for(self, query: str): bool}
+Check if at least one(1) entry already exists for given SELECT-query.
+True if at least one entry is found.
+
+\smallPara{Parameters}
+\begin{itemize}
+	\item \textbf{query} 
+	a sql query to get information
+\end{itemize}
+%new function end
+%new function
+\method{setup\textunderscore database(): void}
+First setup of tables in the database.
+Establish connection to Database with set parameters.
+Read queries from external file and execute them.
+
+Don't crash if tables already exist.
+%new function end	
 \end{methodenv}
 
 \newpage
