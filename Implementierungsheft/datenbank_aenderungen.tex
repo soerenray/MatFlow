@@ -3,13 +3,16 @@
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.85\textwidth]{res/er_diagram.pdf} 
-	\caption{ER-Diagramm der Datenbank; überarbeitet\\ Änderungen in rot}
+	\caption{ER-Diagramm der Datenbank. Änderungen in rot}
 	\label{fig:er_diagram}
 \end{figure}
 
 Auf \ref{fig:er_diagram} ist das Überarbeitete ER-Diagramm der Datenbank zu sehen.
 
 Nach langen Überlegungen sind wir zu dem Schluss gekommen, dass es sinnvoller ist für die Dateispeicherung statt LONGBLOBS und weitere Parameter, nur Pfade in die Datenbank einzuspeichern, die auf die gewünschte Datei zeigen. Zum einen gibt es dadurch weniger rohe Daten die zwischen (manchen) Funktionen kommuniziert werden müssen, aber auch weniger Latenz beim schreiben oder lesen der Dateien aus der Datenbank.
+
+\label{template_gone}Demzufolge ist es uns möglich Workflow Templates in einem einzigen Ordner zu speichern der alle DAG's beinhaltet die nach ihren Template Namen benannt sind. Dieser Ordner ist leicht zu erreichen und darüber zu iterieren. Die Tabelle Workflow\textunderscore Template\ref{wfTemplate} ist dementsprechend nicht mehr benötigt, da der Ordner als eigene Tabelle fungieren kann. Sie bleibt trotzdem bis auf weiteres in der Datenbank um bei eventuellen Komplikationen schneller wechseln zu können.
+
 
 Weitere Änderungen beinhalten die Vereinfachung einer Workflow-Version in der Datenbank. Statt zwei Schlüssel 'wfName' und 'version' bekommt jede Version einen eindeutigen Integer Bezeichner. Dieser muss zwar für manche Zugriffe auf andere Tabellen zuerst von Version geholt werden, erhöht aber das Verständnis der Datenbankstruktur und bringt eine Erleichterung der MySQL-Befehle.
 
@@ -32,9 +35,9 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 \paragraph{}
 \begin{dataTable}
 	\hline
-	\textbf{WorkflowTemplate} &  & \\
+	\textbf{WorkflowTemplate\label{wfTemplate}} &  & \\
 	\hline
-	template\textunderscore ID & int & $key; Auto_Increment$\\
+	template\textunderscore ID & int & $key; Auto\textunderscore Increment$\\
 	\hline
 	name & varchar(255) & $notNull$ \\
 	\hline
@@ -58,7 +61,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{FolderFile} &  & \\
 	\hline
-	filesID & int & $key; Auto_Increment$ \\
+	filesID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
 	wfname & varchar(255) & $notNull;$ name from Workflow\\
 	\hline
@@ -71,7 +74,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{Version} & & \\
 	\hline
-	ID & int & $key; Auto_Increment$ \\
+	ID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
 	wfName & varchar(255) & name from Workflow\\
 	\hline
@@ -110,7 +113,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{ConfFile} & & \\
 	\hline
-	confKey & int & $key; Auto_Increment$ \\
+	confKey & int & $key; Auto\textunderscore Increment$ \\
 	\hline
 	file & varchar(255) & $notNull$ \\
 	\hline
@@ -123,7 +126,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	versionID & int & $key;$ ID from Version \\
 	\hline
-	filesID & int & $key; Auto_Increment$ \\
+	filesID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
 	file & varchar(255) & $notNull$\\
 	\hline
@@ -132,3 +135,17 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 
 
 \subsection{Database Paket Implementierungsänderungen}
+Die Klasse TemplateData des Database Pakets wurde entfernt da es keine Einträge in der Datenbank gibt die sie verwalten muss\ref{template_gone}.
+
+
+
+
+
+
+
+
+
+
+
+
+
