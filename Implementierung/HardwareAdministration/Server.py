@@ -9,18 +9,21 @@ class Server:
     status: str
     containerLimit:int
     selectedForExecution:bool
-    ressources = [str,str]
+    cpuResource: resource
+    vmemResource: resource
+
 
     #Konstruktor
 
-    # TODO USE RESOURCE IMPORT FOR RESSOURCES
     def __init__(self):
         self.name = "server"
-        self.address = "IP"
+        hostname = socket.gethostname()
+        self.address = socket.gethostbyname(hostname)
         self.status = self.checkStatus(self)
         self.containerLimit= 20
         self.selectedForExecution = True
-        self.ressources = ["GPU", "unlimited"] + ["CPU", "unlimited"]
+        self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
+        self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
 
 # getter and setter methods
     # name getter method

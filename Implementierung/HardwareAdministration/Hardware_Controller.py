@@ -26,6 +26,12 @@ class Hardware_Controller:
     def writeServer(self, newServer: Server):
         tempServerData = ServerData()
         tempServerData.write_Server(newServer)
+
+    
+    # setCPUResources
+    def setResources(self, newResource: resource, newSoft: int, newHard: int):
+        resource.setrlimit(newResource,newSoft,newHard)
+
         
 
 
