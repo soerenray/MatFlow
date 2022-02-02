@@ -54,7 +54,7 @@ class BackendServerCommunicator {
             }
         }
     }
-    public pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
+    public pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions[workflowInstanceName] }
     public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
     public pullUsers(): User[] {
         let tempUsers: User[] = []
