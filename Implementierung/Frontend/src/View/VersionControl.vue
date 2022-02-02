@@ -167,7 +167,6 @@ export default {
     Vue.observable(versionControlObject);
   },
   created: function () {
-    this.pullVersionsWithWorkflowInstanceName();
     this.pullWorkflowInstancesName();
   },
 };
