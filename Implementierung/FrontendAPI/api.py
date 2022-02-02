@@ -251,6 +251,7 @@ class FrontendAPI:
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: List[ReducedConfigFile] = ReducedConfigFile.extract_multiple_configs(request)
+            # TODO Pfad, nicht Objekte; ich bekomme Files ( wie mit extract dag file)
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(template_name, wf_name, files)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
