@@ -56,7 +56,13 @@ class BackendServerCommunicator {
     }
     public pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
     public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
-    public pullUsers(): User[] { return JSON.parse(JSON.stringify(users)) }
+    public pullUsers(): User[] {
+        let tempUsers: User[] = []
+        users.forEach((user: User) => {
+            tempUsers.push(new User(user.userName, user.userStatus, user.userPrivilege))
+        })
+        return tempUsers
+    }
     public pushUser(user: User): void { return }
     public pushDeleteUser(user: User): void { deleteUser(user) }
     public pullServers(): Server[] { return }
