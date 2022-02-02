@@ -89,12 +89,12 @@ export default {
     pullVersionsWithWorkflowInstanceName: function () {
       versionControlObject.versions =
         backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
-          versionControlObject.workflowInstanceName
+          this.selectedWorkflowInstanceName
         );
     },
     pushReplaceActiveVersionOfWorkflowInstance() {
       backendServerCommunicatorObject.pushReplaceActiveVersionOfWorkflowInstance(
-        this.workflowInstanceName,
+        this.selectedWorkflowInstanceName,
         this.selectedVersionObject.versionNumber
       );
     },
@@ -132,12 +132,12 @@ export default {
         versionControlObject.versions = versions;
       },
     },
-    workflowInstanceName: {
+    selectedWorkflowInstanceName: {
       get: function (): string {
-        return versionControlObject.workflowInstanceName;
+        return versionControlObject.selectedWorkflowInstanceName;
       },
-      set: function (workflowInstanceName: string) {
-        versionControlObject.workflowInstanceName = workflowInstanceName;
+      set: function (selectedWorkflowInstanceName: string) {
+        versionControlObject.selectedWorkflowInstanceName = selectedWorkflowInstanceName;
       },
     },
     workflowInstancesName: {
