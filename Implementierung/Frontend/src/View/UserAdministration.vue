@@ -5,7 +5,7 @@
         <v-toolbar-title>Administration</v-toolbar-title>
       </v-toolbar>
     </div>
-    <div style="padding-top: 40px">
+    <div style="padding-top: 30px">
       <v-card>
         <v-data-table
           :headers="tableHeaders"
@@ -18,7 +18,6 @@
                 <div
                   style="
                     padding-left: 20px;
-                    padding-top: 5px;
                     padding-bottom: 5px;
                   "
                 >
@@ -31,7 +30,6 @@
                 <div
                   style="
                     padding-right: 20px;
-                    padding-top: 5px;
                     padding-bottom: 5px;
                   A"
                 >
@@ -41,6 +39,7 @@
                 </div>
               </v-col>
             </v-row>
+            <v-divider></v-divider>
           </template>
           <template v-slot:[`item.name`]="{ item }"
             ><v-text-field disabled v-model="item.userName"></v-text-field
