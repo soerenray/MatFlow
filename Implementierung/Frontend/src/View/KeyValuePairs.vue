@@ -26,14 +26,6 @@ export default {
       type: Array as () => Array<[string, string]>,
     },
   },
-  data: function () {
-    return {
-      headers: [
-        { text: "Parameter/ value old", value: "oldValue" },
-        { text: "Parameter/ value new", value: "newValue" },
-      ],
-    };
-  },
   computed: {
     parameterChangesTableObject: function (): object[] {
       return this.parameterChanges.map((x: [string, string]): object => {
