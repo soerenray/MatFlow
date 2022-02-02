@@ -1,5 +1,6 @@
 
-
+import nmap, socket
+import resource
 
 
 class Server:
@@ -11,13 +12,15 @@ class Server:
     ressources = [str,str]
 
     #Konstruktor
-    def __init__(self, name: str, address: str, status: str, containerLimit: int, selectedForExecution: bool, ressources =[str,str]):
-        self.name = name
-        self.address = address
-        self.status = status
-        self.containerLimit= containerLimit
-        self.selectedForExecution = selectedForExecution
-        self.ressources = ressources
+
+    # TODO USE RESOURCE IMPORT FOR RESSOURCES
+    def __init__(self):
+        self.name = "server"
+        self.address = "IP"
+        self.status = self.checkStatus(self)
+        self.containerLimit= 20
+        self.selectedForExecution = True
+        self.ressources = ["GPU", "unlimited"] + ["CPU", "unlimited"]
 
 # getter and setter methods
     # name getter method
@@ -68,6 +71,18 @@ class Server:
     def setRessources(self,ressources):
         self.ressources = ressources
 
+    # other methods:
+
+    # check status method:
+    def checkStatus(self):
+        scanner = nmap.PortScanner()
+        host = socket.gethostbyname(self.getAddress)
+        scanner.scan(host, "1","-v")
+        if scanner[host].state() == "UP":
+            return True
+        else:
+            return False
+        
 
 
 

@@ -1,19 +1,38 @@
 from operator import truediv
 from Server import Server
+import resource
+from Database.ServerData import ServerData
 
 
 class Hardware_Controller:
-    Server: Server
+    _Server: Server
+
+
 
 # Constructor
-    def __init__(self, Server: Server):
-        self.Server = Server
+    def __init__(self):
+        standardServer = Server()
+        self._Server = standardServer
 
-# Methods
+# Methods:
+
+    # getServer method gets the standard server via his ip
+    def getServer(self):
+        tempServerData = ServerData()
+        self._Server = tempServerData.get_Server()
+        return self._Server
+
+    # writeServer 
+    def writeServer(self, newServer: Server):
+        tempServerData = ServerData()
+        tempServerData.write_Server(newServer)
+        
+
+
 
     # method that gets a Server and adds it to the ServerList
     def addServer(Server):
-        Server = Server
+        Server = Server()
         # stuff that happens
         #
         #
@@ -35,7 +54,7 @@ class Hardware_Controller:
 
     # method that gets a Server and sets the Servers bool "isSelectedForExecution"
     # to True
-    def selectServer(Server)
+    def selectServer(Server):
         Server.isSelectedForExecution = True
         # stuff that happens
         #
