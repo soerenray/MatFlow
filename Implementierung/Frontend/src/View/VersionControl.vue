@@ -2,6 +2,30 @@
   <v-app>
     <v-container>
       <v-col align="center">
+        <v-card>
+          <div
+            v-for="workflowInstanceName in workflowInstancesName"
+            :key="workflowInstanceName"
+          >
+            <v-col
+              @click="
+                setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
+                  workflowInstanceName
+                )
+              "
+              v-if="selectedWorkflowInstanceName != workflowInstanceName"
+            >
+              {{ workflowInstanceName }}
+            </v-col>
+            <v-col
+              v-if="selectedWorkflowInstanceName == workflowInstanceName"
+              style="background-color: #a9cce3"
+            >
+              {{ workflowInstanceName }}
+            </v-col>
+            <v-divider></v-divider>
+          </div>
+        </v-card>
         <v-card width="1000px">
           <v-data-table
             :headers="tableHeaders"
