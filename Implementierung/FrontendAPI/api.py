@@ -267,6 +267,7 @@ class FrontendAPI:
             String: json-dumped object containing all workflow instance names and config file names
         """
         # the return is already in format {wf_instance_name_1: List[Config], wf_instance_name_2: List[Config], ..}
+        # never an exception, worst case is empty dict
         return ExceptionHandler.success({keys.names_and_configs:
                                         FrontendAPI.workflow_manager.get_names_of_workflows_and_config_files()})
 
@@ -351,7 +352,7 @@ class FrontendAPI:
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
-            return ExceptionHandler.success(Template.encode_template(template))
+            return ExceptionHandler.success(template.encode_template())
 
     @staticmethod
     @app.route('/get_graph_for_temporary_template', methods=['GET'])
