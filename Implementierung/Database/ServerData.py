@@ -1,6 +1,6 @@
 from Implementierung.Database.DatabaseTable import DatabaseTable
-
 from Implementierung.HardwareAdministration.Server import Server
+from typing import List
 
 
 class ServerData:
@@ -40,7 +40,7 @@ class ServerData:
         self.__databaseTable.set(query)
         return
 
-    def get_server(self) -> str:
+    def get_server(self) -> List[(str, str)]:
         """Get server in database.
 
         NOTE:   Currently there is no intention of storing multiple servers to connect to,

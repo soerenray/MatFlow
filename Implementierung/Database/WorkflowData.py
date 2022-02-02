@@ -287,7 +287,7 @@ class WorkflowData:
         return version_id[0]
 
     # TODO Implementierung
-    def get_version_numbers_of_workflow_instance(self, wf_name: str):
+    def get_version_numbers_of_workflow_instance(self, wf_name: str) -> List[str]:
         """Return all Versions of a workflow.
 
         Extended description of function.

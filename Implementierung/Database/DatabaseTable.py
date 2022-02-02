@@ -18,7 +18,7 @@ class DatabaseTable:
             DatabaseTable.__instance = self
             return
 
-    def get_database_connection(self):
+    def __get_database_connection(self):
         """Connect to MySQL Database and return connection.
 
         Parameters are set in file mydb.conf."""
@@ -40,7 +40,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -68,7 +68,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -96,7 +96,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -124,7 +124,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -153,7 +153,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -184,7 +184,7 @@ class DatabaseTable:
 
         """
         # connect to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         try:
@@ -212,7 +212,7 @@ class DatabaseTable:
 
         """
         # connection to database
-        db = self.get_database_connection()
+        db = self.__get_database_connection()
         cursor = db.cursor()
 
         # queries outsourced to avoid overly long lines in code
