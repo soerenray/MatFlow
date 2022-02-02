@@ -91,8 +91,13 @@ function updateUser(user: User) {
     }
 }
 
+interface VersionsObject {
+    workflowInstance1: Version[],
+    workflowInstance2: Version[],
+}
+
 // pullVersionsWithWorkflowInstanceName
-let versions = {
+let versions: VersionsObject = {
     workflowInstance1: [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
     ["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
     ["key3: 5.0 5.0", "key3: 'text'"]])], workflowInstance2: [new Version('2.1', 'changed name of key3', [["key3: Foo bar", "key1: Foo bar"]]), new Version('2.2', 'fixed typo in key-value', [["key1: xy", "key1: xy"], ["key2: 42", "key2: 420"],
