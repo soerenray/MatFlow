@@ -58,7 +58,7 @@
             ></v-select
           ></template>
           <template v-slot:[`item.delete`]="{ item }">
-            <v-btn @click="pushDeleteUser(item)" icon>
+            <v-btn @click="pushDeleteUserAndPullUsersFromServer(item)" icon>
               <delete-icon></delete-icon></v-btn></template
           ><template v-slot:[`item.password`]="{}">
             <v-dialog v-model="dialog">
