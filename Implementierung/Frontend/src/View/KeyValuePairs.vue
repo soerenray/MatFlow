@@ -21,8 +21,6 @@ export default {
   },
   data: function () {
     return {
-      search: "",
-      dialoge: "",
       headers: [
         { text: "Parameter/ value old", value: "oldValue" },
         { text: "Parameter/ value new", value: "newValue" },
