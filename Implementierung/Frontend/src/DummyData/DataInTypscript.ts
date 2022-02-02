@@ -80,6 +80,17 @@ function deleteUser(user: User) {
     users = users.filter(userInUsers => { return user.userName !== userInUsers.userName })
 }
 
+function updateUser(user: User) {
+    let userIndex = users.findIndex((userInUsers: User) => {
+        return user.userName === userInUsers.userName
+    })
+    if(userIndex == -1) {
+        return 
+    } else {
+        users[userIndex] = user
+    }
+}
+
 // pullVersionsWithWorkflowInstanceName
 let versions: Version[] = [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
 ["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
