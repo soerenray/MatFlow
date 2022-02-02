@@ -93,7 +93,6 @@ export default {
         backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
-      createWorkflowInstanceObject.setObjectToDefaultValues();
     },
     pushCreateWorkflowInstanceFromTemplate() {
       if (
