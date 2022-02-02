@@ -11,6 +11,7 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import KeyValuePairs from "../Model/KeyValuePairs";
 
 const keyValuePairsObject = new KeyValuePairs([
