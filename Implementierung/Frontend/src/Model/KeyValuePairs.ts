@@ -1,11 +1,11 @@
 class KeyValuePairs {
-    private _headers: string[]
+    private _headers: object[]
 
     /**
     *
     * @param headers The headers
     */
-    constructor(headers: string[],) {
+    constructor(headers: object[],) {
         this._headers = headers
     }
 
@@ -13,7 +13,7 @@ class KeyValuePairs {
     * Gets the headers
     * @returns _headers
     */
-    public get headers(): string[] {
+    public get headers(): object[] {
         return this._headers
     }
 
@@ -22,7 +22,7 @@ class KeyValuePairs {
     * Sets the value of _headers
     * @param headers The new value of _headers
     */
-    public set headers(headers: string[]) {
+    public set headers(headers: object[]) {
         this._headers = headers
     }
 }
