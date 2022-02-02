@@ -59,31 +59,8 @@
           ></template>
           <template v-slot:[`item.delete`]="{ item }">
             <v-btn @click="pushDeleteUserAndPullUsersFromServer(item)" icon>
-              <delete-icon></delete-icon></v-btn></template
-          ><template v-slot:[`item.password`]="{}">
-            <v-dialog v-model="dialog">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn icon v-bind="attrs" v-on="on"
-                  ><lock-clock-icon></lock-clock-icon>
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title> Reset the password </v-card-title>
-                <div style="padding-right: 10px; padding-left: 10px">
-                  <v-text-field></v-text-field>
-                </div>
-                <div style="padding-right: 10px; padding-left: 10px">
-                  <v-text-field></v-text-field>
-                </div>
-                <v-row>
-                  <v-spacer></v-spacer>
-                  <div style="padding-right: 20px">
-                    <v-btn disabled>reset</v-btn>
-                  </div>
-                </v-row>
-              </v-card>
-            </v-dialog></template
-          >
+              <delete-icon></delete-icon></v-btn
+          ></template>
         </v-data-table>
       </v-card>
     </div>
@@ -102,7 +79,6 @@ const userAdministrationObject = new UserAdministration(
     { text: "User priviliges", value: "privilege" },
     { text: "Status", value: "status" },
     { text: "Delete", value: "delete" },
-    { text: "Reset password", value: "password" },
   ],
   [],
   ["activated", "suspended", "pending"],
