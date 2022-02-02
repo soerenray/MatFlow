@@ -46,4 +46,9 @@ dag_save_path: str = "dag_file"
 
 underscore: str = "_"
 
+old_key = "oldKey"
+new_key = "newKey"
+old_value = "oldValue"
+new_value = "newValue"
+
 

@@ -54,6 +54,9 @@ class FrontendVersion(Version):
         """
         out_dict: dict = dict()
         out_dict.update({keys.version_note_name: self.get_note()})
-        out_dict.update({keys.version_number_name: self.get_version_number()})
-        out_dict.update({keys.frontend_versions_changes: self.get_changes()})
+        out_dict.update({keys.version_number_name: self.get_version_number().get_number()})
+        changes_list: List[dict] = []
+        for change in self.get_changes():
+            changes_list.append(change.encode())
+        out_dict.update({keys.frontend_versions_changes: changes_list})
         return out_dict

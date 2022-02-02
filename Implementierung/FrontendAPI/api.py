@@ -168,7 +168,7 @@ class FrontendAPI:
             wf_name: str = json.loads(request.get_json())[keys.workflow_instance_name]
             versions: List[FrontendVersion] = FrontendAPI.workflow_manager.get_versions_from_workflow_instance(wf_name)
         except MatFlowException as exception:
-            ExceptionHandler.handle_exception(exception)
+            return ExceptionHandler.handle_exception(exception)
         else:
             for version in versions:
                 list_of_versions.append(version.encode_version())
