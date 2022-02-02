@@ -26,3 +26,5 @@ class KeyValuePairs {
         this._headers = headers
     }
 }
+
+export default KeyValuePairs
