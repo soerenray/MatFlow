@@ -5,15 +5,45 @@
         <v-toolbar-title>Administration</v-toolbar-title>
       </v-toolbar>
     </div>
-    <div style="padding-top: 20px">
+    <div style="padding-top: 40px">
       <v-card>
         <v-data-table
           :headers="tableHeaders"
           :items="users"
           :item-key="users.name"
         >
+          <template v-slot:top
+            ><v-row>
+              <v-col>
+                <div
+                  style="
+                    padding-left: 20px;
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+                  "
+                >
+                  <v-btn @click="pullUsersFromServer" color="yellow"
+                    >Pull users from server</v-btn
+                  >
+                </div>
+              </v-col>
+              <v-col align="right">
+                <div
+                  style="
+                    padding-right: 20px;
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+                  A"
+                >
+                  <v-btn @click="pushUsersAndPullUsersFromServer()" color="blue"
+                    >Update users</v-btn
+                  >
+                </div>
+              </v-col>
+            </v-row>
+          </template>
           <template v-slot:[`item.name`]="{ item }"
-            ><v-text-field :value="item.userName"></v-text-field
+            ><v-text-field disabled v-model="item.userName"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
             ><v-select
@@ -31,7 +61,7 @@
             <v-btn @click="pushDeleteUser(item)" icon>
               <delete-icon></delete-icon></v-btn></template
           ><template v-slot:[`item.password`]="{}">
-            <v-dialog v-model="dialog" max-width="500px">
+            <v-dialog v-model="dialog">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon v-bind="attrs" v-on="on"
                   ><lock-clock-icon></lock-clock-icon>
@@ -87,9 +117,22 @@ export default {
     };
   },
   methods: {
-    pushDeleteUser(user: User) {
+    pushDeleteUserAndPullUsersFromServer(user: User) {
       backendServerCommunicatorObject.pushDeleteUser(user);
+      this.pullUsersFromServer();
+    },
+    pullUsersFromServer() {
+      this.removeUsersFromComponent();
       this.users = backendServerCommunicatorObject.pullUsers();
+    },
+    pushUsersAndPullUsersFromServer() {
+      this.users.forEach((user: User) => {
+        backendServerCommunicatorObject.pushUser(user);
+      });
+      this.pullUsersFromServer();
+    },
+    removeUsersFromComponent() {
+      this.users.splice(0);
     },
   },
   computed: {

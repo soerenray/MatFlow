@@ -4,7 +4,7 @@ import Server from '../Classes/Server'
 import Version from '../Classes/Version'
 import Template from '../Classes/Template'
 
-import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser } from '../DummyData/DataInTypscript'
+import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '../Classes/WorkflowInstance'
 
 class BackendServerCommunicator {
@@ -56,8 +56,14 @@ class BackendServerCommunicator {
     }
     public pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions }
     public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
-    public pullUsers(): User[] { return users }
-    public pushUser(user: User): void { return }
+    public pullUsers(): User[] {
+        let tempUsers: User[] = []
+        users.forEach((user: User) => {
+            tempUsers.push(new User(user.userName, user.userStatus, user.userPrivilege))
+        })
+        return tempUsers
+    }
+    public pushUser(user: User): void { updateUser(user) }
     public pushDeleteUser(user: User): void { deleteUser(user) }
     public pullServers(): Server[] { return }
     public pushServer(server: Server): void { return }
