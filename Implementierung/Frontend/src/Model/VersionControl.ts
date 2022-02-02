@@ -116,7 +116,7 @@ class VersionControl {
 
     /**
     * Sets the value of _workflowInstancesName
-    * @param workflowInstanceName The new value of _workflowInstancesName
+    * @param workflowInstancesName The new value of _workflowInstancesName
     */
     public set workflowInstancesName(workflowInstancesName: string[]) {
         this._workflowInstancesName = workflowInstancesName
