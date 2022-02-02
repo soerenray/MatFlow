@@ -164,6 +164,7 @@ export default {
   },
   created: function () {
     this.pullVersionsWithWorkflowInstanceName();
+    this.pullWorkflowInstancesName()
   },
 };
 </script>
