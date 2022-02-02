@@ -84,21 +84,24 @@ function updateUser(user: User) {
     let userIndex = users.findIndex((userInUsers: User) => {
         return user.userName === userInUsers.userName
     })
-    if(userIndex == -1) {
-        return 
+    if (userIndex == -1) {
+        return
     } else {
         users[userIndex] = user
     }
 }
 
 // pullVersionsWithWorkflowInstanceName
-let versions: Version[] = [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
-["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
-["key3: 5.0 5.0", "key3: 'text'"]])]
+let versions = {
+    workflowInstance1: [new Version('1.1', 'changed value of key1', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
+    ["key3: 5.0 5.0", "key3: 'text'"]]), new Version('1.1.1', 'reverted previous change', [["key1: Ipsom lorum", "key1: lorem ipsum"], ["key1: xy", "key2: xy"],
+    ["key3: 5.0 5.0", "key3: 'text'"]])], workflowInstance2: [new Version('2.1', 'changed name of key3', [["key3: Foo bar", "key1: Foo bar"]]), new Version('2.2', 'fixed typo in key-value', [["key1: xy", "key1: xy"], ["key2: 42", "key2: 420"],
+    ])]
+}
 
 // pullUsers
 let users: User[] = [new User('name1', 'suspended', 'administrator'), new User('name2', 'pending', 'visitor')]
 
 // pullServers
 // wont be implemented at the moement (time pressure)
-export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser  }
+export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser }
