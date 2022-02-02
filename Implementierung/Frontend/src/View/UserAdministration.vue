@@ -41,7 +41,7 @@
             </v-row>
           </template>
           <template v-slot:[`item.name`]="{ item }"
-            ><v-text-field :value="item.userName"></v-text-field
+            ><v-text-field v-model="item.userName"></v-text-field
           ></template>
           <template v-slot:[`item.privilege`]="{ item }"
             ><v-select
