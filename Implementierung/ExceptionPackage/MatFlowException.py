@@ -23,6 +23,7 @@ class MatFlowException(Exception):
         Returns:
              int: the status code
         """
+        return self.status_code
 
 
 class UserExistsException(MatFlowException):

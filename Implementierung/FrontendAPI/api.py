@@ -7,7 +7,7 @@ from flask import Flask, request
 # for production api:
 from waitress import serve
 from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
-from Implementierung.FrontendAPI import utilities
+from Implementierung.FrontendAPI import utilities, keys
 from Implementierung.UserAdministration.UserController import UserController
 from Implementierung.UserAdministration.User import User
 from Implementierung.workflow.frontend_version import FrontendVersion
@@ -17,7 +17,6 @@ from Implementierung.workflow.workflow_manager import WorkflowManager
 from .ExceptionHandler import ExceptionHandler
 from Implementierung.HardwareAdministration.Hardware_Controller import Hardware_Controller
 from Implementierung.HardwareAdministration.Server import Server
-import Implementierung.FrontendAPI.keys
 
 # according to Flask docs this command should be on modular level
 app = Flask('FrontendAPI')
@@ -47,7 +46,7 @@ class FrontendAPI:
         raise RuntimeError("Call get_frontend_api()")
 
     @classmethod
-    def get_frontend_api(cls):
+    def get_frontend_api(cls) -> Flask:
         """
         returns the FrontendAPI in singleton design fashion, meaning there is only one instance of FrontendAPI
         in circulation at all times.
@@ -57,6 +56,7 @@ class FrontendAPI:
         """
         if cls.__instance is None:
             cls.__start_api()
+            return app
         else:
             # api already up and running
             pass
@@ -82,7 +82,8 @@ class FrontendAPI:
             String: json-dumped object containing the above described information
         """
         try:
-            encoded_server: dict = Server.encode_server(FrontendAPI.hardware_controller.getServer())
+            server: Server = FrontendAPI.hardware_controller.getServer()
+            encoded_server: dict = server.encode_server()
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
@@ -100,7 +101,7 @@ class FrontendAPI:
         """
         try:
             server: Server = Server.extract_server(request)
-            FrontendAPI.hardware_controller.writeServer(server)
+            FrontendAPI.hardware_controller.setServer(server)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
@@ -167,7 +168,7 @@ class FrontendAPI:
             wf_name: str = json.loads(request.get_json())[keys.workflow_instance_name]
             versions: List[FrontendVersion] = FrontendAPI.workflow_manager.get_versions_from_workflow_instance(wf_name)
         except MatFlowException as exception:
-            ExceptionHandler.handle_exception(exception)
+            return ExceptionHandler.handle_exception(exception)
         else:
             for version in versions:
                 list_of_versions.append(version.encode_version())
