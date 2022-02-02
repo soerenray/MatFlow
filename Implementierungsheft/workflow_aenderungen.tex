@@ -1,3 +1,5 @@
+% ich kümmere mich morgen um die komischen Anführungszeichen
+
 \subsection{Kommunikation von Dateien innerhalb der Serveranwendung}
 Alle Attribute, Parameter und Rückgaben, die im Entwurfsheft mit dem Typ "File" gekennzeichnet waren, haben wir jetzt als "Path" implementiert. Wobei wir die Klasse "Path" aus dem Modul "pathlib" der Python-Standardbibliothek importieren.
 
@@ -14,6 +16,6 @@ Im Entwurfsheft haben wir uns keine Gedanken über die Ordnerstruktur der auf de
 
 Zum einen gibt es den Ordner "templates", der unmittelbar alle Dag-definition-files der bisher erstellten Templates enthält. Der Name der Datei stimmt dabei stets mit dem Namen des Templates überein. 
 
-Daneben gibt es zudem noch den Ordner "workflow_instances". Dieser enthält für jede erstellte Workflow-Instanz einen Unterordner, der den eindeutigen Namen der Instanz trägt. In jedem dieser Unterordner befinden sich mindestens die Dag-definition-file der Instanz und der Ordner "current_conf", der in seiner Struktur stehts dem ursprünglich Konfigurationsordner enspricht. Insbesondere können auch Dateien mit einer Endung darin liegen, die nicht ".conf" ist. Die ".conf"-Dateien sind dabei immer auf dem Stand der aktuellen Version der Workflowinstanz. Ebenfalls fester Bestandteil ist der Ordner "1", der die initiale Version der Instanz representiert. In ihm liegen alle ".conf"-Dateien in ihrer ursprünglichen Fassung. Zusätzlich gibt es noch für jede neu erstellte Version einen Ordner, in dem stets nur die in dieser Version geänderten ".conf"-Dateien liegen.
+Daneben gibt es zudem noch den Ordner "workflow\_instances". Dieser enthält für jede erstellte Workflow-Instanz einen Unterordner, der den eindeutigen Namen der Instanz trägt. In jedem dieser Unterordner befinden sich mindestens die Dag-definition-file der Instanz und der Ordner "current\_conf", der in seiner Struktur stehts dem ursprünglich Konfigurationsordner enspricht. Insbesondere können auch Dateien mit einer Endung darin liegen, die nicht ".conf" ist. Die ".conf"-Dateien sind dabei immer auf dem Stand der aktuellen Version der Workflowinstanz. Ebenfalls fester Bestandteil ist der Ordner "1", der die initiale Version der Instanz representiert. In ihm liegen alle ".conf"-Dateien in ihrer ursprünglichen Fassung. Zusätzlich gibt es noch für jede neu erstellte Version einen Ordner, in dem stets nur die in dieser Version geänderten ".conf"-Dateien liegen.
 
 \subsection{Änderungen im Workflow-Package}
