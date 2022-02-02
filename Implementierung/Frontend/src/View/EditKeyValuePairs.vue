@@ -3,50 +3,64 @@
     <div style="width: 700px">
       <v-card>
         <v-row>
-          <div>
-            <v-btn text color="primary"> Key name </v-btn>
-          </div>
-          <v-spacer></v-spacer>
-          <div style="padding-top: 15px; padding-right: 290px">
-            <v-btn text color="primary"> Value </v-btn>
-          </div>
+          <v-col>
+            <v-row>
+              <div>
+                <v-btn text color="primary"> Key name </v-btn>
+              </div>
+              <v-spacer></v-spacer>
+              <div style="padding-top: 15px; padding-right: 290px">
+                <v-btn text color="primary"> Value </v-btn>
+              </div>
+            </v-row>
+          </v-col>
+          <v-col>
+            <v-card
+              style="background-color: #f7f9f9"
+              width="700px"
+              height="50px"
+            >
+              <v-row>
+                <div style="padding-left: 20px; padding-top: 5px">
+                  <v-btn @click="resetChoosenConfigFileObject" color="yellow"
+                    >Pull files from Server</v-btn
+                  >
+                </div>
+                <v-spacer></v-spacer>
+                <div style="padding-right: 20px; padding-top: 5px">
+                  <v-btn
+                    @click="pushUpdatedConfigFilesToBackendServer"
+                    color="blue"
+                    >Create new version</v-btn
+                  >
+                </div>
+              </v-row>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card v-for="(keyValuePair, index) in keyValuePairs" :key="index">
+              <v-row>
+                <div style="padding-top: 15px; padding-left: 20px">
+                  <v-text-field
+                    @input="changeAllKeyValuePairs"
+                    v-model="keyValuePair.keyName"
+                    solo
+                    dense
+                  ></v-text-field>
+                </div>
+                <v-spacer></v-spacer>
+                <div style="padding-top: 15px; padding-right: 50px">
+                  <v-text-field
+                    @input="changeAllKeyValuePairs"
+                    v-model="keyValuePair.keyValue"
+                    style="width: 400px"
+                    dense
+                  ></v-text-field>
+                </div>
+              </v-row>
+            </v-card>
+          </v-col>
         </v-row>
-        <v-card style="background-color: #f7f9f9" width="700px" height="50px">
-          <v-row>
-            <div style="padding-left: 20px; padding-top: 5px">
-              <v-btn @click="resetChoosenConfigFileObject" color="yellow"
-                >Pull files from Server</v-btn
-              >
-            </div>
-            <v-spacer></v-spacer>
-            <div style="padding-right: 20px; padding-top: 5px">
-              <v-btn @click="pushUpdatedConfigFilesToBackendServer" color="blue"
-                >Create new version</v-btn
-              >
-            </div>
-          </v-row>
-        </v-card>
-        <v-card v-for="(keyValuePair, index) in keyValuePairs" :key="index">
-          <v-row>
-            <div style="padding-top: 15px; padding-left: 20px">
-              <v-text-field
-                @input="changeAllKeyValuePairs"
-                v-model="keyValuePair.keyName"
-                solo
-                dense
-              ></v-text-field>
-            </div>
-            <v-spacer></v-spacer>
-            <div style="padding-top: 15px; padding-right: 50px">
-              <v-text-field
-                @input="changeAllKeyValuePairs"
-                v-model="keyValuePair.keyValue"
-                style="width: 400px"
-                dense
-              ></v-text-field>
-            </div>
-          </v-row>
-        </v-card>
       </v-card>
     </div>
   </v-app>
