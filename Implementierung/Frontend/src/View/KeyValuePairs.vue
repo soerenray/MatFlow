@@ -13,6 +13,11 @@
 <script lang='ts'>
 import KeyValuePairs from "../Model/KeyValuePairs";
 
+const keyValuePairsObject = new KeyValuePairs([
+  { text: "Parameter/ value old", value: "oldValue" },
+  { text: "Parameter/ value new", value: "newValue" },
+]);
+
 export default {
   name: "KeyValuePairs",
   // details: https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
