@@ -6,4 +6,14 @@ Dort wird der Datei dann dem Aufruf entsprechend ein langfristiger Speicherort i
 
 Im Entwurfsheft haben wir uns keine Gedanken über die Ordnerstruktur der auf dem Server gespeicherten Dateien gemacht, deshalb reichen wir nun einen entsprechenden Entwurf nach. 
 
+\begin{figure}[h]
+            \label{Ordnerstruktur}
+            \centerline{\includegraphics[scale=0.7]{res/ordnerstruktur.pdf}}
+            \caption{Eine graphische Veranschaulichung der Ordnerstruktur}
+        \end{figure}
+
+Zum einen gibt es den Ordner "templates", der unmittelbar alle Dag-definition-files der bisher erstellten Templates enthält. Der Name der Datei stimmt dabei stets mit dem Namen des Templates überein. 
+
+Daneben gibt es zudem noch den Ordner "workflow_instances". Dieser enthält für jede erstellte Workflow-Instanz einen Unterordner, der den eindeutigen Namen der Instanz trägt. In jedem dieser Unterordner befinden sich mindestens die Dag-definition-file der Instanz und der Ordner "current_conf", der in seiner Struktur stehts dem ursprünglich Konfigurationsordner enspricht. Insbesondere können auch Dateien mit einer Endung darin liegen, die nicht ".conf" ist. Die ".conf"-Dateien sind dabei immer auf dem Stand der aktuellen Version der Workflowinstanz. Ebenfalls fester Bestandteil ist der Ordner "1", der die initiale Version der Instanz representiert. In ihm liegen alle ".conf"-Dateien in ihrer ursprünglichen Fassung. Zusätzlich gibt es noch für jede neu erstellte Version einen Ordner, in dem stets nur die in dieser Version geänderten ".conf"-Dateien liegen.
+
 \subsection{Änderungen im Workflow-Package}
