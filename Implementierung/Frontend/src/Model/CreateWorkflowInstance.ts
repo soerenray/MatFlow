@@ -1,10 +1,6 @@
 class CreateWorkflowInstance {
     private _dropDownCreateOrImportWokflowInstance: string[]
-    // _copyOfDropDownCreateOrImportWokflowInstance is needed for the method setObjectToDefaultValues
-    private _copyOfDropDownCreateOrImportWokflowInstance: string[]
     private _selectedDropDownItem: string
-    // _copyOfSelectedDropDownItem is needed for the method setObjectToDefaultValues
-    private _copyOfSelectedDropDownItem: string
     private _templatesName: string[]
     private _configFolder: File
     private _workflowInstanceFolder: File
@@ -23,9 +19,7 @@ class CreateWorkflowInstance {
     */
     constructor(dropDownCreateOrImportWokflowInstance: string[] = [], selectedDropDownItem: string = '', templatesName: string[] = [], configFolder: File = new File([], "emptyFile", { type: 'application/zip' }), workflowInstanceFolder: File = new File([], "emptyFile", { type: 'application/zip' }), selectedTemplateName: string = '', workflowInstanceName: string = '',) {
         this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance
-        this._copyOfDropDownCreateOrImportWokflowInstance = JSON.parse(JSON.stringify(dropDownCreateOrImportWokflowInstance))
         this._selectedDropDownItem = selectedDropDownItem
-        this._copyOfSelectedDropDownItem = JSON.parse(JSON.stringify(selectedDropDownItem))
         this._templatesName = templatesName
         this._configFolder = configFolder
         this._workflowInstanceFolder = workflowInstanceFolder
@@ -143,19 +137,6 @@ class CreateWorkflowInstance {
     */
     public set workflowInstanceName(workflowInstanceName: string) {
         this._workflowInstanceName = workflowInstanceName
-    }
-
-    /**
-    * sets the default values of the class to the instance (the values that will be used, if the constructor is called with no input)
-    */
-    public setObjectToDefaultValues() {
-        this._dropDownCreateOrImportWokflowInstance = this._copyOfDropDownCreateOrImportWokflowInstance
-        this.selectedDropDownItem = this._copyOfSelectedDropDownItem
-        this._templatesName = []
-        this._configFolder = new File([], "emptyFile", { type: 'application/zip' })
-        this._workflowInstanceFolder = new File([], "emptyFile", { type: 'application/zip' })
-        this.selectedTemplateName = ''
-        this._workflowInstanceName = ''
     }
 }
 
