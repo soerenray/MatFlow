@@ -29,7 +29,7 @@
             </div>
             <v-row>
               <div style="padding-left: 10px; padding-top: 5px">
-                <a href>SignUp</a>
+                 <router-link to="/SignUp">SignUp</router-link>
               </div>
               <v-spacer></v-spacer>
               <v-btn @click='pushLogIn' color="blue">LogIn</v-btn>
