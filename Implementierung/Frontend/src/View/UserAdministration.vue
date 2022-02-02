@@ -125,7 +125,7 @@ export default {
       this.users = backendServerCommunicatorObject.pullUsers()
     },
     removeUsersFromComponent() {
-      this.users = []
+      this.users.splice(0)
     }
   },
   computed: {
