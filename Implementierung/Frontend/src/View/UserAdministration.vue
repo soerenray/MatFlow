@@ -35,7 +35,7 @@
                     padding-bottom: 5px;
                   A"
                 >
-                  <v-btn @click="pushUserAndPullUsersFromServer()" color="blue">Update users</v-btn>
+                  <v-btn @click="pushUsersAndPullUsersFromServer()" color="blue">Update users</v-btn>
                 </div>
               </v-col>
             </v-row>
@@ -123,7 +123,7 @@ export default {
       this.removeUsersFromComponent();
       this.users = backendServerCommunicatorObject.pullUsers();
     },
-    pushUserAndPullUsersFromServer(user: User) {
+    pushUsersAndPullUsersFromServer(user: User) {
       backendServerCommunicatorObject.pushUser(user)
       this.pullUsersFromServer()
     },
