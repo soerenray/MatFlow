@@ -35,7 +35,7 @@
                     padding-bottom: 5px;
                   A"
                 >
-                  <v-btn @click="pushUserAndPullUsersFromServer(item)" color="blue">Update users</v-btn>
+                  <v-btn @click="pushUserAndPullUsersFromServer()" color="blue">Update users</v-btn>
                 </div>
               </v-col>
             </v-row>
