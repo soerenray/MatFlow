@@ -2,7 +2,7 @@ from pathlib import Path
 from os import listdir
 from typing import List, Tuple
 
-from Implementierung.workflow.version import Version
+from Implementierung.workflow.workflow_version import WorkflowVersion
 from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.config_file import ConfigFile
@@ -10,7 +10,7 @@ from Implementierung.workflow.parameter_change import ParameterChange
 from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 
-class DatabaseVersion(Version):
+class DatabaseVersion(WorkflowVersion):
     """
     This class inherits from Version and is specialized to fit the way versions are managed in the database
     """

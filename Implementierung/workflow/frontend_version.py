@@ -2,12 +2,12 @@ from typing import List
 
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
-from Implementierung.workflow.version import Version
+from Implementierung.workflow.workflow_version import WorkflowVersion
 from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.parameter_change import ParameterChange
 
 
-class FrontendVersion(Version):
+class FrontendVersion(WorkflowVersion):
     """
     This class inherits from Version and is specialized to satisfy the need for information of the client application.
     """
