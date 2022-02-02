@@ -33,6 +33,14 @@ export default {
         return { oldValue: x[0], newValue: x[1] };
       });
     },
+    headers: {
+      get: function (): Object[] {
+        return keyValuePairsObject.headers;
+      },
+      set: function (headers: Object[]) {
+        keyValuePairsObject.headers = headers;
+      },
+    },
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
