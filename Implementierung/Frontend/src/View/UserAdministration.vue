@@ -22,7 +22,9 @@
                     padding-bottom: 5px;
                   "
                 >
-                  <v-btn color="yellow">Pull users from server</v-btn>
+                  <v-btn @click="pullUsersFromServer" color="yellow"
+                    >Pull users from server</v-btn
+                  >
                 </div>
               </v-col>
               <v-col align="right">
@@ -114,12 +116,17 @@ export default {
   },
   methods: {
     pushDeleteUser(user: User) {
+      this.removeUsersFromComponent()
       backendServerCommunicatorObject.pushDeleteUser(user);
       this.users = backendServerCommunicatorObject.pullUsers();
     },
     pullUsersFromServer() {
-      this.users = backendServerCommunicatorObject.pullUsers();
+      this.removeUsersFromComponent()
+      this.users = backendServerCommunicatorObject.pullUsers()
     },
+    removeUsersFromComponent() {
+      this.users = []
+    }
   },
   computed: {
     tableHeaders: {
