@@ -116,7 +116,6 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
-        # TODO Rückgabe mit Nils abchecken
         return ExceptionHandler.success({keys.all_users: FrontendAPI.user_controller.getAllUsersAndDetails()})
 
     @staticmethod

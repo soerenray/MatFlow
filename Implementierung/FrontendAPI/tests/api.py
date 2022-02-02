@@ -9,6 +9,7 @@ from Implementierung.FrontendAPI import keys
 from Implementierung.UserAdministration.User import User
 from Implementierung.workflow.frontend_version import FrontendVersion
 from Implementierung.workflow.parameter_change import ParameterChange
+from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.version_number import VersionNumber
 
 
@@ -309,7 +310,57 @@ class WorkflowInstanceTest(unittest.TestCase):
                                                 keys.version_number_name: "scooby"}))
             retrieved_json: dict = json.loads(got.get_data())
             # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
-            self.assertEqual(retrieved_json, self.failed_dict)
+            self.assertEqual(retrieved_json, success_response)
+
+    def test_create_version_of_wf_instance_call_extract_files(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'create_new_version_of_workflow_instance') \
+                as mock_method:
+            with patch.object(ReducedConfigFile, 'extract_multiple_configs', return_value=[]):
+                self.app.post('create_version_of_wf_instance',
+                              json=json.dumps({keys.workflow_instance_name: "bla", keys.version_note_name: "scooby",
+                                              keys.config_files: []}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
+
+    def test_create_version_of_wf_instance_call_wf_manager(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'create_new_version_of_workflow_instance'):
+            with patch.object(ReducedConfigFile, 'extract_multiple_configs', return_value=[]) \
+                    as mock_method_2:
+                self.app.post('create_version_of_wf_instance',
+                              json=json.dumps({keys.workflow_instance_name: "bla", keys.version_note_name: "scooby",
+                                              keys.config_files: []}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method_2.call_count > 0
+
+    def test_create_version_of_wf_instance_response_fail(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'create_new_version_of_workflow_instance',
+                          side_effect=InternalException("oops")):
+            with patch.object(ReducedConfigFile, 'extract_multiple_configs', return_value=[]):
+                got = self.app.post('create_version_of_wf_instance',
+                                    json=json.dumps({keys.workflow_instance_name: "bla",
+                                                     keys.version_note_name: "scooby", keys.config_files: []}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                retrieved_json: dict = json.loads(got.get_data())
+                self.assertEqual(retrieved_json, self.failed_dict)
+
+    def test_create_version_of_wf_instance_response_valid(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'create_new_version_of_workflow_instance'):
+            with patch.object(ReducedConfigFile, 'extract_multiple_configs', return_value=[]):
+                got = self.app.post('create_version_of_wf_instance',
+                                    json=json.dumps({keys.workflow_instance_name: "bla",
+                                                     keys.version_note_name: "scooby", keys.config_files: []}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                retrieved_json: dict = json.loads(got.get_data())
+                self.assertEqual(retrieved_json, success_response)
+
+    def test_get_config_from_wf_instance_call_wf_manager(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file') \
+                as mock_method:
+            with patch.object(ReducedConfigFile, "encode_config", return_value=dict()):
+                self.app.get('get_config_from_wf_instance',
+                             json=json.dumps({keys.workflow_instance_name: "bla", keys.config_file_name: "scooby"}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
 
 
 if __name__ == '__main__':
