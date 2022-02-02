@@ -8,7 +8,9 @@
             :key="workflowInstanceName"
           >
             <v-col
-              @click="selectedWorkflowInstanceName = workflowInstanceName"
+              @click="
+                selectWorkflowInstanceNameAndPullVersions(workflowInstanceName)
+              "
               v-if="selectedWorkflowInstanceName != workflowInstanceName"
             >
               {{ workflowInstanceName }}
