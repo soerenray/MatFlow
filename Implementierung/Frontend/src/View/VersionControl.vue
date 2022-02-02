@@ -92,6 +92,13 @@ export default {
           this.selectedWorkflowInstanceName
         );
     },
+    pullWorkflowInstancesName: function () {
+      this.workflowInstancesName = backendServerCommunicatorObject
+        .pullWorkflowInstancesNameAndConfigFilesName()
+        .map((workflowInstanceNameAndConfigFilesName) => {
+          return workflowInstanceNameAndConfigFilesName[0];
+        });
+    },
     pushReplaceActiveVersionOfWorkflowInstance() {
       backendServerCommunicatorObject.pushReplaceActiveVersionOfWorkflowInstance(
         this.selectedWorkflowInstanceName,
@@ -137,7 +144,8 @@ export default {
         return versionControlObject.selectedWorkflowInstanceName;
       },
       set: function (selectedWorkflowInstanceName: string) {
-        versionControlObject.selectedWorkflowInstanceName = selectedWorkflowInstanceName;
+        versionControlObject.selectedWorkflowInstanceName =
+          selectedWorkflowInstanceName;
       },
     },
     workflowInstancesName: {
