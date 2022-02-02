@@ -101,4 +101,4 @@ let users: User[] = [new User('name1', 'suspended', 'administrator'), new User('
 
 // pullServers
 // wont be implemented at the moement (time pressure)
-export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser  }
+export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser  }
