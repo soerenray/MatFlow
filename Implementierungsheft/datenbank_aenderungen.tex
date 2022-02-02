@@ -1,3 +1,18 @@
+\subsection{Database Paket Implementierungsänderungen}
+\paragraph{TemplateData} Die Klasse TemplateData des Database Pakets wurde entfernt da es keine Einträge in der Datenbank gibt die sie verwalten muss\ref{template_gone}.
+
+
+\paragraph{DatabaseTable} Unterscheidung zwischen einzelnen Werten und Mehreren für get(..) Funktion. Dadurch entstehen get\textunderscore one(..) und get\textunderscore multiple(..).
+
+Neue Funktion \textbf{check\textunderscore for(query: str): bool} um zu sehen ob ein Eintrag von der angegebenen query existiert.
+
+Neue Funktion \textbf{setup\textunderscore database()} die beim Aufrufen die Datenbank aufbaut
+
+\paragraph{WorkflowData} Hauptsächlich Typisierung und Namensgebung 
+
+
+
+
 \subsection{MySQL - Datenbankaufbau}
 
 \begin{figure}[h]
@@ -37,7 +52,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{WorkflowTemplate\label{wfTemplate}} &  & \\
 	\hline
-	template\textunderscore ID & int & $key; Auto\textunderscore Increment$\\
+	template\textunderscore ID & int & $key; Auto\_Increment$\\
 	\hline
 	name & varchar(255) & $notNull$ \\
 	\hline
@@ -61,7 +76,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{FolderFile} &  & \\
 	\hline
-	filesID & int & $key; Auto\textunderscore Increment$ \\
+	filesID & int & $key; Auto\_Increment$ \\
 	\hline
 	wfname & varchar(255) & $notNull;$ name from Workflow\\
 	\hline
@@ -74,7 +89,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{Version} & & \\
 	\hline
-	ID & int & $key; Auto\textunderscore Increment$ \\
+	ID & int & $key; Auto\_Increment$ \\
 	\hline
 	wfName & varchar(255) & name from Workflow\\
 	\hline
@@ -113,7 +128,7 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	\textbf{ConfFile} & & \\
 	\hline
-	confKey & int & $key; Auto\textunderscore Increment$ \\
+	confKey & int & $key; Auto\_Increment$ \\
 	\hline
 	file & varchar(255) & $notNull$ \\
 	\hline
@@ -126,16 +141,12 @@ Dementsprechend sind Folgende Tabellen in der Datenbank vorhanden:
 	\hline
 	versionID & int & $key;$ ID from Version \\
 	\hline
-	filesID & int & $key; Auto\textunderscore Increment$ \\
+	filesID & int & $key; Auto\_Increment$ \\
 	\hline
 	file & varchar(255) & $notNull$\\
 	\hline
 \end{dataTable}
 
-
-
-\subsection{Database Paket Implementierungsänderungen}
-Die Klasse TemplateData des Database Pakets wurde entfernt da es keine Einträge in der Datenbank gibt die sie verwalten muss\ref{template_gone}.
 
 
 
