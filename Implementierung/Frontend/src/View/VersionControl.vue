@@ -82,6 +82,12 @@ export default {
     selectNewVersionObject: function (selectedVersionObject: Version) {
       versionControlObject.selectedVersionObject = selectedVersionObject;
     },
+    selectWorkflowInstanceNameAndPullVersions(
+      selectedWorkflowInstanceName: string
+    ) {
+      this.selectedWorkflowInstanceName = selectedWorkflowInstanceName;
+      this.pullVersionsWithWorkflowInstanceName();
+    },
     pullVersionsWithWorkflowInstanceName: function () {
       versionControlObject.versions =
         backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
