@@ -292,6 +292,25 @@ class WorkflowInstanceTest(unittest.TestCase):
             # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
             self.assertEqual(retrieved_json, expected_dict)
 
+    def test_replace_wf_instance_active_versions_call_wf_manager(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'set_active_version_through_number') as mock_method:
+            got = self.app.put('replace_wf_instance_active_version',
+                               json= json.dumps({keys.workflow_instance_name: "bla", keys.version_number_name: "scooby"}))
+            retrieved_json: dict = json.loads(got.get_data())
+            # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+            assert mock_method.call_count > 0
+
+    def test_replace_wf_instance_active_versions_fail(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'set_active_version_through_number',
+                          side_effect=InternalException("oops")) as mock_method:
+            got = self.app.put('replace_wf_instance_active_version',
+                               json= json.dumps({keys.workflow_instance_name: "bla", keys.version_number_name: "scooby"}))
+            retrieved_json: dict = json.loads(got.get_data())
+            # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+            self.assertEqual(retrieved_json, self.failed_dict)
+
+
+
 
 
 
