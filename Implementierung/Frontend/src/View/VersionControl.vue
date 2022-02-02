@@ -1,62 +1,59 @@
 <template>
   <v-app>
-    <v-container>
-      <v-col align="center">
-        <v-card>
-          <div
-            v-for="workflowInstanceName in workflowInstancesName"
-            :key="workflowInstanceName"
+    <v-row style="padding-left: 30px; padding-top: 30px">
+      <v-card style="padding-right: 5px">
+        <v-col></v-col>
+        <v-col></v-col>
+        <v-divider></v-divider>
+        <div
+          v-for="workflowInstanceName in workflowInstancesName"
+          :key="workflowInstanceName"
+        >
+          <v-col
+            @click="
+              selectWorkflowInstanceNameAndPullVersions(workflowInstanceName)
+            "
+            v-if="selectedWorkflowInstanceName != workflowInstanceName"
           >
-            <v-col
-              @click="
-                selectWorkflowInstanceNameAndPullVersions(workflowInstanceName)
-              "
-              v-if="selectedWorkflowInstanceName != workflowInstanceName"
-            >
-              {{ workflowInstanceName }}
-            </v-col>
-            <v-col
-              v-if="selectedWorkflowInstanceName == workflowInstanceName"
-              style="background-color: #a9cce3"
-            >
-              {{ workflowInstanceName }}
-            </v-col>
-            <v-divider></v-divider>
-          </div>
-        </v-card>
-        <v-card width="1000px">
-          <v-data-table
-            :headers="tableHeaders"
-            :items="versions"
-            item-key="name"
+            {{ workflowInstanceName }}
+          </v-col>
+          <v-col
+            v-if="selectedWorkflowInstanceName == workflowInstanceName"
+            style="background-color: #a9cce3"
           >
-            <template v-slot:[`item.parameterChanges`]="{ item }">
-              <v-btn icon>
-                <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      @click="selectNewVersionObject(item)"
-                      icon
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <file-document-outline-icon></file-document-outline-icon>
-                    </v-btn>
-                  </template>
-                  <key-value-pairs
-                    :parameter-changes="selectedVersionObject.parameterChanges"
-                  ></key-value-pairs>
-                </v-dialog>
-              </v-btn>
-            </template>
-            <template v-slot:[`item.workspace`]="{}"
-              ><v-btn @click="pushReplaceActiveVersionOfWorkflowInstance" icon
-                ><file-restore-icon></file-restore-icon></v-btn
-            ></template>
-          </v-data-table>
-        </v-card>
-      </v-col>
-    </v-container>
+            {{ workflowInstanceName }}
+          </v-col>
+          <v-divider></v-divider>
+        </div>
+      </v-card>
+      <v-card width="700px">
+        <v-data-table :headers="tableHeaders" :items="versions" item-key="name">
+          <template v-slot:[`item.parameterChanges`]="{ item }">
+            <v-btn icon>
+              <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    @click="selectNewVersionObject(item)"
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <file-document-outline-icon></file-document-outline-icon>
+                  </v-btn>
+                </template>
+                <key-value-pairs
+                  :parameter-changes="selectedVersionObject.parameterChanges"
+                ></key-value-pairs>
+              </v-dialog>
+            </v-btn>
+          </template>
+          <template v-slot:[`item.workspace`]="{}"
+            ><v-btn @click="pushReplaceActiveVersionOfWorkflowInstance" icon
+              ><file-restore-icon></file-restore-icon></v-btn
+          ></template>
+        </v-data-table>
+      </v-card>
+    </v-row>
   </v-app>
 </template>
 
