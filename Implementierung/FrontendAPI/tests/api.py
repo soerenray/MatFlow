@@ -169,7 +169,6 @@ class UserTest(unittest.TestCase):
             with patch.object(FrontendAPI.user_controller.__class__, 'overrideUser'):
                 got = self.app.put('set_user_details', json=json.dumps(self.expected_dict_user_1))
                 retrieved_json: dict = json.loads(got.get_data())
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 self.assertEqual(retrieved_json, success_response)
 
     def test_set_user_response_fail(self):
@@ -178,7 +177,6 @@ class UserTest(unittest.TestCase):
                               side_effect=UserExistsException("scooby not found")):
                 got = self.app.put('set_user_details', json=json.dumps(self.expected_dict_user_1))
                 retrieved_json: dict = json.loads(got.get_data())
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 self.assertEqual(retrieved_json, self.failed_dict)
 
     def test_delete_user_call_1(self):
@@ -201,7 +199,6 @@ class UserTest(unittest.TestCase):
                               side_effect=UserExistsException("scooby not found")):
                 got = self.app.delete('delete_user', json=json.dumps(self.expected_dict_user_1))
                 retrieved_json: dict = json.loads(got.get_data())
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 self.assertEqual(retrieved_json, self.failed_dict)
 
     def test_delete_user_response_valid(self):
@@ -209,7 +206,6 @@ class UserTest(unittest.TestCase):
             with patch.object(FrontendAPI.user_controller.__class__, 'deleteUser'):
                 got = self.app.delete('delete_user', json=json.dumps(self.expected_dict_user_1))
                 retrieved_json: dict = json.loads(got.get_data())
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 self.assertEqual(retrieved_json, success_response)
 
 
@@ -217,13 +213,11 @@ class WorkflowInstanceTest(unittest.TestCase):
 
     def setUp(self) -> None:
         self.frontendVersion1 = Mock()
-        self.frontendVersion1.version_note_name = "scooby"
-        self.frontendVersion1.version_number_name = "doo"
-        self.frontendVersion1.frontend_versions_changes = "None"
         self.return_version_dict = {"he": "Scooby"}
         self.frontendVersion2 = Mock()
         self.app = app.test_client()
         self.failed_dict = {keys.status_code_name: InternalException("whoops").get_status_code()}
+        self.mockConfig = Mock()
 
     def test_get_wf_instance_versions_call_wf_manager(self):
         with patch.object(FrontendAPI.workflow_manager.__class__, 'get_versions_from_workflow_instance',
@@ -266,25 +260,20 @@ class WorkflowInstanceTest(unittest.TestCase):
                     got = self.app.get('get_wf_instance_versions',
                                        json=json.dumps({keys.workflow_instance_name: "bla"}))
                     retrieved_json: dict = json.loads(got.get_data())
-                    # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called()
-                    # throws error
                     self.assertEqual(retrieved_json, self.failed_dict)
 
     def test_get_wf_instance_versions_response_valid(self):
-        # we need a real version here; all other attempts have failed due to circular dependencies (of mocks)
-        version: FrontendVersion = FrontendVersion(VersionNumber("1"), "bla",
-                                                   [ParameterChange("bla", "bla", "bla", "bla", "bla")])
-        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_versions_from_workflow_instance',
-             return_value=[version, version]):
-            got = self.app.get('get_wf_instance_versions',
-                               json=json.dumps({keys.workflow_instance_name: "bla"}))
-            print(got)
-            retrieved_json: dict = json.loads(got.get_data())
-            expected_dict: dict = json.loads(json.dumps({keys.versions_name: [version.encode_version(),
-                                                                              version.encode_version()]}))
-            expected_dict.update(success_response)
-            # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
-            self.assertEqual(retrieved_json, expected_dict)
+        with patch.object(self.frontendVersion1, 'encode_version', return_value={"ha": "he"}):
+            with patch.object(FrontendAPI.workflow_manager.__class__, 'get_versions_from_workflow_instance',
+                              return_value=[self.frontendVersion1, self.frontendVersion1]):
+                got = self.app.get('get_wf_instance_versions',
+                                   json=json.dumps({keys.workflow_instance_name: "bla"}))
+                retrieved_json: dict = json.loads(got.get_data())
+                expected_dict: dict = json.loads(json.dumps({keys.versions_name:
+                                                            [self.frontendVersion1.encode_version(),
+                                                             self.frontendVersion1.encode_version()]}))
+                expected_dict.update(success_response)
+                self.assertEqual(retrieved_json, expected_dict)
 
     def test_replace_wf_instance_active_versions_call_wf_manager(self):
         with patch.object(FrontendAPI.workflow_manager.__class__, 'set_active_version_through_number') as mock_method:
@@ -300,7 +289,6 @@ class WorkflowInstanceTest(unittest.TestCase):
                                json=json.dumps({keys.workflow_instance_name: "bla",
                                                 keys.version_number_name: "scooby"}))
             retrieved_json: dict = json.loads(got.get_data())
-            # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
             self.assertEqual(retrieved_json, self.failed_dict)
 
     def test_replace_wf_instance_active_versions_valid(self):
@@ -309,7 +297,6 @@ class WorkflowInstanceTest(unittest.TestCase):
                                json=json.dumps({keys.workflow_instance_name: "bla",
                                                 keys.version_number_name: "scooby"}))
             retrieved_json: dict = json.loads(got.get_data())
-            # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
             self.assertEqual(retrieved_json, success_response)
 
     def test_create_version_of_wf_instance_call_extract_files(self):
@@ -339,7 +326,6 @@ class WorkflowInstanceTest(unittest.TestCase):
                 got = self.app.post('create_version_of_wf_instance',
                                     json=json.dumps({keys.workflow_instance_name: "bla",
                                                      keys.version_note_name: "scooby", keys.config_files: []}))
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, self.failed_dict)
 
@@ -349,19 +335,50 @@ class WorkflowInstanceTest(unittest.TestCase):
                 got = self.app.post('create_version_of_wf_instance',
                                     json=json.dumps({keys.workflow_instance_name: "bla",
                                                      keys.version_note_name: "scooby", keys.config_files: []}))
-                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
 
     def test_get_config_from_wf_instance_call_wf_manager(self):
-        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file') \
-                as mock_method:
-            with patch.object(ReducedConfigFile, "encode_config", return_value=dict()):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file', return_value=
+                          self.mockConfig) as mock_method:
+            with patch.object(self.mockConfig, "encode_config", return_value={"he": "du"}):
                 self.app.get('get_config_from_wf_instance',
                              json=json.dumps({keys.workflow_instance_name: "bla", keys.config_file_name: "scooby"}))
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
 
+    def test_get_config_from_wf_instance_call_encode(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file', return_value=
+                          self.mockConfig):
+            with patch.object(self.mockConfig, "encode_config", return_value={"he": "du"}) as mock_method:
+                self.app.get('get_config_from_wf_instance',
+                             json=json.dumps({keys.workflow_instance_name: "bla", keys.config_file_name: "scooby"}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
+
+    def test_get_config_from_wf_instance_response_fail(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file', side_effect=
+                          InternalException("whoops")):
+            with patch.object(self.mockConfig, "encode_config", return_value={"he": "du"}):
+                got = self.app.get('get_config_from_wf_instance',
+                                   json=json.dumps({keys.workflow_instance_name: "bla", keys.config_file_name: "scooby"}))
+                retrieved_json:dict = json.loads(got.get_data())
+                self.assertEqual(retrieved_json, self.failed_dict)
+
+    def test_get_config_from_wf_instance_response_valid(self):
+        with patch.object(FrontendAPI.workflow_manager.__class__, 'get_key_value_pairs_from_config_file', return_value=
+                          self.mockConfig):
+            with patch.object(self.mockConfig, "encode_config", return_value={"he": "du"}):
+                got = self.app.get('get_config_from_wf_instance',
+                                   json=json.dumps({keys.workflow_instance_name: "bla", keys.config_file_name: "scooby"}))
+                retrieved_json:dict = json.loads(got.get_data())
+                expected_dict: dict = {"he": "du"}
+                expected_dict.update(success_response)
+                # get rid of python native data types
+                expected_dict = json.loads(json.dumps(expected_dict))
+                self.assertEqual(retrieved_json, expected_dict)
+
+# TODO Stand create workflow
 
 if __name__ == '__main__':
     unittest.main()
