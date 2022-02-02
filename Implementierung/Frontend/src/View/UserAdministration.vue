@@ -116,17 +116,17 @@ export default {
   },
   methods: {
     pushDeleteUser(user: User) {
-      this.removeUsersFromComponent()
+      this.removeUsersFromComponent();
       backendServerCommunicatorObject.pushDeleteUser(user);
       this.users = backendServerCommunicatorObject.pullUsers();
     },
     pullUsersFromServer() {
-      this.removeUsersFromComponent()
-      this.users = backendServerCommunicatorObject.pullUsers()
+      this.removeUsersFromComponent();
+      this.users = backendServerCommunicatorObject.pullUsers();
     },
     removeUsersFromComponent() {
-      this.users.splice(0)
-    }
+      this.users.splice(0);
+    },
   },
   computed: {
     tableHeaders: {
