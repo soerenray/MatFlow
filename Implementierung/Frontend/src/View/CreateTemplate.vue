@@ -60,9 +60,6 @@ const createTemplateObject = new CreateTemplate();
 
 export default {
   name: "CreateTemplate",
-  data: function () {
-    return {};
-  },
   methods: {
     pressSendButton() {
       this.pushTemplateObjectToBackend();

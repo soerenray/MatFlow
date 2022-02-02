@@ -85,9 +85,6 @@ const createWorkflowInstanceObject = new CreateWorkflowInstance(
 
 export default {
   name: "CreateWorkflowInstance",
-  data: function () {
-    return {};
-  },
   methods: {
     pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();

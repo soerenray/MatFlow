@@ -87,11 +87,6 @@ const userAdministrationObject = new UserAdministration(
 
 export default {
   name: "UserAdministration",
-  data: function () {
-    return {
-      dialog: false,
-    };
-  },
   methods: {
     pushDeleteUserAndPullUsersFromServer(user: User) {
       backendServerCommunicatorObject.pushDeleteUser(user);
