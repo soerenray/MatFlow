@@ -31,7 +31,7 @@
                     padding-right: 20px;
                     padding-top: 5px;
                     padding-bottom: 5px;
-                  "
+                  A"
                 >
                   <v-btn color="blue">Update users</v-btn>
                 </div>
@@ -115,6 +115,9 @@ export default {
   methods: {
     pushDeleteUser(user: User) {
       backendServerCommunicatorObject.pushDeleteUser(user);
+      this.users = backendServerCommunicatorObject.pullUsers();
+    },
+    pullUsersFromServer() {
       this.users = backendServerCommunicatorObject.pullUsers();
     },
   },
