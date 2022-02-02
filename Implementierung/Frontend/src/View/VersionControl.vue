@@ -8,11 +8,7 @@
             :key="workflowInstanceName"
           >
             <v-col
-              @click="
-                setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
-                  workflowInstanceName
-                )
-              "
+              @click="selectedWorkflowInstanceName = workflowInstanceName"
               v-if="selectedWorkflowInstanceName != workflowInstanceName"
             >
               {{ workflowInstanceName }}
@@ -164,7 +160,7 @@ export default {
   },
   created: function () {
     this.pullVersionsWithWorkflowInstanceName();
-    this.pullWorkflowInstancesName()
+    this.pullWorkflowInstancesName();
   },
 };
 </script>
