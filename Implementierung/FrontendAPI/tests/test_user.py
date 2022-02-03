@@ -1,5 +1,6 @@
 import json
 import unittest
+from copy import deepcopy
 from unittest.mock import patch
 from Implementierung.FrontendAPI.api import app, FrontendAPI
 from Implementierung.FrontendAPI import keys
@@ -39,9 +40,10 @@ class UserTest(unittest.TestCase):
             got = self.app.get('get_all_users_and_details')
             # content not relevant, Nils has to test this
             retrieved_json = json.loads(got.get_data())
-            self.all_users.update(success_response)
+            expected_response: dict = deepcopy(self.all_users)
+            expected_response.update(success_response)
             # get rid of python native data types
-            expected_response = json.loads(json.dumps(self.all_users))
+            expected_response = json.loads(json.dumps(expected_response))
             self.assertEqual(retrieved_json, expected_response)
 
     def test_set_user_call_1(self):
@@ -111,15 +113,13 @@ class UserTest(unittest.TestCase):
         with patch.object(FrontendAPI.user_controller.__class__, "loginUser", side_effect=InternalException("oops")):
             got = self.app.get('verify_login', json=json.dumps({keys.user_name: "scooby", keys.password_name: "doo"}))
             retrieved_json: dict = json.loads(got.get_data())
-            expected_dict: dict = self.failed_dict
-            self.assertEqual(retrieved_json, expected_dict)
+            self.assertEqual(retrieved_json, self.failed_dict)
 
     def test_verify_login_response_valid(self):
         with patch.object(FrontendAPI.user_controller.__class__, "loginUser"):
             got = self.app.get('verify_login', json=json.dumps({keys.user_name: "scooby", keys.password_name: "doo"}))
             retrieved_json: dict = json.loads(got.get_data())
-            expected_dict: dict = success_response
-            self.assertEqual(retrieved_json, expected_dict)
+            self.assertEqual(retrieved_json, success_response)
 
     def test_register_user_call_create_user(self):
         with patch.object(FrontendAPI.user_controller.__class__, "createUser") as mock_method:

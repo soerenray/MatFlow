@@ -39,7 +39,7 @@ class FrontendAPI:
     # we only have one server in system, and it needs to be pre-registered
     workflow_manager: WorkflowManager = WorkflowManager.get_instance()
     user_controller: UserController = UserController()
-    hardware_controller: Hardware_Controller = Hardware_Controller()
+    hardware_controller: Hardware_Controller = Hardware_Controller(Server())
 
     def __init__(self):
         # all "instantiations" should be called over get_frontend_api
@@ -249,8 +249,7 @@ class FrontendAPI:
             decoded_json: dict = json.loads(request.get_json())
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
-            files: List[ReducedConfigFile] = ReducedConfigFile.extract_multiple_configs(request)
-            # TODO Pfad, nicht Objekte; ich bekomme Files ( wie mit extract dag file)
+            files: Path = ReducedConfigFile.extract_multiple_config_files(request)
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(template_name, wf_name, files)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)

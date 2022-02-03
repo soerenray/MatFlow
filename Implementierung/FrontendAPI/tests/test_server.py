@@ -1,5 +1,6 @@
 import json
 import unittest
+from copy import deepcopy
 from unittest.mock import patch
 from Implementierung.FrontendAPI.api import app, FrontendAPI
 from Implementierung.FrontendAPI import keys
@@ -55,9 +56,10 @@ class ServerTest(unittest.TestCase):
             got = self.app.get('get_server_details')
             # content not relevant, Nils has to test this
             retrieved_json = json.loads(got.get_data())
-            self.expected_dict_server.update(success_response)
+            expected_dict: dict = deepcopy(self.expected_dict_server)
+            expected_dict.update(success_response)
             # get rid of python native data types
-            expected_response = json.loads(json.dumps(self.expected_dict_server))
+            expected_response = json.loads(json.dumps(expected_dict))
             self.assertEqual(retrieved_json, expected_response)
 
     def test_setServer_called_1(self):
