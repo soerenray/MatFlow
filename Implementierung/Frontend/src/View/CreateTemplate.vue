@@ -22,6 +22,7 @@
           <v-col>
             <v-file-input
               v-model="templateFolder"
+              :clearable=false
               accept="application/zip"
               label="import folder"
             >
