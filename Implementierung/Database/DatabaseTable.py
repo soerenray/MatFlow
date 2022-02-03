@@ -24,13 +24,10 @@ class DatabaseTable:
         Parameters are set in file mydb.conf."""
 
         # read from file instead of hard-coding
-        return mysql.connector.connect(option_files='mydb.conf')
+        return mysql.connector.connect(option_files="mydb.conf")
 
     def set(self, create: str) -> None:
         """Set new values into tables in database.
-
-        Throw error if value already exists,
-        or if values are in violation with something
 
         Args:
             create(str): mysql-query for setting new value(s)
@@ -216,7 +213,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         # queries outsourced to avoid overly long lines in code
-        database_setup_file = open("Database_Table_Setup.txt", 'r')
+        database_setup_file = open("Database_Table_Setup.txt", "r")
         database_setup = database_setup_file.read().replace("\n", "").split(";")
 
         # actual queries
@@ -240,9 +237,12 @@ class DatabaseTable:
 
 #
 
+
 def init_tests():
     print("TEST IN DatabaseTable START")
-    print("Comment out if not needed/crashes program because no Databaseconnection could be established")
+    print(
+        "Comment out if not needed/crashes program because no Databaseconnection could be established"
+    )
 
     d_table = DatabaseTable.get_instance()
     d_table.setup_database()
@@ -280,8 +280,17 @@ def clear_tables(tables):
     db.close()
 
 
-table_names = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
-               "WorkflowTemplate", "Server"]
+table_names = [
+    "VersionFile",
+    "ConfFile",
+    "ResultFile",
+    "ActiveVersion",
+    "Version",
+    "FolderFile",
+    "Workflow",
+    "WorkflowTemplate",
+    "Server",
+]
 # init_tests()
 # clear_tables(table_names)
 # remove(table_names)
