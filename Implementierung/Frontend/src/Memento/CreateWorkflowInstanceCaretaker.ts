@@ -7,7 +7,7 @@ class CreateWorkflowInstanceCaretaker {
         this._createWorkflowInstanceObjects.push(createWorkflowInstanceObject)
     }
 
-    public get createWorkflowInstanceObjectSet(): CreateWorkflowInstance[] {
+    public get createWorkflowInstanceObjects(): CreateWorkflowInstance[] {
         return this._createWorkflowInstanceObjects
     }
 }
