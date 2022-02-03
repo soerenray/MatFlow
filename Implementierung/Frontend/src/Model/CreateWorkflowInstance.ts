@@ -1,4 +1,4 @@
-import CreateWorkflowInstanceMemento from "../Memento/CreateWorkflowInstanceMemeto"
+import CreateWorkflowInstanceMemento from "../Memento/CreateWorkflowInstanceMemento"
 
 class CreateWorkflowInstance {
     private _dropDownCreateOrImportWokflowInstance: string[]
@@ -141,7 +141,7 @@ class CreateWorkflowInstance {
         this._workflowInstanceName = workflowInstanceName
     }
 
-    public setCreateWorkflowInstanceMemento(createWorkflowInstanceMemento: CreateWorkflowInstanceMemento) {
+    public setCreateWorkflowInstanceMemento(createWorkflowInstanceMemento: CreateWorkflowInstanceMemento): void {
         let tempCreateWorkflowInstanceObject = createWorkflowInstanceMemento.createWorkflowInstanceObject
         this.dropDownCreateOrImportWokflowInstance = tempCreateWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance
         this.selectedDropDownItem = tempCreateWorkflowInstanceObject.selectedDropDownItem

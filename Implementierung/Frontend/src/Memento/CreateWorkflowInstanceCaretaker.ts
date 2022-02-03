@@ -1,14 +1,14 @@
-import CreateWorkflowInstance from "../Model/CreateWorkflowInstance"
+import CreateWorkflowInstanceMemento from "./CreateWorkflowInstanceMemento"
 
 class CreateWorkflowInstanceCaretaker {
-    private _createWorkflowInstanceObjects: CreateWorkflowInstance[] = []
+    private _createWorkflowInstanceMementoObjects: CreateWorkflowInstanceMemento[] = []
 
-    public addCreateWorkflowInstanceObjectToArray(createWorkflowInstanceObject: CreateWorkflowInstance) {
-        this._createWorkflowInstanceObjects.push(createWorkflowInstanceObject)
+    public addCreateWorkflowInstanceMementoObjectToArray(createWorkflowInstanceMementoObject: CreateWorkflowInstanceMemento): void {
+        this._createWorkflowInstanceMementoObjects.push(createWorkflowInstanceMementoObject)
     }
 
-    public get createWorkflowInstanceObjects(): CreateWorkflowInstance[] {
-        return this._createWorkflowInstanceObjects
+    public get createWorkflowInstanceMementoObjects(): CreateWorkflowInstanceMemento[] {
+        return this._createWorkflowInstanceMementoObjects
     }
 }
 
