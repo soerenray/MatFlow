@@ -83,9 +83,9 @@ const createWorkflowInstanceObject = new CreateWorkflowInstance(
   ["import worfklow", "create workflow-instance from template"],
   "create workflow-instance from template"
 );
-const createWorkflowInstanceCaretaker = new CreateWorkflowInstanceCaretaker()
+const createWorkflowInstanceCaretakerObject = new CreateWorkflowInstanceCaretaker()
 //For now this is everthing I want to recover
-createWorkflowInstanceCaretaker.addCreateWorkflowInstanceObjectToArray(createWorkflowInstanceObject)
+createWorkflowInstanceCaretakerObject.addCreateWorkflowInstanceObjectToArray(createWorkflowInstanceObject)
 
 export default {
   name: "CreateWorkflowInstance",
