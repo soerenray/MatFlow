@@ -7,7 +7,7 @@ class LogInMemento {
         this._logInObject = logInObject
     }
 
-    public get logInObject() {
+    public get logInObject(): LogIn {
         return this._logInObject
     }
 }
