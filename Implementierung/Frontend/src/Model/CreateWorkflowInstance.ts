@@ -1,3 +1,5 @@
+import CreateWorkflowInstanceMemento from "../Memento/CreateWorkflowInstanceMemeto"
+
 class CreateWorkflowInstance {
     private _dropDownCreateOrImportWokflowInstance: string[]
     private _selectedDropDownItem: string
@@ -139,12 +141,21 @@ class CreateWorkflowInstance {
         this._workflowInstanceName = workflowInstanceName
     }
 
-    public setCreateWorkflowInstanceMemento() {
-
+    public setCreateWorkflowInstanceMemento(createWorkflowInstanceMemento: CreateWorkflowInstanceMemento) {
+        let tempCreateWorkflowInstanceObject = createWorkflowInstanceMemento.createWorkflowInstanceObject
+        this.dropDownCreateOrImportWokflowInstance = tempCreateWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance
+        this.selectedDropDownItem = tempCreateWorkflowInstanceObject.selectedDropDownItem
+        this.templatesName = tempCreateWorkflowInstanceObject.templatesName
+        this.configFolder = tempCreateWorkflowInstanceObject.configFolder
+        this.workflowInstanceFolder = tempCreateWorkflowInstanceObject.workflowInstanceFolder
+        this.selectedTemplateName = tempCreateWorkflowInstanceObject.selectedTemplateName
+        this._workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName
     }
 
     public createWorkflowInstanceMemento() {
-
+        return new CreateWorkflowInstanceMemento(new CreateWorkflowInstance(this.dropDownCreateOrImportWokflowInstance,
+            this.selectedDropDownItem, this.templatesName, this.configFolder, this.workflowInstanceFolder,
+            this.selectedTemplateName, this.workflowInstanceName))
     }
 }
 
