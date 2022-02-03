@@ -1,5 +1,6 @@
 import unittest
 import json
+from pathlib import Path
 from unittest.mock import patch, Mock
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.ExceptionPackage.MatFlowException import InternalException
@@ -180,6 +181,39 @@ class WorkflowInstanceTest(unittest.TestCase):
                 self.assertEqual(retrieved_json, expected_dict)
 
     # TODO create wf test cases
+
+    def test_create_wf_instance_call_extract_configs(self):
+        with patch.object(ReducedConfigFile, "extract_multiple_config_files", return_value=Path("/")) as mock_method:
+            with patch.object(FrontendAPI.workflow_manager.__class__, "create_workflow_instance_from_template"):
+                self.app.post('create_workflow_instance', json=json.dumps({keys.workflow_instance_name: "bla",
+                                                                           keys.template_name: "blue"}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
+
+    def test_create_wf_instance_call_wf_manager(self):
+        with patch.object(ReducedConfigFile, "extract_multiple_config_files", return_value=Path("/")):
+            with patch.object(FrontendAPI.workflow_manager.__class__, "create_workflow_instance_from_template")\
+                    as mock_method:
+                self.app.post('create_workflow_instance', json=json.dumps({keys.workflow_instance_name: "bla",
+                                                                           keys.template_name: "blue"}))
+                # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
+                assert mock_method.call_count > 0
+
+    def test_create_wf_instance_response_fail(self):
+        with patch.object(ReducedConfigFile, "extract_multiple_config_files", side_effect=InternalException("whoops")):
+            with patch.object(FrontendAPI.workflow_manager.__class__, "create_workflow_instance_from_template"):
+                got = self.app.post('create_workflow_instance', json=json.dumps({keys.workflow_instance_name: "bla",
+                                    keys.template_name: "blue"}))
+                retrieved_json: dict = json.loads(got.get_data())
+                self.assertEqual(retrieved_json, self.failed_dict)
+
+    def test_create_wf_instance_response_valid(self):
+        with patch.object(ReducedConfigFile, "extract_multiple_config_files"):
+            with patch.object(FrontendAPI.workflow_manager.__class__, "create_workflow_instance_from_template"):
+                got = self.app.post('create_workflow_instance', json=json.dumps({keys.workflow_instance_name: "bla",
+                                    keys.template_name: "blue"}))
+                retrieved_json: dict = json.loads(got.get_data())
+                self.assertEqual(retrieved_json, success_response)
 
     def test_get_all_wf_instances_names_and_config_file_names_call_wf_manager(self):
         with patch.object(self.mockConfig, "encode_config", return_value={"ha": "he"}):

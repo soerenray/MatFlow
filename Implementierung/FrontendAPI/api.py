@@ -39,7 +39,8 @@ class FrontendAPI:
     # we only have one server in system, and it needs to be pre-registered
     workflow_manager: WorkflowManager = WorkflowManager.get_instance()
     user_controller: UserController = UserController()
-    hardware_controller: Hardware_Controller = Hardware_Controller(Server())
+    # richtig nach merge: hardware_controller: Hardware_Controller = Hardware_Controller(Server())
+    hardware_controller: Hardware_Controller = Hardware_Controller()
 
     def __init__(self):
         # all "instantiations" should be called over get_frontend_api

@@ -7,7 +7,8 @@ Entry module for tests. Disclaimer: InternalException is used as a placeholder f
 to have an exception raised, not which one exactly.
 The point of these unit tests is to prove that the small functions work, i.e. all calls are made and the 
 json is in the right format. That's why the posted json does not have to be called with the right keys, that is
-part of the integration test.
+part of the integration test. We mock the response that we want, this way we do not care about the actual json;
+we care about how our system reacts towards exceptions and successes.
 """
 
 
