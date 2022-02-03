@@ -162,6 +162,23 @@ class LoginException(MatFlowException):
         self.__status_code = 609
         super(LoginException, self).__init__(message, self.__status_code)
 
+class SignUpException(MatFlowException):
+
+    """
+    This is an exception that is thrown when the sign up failed.
+    """
+
+    def __init__(self, message: str):
+        """
+        constructs a new LoginException
+
+        Args:
+            message: The message that is displayed when this exception is thrown.
+        """
+        self.__status_code = 610
+        super(SignUpException, self).__init__(message, self.__status_code)
+
+
 
 class InternalException(MatFlowException):
     """
