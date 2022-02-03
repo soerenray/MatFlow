@@ -1,29 +1,18 @@
-import MementoInterface from './MementoInterface'
 import CreateWorkflowInstance from '../Model/CreateWorkflowInstance'
 
-class CreateWorkflowInstanceMemento implements MementoInterface {
+class CreateWorkflowInstanceMemento {
     private _createWorkflowInstanceObject: CreateWorkflowInstance
 
-    public setState(): void {
-    }
-
-    public getState(): CreateWorkflowInstance {
+    constructor(createWorkflowInstanceObject: CreateWorkflowInstance) {
+        this._createWorkflowInstanceObject = createWorkflowInstanceObject
     }
 
     /**
     * Gets the createWorkflowInstanceObject
     * @returns _createWorkflowInstanceObject
     */
-    private get createWorkflowInstanceObject(): CreateWorkflowInstance {
+    public get createWorkflowInstanceObject(): CreateWorkflowInstance {
         return this._createWorkflowInstanceObject
-    }
-
-    /**
-    * Sets the value of _createWorkflowInstanceObject
-    * @param createWorkflowInstanceObject The new value of _createWorkflowInstanceObject
-    */
-    private set createWorkflowInstanceObject(createWorkflowInstanceObject: CreateWorkflowInstance) {
-        this._createWorkflowInstanceObject = createWorkflowInstanceObject
     }
 }
 
