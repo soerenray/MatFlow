@@ -138,6 +138,14 @@ class CreateWorkflowInstance {
     public set workflowInstanceName(workflowInstanceName: string) {
         this._workflowInstanceName = workflowInstanceName
     }
+
+    public setCreateWorkflowInstanceMemento() {
+
+    }
+
+    public createWorkflowInstanceMemento() {
+
+    }
 }
 
 export default CreateWorkflowInstance
