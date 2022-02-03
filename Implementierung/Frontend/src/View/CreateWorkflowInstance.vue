@@ -74,6 +74,7 @@
 <script lang='ts'>
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
+import CreateWorkflowInstanceCaretaker from "../Memento/CreateWorkflowInstanceCaretaker"
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import WorkflowInstance from "../Classes/WorkflowInstance";
 
@@ -82,6 +83,9 @@ const createWorkflowInstanceObject = new CreateWorkflowInstance(
   ["import worfklow", "create workflow-instance from template"],
   "create workflow-instance from template"
 );
+const createWorkflowInstanceCaretakerObject = new CreateWorkflowInstanceCaretaker()
+//For now this is everthing I want to recover
+createWorkflowInstanceCaretakerObject.addCreateWorkflowInstanceObjectToArray(createWorkflowInstanceObject)
 
 export default {
   name: "CreateWorkflowInstance",
