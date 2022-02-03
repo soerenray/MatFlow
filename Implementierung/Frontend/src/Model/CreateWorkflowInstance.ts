@@ -149,7 +149,7 @@ class CreateWorkflowInstance {
         this.configFolder = tempCreateWorkflowInstanceObject.configFolder
         this.workflowInstanceFolder = tempCreateWorkflowInstanceObject.workflowInstanceFolder
         this.selectedTemplateName = tempCreateWorkflowInstanceObject.selectedTemplateName
-        this._workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName
+        this.workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName
     }
 
     public createWorkflowInstanceMemento(): CreateWorkflowInstanceMemento {
