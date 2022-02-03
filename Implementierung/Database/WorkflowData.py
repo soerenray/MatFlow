@@ -226,22 +226,33 @@ class WorkflowData:
         )
         return Path(data[0])
 
-    # TODO Implementierung
     def get_config_file_from_active_workflow_instance(
         self, wf_name: str, conf_name: str
     ) -> Path:
         """Return single config file from active version of a Workflow.
-
-        Extended description of function.
 
         Args:
             wf_name(str): name of workflow
             conf_name(str): name of config file
 
         Returns:
-            Path: searched conf File
+            Path: conf File path
 
         """
+        # NOTE: possible in one query, split up for intelligibility
+        get_file_query = """SELECT cf.conf 
+                            FROM ConfFile cf INNER JOIN VersionFile vf 
+                            ON cf.confKey = vf.confKey
+                            WHERE version = %s
+                            AND filename = %s
+                            """
+        # get version key
+        active_version = self.get_active_version_of_workflow_instance(wf_name)
+        active_version_key = self.__get_key_of_workflow_version(wf_name, active_version)
+
+        file = self.__databaseTable.get_one(get_file_query, (active_version_key,))
+
+        return Path(file[0])
 
     # TODO Aufwendig
     def get_database_versions_of_workflow_instance(
@@ -315,11 +326,8 @@ class WorkflowData:
 
         return version_id[0]
 
-    # TODO Implementierung
     def get_version_numbers_of_workflow_instance(self, wf_name: str) -> List[str]:
         """Return all Versions of a workflow.
-
-        Extended description of function.
 
         Args:
             wf_name(str): name of workflow
@@ -328,8 +336,18 @@ class WorkflowData:
             str[]: sorted list of versions
 
         """
+        get_versions_query = "SELECT version FROM Version WHERE wfName = %s"
+        raw_versions = self.__databaseTable.get_multiple(get_versions_query, (wf_name,))
+
+        # raw_version is list of single tuples
+        versions: List[str] = []
+        for (version,) in raw_versions:
+            versions.append(version)
+
+        return versions
 
 
+# TODO vvv delete before shipping vvv
 def class_debugging():
     print("TEST IN WorkflowData START")
     print(
@@ -360,6 +378,10 @@ def class_debugging():
     data = wf_data.get_active_version_of_workflow_instance("workflow3")
     print(data)
 
+    versions = wf_data.get_version_numbers_of_workflow_instance("workflow3")
+    print("Versions of workflow3")
+    print(versions)
+
     conf_path = wf_data.get_config_file_from_workflow_instance(
         "workflow3", "mydb.conf", "1"
     )
@@ -368,4 +390,4 @@ def class_debugging():
     print("TEST IN WorkflowData END!")
 
 
-class_debugging()
+# class_debugging()

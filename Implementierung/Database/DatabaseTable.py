@@ -241,9 +241,7 @@ class DatabaseTable:
         db.close()
 
 
-#
-
-
+# TODO vvv delete before shipping vvv
 def init_tests():
     print("TEST IN DatabaseTable START")
     print(
@@ -298,5 +296,5 @@ table_names = [
     "Server",
 ]
 # init_tests()
-clear_tables(table_names)
+# clear_tables(table_names)
 # remove(table_names)
