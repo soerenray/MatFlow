@@ -4,12 +4,6 @@ import CreateWorkflowInstance from '../Model/CreateWorkflowInstance'
 class CreateWorkflowInstanceMemento implements MementoInterface {
     private _createWorkflowInstanceObject: CreateWorkflowInstance
 
-    public setState(): void {
-    }
-
-    public getState(): CreateWorkflowInstance {
-    }
-
     /**
     * Gets the createWorkflowInstanceObject
     * @returns _createWorkflowInstanceObject
