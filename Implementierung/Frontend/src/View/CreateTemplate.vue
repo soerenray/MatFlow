@@ -76,7 +76,7 @@ export default {
     resetView() {
       backendServerCommunicatorObject.pullTemplatesName();
       createTemplateObject.setCreateTemplateMemento(
-        createTemplateCaretakerObject.createTemplateMementoObject[0]
+        createTemplateCaretakerObject.createTemplateMementoObjects[0]
       );
       createTemplateObject.templatesName =
         backendServerCommunicatorObject.pullTemplatesName();
