@@ -5,6 +5,7 @@ from Implementierung.FrontendAPI.api import app, FrontendAPI
 from Implementierung.FrontendAPI import keys, utilities
 from Implementierung.ExceptionPackage.MatFlowException import InternalException
 from Implementierung.workflow.template import Template
+from copy import deepcopy
 
 success_response: dict = {"statusCode": 607}
 
@@ -96,7 +97,7 @@ class TemplateTest(unittest.TestCase):
                               return_value={"he": "ha"}):
                 got = self.app.get('get_template', json=json.dumps({keys.template_name: "hu"}))
                 retrieved_json: dict = json.loads(got.get_data())
-                expected_dict: dict = success_response
+                expected_dict: dict = deepcopy(success_response)
                 expected_dict.update({"he": "ha"})
                 expected_dict = json.loads(json.dumps(expected_dict))
                 self.assertEqual(retrieved_json, expected_dict)
@@ -163,7 +164,7 @@ class TemplateTest(unittest.TestCase):
                     with patch.object(utilities, "encode_file", return_value={"bla": "ble"}):
                         got = self.app.get('get_graph_for_temporary_template', json=json.dumps({"hu": "bla"}))
                         retrieved_json: dict = json.loads(got.get_data())
-                        expected_dict: dict = success_response
+                        expected_dict: dict = deepcopy(success_response)
                         expected_dict.update({"bla": "ble"})
                         expected_dict = json.loads(json.dumps(expected_dict))
                         self.assertEqual(expected_dict, retrieved_json)
