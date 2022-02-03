@@ -1,4 +1,3 @@
-import MementoInterface from './MementoInterface'
 import CreateWorkflowInstance from '../Model/CreateWorkflowInstance'
 
 class CreateWorkflowInstanceMemento {
