@@ -1,8 +1,12 @@
 import MementoInterface from './MementoInterface'
 import CreateWorkflowInstance from '../Model/CreateWorkflowInstance'
 
-class CreateWorkflowInstanceMemento implements MementoInterface {
+class CreateWorkflowInstanceMemento {
     private _createWorkflowInstanceObject: CreateWorkflowInstance
+
+    constructor(createWorkflowInstanceObject: CreateWorkflowInstance) {
+        this._createWorkflowInstanceObject = createWorkflowInstanceObject
+    }
 
     /**
     * Gets the createWorkflowInstanceObject
