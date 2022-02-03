@@ -152,7 +152,7 @@ class CreateWorkflowInstance {
         this._workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName
     }
 
-    public createWorkflowInstanceMemento() {
+    public createWorkflowInstanceMemento(): CreateWorkflowInstanceMemento {
         return new CreateWorkflowInstanceMemento(new CreateWorkflowInstance(this.dropDownCreateOrImportWokflowInstance,
             this.selectedDropDownItem, this.templatesName, this.configFolder, this.workflowInstanceFolder,
             this.selectedTemplateName, this.workflowInstanceName))
