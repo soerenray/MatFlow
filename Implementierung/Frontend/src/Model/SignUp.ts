@@ -1,3 +1,5 @@
+import SignUpMemento from "../Memento/SignUpMemento"
+
 class SignUp {
     private _userName: string
     private _userPassword: string
@@ -99,6 +101,17 @@ class SignUp {
     */
     public set showPasswordRepeated(showPasswordRepeated: boolean) {
         this._showPasswordRepeated = showPasswordRepeated
+    }
+
+    public setSignUpMemento(signUpMemento: SignUpMemento) {
+        let tempSignUpObject = signUpMemento.signUpObject
+        this.userName = tempSignUpObject.userName
+        this.userPassword = tempSignUpObject.userPassword
+        this.userPasswordRepeated = tempSignUpObject.userPasswordRepeated
+    }
+
+    public createSignUpMemento(): SignUpMemento {
+        return new SignUpMemento(new SignUp(this.userName, this.userPassword, this.userPasswordRepeated))
     }
 }
 

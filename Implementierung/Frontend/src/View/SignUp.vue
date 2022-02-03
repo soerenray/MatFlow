@@ -34,7 +34,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-btn @click="pushSignUp" color="primary" dark> SignUp </v-btn>
+            <v-btn @click="pushSignUpAndResetView" color="primary" dark> SignUp </v-btn>
           </v-row>
         </v-card-text>
       </v-card>
@@ -44,21 +44,33 @@
 
 <script lang='ts'>
 import Vue from "vue";
+import SignUpMemento from "../Memento/SignUpMemento";
 import BackenderServerCommunicator from "../Controler/BackendServerCommunicator";
 import SignUp from "../Model/SignUp";
 
 const backendServerCommunicatorObject = new BackenderServerCommunicator();
 const signUpObject = new SignUp();
 
+const signUpMementoObject = new SignUpMemento(
+  signUpObject.createSignUpMemento()
+);
+
 export default {
   name: "SignUp",
   methods: {
+    pushSignUpAndResetView() {
+      this.pushSignUp()
+      this.resetView()
+    },
     pushSignUp() {
       backendServerCommunicatorObject.pushSignUp(
         signUpObject.userName,
         signUpObject.userPassword,
         signUpObject.userPasswordRepeated
       );
+    },
+    resetView() {
+      signUpObject.setSignUpMemento(signUpMementoObject.signUpObject);
     },
   },
   computed: {

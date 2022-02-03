@@ -1,3 +1,5 @@
+import CreateTemplateMemento from "../Memento/CreateTemplateMemento"
+
 class CreateTemplate {
     private _newTemplateName: string
     private _templatesName: string[]
@@ -26,10 +28,10 @@ class CreateTemplate {
     * Gets the newTemplateName
     * @returns _newTemplateName
     */
-     public get newTemplateName(): string {
+    public get newTemplateName(): string {
         return this._newTemplateName
     }
-    
+
     /**
     * Gets the templatesName
     * @returns _templatesName
@@ -66,7 +68,7 @@ class CreateTemplate {
     * Sets the value of _newTemplateName
     * @param newTemplateName The new value of _newTemplateName
     */
-     public set newTemplateName(newTemplateName: string) {
+    public set newTemplateName(newTemplateName: string) {
         this._newTemplateName = newTemplateName
     }
 
@@ -100,6 +102,20 @@ class CreateTemplate {
     */
     public set dagFile(dagFile: File) {
         this._dagFile = dagFile
+    }
+
+    public setCreateTemplateMemento(createTemplateMemento: CreateTemplateMemento) {
+        let tempCreateTemplateMementoObject = createTemplateMemento.createtTemplateObject
+        this.newTemplateName = tempCreateTemplateMementoObject.newTemplateName
+        this.templatesName = tempCreateTemplateMementoObject.templatesName
+        this.chosenTemplateName = tempCreateTemplateMementoObject.chosenTemplateName
+        this.templateFolder = tempCreateTemplateMementoObject.templateFolder
+        this.dagFile = tempCreateTemplateMementoObject.dagFile
+    }
+
+    public createTemplateMemento(): CreateTemplateMemento {
+        return new CreateTemplateMemento(new CreateTemplate(this.newTemplateName, this.templatesName,
+            this.chosenTemplateName, this.templateFolder, this.dagFile))
     }
 }
 

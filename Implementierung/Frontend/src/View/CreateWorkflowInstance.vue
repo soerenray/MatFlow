@@ -31,6 +31,7 @@
             <v-col>
               <v-file-input
                 v-model="configFolder"
+                :clearable=false
                 accept="application/zip"
                 label="Config file folder"
               ></v-file-input>
@@ -53,6 +54,7 @@
           <v-col>
             <v-file-input
               v-model="workflowInstanceFolder"
+              :clearable=false
               accept="application/zip"
               label="Workflow-folder"
             ></v-file-input
@@ -74,6 +76,7 @@
 <script lang='ts'>
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
+import CreateWorkflowInstanceCaretaker from "../Memento/CreateWorkflowInstanceCaretaker";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import WorkflowInstance from "../Classes/WorkflowInstance";
 
@@ -81,6 +84,13 @@ const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createWorkflowInstanceObject = new CreateWorkflowInstance(
   ["import worfklow", "create workflow-instance from template"],
   "create workflow-instance from template"
+);
+
+const createWorkflowInstanceCaretakerObject =
+  new CreateWorkflowInstanceCaretaker();
+//For now this is everthing I want to recover
+createWorkflowInstanceCaretakerObject.addCreateWorkflowInstanceMementoObjectToArray(
+  createWorkflowInstanceObject.createWorkflowInstanceMemento()
 );
 
 export default {
@@ -93,6 +103,10 @@ export default {
         backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
+      createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
+        createWorkflowInstanceCaretakerObject
+          .createWorkflowInstanceMementoObjects[0]
+      );
     },
     pushCreateWorkflowInstanceFromTemplate() {
       if (

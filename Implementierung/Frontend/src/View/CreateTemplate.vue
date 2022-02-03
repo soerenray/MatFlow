@@ -22,6 +22,7 @@
           <v-col>
             <v-file-input
               v-model="templateFolder"
+              :clearable=false
               accept="application/zip"
               label="import folder"
             >
@@ -33,7 +34,7 @@
             </v-radio-group>
           </v-col>
           <v-col>
-            <v-row style='padding-top: 25px'>
+            <v-row style="padding-top: 25px">
               <v-btn color="blue">Edit</v-btn>
               <div style="padding-left: 25px">
                 <v-btn @click="pressSendButton" color="#58D68D"
@@ -52,11 +53,18 @@
 <script lang='ts'>
 import Vue from "vue";
 import CreateTemplate from "../Model/CreateTemplate";
+import CreateTemplateCaretaker from "../Memento/CreateTemplateCaretaker";
 import Template from "../Classes/Template";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createTemplateObject = new CreateTemplate();
+
+const createTemplateCaretakerObject = new CreateTemplateCaretaker();
+//For now this is everything I want to recover
+createTemplateCaretakerObject.addCreateTemplateMementoObjectToArray(
+  createTemplateObject.createTemplateMemento()
+);
 
 export default {
   name: "CreateTemplate",
@@ -67,8 +75,11 @@ export default {
     },
     resetView() {
       backendServerCommunicatorObject.pullTemplatesName();
+      createTemplateObject.setCreateTemplateMemento(
+        createTemplateCaretakerObject.createTemplateMementoObjects[0]
+      );
       createTemplateObject.templatesName =
-      backendServerCommunicatorObject.pullTemplatesName();
+        backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(
@@ -92,12 +103,12 @@ export default {
   },
   computed: {
     newTemplateName: {
-      get: function() {
-        return createTemplateObject.newTemplateName
+      get: function () {
+        return createTemplateObject.newTemplateName;
       },
-      set: function(newTemplateName: string) {
-        createTemplateObject.newTemplateName = newTemplateName
-      }
+      set: function (newTemplateName: string) {
+        createTemplateObject.newTemplateName = newTemplateName;
+      },
     },
     templatesName: {
       get: function () {
