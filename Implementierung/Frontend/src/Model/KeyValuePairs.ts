@@ -1,28 +1,30 @@
 class KeyValuePairs {
-    private _keyValuePairs: string[][]
+    private _headers: object[]
 
     /**
     *
-    * @param keyValuePairs The keyValuePairs
+    * @param headers The headers
     */
-    constructor(keyValuePairs: string[][],) {
-        this._keyValuePairs = keyValuePairs
+    constructor(headers: object[],) {
+        this._headers = headers
     }
 
     /**
-    * Gets the keyValuePairs
-    * @returns _keyValuePairs
+    * Gets the headers
+    * @returns _headers
     */
-    public get keyValuePairs(): string[][] {
-        return this._keyValuePairs
+    public get headers(): object[] {
+        return this._headers
     }
 
 
     /**
-    * Sets the value of _keyValuePairs
-    * @param keyValuePairs The new value of _keyValuePairs
+    * Sets the value of _headers
+    * @param headers The new value of _headers
     */
-    public set keyValuePairs(keyValuePairs: string[][]) {
-        this._keyValuePairs = keyValuePairs
+    public set headers(headers: object[]) {
+        this._headers = headers
     }
 }
+
+export default KeyValuePairs

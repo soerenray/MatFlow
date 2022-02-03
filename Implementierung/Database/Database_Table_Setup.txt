@@ -21,7 +21,7 @@ CREATE TABLE FolderFile (
    wfName varchar(255),
    fileID INTEGER AUTO_INCREMENT,
    file varchar(255),
-   PRIMARY KEY (file_ID),
+   PRIMARY KEY (fileID),
    FOREIGN KEY (wfname) REFERENCES Workflow(name)
 );
 
@@ -30,7 +30,7 @@ CREATE TABLE Version (
    wfName varchar(255) NOT NULL,
    version varchar(127) NOT NULL,
    note varchar(1000),
-   PRIMARY KEY (wfName, version),
+   PRIMARY KEY (ID),
    FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
@@ -60,6 +60,6 @@ CREATE TABLE ResultFile (
    fileID INTEGER NOT NULL AUTO_INCREMENT,
    versionID INTEGER,
    file varchar(255),
-   PRIMARY KEY (filesID),
+   PRIMARY KEY (fileID),
    FOREIGN KEY (versionID) REFERENCES Version(ID)
 );

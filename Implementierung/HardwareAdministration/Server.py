@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import nmap, socket
+import resource
 import json
 from typing import List, Tuple, Type
-
 from flask import request
-
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
@@ -15,16 +15,22 @@ class Server:
     status: str
     containerLimit:int
     selectedForExecution:bool
-    ressources = List[Tuple[str, str]]
+    cpuResource: resource
+    vmemResource: resource
+
 
     #Konstruktor
-    def __init__(self, name: str, address: str, status: str, containerLimit: int, selectedForExecution: bool, ressources : List[Tuple[str, str]]):
-        self.name = name
-        self.address = address
-        self.status = status
-        self.containerLimit= containerLimit
-        self.selectedForExecution = selectedForExecution
-        self.ressources = ressources
+
+    def __init__(self):
+        self.name = "server"
+        hostname = socket.gethostname()
+        self.address = socket.gethostbyname(hostname)
+        self.status = self.checkStatus(self)
+        self.containerLimit= 20
+        self.selectedForExecution = True
+        self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
+        self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
+
 
 # getter and setter methods
     # name getter method
@@ -74,6 +80,19 @@ class Server:
     # Ressources setter method
     def setRessources(self,ressources):
         self.ressources = ressources
+
+    # other methods:
+
+    # check status method:
+    def checkStatus(self):
+        scanner = nmap.PortScanner()
+        host = socket.gethostbyname(self.getAddress)
+        scanner.scan(host, "1","-v")
+        if scanner[host].state() == "UP":
+            return True
+        else:
+            return False
+        
 
     @classmethod
     def extract_server(cls, request_details: request) -> Server:

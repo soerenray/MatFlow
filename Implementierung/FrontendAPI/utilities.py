@@ -51,4 +51,3 @@ def decode_file(encoded_file: str):
         decoded file
     """
     return b64decode(encoded_file)
-

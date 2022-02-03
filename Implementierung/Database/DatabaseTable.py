@@ -18,22 +18,21 @@ class DatabaseTable:
             DatabaseTable.__instance = self
             return
 
-    def __get_database_connection(self):
+    @staticmethod
+    def __get_database_connection():
         """Connect to MySQL Database and return connection.
 
         Parameters are set in file mydb.conf."""
 
         # read from file instead of hard-coding
-        return mysql.connector.connect(option_files='mydb.conf')
+        return mysql.connector.connect(option_files="mydb.conf")
 
-    def set(self, create: str) -> None:
+    def set(self, create: str, arguments: tuple) -> None:
         """Set new values into tables in database.
-
-        Throw error if value already exists,
-        or if values are in violation with something
 
         Args:
             create(str): mysql-query for setting new value(s)
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             void
@@ -44,7 +43,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(create)
+            cursor.execute(create, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -55,13 +54,14 @@ class DatabaseTable:
         db.close()
         return
 
-    def delete(self, remove_query: str) -> None:
+    def delete(self, remove_query: str, arguments: tuple) -> None:
         """Delete rows in a table of the database.
 
         Do nothing if nothing fit the deletion query.
 
         Args:
             remove_query(str): mysql-query to delete something
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             void
@@ -72,7 +72,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(remove_query)
+            cursor.execute(remove_query, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -83,13 +83,14 @@ class DatabaseTable:
         db.close()
         return
 
-    def modify(self, change: str) -> None:
+    def modify(self, change: str, arguments: tuple) -> None:
         """Modify values in database.
 
         Throw error if query was not able to be read.
 
         Args:
             change(str): mysql-query to change values
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             void
@@ -100,7 +101,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(change)
+            cursor.execute(change, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -111,13 +112,14 @@ class DatabaseTable:
         db.close()
         return
 
-    def get_multiple(self, query: str) -> str:
+    def get_multiple(self, query: str, arguments: tuple) -> str:
         """Search for multiple values in database.
 
         Throw error if no entry found in database.
 
         Args:
             query(str): mysql-query to get value(s)
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             list[str]: answer of the database
@@ -128,7 +130,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(query)
+            cursor.execute(query, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -140,13 +142,14 @@ class DatabaseTable:
 
         return data
 
-    def get_one(self, query: str) -> str:
+    def get_one(self, query: str, arguments: tuple) -> str:
         """Search for one(1)/first entry in database
 
         Throw error if no entry found in database.
 
         Args:
             query(str): mysql-query to get value(s)
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             list[str]: answer of the database
@@ -157,7 +160,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(query)
+            cursor.execute(query, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -172,7 +175,7 @@ class DatabaseTable:
 
         return data
 
-    def check_for(self, query: str) -> bool:
+    def check_for(self, query: str, arguments: tuple) -> bool:
         """Check if at least one(1) entry already exists for given SELECT-query.
         True if one entry is found.
 
@@ -188,7 +191,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         try:
-            cursor.execute(query)
+            cursor.execute(query, arguments)
         except mysql.connector.Error as err:
             raise MatFlowException.InternalException(err.msg)
 
@@ -216,7 +219,7 @@ class DatabaseTable:
         cursor = db.cursor()
 
         # queries outsourced to avoid overly long lines in code
-        database_setup_file = open("Database_Table_Setup.txt", 'r')
+        database_setup_file = open("Database_Table_Setup.txt", "r")
         database_setup = database_setup_file.read().replace("\n", "").split(";")
 
         # actual queries
@@ -225,12 +228,12 @@ class DatabaseTable:
             if line == "":  # end of file
                 break
 
-            # avoid error on double execution
+            # error on double execution
             try:
                 cursor.execute(line + ";")
                 # print("success creation: " +line)           #debugging
             except mysql.connector.Error as err:
-                print(err)  # tmp for debugging
+                # print(err)  # tmp for debugging
                 raise MatFlowException.InternalException(err.msg)
 
         # close connection
@@ -238,11 +241,12 @@ class DatabaseTable:
         db.close()
 
 
-#
-
+# TODO vvv delete before shipping vvv
 def init_tests():
     print("TEST IN DatabaseTable START")
-    print("Comment out if not needed/crashes program because no Databaseconnection could be established")
+    print(
+        "Comment out if not needed/crashes program because no Databaseconnection could be established"
+    )
 
     d_table = DatabaseTable.get_instance()
     d_table.setup_database()
@@ -252,8 +256,8 @@ def init_tests():
 
 def remove(tables):
     """helping function for deleting all tables"""
-    d_table = DatabaseTable.get_instance()
-    db = d_table.get_database_connection()
+    db = mysql.connector.connect(option_files="mydb.conf")
+
     cursor = db.cursor()
 
     for rem in tables:
@@ -267,21 +271,30 @@ def remove(tables):
 
 def clear_tables(tables):
     """helping function for clearing all tables"""
-    d_table = DatabaseTable.get_instance()
-    db = d_table.get_database_connection()
+    db = mysql.connector.connect(option_files="mydb.conf")
+
     cursor = db.cursor()
 
     for rem in tables:
         print("Clear " + rem)
-        tmp = "DELETE FROM {}".format(rem)
-        cursor.execute(tmp)
+        tmp = "DELETE FROM {}"
+        cursor.execute(tmp.format(rem))
         db.commit()
     cursor.close()
     db.close()
 
 
-table_names = ["VersionFile", "ConfFile", "ResultFile", "ActiveVersion", "Version", "FolderFile", "Workflow",
-               "WorkflowTemplate", "Server"]
+table_names = [
+    "VersionFile",
+    "ConfFile",
+    "ResultFile",
+    "ActiveVersion",
+    "Version",
+    "FolderFile",
+    "Workflow",
+    "WorkflowTemplate",
+    "Server",
+]
 # init_tests()
 # clear_tables(table_names)
 # remove(table_names)

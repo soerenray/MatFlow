@@ -1,6 +1,6 @@
 from Implementierung.Database.DatabaseTable import DatabaseTable
 from Implementierung.HardwareAdministration.Server import Server
-from typing import List
+from typing import List, Tuple
 
 
 class ServerData:
@@ -22,8 +22,6 @@ class ServerData:
     def write_server(self, server: Server):
         """Write new Server into database.
 
-        Throw error if ip already exists.
-
         Args:
             server(Server): new server
 
@@ -35,12 +33,12 @@ class ServerData:
         ip_address = server.getAddress()
 
         # insert values
-        query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(ip_address, name)
+        query = "INSERT INTO Server (ip, name) VALUES (%s, %s)"
         # execute
-        self.__databaseTable.set(query)
+        self.__databaseTable.set(query, (ip_address, name))
         return
 
-    def get_server(self) -> List[(str, str)]:
+    def get_server(self) -> List[Tuple[str, str]]:
         """Get server in database.
 
         NOTE:   Currently there is no intention of storing multiple servers to connect to,
@@ -61,13 +59,16 @@ class ServerData:
         return data
 
 
+# TODO vvv delete before shipping vvv
 def class_debugging():
     print("TEST IN ServerData START")
-    print("Comment out if not needed/crahses program because no Databaseconnection could be established")
+    print(
+        "Comment out if not needed/crahses program because no Databaseconnection could be established"
+    )
 
     s_data = ServerData()
     # dummy data
-    server = Server("name1", "adress1", "status1", 42, True, ['no', 'limit'])
+    server = Server("name1", "adress1", "status1", 42, True, ["no", "limit"])
     s_data.write_server(server)
 
     # retrieve dummy data
@@ -75,5 +76,6 @@ def class_debugging():
     print(test)
 
     print("TEST IN ServerData END!")
+
 
 # class_debugging()

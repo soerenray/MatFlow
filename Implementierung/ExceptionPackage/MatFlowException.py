@@ -4,6 +4,7 @@ class MatFlowException(Exception):
     It adds more functionality to a standard exception through the exception’s status code
     and function which gets the status code. This is important for our API Package.
     """
+
     def __init__(self, message: str, status_code: int):
         """
         constructs a new MatFlowException
@@ -91,7 +92,9 @@ class DoubleWorkflowInstanceNameException(MatFlowException):
             message: The message that is displayed when this exception is thrown.
         """
         self.__status_code = 604
-        super(DoubleWorkflowInstanceNameException, self).__init__(message, self.__status_code)
+        super(DoubleWorkflowInstanceNameException, self).__init__(
+            message, self.__status_code
+        )
 
 
 class EmptyConfigFolderException(MatFlowException):
@@ -125,7 +128,9 @@ class WorkflowInstanceRunningException(MatFlowException):
             message: The message that is displayed when this exception is thrown.
         """
         self.__status_code = 606
-        super(WorkflowInstanceRunningException, self).__init__(message, self.__status_code)
+        super(WorkflowInstanceRunningException, self).__init__(
+            message, self.__status_code
+        )
 
 
 class UnrepresentableDagException(MatFlowException):
@@ -163,12 +168,28 @@ class LoginException(MatFlowException):
         super(LoginException, self).__init__(message, self.__status_code)
 
 
+class SignUpException(MatFlowException):
+
+    """
+    This is an exception that is thrown when the sign up failed.
+    """
+
+    def __init__(self, message: str):
+        """
+        constructs a new LoginException
+
+        Args:
+            message: The message that is displayed when this exception is thrown.
+        """
+        self.__status_code = 610
+        super(SignUpException, self).__init__(message, self.__status_code)
+
+
 class InternalException(MatFlowException):
     """
     Exception for dev purposes
     """
+
     def __init__(self, message: str):
         self.__status_code = 666
         super(InternalException, self).__init__(message, self.__status_code)
-
-

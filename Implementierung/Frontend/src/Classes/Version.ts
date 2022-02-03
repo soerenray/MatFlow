@@ -9,7 +9,7 @@ class Version {
     * @param versionNote The versionNote
     * @param parameterChanges The parameterChanges
     */
-    constructor(versionNumber: string, versionNote: string, parameterChanges: Array<[string, string]>,) {
+    constructor(versionNumber: string = "", versionNote: string = "", parameterChanges: Array<[string, string]> = [],) {
         this._versionNumber = versionNumber
         this._versionNote = versionNote
         this._parameterChanges = parameterChanges

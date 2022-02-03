@@ -1,13 +1,18 @@
-class WorkflowInstance {
+import Template from "./Template"
+
+class WorkflowInstance extends Template {
     private _versionsNumbers: string[]
     private _activeVersionNumber: string
 
     /**
     *
+    * @param dagDefinitionFile The dagDefinitionFile
+    * @param templateName The templateName
     * @param versionsNumbers The versionsNumbers
     * @param activeVersionNumber The activeVersionNumber
     */
-    constructor(versionsNumbers: string[], activeVersionNumber: string,) {
+    constructor(dagDefinitionFile: File = new File([], "emptyFile", { type: 'application/zip' }), templateName: string = '', versionsNumbers: string[] = [], activeVersionNumber: string = '',) {
+        super(dagDefinitionFile, templateName)
         this._versionsNumbers = versionsNumbers
         this._activeVersionNumber = activeVersionNumber
     }

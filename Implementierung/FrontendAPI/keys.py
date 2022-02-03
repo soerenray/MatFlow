@@ -16,6 +16,7 @@ key_value_pairs_name: str = "keyValuePairs"
 
 workflow_instance_names: str = "workflowInstanceNames"
 config_file_names: str = "configFileNames"
+config_file_name: str = "configFileName"
 template_names: str = "templateNames"
 config_files: str = "configFiles"
 
@@ -50,5 +51,3 @@ old_key = "oldKey"
 new_key = "newKey"
 old_value = "oldValue"
 new_value = "newValue"
-
-

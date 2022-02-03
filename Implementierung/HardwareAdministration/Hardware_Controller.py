@@ -1,22 +1,43 @@
 from operator import truediv
+import resource
+from Implementierung.Database.ServerData import ServerData
 from Implementierung.HardwareAdministration.Server import Server
 
 
 class Hardware_Controller:
-    Server: Server
+    _Server: Server
+
+
 
 # Constructor
-    def __init__(self, Server: Server):
-        self.Server = Server
-
     def __init__(self):
-        self.Server = None
+        standardServer = Server()
+        self._Server = standardServer
+
+# Methods:
+
+    # getServer method gets the standard server via his ip
+    def getServer(self):
+        tempServerData = ServerData()
+        self._Server = tempServerData.get_Server()
+        return self._Server
+
+    # writeServer 
+    def writeServer(self, newServer: Server):
+        tempServerData = ServerData()
+        tempServerData.write_Server(newServer)
+
+    
+    # setCPUResources
+    def setResources(self, newResource: resource, newSoft: int, newHard: int):
+        resource.setrlimit(newResource,newSoft,newHard)
+
 
 # Methods
 
     # method that gets a Server and adds it to the ServerList
     def addServer(Server):
-        Server = Server
+        Server = Server()
         # stuff that happens
         #
         #

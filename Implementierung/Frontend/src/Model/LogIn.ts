@@ -1,15 +1,20 @@
+import LogInMemento from "../Memento/LogInMemento"
+
 class LogIn {
     private _userName: string
     private _userPassword: string
+    private _showPassword: boolean
 
     /**
     *
     * @param userName The userName
     * @param userPassword The userPassword
+    * @param showPassword true if password should be shown, otherwise false
     */
-    constructor(userName: string = '', userPassword: string = '',) {
+    constructor(userName: string = '', userPassword: string = '', showPassword: boolean = false) {
         this._userName = userName
         this._userPassword = userPassword
+        this._showPassword = showPassword
     }
 
     /**
@@ -28,6 +33,13 @@ class LogIn {
         return this._userPassword
     }
 
+    /**
+    * Gets the showPassword
+    * @returns _showPassword
+    */
+    public get showPassword(): boolean {
+        return this._showPassword
+    }
 
     /**
     * Sets the value of _userName
@@ -43,6 +55,25 @@ class LogIn {
     */
     public set userPassword(userPassword: string) {
         this._userPassword = userPassword
+    }
+
+    /**
+    * Sets the value of _showPassword
+    * @param showPassword The new value of _showPassword
+    */
+    public set showPassword(showPassword: boolean) {
+        this._showPassword = showPassword
+    }
+
+    public setLogInMemento(logInMemento: LogInMemento) {
+        let tempLogInObject = logInMemento.logInObject
+        this.userName = tempLogInObject.userName
+        this.userPassword = tempLogInObject.userPassword
+        this.showPassword = tempLogInObject.showPassword
+    }
+
+    public createLogInMemento(): LogInMemento {
+        return new LogInMemento(new LogIn(this.userName, this.userPassword, this.showPassword))
     }
 }
 
