@@ -1,14 +1,14 @@
 import CreateTemplateMemento from "./CreateTemplateMemento"
 
 class CreateTemplateCaretaker {
-    private _createTemplateMementoObject: CreateTemplateMemento[] = []
+    private _createTemplateMementoObjects: CreateTemplateMemento[] = []
 
     public addCreateTemplateMementoObjectToArray(createTemplateMementoObject: CreateTemplateMemento) {
-        this._createTemplateMementoObject.push(createTemplateMementoObject)
+        this._createTemplateMementoObjects.push(createTemplateMementoObject)
     }
 
-    public get createTemplateMementoObject(): CreateTemplateMemento[] {
-        return this._createTemplateMementoObject
+    public get createTemplateMementoObjects(): CreateTemplateMemento[] {
+        return this._createTemplateMementoObjects
     }
 }
 
