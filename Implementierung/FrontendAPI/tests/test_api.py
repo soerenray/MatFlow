@@ -24,10 +24,10 @@ class APITest(unittest.TestCase):
         self.app = app.test_client()
 
     def test_api_reachability(self):
-        posted = self.app.post('/')
+        posted = self.app.post("/")
         retrieved_json: dict = json.loads(posted.get_data())
         self.assertEqual(success_response, retrieved_json)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
