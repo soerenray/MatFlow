@@ -3,7 +3,7 @@ import CreateWorkflowInstanceMemento from "./CreateWorkflowInstanceMemento"
 class CreateWorkflowInstanceCaretaker {
     private _createWorkflowInstanceMementoObjects: CreateWorkflowInstanceMemento[] = []
 
-    public addCreateWorkflowInstanceMementoObjectToArray(createWorkflowInstanceMementoObject: CreateWorkflowInstanceMemento) {
+    public addCreateWorkflowInstanceMementoObjectToArray(createWorkflowInstanceMementoObject: CreateWorkflowInstanceMemento): void {
         this._createWorkflowInstanceMementoObjects.push(createWorkflowInstanceMementoObject)
     }
 
