@@ -1,4 +1,4 @@
-import CreateWorkflowInstanceMemento from "../Memento/CreateWorkflowInstanceMemeto"
+import CreateWorkflowInstanceMemento from "../Memento/CreateWorkflowInstanceMemento"
 
 class CreateWorkflowInstance {
     private _dropDownCreateOrImportWokflowInstance: string[]

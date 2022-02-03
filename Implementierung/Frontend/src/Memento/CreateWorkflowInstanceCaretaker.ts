@@ -1,4 +1,4 @@
-import CreateWorkflowInstanceMemento from "./CreateWorkflowInstanceMemeto"
+import CreateWorkflowInstanceMemento from "./CreateWorkflowInstanceMemento"
 
 class CreateWorkflowInstanceCaretaker {
     private _createWorkflowInstanceMementoObjects: CreateWorkflowInstanceMemento[] = []
