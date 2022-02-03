@@ -26,11 +26,11 @@ class WorkflowData:
     def __get_key_of_workflow_version(self, wf_name: str, version: str) -> str:
         """Returns: index of workflow version"""
         get_version_key_query = (
-            "SELECT ID FROM Version WHERE wfName = '{}' AND version = '{}';".format(
-                wf_name, version
-            )
+            "SELECT ID FROM Version WHERE wfName = %s AND version = %s;"
         )
-        version_key = self.__databaseTable.get_one(get_version_key_query)
+        version_key = self.__databaseTable.get_one(
+            get_version_key_query, (wf_name, version)
+        )
         return version_key[0]
 
     def create_wf_instance(self, wf_in: WorkflowInstance, conf_dir: Path):
@@ -59,59 +59,58 @@ class WorkflowData:
             other_file_list.append(str(file))
 
         # check if workflow already exists
-        workflow_exists_query = "SELECT name from Workflow WHERE name = '{}'".format(
-            wf_name
-        )
+        workflow_exists_query = "SELECT name from Workflow WHERE name = %s"
 
         # raise exception if workflow name already exists
-        if self.__databaseTable.check_for(workflow_exists_query):
+        if self.__databaseTable.check_for(workflow_exists_query, (wf_name,)):
             raise MatFlowException.InternalException(
-                "ERROR: workflow " + wf_name + " already exists"
+                "ERROR: workflow '" + wf_name + "' already exists"
             )
 
         # create workflow entry
-        workflow_query = "INSERT INTO Workflow (name, dag) VALUES ('{}', '{}')".format(
-            wf_name, dag_file
-        )
-        self.__databaseTable.set(workflow_query)
+        workflow_query = "INSERT INTO Workflow (name, dag) VALUES (%s, %s)"
+        self.__databaseTable.set(workflow_query, (wf_name, str(dag_file)))
 
         # create version entry
-        version_query = "INSERT INTO Version (wfName, version, note) VALUES ('{}', '{}', '{}')".format(
-            wf_name, "1", ""
+        version_query = (
+            "INSERT INTO Version (wfName, version, note) VALUES (%s, %s, %s)"
         )
-        self.__databaseTable.set(version_query)
+        self.__databaseTable.set(version_query, (wf_name, "1", ""))
 
         # get key of version number
         version_key = self.__get_key_of_workflow_version(wf_name, "1")
 
         # create all file entries for non-conf-files
-        folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES ('{}', '{}')"
+        folderfile_query = "INSERT INTO FolderFile (wfName, file) VALUES (%s, %s)"
         for file_path in other_file_list:
-            self.__databaseTable.set(folderfile_query.format(wf_name, file_path))
+            self.__databaseTable.set(folderfile_query, (wf_name, file_path))
 
         # create all file entries for conf-files
-        conffile_set_query = "INSERT INTO ConfFile (file) VALUES ('{}')"
-        conffile_get_key_query = "SELECT confKey FROM ConfFile WHERE file = '{}'"
-        versionfile_set_query = "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ('{}', '{}', '{}')"
+        conffile_set_query = "INSERT INTO ConfFile (file) VALUES (%s)"
+        conffile_get_key_query = "SELECT confKey FROM ConfFile WHERE file = %s"
+        versionfile_set_query = (
+            "INSERT INTO VersionFile (versionID, filename, confKey) VALUES (%s, %s, %s)"
+        )
         for file_path in conf_file_list:
             # injection into ConfFile
-            self.__databaseTable.set(conffile_set_query.format(file_path))
+            self.__databaseTable.set(conffile_set_query, (file_path,))
 
             # get index of new entry; format into usable index
             # all names are unique in a workflow folder
             file_key = self.__databaseTable.get_one(
-                conffile_get_key_query.format(file_path)
+                conffile_get_key_query, (str(file_path),)
             )
             file_key = file_key[0]
 
             # injection into VersionFile
             filename = Path(file_path).name
             self.__databaseTable.set(
-                versionfile_set_query.format(version_key, filename, file_key)
+                versionfile_set_query, (version_key, filename, file_key)
             )
 
         # set active
-        self.set_active_version_through_number(wf_name, "1")
+        set_query = "INSERT INTO ActiveVersion (wfName, version) VALUES (%s, %s)"
+        self.__databaseTable.set(set_query, (wf_name, "1"))
 
         return
 
@@ -128,7 +127,7 @@ class WorkflowData:
         workflow_dict: Dict[str, List[str]] = {}
         # get all existing files with corresponding workflows
         query = "SELECT v.wfName, vf.filename FROM Version v INNER JOIN VersionFile vf ON vf.versionID = v.ID;"
-        raw_data = self.__databaseTable.get_multiple(query)
+        raw_data = self.__databaseTable.get_multiple(query, ())
         # build dictionary
         for (name, file_path) in raw_data:
             if name not in workflow_dict:
@@ -155,9 +154,8 @@ class WorkflowData:
         """
         # create new version entry
         new_version_nr = new_version.get_version_number().get_number()
-        new_entry = "INSERT INTO Version (wfName, version) VALUES ('{}', '{}')"
-        new_entry = new_entry.format(wf_name, new_version_nr)
-        self.__databaseTable.set(new_entry)
+        new_entry = "INSERT INTO Version (wfName, version) VALUES (%s, %s)"
+        self.__databaseTable.set(new_entry, (wf_name, new_version_nr))
         # get keys of versions out of Version table
         new_version_index = self.__get_key_of_workflow_version(wf_name, new_version_nr)
         old_version_index = self.__get_key_of_workflow_version(wf_name, old_version_nr)
@@ -169,26 +167,23 @@ class WorkflowData:
                 new_files.append(file)
 
         # insert all new files into ConfFile
-        file_insert = "INSERT INTO ConfFile (file) VALUES ('{}')"
-        get_file_key = "SELECT confKey FROM ConfFile WHERE file = '{}'"
+        file_insert = "INSERT INTO ConfFile (file) VALUES (%s)"
+        get_file_key = "SELECT confKey FROM ConfFile WHERE file = %s"
         file_to_version = (
-            "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ({},'{}',{})"
+            "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ({},%s,{})"
         )
         for file in new_files:
             # inject new file
-            file_insert_local = file_insert.format(str(file))
-            self.__databaseTable.set(file_insert_local)
+            self.__databaseTable.set(file_insert, (str(file),))
 
             # get key from new file
-            get_file_key_local = get_file_key.format(str(file))
-            file_key = self.__databaseTable.get_one(get_file_key_local)
+            file_key = self.__databaseTable.get_one(get_file_key, (str(file),))
             file_key = file_key[0]
 
             # connect new file and new version
-            file_to_version_local = file_to_version.format(
-                new_version_index, file.name, file_key
+            self.__databaseTable.set(
+                file_to_version, (new_version_index, file.name, file_key)
             )
-            self.__databaseTable.set(file_to_version_local)
 
         # connect old, not updated files of previous version
         # query is also saved as 'copy old not updated files -query.txt'
@@ -200,7 +195,7 @@ class WorkflowData:
         copy_old_files = copy_old_files.replace(
             "newVersion", new_version_index
         ).replace("oldVersion", old_version_index)
-        self.__databaseTable.set(copy_old_files)
+        self.__databaseTable.set(copy_old_files, ())
 
     def get_config_file_from_workflow_instance(
         self, wf_name: str, conf_name: str, version: str
@@ -222,12 +217,13 @@ class WorkflowData:
         version_key = self.__get_key_of_workflow_version(wf_name, version)
         get_file_path_query = (
             "SELECT cf.file FROM VersionFile vf INNER JOIN ConfFile cf ON vf.confKey = cf.confKey "
-            "WHERE versionID = '{}' AND  filename = '{}' "
+            "WHERE versionID = %s AND  filename = %s "
         )
-        get_file_path_query = get_file_path_query.format(version_key, conf_name)
 
         # get path
-        data = self.__databaseTable.get_one(get_file_path_query)
+        data = self.__databaseTable.get_one(
+            get_file_path_query, (version_key, conf_name)
+        )
         return Path(data[0])
 
     # TODO Implementierung
@@ -276,37 +272,27 @@ class WorkflowData:
 
         """
         # check for valid wf_name and version
-        check_query = "SELECT * FROM Version WHERE wfName='{}' AND version='{}'"
-        check_query = check_query.format(wf_name, version)
-        if not self.__databaseTable.check_for(check_query):
+        check_query = "SELECT * FROM Version WHERE wfName=%s AND version=%s"
+        if not self.__databaseTable.check_for(check_query, (wf_name, version)):
             raise MatFlowException.InternalException(
                 "ERROR: Workflow '"
                 + wf_name
-                + "'/Version '"
+                + "' and/or Version '"
                 + version
                 + "' does not exist"
             )
 
         # update ActiveVersion entry
         try:
-            update_query = "UPDATE ActiveVersion SET version = '{}' WHERE wfName = '{}"
-            update_query = update_query.format(version, wf_name)
-            self.__databaseTable.modify(update_query)
-        except MatFlowException.InternalException:
-            try:
-                # chance that workflow is only just created and has no valid entry in ActiveVersion
-                set_query = (
-                    "INSERT INTO ActiveVersion (wfName, version) VALUES ('{}', '{}')"
-                )
-                set_query = set_query.format(wf_name, version)
-                self.__databaseTable.set(set_query)
-            except MatFlowException.InternalException as err:
-                # updating and inserting failed
-                raise MatFlowException.InternalException(
-                    "ERROR: Can neither set or update active Version.\n"
-                    + "MySQL ERROR:"
-                    + err.message
-                )
+            update_query = "UPDATE ActiveVersion SET version = %s WHERE wfName = %s"
+            self.__databaseTable.modify(update_query, (version, wf_name))
+        except MatFlowException.InternalException as err:
+            # updating failed
+            raise MatFlowException.InternalException(
+                "ERROR: Can neither set or update active Version.\nMySQL ERROR:"
+                + err.message
+            )
+
         return
 
     def get_active_version_of_workflow_instance(self, wf_name: str) -> str:
@@ -319,10 +305,9 @@ class WorkflowData:
             str: active version identifier
 
         """
-        get_query = "SELECT version FROM ActiveVersion WHERE wfName = '{}'"
-        get_query = get_query.format(wf_name)
+        get_query = "SELECT version FROM ActiveVersion WHERE wfName = %s"
         try:
-            version_id = self.__databaseTable.get_one(get_query)
+            version_id = self.__databaseTable.get_one(get_query, (wf_name,))
         except MatFlowException.InternalException:
             raise MatFlowException.InternalException(
                 "ERROR: workflow '{}' not found".format(wf_name)
@@ -383,4 +368,4 @@ def class_debugging():
     print("TEST IN WorkflowData END!")
 
 
-# class_debugging()
+class_debugging()

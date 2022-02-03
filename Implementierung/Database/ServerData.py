@@ -33,11 +33,9 @@ class ServerData:
         ip_address = server.getAddress()
 
         # insert values
-        query = "INSERT INTO Server (ip, name) VALUES ('{}', '{}')".format(
-            ip_address, name
-        )
+        query = "INSERT INTO Server (ip, name) VALUES (%s, %s)"
         # execute
-        self.__databaseTable.set(query)
+        self.__databaseTable.set(query, (ip_address, name))
         return
 
     def get_server(self) -> List[Tuple[str, str]]:
@@ -61,6 +59,7 @@ class ServerData:
         return data
 
 
+# TODO vvv delete before shipping vvv
 def class_debugging():
     print("TEST IN ServerData START")
     print(
