@@ -8,16 +8,8 @@ class CreateWorkflowInstanceMemento implements MementoInterface {
     * Gets the createWorkflowInstanceObject
     * @returns _createWorkflowInstanceObject
     */
-    private get createWorkflowInstanceObject(): CreateWorkflowInstance {
+    public get createWorkflowInstanceObject(): CreateWorkflowInstance {
         return this._createWorkflowInstanceObject
-    }
-
-    /**
-    * Sets the value of _createWorkflowInstanceObject
-    * @param createWorkflowInstanceObject The new value of _createWorkflowInstanceObject
-    */
-    private set createWorkflowInstanceObject(createWorkflowInstanceObject: CreateWorkflowInstance) {
-        this._createWorkflowInstanceObject = createWorkflowInstanceObject
     }
 }
 
