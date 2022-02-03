@@ -39,6 +39,7 @@ class FrontendAPI:
     # we only have one server in system, and it needs to be pre-registered
     workflow_manager: WorkflowManager = WorkflowManager.get_instance()
     user_controller: UserController = UserController()
+    # richtig nach merge: hardware_controller: Hardware_Controller = Hardware_Controller(Server())
     hardware_controller: Hardware_Controller = Hardware_Controller()
 
     def __init__(self):
@@ -116,7 +117,6 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
-        # TODO Rückgabe mit Nils abchecken
         return ExceptionHandler.success({keys.all_users: FrontendAPI.user_controller.getAllUsersAndDetails()})
 
     @staticmethod
@@ -250,7 +250,7 @@ class FrontendAPI:
             decoded_json: dict = json.loads(request.get_json())
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
-            files: List[ReducedConfigFile] = ReducedConfigFile.extract_multiple_configs(request)
+            files: Path = ReducedConfigFile.extract_multiple_config_files(request)
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(template_name, wf_name, files)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -267,6 +267,7 @@ class FrontendAPI:
             String: json-dumped object containing all workflow instance names and config file names
         """
         # the return is already in format {wf_instance_name_1: List[Config], wf_instance_name_2: List[Config], ..}
+        # never an exception, worst case is empty dict
         return ExceptionHandler.success({keys.names_and_configs:
                                         FrontendAPI.workflow_manager.get_names_of_workflows_and_config_files()})
 
@@ -351,7 +352,7 @@ class FrontendAPI:
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
-            return ExceptionHandler.success(Template.encode_template(template))
+            return ExceptionHandler.success(template.encode_template())
 
     @staticmethod
     @app.route('/get_graph_for_temporary_template', methods=['GET'])
