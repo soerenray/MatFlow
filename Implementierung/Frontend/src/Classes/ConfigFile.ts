@@ -7,7 +7,7 @@ class ConfigFile {
     * @param configFileName The configFileName
     * @param keyValuePairs The keyValuePairs
     */
-    constructor(configFileName: string, keyValuePairs: Array<[string, string]>,) {
+    constructor(configFileName: string = '', keyValuePairs: Array<[string, string]> = [],) {
         this._configFileName = configFileName
         this._keyValuePairs = keyValuePairs
     }

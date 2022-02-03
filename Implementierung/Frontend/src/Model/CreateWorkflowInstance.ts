@@ -1,6 +1,6 @@
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
-
 class CreateWorkflowInstance {
+    private _dropDownCreateOrImportWokflowInstance: string[]
+    private _selectedDropDownItem: string
     private _templatesName: string[]
     private _configFolder: File
     private _workflowInstanceFolder: File
@@ -9,13 +9,17 @@ class CreateWorkflowInstance {
 
     /**
     *
+    * @param dropDownCreateOrImportWokflowInstance The dropDownCreateOrImportWokflowInstance
+    * @param selectedDropDownItem The selectedDropDownItem
     * @param templatesName The templatesName
     * @param configFolder The configFolder
     * @param workflowInstanceFolder The workflowInstanceFolder
     * @param selectedTemplateName The selectedTemplateName
     * @param workflowInstanceName The workflowInstanceName
     */
-    constructor(templatesName: string[] = [], configFolder: File = new File([], "emptyFile", { type: 'application/zip' }), workflowInstanceFolder: File = new File([], "emptyFile", { type: 'application/zip' }), selectedTemplateName: string = '', workflowInstanceName: string = '',) {
+    constructor(dropDownCreateOrImportWokflowInstance: string[] = [], selectedDropDownItem: string = '', templatesName: string[] = [], configFolder: File = new File([], "emptyFile", { type: 'application/zip' }), workflowInstanceFolder: File = new File([], "emptyFile", { type: 'application/zip' }), selectedTemplateName: string = '', workflowInstanceName: string = '',) {
+        this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance
+        this._selectedDropDownItem = selectedDropDownItem
         this._templatesName = templatesName
         this._configFolder = configFolder
         this._workflowInstanceFolder = workflowInstanceFolder
@@ -23,13 +27,27 @@ class CreateWorkflowInstance {
         this._workflowInstanceName = workflowInstanceName
     }
 
+    /**
+    * Gets the dropDownCreateOrImportWokflowInstance
+    * @returns _dropDownCreateOrImportWokflowInstance
+    */
+    public get dropDownCreateOrImportWokflowInstance(): string[] {
+        return this._dropDownCreateOrImportWokflowInstance
+    }
+
+    /**
+    * Gets the selectedDropDownItem
+    * @returns _selectedDropDownItem
+    */
+    public get selectedDropDownItem(): string {
+        return this._selectedDropDownItem
+    }
 
     /**
     * Gets the templatesName
     * @returns _templatesName
     */
     public get templatesName(): string[] {
-        this._templatesName = BackendServerCommunicator.pullTemplatesName()
         return this._templatesName
     }
 
@@ -65,6 +83,21 @@ class CreateWorkflowInstance {
         return this._workflowInstanceName
     }
 
+    /**
+    * Sets the value of _dropDownCreateOrImportWokflowInstance
+    * @param dropDownCreateOrImportWokflowInstance The new value of _dropDownCreateOrImportWokflowInstance
+    */
+    public set dropDownCreateOrImportWokflowInstance(dropDownCreateOrImportWokflowInstance: string[]) {
+        this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance
+    }
+
+    /**
+    * Sets the value of _selectedDropDownItem
+    * @param selectedDropDownItem The new value of _selectedDropDownItem
+    */
+    public set selectedDropDownItem(selectedDropDownItem: string) {
+        this._selectedDropDownItem = selectedDropDownItem
+    }
 
     /**
     * Sets the value of _templatesName

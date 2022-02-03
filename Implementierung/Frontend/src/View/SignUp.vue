@@ -34,20 +34,7 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-dialog v-model="dialoge" max-width="500px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                  Open Dialog
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title> Registration was successfull </v-card-title>
-                <v-card-text
-                  >Your registration was send to the adminastrator, who will
-                  approve your account.
-                </v-card-text>
-              </v-card>
-            </v-dialog>
+            <v-btn @click="pushSignUp" color="primary" dark> SignUp </v-btn>
           </v-row>
         </v-card-text>
       </v-card>
@@ -56,14 +43,23 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
+import BackenderServerCommunicator from "../Controler/BackendServerCommunicator";
 import SignUp from "../Model/SignUp";
 
-let signUpObject = new SignUp();
+const backendServerCommunicatorObject = new BackenderServerCommunicator();
+const signUpObject = new SignUp();
 
 export default {
   name: "SignUp",
-  data: () => {
-    return { showPassword: false, showPasswordRepeated: false };
+  methods: {
+    pushSignUp() {
+      backendServerCommunicatorObject.pushSignUp(
+        signUpObject.userName,
+        signUpObject.userPassword,
+        signUpObject.userPasswordRepeated
+      );
+    },
   },
   computed: {
     userName: {
@@ -90,6 +86,27 @@ export default {
         signUpObject.userPasswordRepeated = userPasswordRepeated;
       },
     },
+    showPassword: {
+      get: function (): boolean {
+        return signUpObject.showPassword;
+      },
+      set: function (showPassword: boolean) {
+        signUpObject.showPassword = showPassword;
+      },
+    },
+    showPasswordRepeated: {
+      get: function (): boolean {
+        return signUpObject.showPasswordRepeated;
+      },
+      set: function (showPasswordRepeated: boolean) {
+        signUpObject.showPasswordRepeated = showPasswordRepeated;
+      },
+    },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(signUpObject);
   },
 };
 </script>

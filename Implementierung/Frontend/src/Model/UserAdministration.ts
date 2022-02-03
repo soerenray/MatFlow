@@ -1,21 +1,23 @@
 import User from '../Classes/User'
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 
 class UserAdministration {
     private _tableHeaders: object[]
-    private _searchedUser: string
     private _users: User[]
+    private _selectStatuses: string[]
+    private _selectPrivileges: string[]
 
     /**
     *
     * @param tableHeaders The tableHeaders
-    * @param searchedUser The searchedUser
     * @param users The users
+    * @param selectStatues The selectStatuses
+    * @param selectPriviliges The selectPrivliges
     */
-    constructor(tableHeaders: object[], searchedUser: string, users: User[],) {
+    constructor(tableHeaders: object[] = [], users: User[] = [], selectStatuses: string[] = [], selectPrivileges: string[] = [],) {
         this._tableHeaders = tableHeaders
-        this._searchedUser = searchedUser
         this._users = users
+        this._selectStatuses = selectStatuses
+        this._selectPrivileges = selectPrivileges
     }
 
     /**
@@ -27,20 +29,27 @@ class UserAdministration {
     }
 
     /**
-    * Gets the searchedUser
-    * @returns _searchedUser
-    */
-    public get searchedUser(): string {
-        return this._searchedUser
-    }
-
-    /**
     * Gets the users
     * @returns _users
     */
     public get users(): User[] {
-        this._users = BackendServerCommunicator.pullUsers()
         return this._users
+    }
+
+    /**
+    * Gets the selectStatuses
+    * @returns _selectStatuses
+    */
+    public get selectStatuses(): string[] {
+        return this._selectStatuses
+    }
+
+    /**
+    * Gets the selectPrivileges
+    * @returns _selectPrivileges
+    */
+    public get selectPrivileges(): string[] {
+        return this._selectPrivileges
     }
 
     /**
@@ -52,18 +61,28 @@ class UserAdministration {
     }
 
     /**
-    * Sets the value of _searchedUser
-    * @param searchedUser The new value of _searchedUser
-    */
-    public set searchedUser(searchedUser: string) {
-        this._searchedUser = searchedUser
-    }
-
-    /**
-    * Sets the value of users
-    * @param tableHeaders The new value of users
+    * Sets the value of _users
+    * @param users The new value of users
     */
     public set users(users: User[]) {
         this._users = users
     }
+
+    /**
+    * Sets the value of _selectStatuses
+    * @param selectStatuses The new value of _selectStatuses
+    */
+    public set selectStatuses(selectStatuses: string[]) {
+        this._selectStatuses = selectStatuses
+    }
+
+    /**
+    * Sets the value of _selectPrivileges
+    * @param selectPrivileges The new value of selectPrivileges
+    */
+    public set selectPrivileges(selectPrivileges: string[]) {
+        this._selectPrivileges = selectPrivileges
+    }
 }
+
+export default UserAdministration

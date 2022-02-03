@@ -1,23 +1,28 @@
 import Version from '../Classes/Version'
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 
 class VersionControl {
     private _tableHeaders: object[]
+    private _dialogKeyValuePairs: boolean
+    private _selectedVersionObject: Version
     private _versions: Version[]
-    private _workflowInstanceName: string
+    private _selectedWorkflowInstanceName: string
     private _workflowInstancesName: string[]
 
     /**
     *
     * @param tableHeaders The tableHeaders
+    * @param dialogKeyValuePairs True if the difference of the keyValuePairs should be displayed, false otherwise
+    * @param selectedVersionObject The selectedVersionObject
     * @param versions The versions
-    * @param workflowInstanceName The workflowInstanceName
+    * @param selectedWorkflowInstanceName The selectedWorkflowInstanceName
     * @param workflowInstancesName The workflowInstancesName
     */
-    constructor(tableHeaders: object[] = [], versions: Version[] = [], workflowInstanceName: string = "", workflowInstancesName: string[] = []) {
+    constructor(tableHeaders: object[] = [], dialogKeyValuePairs: boolean = false, selectedVersionObject: Version = new Version(), versions: Version[] = [], selectedWorkflowInstanceName: string = "", workflowInstancesName: string[] = []) {
         this._tableHeaders = tableHeaders
+        this._dialogKeyValuePairs = dialogKeyValuePairs
+        this._selectedVersionObject = selectedVersionObject
         this._versions = versions
-        this._workflowInstanceName = workflowInstanceName
+        this._selectedWorkflowInstanceName = selectedWorkflowInstanceName
         this._workflowInstancesName = workflowInstancesName
     }
 
@@ -30,20 +35,35 @@ class VersionControl {
     }
 
     /**
+    * Gets the dialogKeyValuePairs
+    * @returns _dialogKeyValuePairs
+    */
+    public get dialogKeyValuePairs(): boolean {
+        return this._dialogKeyValuePairs
+    }
+
+    /**
+    * Gets the selectedVersionObject
+    * @returns _selectedVersionObject
+    */
+    public get selectedVersionObject(): Version {
+        return this._selectedVersionObject
+    }
+
+    /**
     * Gets the versions
     * @returns _versions
     */
     public get versions(): Version[] {
-        this._versions = BackendServerCommunicator.pullVersionsWithWorkflowInstanceName(this._workflowInstanceName)
         return this._versions
     }
 
     /**
-    * Gets the workflowInstanceName
-    * @returns _workflowInstanceName
+    * Gets the selectedWorkflowInstanceName
+    * @returns _selectedWorkflowInstanceName
     */
-    public get workflowInstanceName(): string {
-        return this._workflowInstanceName
+    public get selectedWorkflowInstanceName(): string {
+        return this._selectedWorkflowInstanceName
     }
 
     /**
@@ -51,7 +71,6 @@ class VersionControl {
     * @returns _workflowInstancesName
     */
     public get workflowInstancesName(): string[] {
-        this._workflowInstancesName = BackendServerCommunicator.pullWorkflowInstancesName()
         return this._workflowInstancesName
     }
 
@@ -64,6 +83,22 @@ class VersionControl {
     }
 
     /**
+    * Sets the value of _dialogKeyValuePairs
+    * @param dialogKeyValuePairs The new value of _dialogKeyValuePairs
+    */
+    public set dialogKeyValuePairs(dialogKeyValuePairs: boolean) {
+        this._dialogKeyValuePairs = dialogKeyValuePairs
+    }
+
+    /**
+    * Sets the value of _selectedVersionObject
+    * @param selectedVersionObject The new value of _selectedVersionObject
+    */
+    public set selectedVersionObject(selectedVersionObject: Version) {
+        this._selectedVersionObject = selectedVersionObject
+    }
+
+    /**
     * Sets the value of _versions
     * @param versions The new value of _versions
     */
@@ -72,16 +107,16 @@ class VersionControl {
     }
 
     /**
-    * Sets the value of _workflowInstanceName
-    * @param workflowInstanceName The new value of _workflowInstanceName
+    * Sets the value of _selectedWorkflowInstanceName
+    * @param selectedWorkflowInstanceName The new value of _selectedWorkflowInstanceName
     */
-    public set workflowInstanceName(workflowInstanceName: string) {
-        this._workflowInstanceName = workflowInstanceName
+    public set selectedWorkflowInstanceName(selectedWorkflowInstanceName: string) {
+        this._selectedWorkflowInstanceName = selectedWorkflowInstanceName
     }
 
     /**
     * Sets the value of _workflowInstancesName
-    * @param workflowInstanceName The new value of _workflowInstancesName
+    * @param workflowInstancesName The new value of _workflowInstancesName
     */
     public set workflowInstancesName(workflowInstancesName: string[]) {
         this._workflowInstancesName = workflowInstancesName

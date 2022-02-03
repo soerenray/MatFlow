@@ -7,12 +7,13 @@
           <v-col>
             <v-text-field
               label="Name of the template"
+              v-model="newTemplateName"
               hide-details="auto"
             ></v-text-field>
           </v-col>
           <v-col>
             <v-select
-              :items="templates"
+              :items="templatesName"
               v-model="chosenTemplateName"
               label="use predefined template"
             >
@@ -32,10 +33,12 @@
             </v-radio-group>
           </v-col>
           <v-col>
-            <v-row>
+            <v-row style='padding-top: 25px'>
               <v-btn color="blue">Edit</v-btn>
-              <div style="padding-left: 80px">
-                <v-btn fab small color="#58D68D"><plus-icon></plus-icon></v-btn>
+              <div style="padding-left: 25px">
+                <v-btn @click="pressSendButton" color="#58D68D"
+                  ><send-icon></send-icon
+                ></v-btn>
               </div>
             </v-row>
           </v-col>
@@ -47,24 +50,69 @@
 </template>
 
 <script lang='ts'>
+import Vue from "vue";
 import CreateTemplate from "../Model/CreateTemplate";
+import Template from "../Classes/Template";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-let createTemplateObject = new CreateTemplate();
+const backendServerCommunicatorObject = new BackendServerCommunicator();
+const createTemplateObject = new CreateTemplate();
 
 export default {
-  data: function () {
-    return {
-      templates: createTemplateObject.templatesName,
-    };
+  name: "CreateTemplate",
+  methods: {
+    pressSendButton() {
+      this.pushTemplateObjectToBackend();
+      this.resetView();
+    },
+    resetView() {
+      backendServerCommunicatorObject.pullTemplatesName();
+      createTemplateObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
+    },
+    pushTemplateObjectToBackend() {
+      backendServerCommunicatorObject.pushCreateTemplate(
+        this.createTemplateObject()
+      );
+    },
+    createTemplateObject(): Template {
+      return new Template(
+        this.templateBlueprintFile(),
+        createTemplateObject.chosenTemplateName
+      );
+    },
+    templateBlueprintFile(): File {
+      if (createTemplateObject.templateFolder.name !== "emptyFile") {
+        return createTemplateObject.templateFolder;
+      } else if (createTemplateObject.templateFolder.name !== "emptyFile") {
+        return createTemplateObject.templateFolder;
+      }
+      return new File([], "emptyFile", { type: "application/zip" });
+    },
   },
   computed: {
+    newTemplateName: {
+      get: function() {
+        return createTemplateObject.newTemplateName
+      },
+      set: function(newTemplateName: string) {
+        createTemplateObject.newTemplateName = newTemplateName
+      }
+    },
+    templatesName: {
+      get: function () {
+        return createTemplateObject.templatesName;
+      },
+      set: function (templatesName: string[]) {
+        createTemplateObject.templatesName = templatesName;
+      },
+    },
     chosenTemplateName: {
       get: function (): string {
         return createTemplateObject.chosenTemplateName;
       },
       set: function (chosenTemplateName: string) {
         createTemplateObject.chosenTemplateName = chosenTemplateName;
-        console.log(createTemplateObject.chosenTemplateName);
       },
     },
     templateFolder: {
@@ -83,6 +131,13 @@ export default {
         createTemplateObject.dagFile = dagFile;
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(createTemplateObject);
+    createTemplateObject.templatesName =
+      backendServerCommunicatorObject.pullTemplatesName();
   },
 };
 </script>
