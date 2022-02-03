@@ -1,3 +1,4 @@
+from Implementierung.FrontendAPI import keys
 class ParameterChange:
     """
     This class represents the change of a key-value pair.
@@ -109,3 +110,14 @@ class ParameterChange:
             config_file_name (str): The name of the config file
         """
         self.__config_file_name = config_file_name
+
+    def encode(self):
+        """
+        encode the parameter changes
+
+        Returns:
+            encoded changes
+        """
+        return {keys.config_file_name: self.__config_file_name, keys.old_key: self.__old_key,
+                keys.new_key: self.__new_key, keys.old_value: self.__old_value, keys.new_value: self.__new_value}
+

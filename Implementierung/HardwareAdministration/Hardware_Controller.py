@@ -1,7 +1,7 @@
 from operator import truediv
-from Server import Server
 import resource
-from Database.ServerData import ServerData
+from Implementierung.Database.ServerData import ServerData
+from Implementierung.HardwareAdministration.Server import Server
 
 
 class Hardware_Controller:
@@ -32,9 +32,8 @@ class Hardware_Controller:
     def setResources(self, newResource: resource, newSoft: int, newHard: int):
         resource.setrlimit(newResource,newSoft,newHard)
 
-        
 
-
+# Methods
 
     # method that gets a Server and adds it to the ServerList
     def addServer(Server):
@@ -69,6 +68,12 @@ class Hardware_Controller:
         #
         #
         #
+
+    def getServer(self) -> Server:
+        return self.Server
+
+    def setServer(self, server: Server):
+        self.Server = server
 
 
 

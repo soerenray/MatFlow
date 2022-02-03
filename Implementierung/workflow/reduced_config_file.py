@@ -1,4 +1,8 @@
+from __future__ import annotations
 from typing import List, Tuple
+from flask import request
+from Implementierung.FrontendAPI import keys
+import json
 
 
 class ReducedConfigFile:
@@ -58,3 +62,51 @@ class ReducedConfigFile:
 
         """
         self.__key_value_pairs = key_value_pairs
+
+    def encode_config(self) -> dict:
+        """
+        extracts all reduced_config attributes and dumps them into json object
+
+        Returns:
+            String: json-dumped object containing encoded reduced config file (essentially key value pairs)
+        """
+        out_dict = dict({keys.config_file_name: self.get_file_name()})
+        key_value_pairs: List[Tuple[str, str]] = self.get_key_value_pairs()
+        out_dict.update({keys.key_value_pairs_name: key_value_pairs})
+        return out_dict
+
+    @classmethod
+    def extract_config(cls, request_details: request) -> ReducedConfigFile:
+        """
+        extracts json details and builds a new ReducedConfigFile based off of these json details
+
+        Args:
+            request_details(request): contains encoded reduced config file
+
+        Returns:
+            ReducedConfigFile: the extracted reduced config file
+        """
+        decoded_json: dict = json.loads(request_details.get_json())
+        name: str = decoded_json[keys.config_file_name]
+        key_value_pairs: List[Tuple[str, str]] = decoded_json[keys.key_value_pairs_name]
+        reduced_config: ReducedConfigFile = ReducedConfigFile(name, key_value_pairs)
+        return reduced_config
+
+    @classmethod
+    def extract_multiple_configs(cls, request_details: request) -> List[ReducedConfigFile]:
+        """
+        extracts json details and builds a new ReducedConfigFile array based off of these json details
+
+        Args:
+            request_details(request): contains encoded reduced config files
+
+        Returns:
+            ReducedConfigFile[]: the extracted reduced config files
+        """
+        decoded_json: dict = json.loads(request_details.get_json())
+        lists_of_json_configs: List[dict] = decoded_json[keys.config_files]
+        configs: List[ReducedConfigFile] = []
+        for json_config in lists_of_json_configs:
+            config = ReducedConfigFile(json_config[keys.config_file_name], json_config[keys.key_value_pairs_name])
+            configs.append(config)
+        return configs

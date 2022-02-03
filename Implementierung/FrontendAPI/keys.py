@@ -3,6 +3,7 @@ user_privilege_name: str = "userPrivilege"
 password_name: str = "password"
 repeat_password_name: str = "repeatPassword"
 user_name = "userName"
+all_users = "users"
 
 template_name: str = "templateName"
 workflow_instance_name: str = "workflowInstanceName"
@@ -10,12 +11,15 @@ version_number_name: str = "versionNumber"
 version_note_name: str = "versionNote"
 config_file_name: str = "configFileName"
 versions_name: str = "versions"
-parameter_changes_name: str = "parameterChanges"
+frontend_versions_changes: str = "parameterChanges"
 key_value_pairs_name: str = "keyValuePairs"
 
 workflow_instance_names: str = "workflowInstanceNames"
 config_file_names: str = "configFileNames"
 template_names: str = "templateNames"
+config_files: str = "configFiles"
+
+names_and_configs: str = "workflowInstanceConfigNames"
 
 dag_picture_name: str = "dagPicture"
 dag_definition_name: str = "dagDefinitionFile"
@@ -41,4 +45,10 @@ config_save_path: str = "config"
 dag_save_path: str = "dag_file"
 
 underscore: str = "_"
+
+old_key = "oldKey"
+new_key = "newKey"
+old_value = "oldValue"
+new_value = "newValue"
+
 

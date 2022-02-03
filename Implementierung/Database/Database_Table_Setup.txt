@@ -13,15 +13,15 @@ CREATE TABLE WorkflowTemplate (
 
 CREATE TABLE Workflow (
    name varchar(255),
-   dag varchar(255),
+   dag varchar(255) NOT NULL,
    PRIMARY KEY (name)
 );
 
 CREATE TABLE FolderFile (
    wfName varchar(255),
-   file_ID INTEGER,
+   fileID INTEGER AUTO_INCREMENT,
    file varchar(255),
-   PRIMARY KEY (wfname, file_ID),
+   PRIMARY KEY (file_ID),
    FOREIGN KEY (wfname) REFERENCES Workflow(name)
 );
 
@@ -30,18 +30,19 @@ CREATE TABLE Version (
    wfName varchar(255) NOT NULL,
    version varchar(127) NOT NULL,
    note varchar(1000),
-   PRIMARY KEY (ID, wfName, version),
+   PRIMARY KEY (wfName, version),
    FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
 CREATE TABLE ActiveVersion (
-   versionID INTEGER,
-   PRIMARY KEY (versionID),
-   FOREIGN KEY (versionID) REFERENCES Version(ID)
+   wfName varchar(255),
+   version varchar(127) NOT NULL,
+   PRIMARY KEY (wfName),
+   FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
 CREATE TABLE ConfFile (
-   confKey INTEGER NOT NULL,
+   confKey INTEGER NOT NULL AUTO_INCREMENT,
    file varchar(255) NOT NULL,
    PRIMARY KEY (confKey)
 );
@@ -56,9 +57,9 @@ CREATE TABLE VersionFile (
 );
 
 CREATE TABLE ResultFile (
+   fileID INTEGER NOT NULL AUTO_INCREMENT,
    versionID INTEGER,
-   filesID INTEGER NOT NULL,
    file varchar(255),
-   PRIMARY KEY (versionID, filesID),
+   PRIMARY KEY (filesID),
    FOREIGN KEY (versionID) REFERENCES Version(ID)
 );

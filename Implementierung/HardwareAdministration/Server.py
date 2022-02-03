@@ -1,6 +1,12 @@
+from __future__ import annotations
 
 import nmap, socket
 import resource
+import json
+from typing import List, Tuple, Type
+from flask import request
+from Implementierung.FrontendAPI import keys
+from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
 
 class Server:
@@ -24,6 +30,7 @@ class Server:
         self.selectedForExecution = True
         self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
         self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
+
 
 # getter and setter methods
     # name getter method
@@ -67,7 +74,7 @@ class Server:
         self.selectedForExecution = selected
 
     # Ressources getter method
-    def getRessources(self):
+    def getRessources(self) -> List[Tuple[str, str]]:
         return self.ressources
 
     # Ressources setter method
@@ -87,6 +94,43 @@ class Server:
             return False
         
 
+    @classmethod
+    def extract_server(cls, request_details: request) -> Server:
+        """
+        extracts json details and builds a new Server based off of these json details
 
+        Args:
+            request_details(request): contains encoded server
+
+        Returns:
+            Server: decoded server object
+        """
+        decoded_json: dict = json.loads(request_details.get_json())
+        name: str = decoded_json[keys.server_name]
+        ip_address: str = decoded_json[keys.server_address_name]
+        status: str = decoded_json[keys.server_status_name]
+        container_limit: int = int(decoded_json[keys.container_limit_name])
+        resources: List[Tuple[str, str]] = decoded_json[keys.server_resources_name]
+        executing: bool = bool(decoded_json[keys.selected_for_execution_name])
+        server: Server = Server(name, ip_address, status, container_limit, executing, resources)
+        return server
+
+    def encode_server(self) -> dict:
+        """
+        encodes all server attributes and dumps them into json object
+
+        Returns:
+            String: json-dumped object containing encoded server
+        """
+        name: str = self.getName()
+        ip_address: str = self.getAddress()
+        status: str = self.getStatus()
+        container_limit: int = self.getContainerLimit()
+        executing: bool = self.isSelectedForExecution()
+        resources: List[Tuple[str, str]] = self.getRessources()
+        out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
+                          keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
+                          keys.server_resources_name: resources}
+        return out_dict
 
 

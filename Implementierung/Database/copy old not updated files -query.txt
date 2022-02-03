@@ -1,0 +1,8 @@
+INSERT INTO VersionFile (versionID, filename, confKey) 
+SELECT newVersion, filename, confKey 
+	FROM VersionFile 
+	WHERE versionID = 'oldVersion'
+    AND filename 
+    NOT IN (Select filename 
+		FROM VersionFile 
+        WHERE versionID = 'newVersion');

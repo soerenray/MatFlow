@@ -1,7 +1,7 @@
-from .version_number import VersionNumber
+from Implementierung.workflow.version_number import VersionNumber
 
 
-class Version:
+class WorkflowVersion:
     """
     This class represents a version of a workflow instance.
     It's main task is to switch between the two different representations of versions one in the frontend,

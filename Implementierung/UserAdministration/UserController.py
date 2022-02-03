@@ -1,5 +1,5 @@
 from array import array
-from User import User
+from Implementierung.UserAdministration.User import User
 from requests.auth import HTTPBasicAuth
 import requests
 from Implementierung.ExceptionPackage.MatFlowException import UserExistsException, LoginException, SignUpException
