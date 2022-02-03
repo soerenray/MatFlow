@@ -31,6 +31,7 @@
             <v-col>
               <v-file-input
                 v-model="configFolder"
+                :clearable=false
                 accept="application/zip"
                 label="Config file folder"
               ></v-file-input>
@@ -53,6 +54,7 @@
           <v-col>
             <v-file-input
               v-model="workflowInstanceFolder"
+              :clearable=false
               accept="application/zip"
               label="Workflow-folder"
             ></v-file-input
@@ -102,7 +104,8 @@ export default {
     },
     resetView() {
       createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
-        createWorkflowInstanceCaretakerObject.createWorkflowInstanceMementoObjects[0]
+        createWorkflowInstanceCaretakerObject
+          .createWorkflowInstanceMementoObjects[0]
       );
     },
     pushCreateWorkflowInstanceFromTemplate() {
