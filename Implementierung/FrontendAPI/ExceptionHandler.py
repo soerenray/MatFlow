@@ -8,6 +8,7 @@ class ExceptionHandler:
     This class handles all MatFlowExceptions and those who inherit from MatFlowException.
     It is responsible for preparing the status code for the response.
     """
+
     @staticmethod
     def handle_exception(exception: MatFlowException) -> str:
         """
@@ -19,7 +20,9 @@ class ExceptionHandler:
         Returns:
             String: status code nested in json object
         """
-        return json.dumps(ExceptionHandler.send_status_code(exception.get_status_code(), dict()))
+        return json.dumps(
+            ExceptionHandler.send_status_code(exception.get_status_code(), dict())
+        )
 
     @staticmethod
     def success(out_dict: dict) -> str:
@@ -36,6 +39,6 @@ class ExceptionHandler:
 
     @staticmethod
     def send_status_code(status_code: int, unfinished_dict: dict) -> dict:
-        status_code_dict: dict = {'statusCode': status_code}
+        status_code_dict: dict = {"statusCode": status_code}
         unfinished_dict.update(status_code_dict)
         return unfinished_dict
