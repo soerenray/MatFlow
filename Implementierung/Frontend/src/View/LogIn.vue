@@ -29,10 +29,10 @@
             </div>
             <v-row>
               <div style="padding-left: 10px; padding-top: 5px">
-                 <router-link to="/SignUp">SignUp</router-link>
+                <router-link to="/SignUp">SignUp</router-link>
               </div>
               <v-spacer></v-spacer>
-              <v-btn @click='pushLogIn' color="blue">LogIn</v-btn>
+              <v-btn @click="pushLogIn" color="blue">LogIn</v-btn>
             </v-row>
           </v-col>
         </v-card-text>

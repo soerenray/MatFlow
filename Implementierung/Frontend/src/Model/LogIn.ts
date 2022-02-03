@@ -1,3 +1,5 @@
+import LogInMemento from "../Memento/LogInMemento"
+
 class LogIn {
     private _userName: string
     private _userPassword: string
@@ -61,6 +63,17 @@ class LogIn {
     */
     public set showPassword(showPassword: boolean) {
         this._showPassword = showPassword
+    }
+
+    public setLogInMemento(logInMemento: LogInMemento) {
+        let tempLogInObject = logInMemento.logInObject
+        this.userName = tempLogInObject.userName
+        this.userPassword = tempLogInObject.userPassword
+        this.showPassword = tempLogInObject.showPassword
+    }
+
+    public createLogInMemento(): LogInMemento {
+        return new LogInMemento(new LogIn(this.userName, this.userPassword, this.showPassword))
     }
 }
 
