@@ -74,6 +74,7 @@
 <script lang='ts'>
 import Vue from "vue";
 import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
+import CreateWorkflowInstanceCaretaker from "../Memento/CreateWorkflowInstanceCaretaker"
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import WorkflowInstance from "../Classes/WorkflowInstance";
 
