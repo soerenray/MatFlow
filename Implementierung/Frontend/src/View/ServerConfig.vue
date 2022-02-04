@@ -6,27 +6,6 @@
       </v-toolbar>
     </div>
     <div style="padding-top: 20px">
-      <v-card flat>
-        <div style="padding-left: 20px">
-          <v-row>
-            <v-col>
-              <v-text-field
-                label="server-name"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <v-col>
-              <v-text-field
-                label="server-address"
-                hide-details="auto"
-              ></v-text-field>
-            </v-col>
-            <div style="padding-right: 50px; padding-top: 20px">
-              <v-btn color="blue">Add new server</v-btn>
-            </div>
-          </v-row>
-        </div>
-      </v-card>
       <v-data-table :headers="header" :items="items" item-key="name">
         <template v-slot:[`item.name`]="{ item }"
           ><v-text-field v-model="item.name"></v-text-field
@@ -38,7 +17,7 @@
           ><v-text-field v-model="item.dagLocation"></v-text-field
         ></template>
         <template v-slot:[`item.delete`]="{}"
-          ><v-btn color="red" icon><v-icon>delete</v-icon></v-btn></template
+          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn></template
         >
         <template v-slot:[`item.apply`]="{}"
           ><v-btn color="green" outlined>apply changes</v-btn></template
@@ -75,13 +54,6 @@ export default {
           status: "running",
           limit: 5,
           dagLocation: "home/airflow/dags",
-        },
-        {
-          name: "kit-informatik",
-          address: "123.123.123.123",
-          status: "maintance",
-          limit: 12,
-          dagLocation: "usr/admin/documents/airflow/dags",
         },
       ],
     };
