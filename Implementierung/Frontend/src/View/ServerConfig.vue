@@ -20,8 +20,10 @@
         <template v-slot:[`item.serverResources`]="{}"
           ><v-btn icon><memory-icon></memory-icon></v-btn
         ></template>
-        <template v-slot:[`item.apply`]="{}"
-          ><v-btn color="green" outlined>apply changes</v-btn></template
+        <template v-slot:[`item.apply`]="{ item }"
+          ><v-btn @click="pushServerAndPullServers(item)" color="green" outlined
+            >apply changes</v-btn
+          ></template
         >
       </v-data-table>
     </div>
@@ -52,7 +54,7 @@ export default {
   methods: {
     pushServerAndPullServers(server: Server) {
       this.pushServer(server);
-      backendServerCommunicatorObject.pullServers();
+      this.servers = backendServerCommunicatorObject.pullServers();
     },
     pushServer(server: Server) {
       backendServerCommunicatorObject.pushServer(server);
