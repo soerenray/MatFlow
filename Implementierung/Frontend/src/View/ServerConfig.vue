@@ -25,6 +25,9 @@
               ></v-btn>
             </template>
             <edit-key-value-pairs
+              v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+              v-on:push="pushServer"
+              v-on:reset="pullServers"
               fileName="resources"
               :keyValuePairsFromParent="item.serverResources"
             ></edit-key-value-pairs>
@@ -71,6 +74,9 @@ export default {
   methods: {
     pushServerAndPullServers(server: Server) {
       this.pushServer(server);
+      this.pullServers();
+    },
+    pullServers() {
       this.servers = backendServerCommunicatorObject.pullServers();
     },
     pushServer(server: Server) {
