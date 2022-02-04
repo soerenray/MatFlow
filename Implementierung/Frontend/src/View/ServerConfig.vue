@@ -32,11 +32,11 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator()
+const backendServerCommunicatorObject = new BackendServerCommunicator();
 const serverConfigObject = new ServerConfig(
   [
     { text: "Server location name", value: "serverName" },
@@ -75,6 +75,9 @@ export default {
     // Vue is oberserving data in the data property.
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(serverConfigObject);
+  },
+  created: function () {
+    this.servers = backendServerCommunicatorObject.pullServers();
   },
 };
 </script>
