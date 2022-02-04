@@ -47,3 +47,5 @@ class ServerConfig {
         this._servers = servers
     }
 }
+
+export default ServerConfig
