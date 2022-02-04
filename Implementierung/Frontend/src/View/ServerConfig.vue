@@ -6,7 +6,7 @@
       </v-toolbar>
     </div>
     <div style="padding-top: 20px">
-      <v-data-table :headers="header" :items="items" item-key="name">
+      <v-data-table :headers="tableHeaders" :items="items" item-key="name">
         <template v-slot:[`item.name`]="{ item }"
           ><v-text-field disabled v-model="item.name"></v-text-field
         ></template>
@@ -43,7 +43,6 @@ const serverConfigObject = new ServerConfig(
     { text: "Status", value: "status" },
     { text: "Container limit", value: "limit" },
     { text: "Select server for execution", value: "server" },
-    { text: "dag-folder location", value: "dagLocation" },
     { text: "Configurate server resources", value: "serverResources" },
     { text: "apply changes", value: "apply" },
     { text: "delete server", value: "delete" },
@@ -71,6 +70,14 @@ export default {
         serverConfigObject.tableHeaders = tableHeaders;
       },
     },
+    servers: {
+      get: function(): Server[] {
+        return serverConfigObject.servers
+      },
+      set: function(servers: Server[]) {
+        serverConfigObject.servers = servers
+      }
+    }
   },
 };
 </script>
