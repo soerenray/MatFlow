@@ -17,13 +17,16 @@
         <template v-slot:[`item.selectedForExecution`]="{}"
           ><v-checkbox disabled></v-checkbox
         ></template>
-        <template v-slot:[`item.serverResources`]="{}">
-          <v-dialog v-model="dialog" width="500">
+        <template v-slot:[`item.serverResources`]="{ item }">
+          <v-dialog width="700px" v-model="dialog">
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-on="on" v-bind="attrs" icon
                 ><memory-icon></memory-icon
               ></v-btn>
             </template>
+            <edit-key-value-pairs
+              :keyValuePairsFromParent="item.serverResources"
+            ></edit-key-value-pairs>
           </v-dialog>
         </template>
         <template v-slot:[`item.apply`]="{ item }"
@@ -37,6 +40,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import EditKeyValuePairs from "../View/EditKeyValuePairs.vue";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
@@ -56,6 +60,7 @@ const serverConfigObject = new ServerConfig(
 );
 
 export default {
+  components: { EditKeyValuePairs },
   name: "ServerConfig",
   data: function () {
     return {

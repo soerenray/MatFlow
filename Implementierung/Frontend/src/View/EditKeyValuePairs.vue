@@ -31,7 +31,7 @@
                   <v-btn
                     @click="pushUpdatedConfigFilesToBackendServer"
                     color="blue"
-                    >Create new version</v-btn
+                    >Push to Server</v-btn
                   >
                 </div>
               </v-row>
