@@ -35,6 +35,17 @@ let wf2Conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1']])
 let wf2Conf2: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2']])
 let wf2Conf3: ConfigFile = new ConfigFile('conf3', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
 
+let servers = [
+    new Server(
+        "123.123.11.1",
+        "running",
+        5,
+        true,
+        "kit-materialwissenschaften",
+        [["cpu1", "50%"]]
+    ),
+]
+
 function deepCopyConfigFile(configFile: ConfigFile): ConfigFile {
     return new ConfigFile(JSON.parse(JSON.stringify(configFile.configFileName)), JSON.parse(JSON.stringify(configFile.keyValuePairs)))
 }
