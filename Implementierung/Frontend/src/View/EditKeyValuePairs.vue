@@ -91,11 +91,11 @@ export default {
   },
   methods: {
     resetChoosenConfigFileObject() {
-      this.$emit("resetChoosenConfigFileObject");
+      this.$emit("reset");
     },
     pushUpdatedConfigFilesToBackendServer() {
       this.changeAllKeyValuePairs();
-      this.$emit("pushUpdatedConfigFilesToBackendServer");
+      this.$emit("update");
     },
     changeAllKeyValuePairs() {
       let keyValuePairsAsTupleArray = this.keyValuePairs.map(
