@@ -77,9 +77,11 @@ export default {
       this.pullServers();
     },
     pullServers() {
+      console.log(backendServerCommunicatorObject.pullServers())
       this.servers = backendServerCommunicatorObject.pullServers();
     },
     pushServer() {
+      console.log('push')
       backendServerCommunicatorObject.pushServer(this.servers[0]);
     },
     changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
