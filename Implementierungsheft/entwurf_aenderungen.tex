@@ -52,10 +52,12 @@ Es handelt sich hier also nur um eine Anlehnung an die bereits etablierten HTTP 
 
 \subsection{Authentifizierung} \label{Cookie}
 Im Frontend kann man theoretisch unabhängig der User Privilegien mittels URL Manipulation auf alle 
-Seiten zugreifen. Um dies zu verhindern, wird im Frontend ein einzigartiges Cookie mit der Anfrage an die Frontend
-API geschickt, die dann ??
-% TODO Alessandro
-% TODO Nils dann Entwurf ändern und neues Bild posten
+Seiten zugreifen. Um dies zu verhindern, wird im Backernd ein einzigartiges Cookie erstellt, wenn sich der Benutzer einloggt. 
+Bei jeder Anfrage aus dem Frontend wird dieser Cookie dann mitgeliefert und verhindert unerlaubten Zugriff.
+
+\subsection{keys} \label{Cookie}
+Zur Kapselung der JSON Keys wurde im FrontendAPI package eine eigenes Modul eingeführt.
+
 \input{user_administration_aenderungen}
 \input{hardware_administration_aenderungen}
 
@@ -66,4 +68,4 @@ API geschickt, die dann ??
 % ich werde hier in meiner externen file die subsections "Kommunikation von Dateien innerhalb der Serveranwendung" und "Änderungen im Workflow-Package" hinzufügen. Im ersteren Kapitel würde ich auch die von meinem package angelegte und verwaltete File-System-Struktur erklären. Nur damit sich das nicht zu sehr mit Lukas Text überschneidet
 
 
-%\input{datenbank_aenderungen} %Lukas
+\input{datenbank_aenderungen} %Lukas
