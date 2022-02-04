@@ -4,7 +4,10 @@ from copy import deepcopy
 from unittest.mock import patch, Mock
 from Implementierung.FrontendAPI.api import app, FrontendAPI
 from Implementierung.FrontendAPI import keys
-from Implementierung.ExceptionPackage.MatFlowException import InternalException, ConverterException
+from Implementierung.ExceptionPackage.MatFlowException import (
+    InternalException,
+    ConverterException,
+)
 from Implementierung.HardwareAdministration.Server import Server
 
 success_response: dict = {"statusCode": 607}
@@ -49,7 +52,9 @@ class ServerTest(unittest.TestCase):
             return_value=self.server,
         ) as mock_method:
             with patch.object(
-                self.server, "encode_server", return_value=deepcopy(self.expected_dict_server)
+                self.server,
+                "encode_server",
+                return_value=deepcopy(self.expected_dict_server),
             ):
                 self.app.get("get_server_details")
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
@@ -62,7 +67,9 @@ class ServerTest(unittest.TestCase):
             return_value=self.server,
         ):
             with patch.object(
-                self.server, "encode_server", return_value=deepcopy(self.expected_dict_server)
+                self.server,
+                "encode_server",
+                return_value=deepcopy(self.expected_dict_server),
             ) as mock_method_2:
 
                 self.app.get("get_server_details")
@@ -76,7 +83,9 @@ class ServerTest(unittest.TestCase):
             side_effect=InternalException("Server not found"),
         ):
             with patch.object(
-                self.server, "encode_server", return_value=deepcopy(self.expected_dict_server)
+                self.server,
+                "encode_server",
+                return_value=deepcopy(self.expected_dict_server),
             ):
                 got = self.app.get("get_server_details")
                 retrieved_json: dict = json.loads(got.get_data())
@@ -89,7 +98,9 @@ class ServerTest(unittest.TestCase):
             return_value=self.server,
         ):
             with patch.object(
-                self.server, "encode_server", return_value=deepcopy(self.expected_dict_server)
+                self.server,
+                "encode_server",
+                return_value=deepcopy(self.expected_dict_server),
             ):
                 got = self.app.get("get_server_details")
                 # content not relevant, Nils has to test this
@@ -106,7 +117,8 @@ class ServerTest(unittest.TestCase):
         ) as mock_method:
             with patch.object(self.server, "extract_server", return_value=self.server):
                 self.app.put(
-                    "set_server_details", json=json.dumps(deepcopy(self.expected_dict_server_2))
+                    "set_server_details",
+                    json=json.dumps(deepcopy(self.expected_dict_server_2)),
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -117,7 +129,8 @@ class ServerTest(unittest.TestCase):
                 Server, "extract_server", return_value=self.server
             ) as mock_method:
                 self.app.put(
-                    "set_server_details", json=json.dumps(deepcopy(self.expected_dict_server))
+                    "set_server_details",
+                    json=json.dumps(deepcopy(self.expected_dict_server)),
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -129,25 +142,34 @@ class ServerTest(unittest.TestCase):
             side_effect=InternalException("Server not valid"),
         ):
             with patch.object(Server, "extract_server", return_value=self.server):
-                got = self.app.put("set_server_details", json=deepcopy(self.expected_dict_server))
+                got = self.app.put(
+                    "set_server_details", json=deepcopy(self.expected_dict_server)
+                )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(self.failed_dict, retrieved_json)
 
     def test_setServer_response(self):
         with patch.object(FrontendAPI.hardware_controller.__class__, "setServer"):
             with patch.object(Server, "extract_server", return_value=self.server):
-                got = self.app.put("set_server_details", json=deepcopy(self.expected_dict_server))
+                got = self.app.put(
+                    "set_server_details", json=deepcopy(self.expected_dict_server)
+                )
                 retrieved_json = json.loads(got.get_data())
                 # get rid of python native data types
                 self.assertEqual(retrieved_json, success_response)
 
-
     # only valid response
     def test_server_encoding(self):
         server: Server = Server()
-        expected = {'serverName': 'server', 'serverAddress': '192.168.0.81', 'serverStatus': True,
-                    'containerLimit': 20, 'selectedForExecution': True, 'serverResources': [1,2]}
-        with patch.object(Server, "getRessources", return_value=[1,2]):
+        expected = {
+            "serverName": "server",
+            "serverAddress": "192.168.0.81",
+            "serverStatus": True,
+            "containerLimit": 20,
+            "selectedForExecution": True,
+            "serverResources": [1, 2],
+        }
+        with patch.object(Server, "getRessources", return_value=[1, 2]):
             encoding = server.encode_server()
             self.assertEqual(encoding, expected)
 
@@ -156,19 +178,29 @@ class ServerTest(unittest.TestCase):
             with patch.object(Server, "getAddress", return_value="local"):
                 with patch.object(Server, "getStatus", return_value="online"):
                     with patch.object(Server, "getContainerLimit", return_value=20):
-                        with patch.object(Server, "isSelectedForExecution", return_value=True):
-                            with patch.object(Server, "getRessources", return_value=(1,2)):
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ):
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ):
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
 
     def test_server_encoding_call_address(self):
         with patch.object(Server, "getName", return_value="scooby"):
-            with patch.object(Server, "getAddress", return_value="local") as mock_method:
+            with patch.object(
+                Server, "getAddress", return_value="local"
+            ) as mock_method:
                 with patch.object(Server, "getStatus", return_value="online"):
                     with patch.object(Server, "getContainerLimit", return_value=20):
-                        with patch.object(Server, "isSelectedForExecution", return_value=True):
-                            with patch.object(Server, "getRessources", return_value=(1, 2)):
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ):
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ):
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
@@ -176,10 +208,16 @@ class ServerTest(unittest.TestCase):
     def test_server_encoding_call_status(self):
         with patch.object(Server, "getName", return_value="scooby"):
             with patch.object(Server, "getAddress", return_value="local"):
-                with patch.object(Server, "getStatus", return_value="online") as mock_method:
+                with patch.object(
+                    Server, "getStatus", return_value="online"
+                ) as mock_method:
                     with patch.object(Server, "getContainerLimit", return_value=20):
-                        with patch.object(Server, "isSelectedForExecution", return_value=True):
-                            with patch.object(Server, "getRessources", return_value=(1, 2)):
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ):
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ):
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
@@ -188,9 +226,15 @@ class ServerTest(unittest.TestCase):
         with patch.object(Server, "getName", return_value="scooby"):
             with patch.object(Server, "getAddress", return_value="local"):
                 with patch.object(Server, "getStatus", return_value="online"):
-                    with patch.object(Server, "getContainerLimit", return_value=20) as mock_method:
-                        with patch.object(Server, "isSelectedForExecution", return_value=True):
-                            with patch.object(Server, "getRessources", return_value=(1, 2)):
+                    with patch.object(
+                        Server, "getContainerLimit", return_value=20
+                    ) as mock_method:
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ):
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ):
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
@@ -200,8 +244,12 @@ class ServerTest(unittest.TestCase):
             with patch.object(Server, "getAddress", return_value="local"):
                 with patch.object(Server, "getStatus", return_value="online"):
                     with patch.object(Server, "getContainerLimit", return_value=20):
-                        with patch.object(Server, "isSelectedForExecution", return_value=True) as mock_method:
-                            with patch.object(Server, "getRessources", return_value=(1, 2)):
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ) as mock_method:
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ):
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
@@ -211,8 +259,12 @@ class ServerTest(unittest.TestCase):
             with patch.object(Server, "getAddress", return_value="local"):
                 with patch.object(Server, "getStatus", return_value="online"):
                     with patch.object(Server, "getContainerLimit", return_value=20):
-                        with patch.object(Server, "isSelectedForExecution", return_value=True):
-                            with patch.object(Server, "getRessources", return_value=(1, 2)) as mock_method:
+                        with patch.object(
+                            Server, "isSelectedForExecution", return_value=True
+                        ):
+                            with patch.object(
+                                Server, "getRessources", return_value=(1, 2)
+                            ) as mock_method:
                                 server: Server = Server()
                                 server.encode_server()
                                 assert mock_method.call_count > 0
@@ -220,14 +272,28 @@ class ServerTest(unittest.TestCase):
     def test_extraction_valid(self):
         # self.expected_dict_server_2 has resources as tuple, not list
         extracted = Server.extract_server(json.dumps(self.expected_dict_server_2))
-        self.assertEqual(extracted.getName(), self.expected_dict_server[keys.server_name])
-        self.assertEqual(extracted.getStatus(), self.expected_dict_server[keys.server_status_name])
+        self.assertEqual(
+            extracted.getName(), self.expected_dict_server[keys.server_name]
+        )
+        self.assertEqual(
+            extracted.getStatus(), self.expected_dict_server[keys.server_status_name]
+        )
         # server resources should be tuple -> first element in list
-        self.assertEqual(extracted.getRessources(), self.expected_dict_server_2[keys.server_resources_name])
-        self.assertEqual(extracted.getAddress(), self.expected_dict_server[keys.server_address_name])
-        self.assertEqual(extracted.getContainerLimit(), self.expected_dict_server[keys.container_limit_name])
-        self.assertEqual(extracted.isSelectedForExecution(),
-                         self.expected_dict_server[keys.selected_for_execution_name])
+        self.assertEqual(
+            extracted.getRessources(),
+            self.expected_dict_server_2[keys.server_resources_name],
+        )
+        self.assertEqual(
+            extracted.getAddress(), self.expected_dict_server[keys.server_address_name]
+        )
+        self.assertEqual(
+            extracted.getContainerLimit(),
+            self.expected_dict_server[keys.container_limit_name],
+        )
+        self.assertEqual(
+            extracted.isSelectedForExecution(),
+            self.expected_dict_server[keys.selected_for_execution_name],
+        )
 
     def test_extraction_invalid_name(self):
         to_dump = {

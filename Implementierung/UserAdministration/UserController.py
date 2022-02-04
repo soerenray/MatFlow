@@ -92,12 +92,11 @@ class UserController:
         overridePassword = overrideUser.getPassword()
 
         # now we build our api call address
-         
+
         overrideAddress = "http://localhost:8080/api/v1/users/" + overrideUsername
         getOverrideUser = requests.get(overrideAddress, auth=self.getAuth())
 
         # we check if the response is what we wanted
-
 
         if getOverrideUser.status_code != 200:
             raise UserExistsException
@@ -120,7 +119,6 @@ class UserController:
         patchOverrideUser = requests.patch(
             overrideAddress, json=overridePayload, auth=self.getAuth()
         )
-
 
         # we patch the user
 
@@ -179,7 +177,6 @@ class UserController:
         ):
             raise LoginException
 
-
         # and check the password
 
         if (
@@ -203,10 +200,9 @@ class UserController:
     ):
         # we check if the passwords are identical
 
-
         if signUpPassword != signUpPasswordRepetition:
             raise SignUpException
-        
+
         # we build our address
 
         createUserAddress = "http://localhost:8080/api/v1/users"

@@ -13,8 +13,11 @@ from Implementierung.UserAdministration.User import User
 class UserTest(unittest.TestCase):
     def setUp(self) -> None:
         self.user: User = User("scooby", "active", "reviewer", "scooby_snacks")
-        self.expected_encoding = {keys.user_name: "scooby", keys.user_status_name: "active",
-                                  keys.user_privilege_name: "reviewer"}
+        self.expected_encoding = {
+            keys.user_name: "scooby",
+            keys.user_status_name: "active",
+            keys.user_privilege_name: "reviewer",
+        }
         self.expected_extracting = deepcopy(self.expected_encoding)
         self.expected_extracting.update({keys.password_name: "scooby_snacks"})
 
@@ -69,5 +72,5 @@ class UserTest(unittest.TestCase):
             User.extract_user(json.dumps(to_dump))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

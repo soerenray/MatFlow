@@ -72,8 +72,12 @@ class User:
             User: decoded user object
         """
         decoded_json: dict = json.loads(json_details)
-        keys_to_check: List = [keys.user_name, keys.user_status_name, keys.user_privilege_name,
-                               keys.password_name]
+        keys_to_check: List = [
+            keys.user_name,
+            keys.user_status_name,
+            keys.user_privilege_name,
+            keys.password_name,
+        ]
         for key in keys_to_check:
             if key not in decoded_json:
                 raise ConverterException(key + "not found")
