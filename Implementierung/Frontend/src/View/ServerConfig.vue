@@ -32,8 +32,8 @@
     </div>
   </v-app>
 </template>
-<script>
-import serverConfig from "../Model/ServerConfig";
+<script lang="ts">
+import ServerConfig from "../Model/ServerConfig";
 
 const serverConfigObject = new ServerConfig(
   [
@@ -58,5 +58,17 @@ const serverConfigObject = new ServerConfig(
   ]
 );
 
-export default {};
+export default {
+  name: "ServerConfig",
+  computed: {
+    tableHeaders: {
+      get: function (): object[] {
+        return this.serverConfigObject.tableHeaders;
+      },
+      set: function (tableHeaders: object[]) {
+        this.serverConfigObject.tableHeaders = tableHeaders;
+      },
+    },
+  },
+};
 </script>
