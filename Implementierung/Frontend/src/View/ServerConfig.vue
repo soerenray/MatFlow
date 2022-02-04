@@ -28,7 +28,7 @@
               v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
               v-on:push="pushServer"
               v-on:reset="pullServers"
-              fileName="resources"
+              :fileName="item.serverName"
               :keyValuePairsFromParent="item.serverResources"
             ></edit-key-value-pairs>
           </v-dialog>
