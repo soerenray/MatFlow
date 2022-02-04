@@ -3,21 +3,18 @@ import Server from '../Classes/Server'
 class ServerConfig {
     private _tableHeaders: object[]
     private _servers: Server[]
-    private _serverName: string
-    private _serverAddres: string
+    private _resourcesDialog: boolean
 
     /**
     *
     * @param tableHeaders The tableHeaders
     * @param servers The servers
-    * @param serverName The serverName
-    * @param serverAddres The serverAddres
+    * @param resourcesDialog The resourcesDialog
     */
-    constructor(tableHeaders: object[], servers: Server[], serverName: string, serverAddres: string,) {
+    constructor(tableHeaders: object[], servers: Server[], resourcesDialog: boolean) {
         this._tableHeaders = tableHeaders
         this._servers = servers
-        this._serverName = serverName
-        this._serverAddres = serverAddres
+        this._resourcesDialog = resourcesDialog
     }
 
     /**
@@ -31,27 +28,18 @@ class ServerConfig {
     /**
     * Gets the servers
     * @returns _servers
-    */
+        */
     public get servers(): Server[] {
         return this._servers
     }
 
     /**
-    * Gets the serverName
-    * @returns _serverName
+    * Gets the resourcesDialog
+    * @returns _resourcesDialog
     */
-    public get serverName(): string {
-        return this._serverName
+    public get resourcesDialog(): boolean {
+        return this._resourcesDialog
     }
-
-    /**
-    * Gets the serverAddres
-    * @returns _serverAddres
-    */
-    public get serverAddres(): string {
-        return this._serverAddres
-    }
-
 
     /**
     * Sets the value of _tableHeaders
@@ -70,18 +58,12 @@ class ServerConfig {
     }
 
     /**
-    * Sets the value of _serverName
-    * @param serverName The new value of _serverName
+    * Sets the value of _resourcesDialog
+    * @param resourcesDialog The new value of _resourcesDialog
     */
-    public set serverName(serverName: string) {
-        this._serverName = serverName
-    }
-
-    /**
-    * Sets the value of _serverAddres
-    * @param serverAddres The new value of _serverAddres
-    */
-    public set serverAddres(serverAddres: string) {
-        this._serverAddres = serverAddres
+    public set resourcesDialog(resourcesDialog: boolean) {
+        this._resourcesDialog = resourcesDialog
     }
 }
+
+export default ServerConfig

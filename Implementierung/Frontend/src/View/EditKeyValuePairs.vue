@@ -4,12 +4,12 @@
       <v-card>
         <v-row>
           <v-col>
-            <v-row>
+            <v-row style="padding-top: 10px">
               <div>
                 <v-btn text color="primary"> Key name </v-btn>
               </div>
               <v-spacer></v-spacer>
-              <div style="padding-top: 15px; padding-right: 290px">
+              <div style="padding-right: 290px">
                 <v-btn text color="primary"> Value </v-btn>
               </div>
             </v-row>
@@ -23,7 +23,7 @@
               <v-row>
                 <div style="padding-left: 20px; padding-top: 5px">
                   <v-btn @click="resetChoosenConfigFileObject" color="yellow"
-                    >Pull files from Server</v-btn
+                    >Pull from Server</v-btn
                   >
                 </div>
                 <v-spacer></v-spacer>
@@ -31,7 +31,7 @@
                   <v-btn
                     @click="pushUpdatedConfigFilesToBackendServer"
                     color="blue"
-                    >Create new version</v-btn
+                    >Push to Server</v-btn
                   >
                 </div>
               </v-row>
@@ -91,11 +91,11 @@ export default {
   },
   methods: {
     resetChoosenConfigFileObject() {
-      this.$emit("resetChoosenConfigFileObject");
+      this.$emit("reset");
     },
     pushUpdatedConfigFilesToBackendServer() {
       this.changeAllKeyValuePairs();
-      this.$emit("pushUpdatedConfigFilesToBackendServer");
+      this.$emit("update", this.fileName);
     },
     changeAllKeyValuePairs() {
       let keyValuePairsAsTupleArray = this.keyValuePairs.map(
@@ -103,7 +103,7 @@ export default {
           return [keyValuePair.keyName, keyValuePair.keyValue];
         }
       );
-      this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray);
+      this.$emit("changeAllKeyValuePairs", this.fileName, keyValuePairsAsTupleArray);
     },
     initialiseKeyValuePairs() {
       editKeyValuePairsObject.keyValuePairs = [];
@@ -128,6 +128,9 @@ export default {
   },
   beforeCreate: function () {
     Vue.observable(editKeyValuePairsObject);
+  },
+  created: function() {
+    this.initialiseKeyValuePairs()
   },
   watch: {
     fileName: function () {

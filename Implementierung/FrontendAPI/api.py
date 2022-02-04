@@ -112,7 +112,8 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            server: Server = Server.extract_server(request)
+            json_decoded = request.get_json()
+            server: Server = Server.extract_server(json_decoded)
             FrontendAPI.hardware_controller.setServer(server)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -142,7 +143,8 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            user: User = User.extract_user(request)
+            json_details = request.get_json()
+            user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.overrideUser(user)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -159,7 +161,8 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            user: User = User.extract_user(request)
+            json_details = request.get_json()
+            user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.deleteUser(user)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -229,7 +232,7 @@ class FrontendAPI:
             version_note: str = decoded_json[keys.version_note_name]
             configs: List[
                 ReducedConfigFile
-            ] = ReducedConfigFile.extract_multiple_configs(request)
+            ] = ReducedConfigFile.extract_multiple_configs(request.get_json())
             FrontendAPI.workflow_manager.create_new_version_of_workflow_instance(
                 wf_instance_name, configs, version_note
             )
@@ -275,7 +278,9 @@ class FrontendAPI:
             decoded_json: dict = json.loads(request.get_json())
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
-            files: Path = ReducedConfigFile.extract_multiple_config_files(request)
+            files: Path = ReducedConfigFile.extract_multiple_config_files(
+                request.get_json()
+            )
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(
                 template_name, wf_name, files
             )
@@ -351,7 +356,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            template: Template = Template.extract_template(request)
+            template: Template = Template.extract_template(request.get_json())
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -401,7 +406,9 @@ class FrontendAPI:
             File: picture of dag in .png format
         """
         try:
-            contemporary_template: Template = Template.extract_template(request)
+            contemporary_template: Template = Template.extract_template(
+                request.get_json()
+            )
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = (
                 FrontendAPI.workflow_manager.get_dag_representation_from_template(
