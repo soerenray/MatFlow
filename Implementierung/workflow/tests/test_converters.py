@@ -1,10 +1,11 @@
+from __future__ import annotations
 import json
 import unittest
 from pathlib import Path
+from typing import List
 from unittest import mock
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, mock_open
 import flask
-
 from Implementierung.ExceptionPackage.MatFlowException import ConverterException
 from Implementierung.FrontendAPI import keys, utilities
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
@@ -129,6 +130,10 @@ class ReducedConfigTest(unittest.TestCase):
     def setUp(self) -> None:
         self.reduced_config: ReducedConfigFile = ReducedConfigFile("scooby", json.loads(json.dumps([("3", "4")])))
         self.json_dumped = json.dumps({keys.config_file_name: "scooby", keys.key_value_pairs_name: [("3", "4")]})
+        self.multipleConfigsKeyPairs = json.dumps({keys.config_files: [{keys.config_file_name: "scooby",
+                                                                        keys.key_value_pairs_name: [("3", "4")]}]})
+        self.files_dumped = json.dumps({keys.config_files: [{keys.config_file_name: "scooby",
+                                                            keys.file_key: "doo"}]})
 
     def test_encode_call_get_file(self):
         with patch.object(ReducedConfigFile, "get_file_name", return_value="scooby") as mock_method:
@@ -150,7 +155,6 @@ class ReducedConfigTest(unittest.TestCase):
                 encoded = self.reduced_config.encode_config()
                 self.assertEqual(encoded, expected)
 
-    # TODO alle extract Methoden testen
     def test_extract_config_valid(self):
         config = ReducedConfigFile.extract_config(self.json_dumped)
         self.assertEqual(config.get_file_name(), self.reduced_config.get_file_name())
@@ -164,12 +168,88 @@ class ReducedConfigTest(unittest.TestCase):
         with self.assertRaises(ConverterException):
             ReducedConfigFile.extract_config(json.dumps({keys.config_file_name: "je"}))
 
-    # TODO andere multiple extracts Methoden
+    def test_extract_configs_invalid_pairs(self):
+        dumped = json.dumps({keys.config_files: [{keys.config_file_name: "scooby"}]})
+        with self.assertRaises(ConverterException):
+            ReducedConfigFile.extract_multiple_configs(dumped)
 
+    def test_extract_configs_invalid_name(self):
+        dumped = json.dumps({keys.config_files: [{keys.key_value_pairs_name: [("3", "4")]}]})
+        with self.assertRaises(ConverterException):
+            ReducedConfigFile.extract_multiple_configs(dumped)
+
+    def test_extract_configs_invalid_main_key(self):
+        dumped = json.dumps({keys.dag_definition_name: "Pluto"})
+        with self.assertRaises(ConverterException):
+            ReducedConfigFile.extract_multiple_configs(dumped)
+
+    def test_extract_configs_valid(self):
+        configs: List[ReducedConfigFile] = ReducedConfigFile.extract_multiple_configs(self.multipleConfigsKeyPairs)
+        # only 1 object
+        self.assertEqual(len(configs), 1)
+        self.assertEqual(configs[0].get_file_name(), self.reduced_config.get_file_name())
+        self.assertEqual(configs[0].get_key_value_pairs(), self.reduced_config.get_key_value_pairs())
+
+    def test_extract_config_files_call_write(self):
+        with patch.object(utilities, "create_dir", return_value = "/"):
+            with patch.object(utilities, "decode_file", return_value = "encoded_file"):
+                with patch("builtins.open", mock_open(read_data="data")) as mock_file:
+                    ReducedConfigFile.extract_multiple_config_files(self.files_dumped)
+                    mock_file.assert_called_with("/scooby", "wb")
+
+    def test_extract_config_files_call_create_dir(self):
+        with patch.object(utilities, "create_dir", return_value = "/") as mock_method:
+            with patch.object(utilities, "decode_file", return_value="encoded_file"):
+                with patch("builtins.open", mock_open(read_data="data")):
+                    ReducedConfigFile.extract_multiple_config_files(self.files_dumped)
+                    assert mock_method.call_count > 0
+
+    def test_extract_config_files_call_decode_file(self):
+        with patch.object(utilities, "create_dir", return_value="/"):
+            with patch.object(utilities, "decode_file", return_value ="encoded_file") as mock_method:
+                with patch("builtins.open", mock_open(read_data="data")):
+                    ReducedConfigFile.extract_multiple_config_files(self.files_dumped)
+                    assert mock_method.call_count > 0
+
+    def test_extract_config_files_valid(self):
+        with patch.object(utilities, "create_dir", return_value ="/"):
+            with patch.object(utilities, "decode_file", return_value ="encoded_file"):
+                with patch("builtins.open", mock_open(read_data="data")):
+                    path: Path = ReducedConfigFile.extract_multiple_config_files(self.files_dumped)
+                    self.assertEqual(path, Path("/"))
+
+    def test_extract_config_files_invalid_main_key(self):
+        to_dump = json.dumps({})
+        with self.assertRaises(ConverterException):
+            with patch.object(utilities, "create_dir", return_value ="/"):
+                with patch.object(utilities, "decode_file", return_value ="encoded_file"):
+                    with patch("builtins.open", mock_open(read_data="data")):
+                        path: Path = ReducedConfigFile.extract_multiple_config_files(to_dump)
+                        self.assertEqual(path, Path("/"))
+
+    def test_extract_config_files_invalid_file_key(self):
+        to_dump = json.dumps({keys.config_files: [{keys.config_file_name: "scooby"}]})
+        with self.assertRaises(ConverterException):
+            with patch.object(utilities, "create_dir", return_value ="/"):
+                with patch.object(utilities, "decode_file", return_value ="encoded_file"):
+                    with patch("builtins.open", mock_open(read_data="data")):
+                        path: Path = ReducedConfigFile.extract_multiple_config_files(to_dump)
+                        self.assertEqual(path, Path("/"))
+
+    def test_extract_config_files_invalid_file_name_key(self):
+        to_dump = json.dumps({keys.config_files: [{keys.file_key: "doo"}]})
+        with self.assertRaises(ConverterException):
+            with patch.object(utilities, "create_dir", return_value="/"):
+                with patch.object(utilities, "decode_file", return_value="encoded_file"):
+                    with patch("builtins.open", mock_open(read_data="data")):
+                        path: Path = ReducedConfigFile.extract_multiple_config_files(to_dump)
+                        self.assertEqual(path, Path("/"))
+                        
 
 class FrontendVersionTest:
     def test_sth(self):
         pass
+
 
 if __name__ == '__main__':
     unittest.main()
