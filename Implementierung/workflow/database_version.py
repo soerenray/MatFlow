@@ -1,7 +1,6 @@
 from pathlib import Path
 from os import listdir
 from typing import List, Tuple
-
 from Implementierung.workflow.workflow_version import WorkflowVersion
 from Implementierung.workflow.version_number import VersionNumber
 from Implementierung.workflow.frontend_version import FrontendVersion

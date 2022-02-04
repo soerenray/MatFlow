@@ -1,10 +1,31 @@
 \section{Entwurfsumentscheidungen}
-
+    	
+  
+\subsection{Memento} 	
+    	 The memento pattern is used to set a view to the default state. Every view has its default
+    	 state that is created at the start of the view. When a user makes an input, the view and
+    	 its state changes. Whenever a user sends a request to the backend-server, the view should
+    	 be reset, so that no mistakes are made on future requests. The memento pattern comes in
+    	 place and sets the default state of the view and the view displays it accordingly. In
+    	 the future it would be possible to safe inputs and load them as the view's new state.
+    	\begin{figure}[H]
+            \label{API}
+            \centerline{\includegraphics[scale=0.5]{res/Memento.png}}
+            \caption{Memento package}
+    	\end{figure}
+    	\newpage
+    	
 \subsection{JSON Converter}
     \subsubsection{Frontend}
-    % TODO Alessandro
-    bla
-    \subsubsection{API}
+    	A controler handels every request to convert a JSON-object into a class object.
+    	The controler takes in a string with the classname and the JSON-object, calls the 
+    	method create...ObjectFromJSON in the corresponding class and returns the created object. 
+    	\begin{figure}[H]
+            \label{API}
+            \centerline{\includegraphics[scale=0.5]{res/Controler.png}}
+            \caption{Controler package}
+    	\end{figure}
+    \subsubsection{API} \label{json_backend}
         \begin{figure}[H]
             \label{API}
             \centerline{\includegraphics[scale=0.5]{res/api.drawio.pdf}}

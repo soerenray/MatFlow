@@ -30,13 +30,14 @@ class TestConfigFile(TestCase):
             ],
         )
 
-        # restore the content of test1
-
+        # prepare the contents of the backup file
         self.back_up_path = Path("test_files/config_file/test1backUp.conf")
         backup_file1: TextIO = open(self.back_up_path)
         self.config1_contend = backup_file1.read()
         backup_file1.close()
 
+    def tearDown(self):
+        # restore the content of test1
         file1: TextIO = open(self.config1.get_file(), "w")
         file1.write(self.config1_contend)
         file1.close()

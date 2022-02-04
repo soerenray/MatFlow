@@ -1,5 +1,4 @@
 from typing import List
-
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 from Implementierung.workflow.workflow_version import WorkflowVersion
