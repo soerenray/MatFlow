@@ -35,6 +35,29 @@ let wf2Conf1: ConfigFile = new ConfigFile('conf1', [['key1', 'val1']])
 let wf2Conf2: ConfigFile = new ConfigFile('conf2', [['key1', 'val1'], ['key2', 'val2']])
 let wf2Conf3: ConfigFile = new ConfigFile('conf3', [['key1', 'val1'], ['key2', 'val2'], ['key3', 'val3']])
 
+let servers = [
+    new Server(
+        "123.123.11.1",
+        "running",
+        5,
+        true,
+        "kit-materialwissenschaften",
+        [["cpu1", "50%"]]
+    ),
+]
+
+function pullServers2() {
+    const server = servers[0]
+    return [
+        new Server(JSON.parse(JSON.stringify(server.serverAddress)), JSON.parse(JSON.stringify(server.serverStatus)), 
+        JSON.parse(JSON.stringify(server.containerLimit)), JSON.parse(JSON.stringify(server.selectedForExecution)), 
+        JSON.parse(JSON.stringify(server.serverName)), JSON.parse(JSON.stringify(server.serverResources)))]
+}
+
+function pushServer(server: Server) {
+    servers = [server]
+}
+
 function deepCopyConfigFile(configFile: ConfigFile): ConfigFile {
     return new ConfigFile(JSON.parse(JSON.stringify(configFile.configFileName)), JSON.parse(JSON.stringify(configFile.keyValuePairs)))
 }
@@ -109,4 +132,4 @@ let users: User[] = [new User('name1', 'suspended', 'administrator'), new User('
 
 // pullServers
 // wont be implemented at the moement (time pressure)
-export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser }
+export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer }
