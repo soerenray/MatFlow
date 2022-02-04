@@ -32,9 +32,11 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import BackendServerCommunicator from "../Controler/BackendServerCommunicator"
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
 
+const backendServerCommunicatorObject = new BackendServerCommunicator()
 const serverConfigObject = new ServerConfig(
   [
     { text: "Server location name", value: "serverName" },
