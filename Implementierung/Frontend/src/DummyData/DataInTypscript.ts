@@ -46,6 +46,16 @@ let servers = [
     ),
 ]
 
+function pullServers2() {
+    const server = servers[0]
+    return [
+        new Server(server.serverAddress, server.serverStatus, server.containerLimit, server.selectedForExecution, server.serverName, server.serverResources)]
+}
+
+function pushServer(server: Server) {
+    servers = [server]
+}
+
 function deepCopyConfigFile(configFile: ConfigFile): ConfigFile {
     return new ConfigFile(JSON.parse(JSON.stringify(configFile.configFileName)), JSON.parse(JSON.stringify(configFile.keyValuePairs)))
 }
@@ -120,4 +130,4 @@ let users: User[] = [new User('name1', 'suspended', 'administrator'), new User('
 
 // pullServers
 // wont be implemented at the moement (time pressure)
-export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser, servers}
+export { templateNames, workflowInstancesNameAndConfigFilesName, getWfConf, setWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer }
