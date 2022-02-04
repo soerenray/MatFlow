@@ -17,9 +17,15 @@
         <template v-slot:[`item.selectedForExecution`]="{}"
           ><v-checkbox disabled></v-checkbox
         ></template>
-        <template v-slot:[`item.serverResources`]="{}"
-          ><v-btn icon><memory-icon></memory-icon></v-btn
-        ></template>
+        <template v-slot:[`item.serverResources`]="{}">
+          <v-dialog v-model="dialog" width="500">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-on="on" v-bind="attrs" icon
+                ><memory-icon></memory-icon
+              ></v-btn>
+            </template>
+          </v-dialog>
+        </template>
         <template v-slot:[`item.apply`]="{ item }"
           ><v-btn @click="pushServerAndPullServers(item)" color="green" outlined
             >apply changes</v-btn
@@ -51,6 +57,11 @@ const serverConfigObject = new ServerConfig(
 
 export default {
   name: "ServerConfig",
+  data: function () {
+    return {
+      dialog: false,
+    };
+  },
   methods: {
     pushServerAndPullServers(server: Server) {
       this.pushServer(server);
