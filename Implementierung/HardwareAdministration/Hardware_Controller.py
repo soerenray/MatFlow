@@ -7,14 +7,12 @@ from Implementierung.HardwareAdministration.Server import Server
 class Hardware_Controller:
     _Server: Server
 
-
-
-# Constructor
+    # Constructor
     def __init__(self):
         standardServer = Server()
         self._Server = standardServer
 
-# Methods:
+    # Methods:
 
     # getServer method gets the standard server via his ip
     def getServer(self):
@@ -22,18 +20,16 @@ class Hardware_Controller:
         self._Server = tempServerData.get_Server()
         return self._Server
 
-    # writeServer 
+    # writeServer
     def writeServer(self, newServer: Server):
         tempServerData = ServerData()
         tempServerData.write_Server(newServer)
 
-    
     # setCPUResources
     def setResources(self, newResource: resource, newSoft: int, newHard: int):
-        resource.setrlimit(newResource,newSoft,newHard)
+        resource.setrlimit(newResource, newSoft, newHard)
 
-
-# Methods
+    # Methods
 
     # method that gets a Server and adds it to the ServerList
     def addServer(Server):
@@ -74,7 +70,3 @@ class Hardware_Controller:
 
     def setServer(self, server: Server):
         self.Server = server
-
-
-
-
