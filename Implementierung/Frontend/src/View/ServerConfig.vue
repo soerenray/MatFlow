@@ -18,7 +18,7 @@
           ><v-checkbox disabled></v-checkbox
         ></template>
         <template v-slot:[`item.serverResources`]="{ item }">
-          <v-dialog width="700px" v-model="dialog">
+          <v-dialog width="700px" v-model="resourcesDialog">
             <template v-slot:activator="{ on, attrs }">
               <v-btn v-on="on" v-bind="attrs" icon
                 ><memory-icon></memory-icon
@@ -60,28 +60,24 @@ const serverConfigObject = new ServerConfig(
     { text: "Configurate server resources", value: "serverResources" },
     { text: "apply changes", value: "apply" },
   ],
-  []
+  [],
+  false
 );
 
 export default {
   components: { EditKeyValuePairs },
   name: "ServerConfig",
-  data: function () {
-    return {
-      dialog: false,
-    };
-  },
   methods: {
     pushServerAndPullServers() {
       this.pushServer();
       this.pullServers();
     },
     pullServers() {
-      console.log(backendServerCommunicatorObject.pullServers())
+      console.log(backendServerCommunicatorObject.pullServers());
       this.servers = backendServerCommunicatorObject.pullServers();
     },
     pushServer() {
-      console.log('push')
+      console.log("push");
       backendServerCommunicatorObject.pushServer(this.servers[0]);
     },
     changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
@@ -108,6 +104,14 @@ export default {
       },
       set: function (servers: Server[]) {
         serverConfigObject.servers = servers;
+      },
+    },
+    resourcesDialog: {
+      get: function (): boolean {
+        return serverConfigObject.resourcesDialog;
+      },
+      set: function (resourcesDialog: boolean) {
+        serverConfigObject.resourcesDialog = resourcesDialog;
       },
     },
   },
