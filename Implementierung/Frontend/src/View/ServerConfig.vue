@@ -33,30 +33,30 @@
   </v-app>
 </template>
 <script>
-export default {
-  data: function () {
-    return {
-      header: [
-        { text: "Server location name", value: "name" },
-        { text: "Address", value: "address" },
-        { text: "Status", value: "status" },
-        { text: "Container limit", value: "limit" },
-        { text: "Select server for execution", value: "server" },
-        { text: "dag-folder location", value: "dagLocation" },
-        { text: "Configurate server resources", value: "serverResources" },
-        { text: "apply changes", value: "apply" },
-        { text: "delete server", value: "delete" },
-      ],
-      items: [
-        {
-          name: "kit-materialwissenschaften",
-          address: "123.123.11.1",
-          status: "running",
-          limit: 5,
-          dagLocation: "home/airflow/dags",
-        },
-      ],
-    };
-  },
-};
+import serverConfig from "../Model/ServerConfig";
+
+const serverConfigObject = new ServerConfig(
+  [
+    { text: "Server location name", value: "name" },
+    { text: "Address", value: "address" },
+    { text: "Status", value: "status" },
+    { text: "Container limit", value: "limit" },
+    { text: "Select server for execution", value: "server" },
+    { text: "dag-folder location", value: "dagLocation" },
+    { text: "Configurate server resources", value: "serverResources" },
+    { text: "apply changes", value: "apply" },
+    { text: "delete server", value: "delete" },
+  ],
+  [
+    {
+      name: "kit-materialwissenschaften",
+      address: "123.123.11.1",
+      status: "running",
+      limit: 5,
+      dagLocation: "home/airflow/dags",
+    },
+  ]
+);
+
+export default {};
 </script>

@@ -3,6 +3,7 @@ import Server from '../Classes/Server'
 class ServerConfig {
     private _tableHeaders: object[]
     private _servers: Server[]
+
     /**
     *
     * @param tableHeaders The tableHeaders
