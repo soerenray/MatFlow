@@ -17,9 +17,22 @@
         <template v-slot:[`item.selectedForExecution`]="{}"
           ><v-checkbox disabled></v-checkbox
         ></template>
-        <template v-slot:[`item.serverResources`]="{}"
-          ><v-btn icon><memory-icon></memory-icon></v-btn
-        ></template>
+        <template v-slot:[`item.serverResources`]="{ item }">
+          <v-dialog width="700px" v-model="dialog">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-on="on" v-bind="attrs" icon
+                ><memory-icon></memory-icon
+              ></v-btn>
+            </template>
+            <edit-key-value-pairs
+              v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+              v-on:update="pushServer"
+              v-on:reset="pullServers"
+              :fileName="item.serverName"
+              :keyValuePairsFromParent="item.serverResources"
+            ></edit-key-value-pairs>
+          </v-dialog>
+        </template>
         <template v-slot:[`item.apply`]="{ item }"
           ><v-btn @click="pushServerAndPullServers(item)" color="green" outlined
             >apply changes</v-btn
@@ -31,6 +44,7 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import EditKeyValuePairs from "../View/EditKeyValuePairs.vue";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
@@ -50,14 +64,33 @@ const serverConfigObject = new ServerConfig(
 );
 
 export default {
+  components: { EditKeyValuePairs },
   name: "ServerConfig",
+  data: function () {
+    return {
+      dialog: false,
+    };
+  },
   methods: {
-    pushServerAndPullServers(server: Server) {
-      this.pushServer(server);
+    pushServerAndPullServers() {
+      this.pushServer();
+      this.pullServers();
+    },
+    pullServers() {
+      console.log(backendServerCommunicatorObject.pullServers())
       this.servers = backendServerCommunicatorObject.pullServers();
     },
-    pushServer(server: Server) {
-      backendServerCommunicatorObject.pushServer(server);
+    pushServer() {
+      console.log('push')
+      backendServerCommunicatorObject.pushServer(this.servers[0]);
+    },
+    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
+      this.servers[0].serverResources.forEach(
+        (keyValuePair: [string, string], index: number) => {
+          keyValuePair[0] = newKeyValuePairs[index][0];
+          keyValuePair[1] = newKeyValuePairs[index][1];
+        }
+      );
     },
   },
   computed: {

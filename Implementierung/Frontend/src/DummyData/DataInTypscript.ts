@@ -49,7 +49,9 @@ let servers = [
 function pullServers2() {
     const server = servers[0]
     return [
-        new Server(server.serverAddress, server.serverStatus, server.containerLimit, server.selectedForExecution, server.serverName, server.serverResources)]
+        new Server(JSON.parse(JSON.stringify(server.serverAddress)), JSON.parse(JSON.stringify(server.serverStatus)), 
+        JSON.parse(JSON.stringify(server.containerLimit)), JSON.parse(JSON.stringify(server.selectedForExecution)), 
+        JSON.parse(JSON.stringify(server.serverName)), JSON.parse(JSON.stringify(server.serverResources)))]
 }
 
 function pushServer(server: Server) {
