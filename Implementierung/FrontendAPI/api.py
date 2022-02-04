@@ -278,7 +278,9 @@ class FrontendAPI:
             decoded_json: dict = json.loads(request.get_json())
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
-            files: Path = ReducedConfigFile.extract_multiple_config_files(request.get_json())
+            files: Path = ReducedConfigFile.extract_multiple_config_files(
+                request.get_json()
+            )
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(
                 template_name, wf_name, files
             )
@@ -404,7 +406,9 @@ class FrontendAPI:
             File: picture of dag in .png format
         """
         try:
-            contemporary_template: Template = Template.extract_template(request.get_json())
+            contemporary_template: Template = Template.extract_template(
+                request.get_json()
+            )
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = (
                 FrontendAPI.workflow_manager.get_dag_representation_from_template(

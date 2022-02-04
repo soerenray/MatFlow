@@ -14,6 +14,7 @@ class ReducedConfigFile:
     """
     This class holds all information to represent a config-file in the frontend.
     """
+
     __file_name: str
     __key_value_pairs: List[Tuple[str, str]]
 
@@ -123,7 +124,10 @@ class ReducedConfigFile:
                 raise ConverterException("no config file name")
             if keys.key_value_pairs_name not in json_config:
                 raise ConverterException("no key value pairs")
-            config = ReducedConfigFile(json_config[keys.config_file_name], json_config[keys.key_value_pairs_name])
+            config = ReducedConfigFile(
+                json_config[keys.config_file_name],
+                json_config[keys.key_value_pairs_name],
+            )
             configs.append(config)
         return configs
 
@@ -141,8 +145,11 @@ class ReducedConfigFile:
         decoded_json: dict = json.loads(json_details)
         if keys.config_files not in decoded_json:
             raise ConverterException("no files key")
-        save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, utilities.temp_in_path,
-                                                          keys.config_save_path))
+        save_dir: str = utilities.create_dir(
+            os.path.join(
+                utilities.parent_path, utilities.temp_in_path, keys.config_save_path
+            )
+        )
         lists_of_encoded_configs: List[dict] = decoded_json[keys.config_files]
         # config files are encoded like this: {configFiles: [{configFileName: "bla", file: "encoded_file"}, {..}, ..]}
         for encoded_config in lists_of_encoded_configs:
@@ -152,6 +159,6 @@ class ReducedConfigFile:
                 raise ConverterException("no file provided")
             config_file = utilities.decode_file(encoded_config[keys.file_key])
             config_name = encoded_config[keys.config_file_name]
-            with open(os.path.join(save_dir, config_name), 'wb') as file:
+            with open(os.path.join(save_dir, config_name), "wb") as file:
                 file.write(config_file)
         return Path(save_dir)

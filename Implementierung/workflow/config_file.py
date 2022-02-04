@@ -9,6 +9,7 @@ class ConfigFile(ReducedConfigFile):
     This is a subclass of ReducedConfigFile and additionally holds the config-file
     itself as well as the name of the associated workflow instance.
     """
+
     __file: Path
 
     def __init__(self, file_name: str, file: Path):
@@ -58,13 +59,20 @@ class ConfigFile(ReducedConfigFile):
         """
         if self.get_file_name() != updated_file.get_file_name():
             # for some reason file name and update name don't match
-            raise InternalException("Internal Error: Names of the file: " + self.get_file_name() + " and the update: "
-                            + updated_file.get_file_name() + " don't match.")
+            raise InternalException(
+                "Internal Error: Names of the file: "
+                + self.get_file_name()
+                + " and the update: "
+                + updated_file.get_file_name()
+                + " don't match."
+            )
         else:  # if the names match we can apply the changes
             changes: List[Tuple[str, str, str, str]] = self.find_changes(updated_file)
             self.__write_changes_to_file(changes)
 
-    def find_changes(self, updated_file: ReducedConfigFile) -> List[Tuple[str, str, str, str]]:
+    def find_changes(
+        self, updated_file: ReducedConfigFile
+    ) -> List[Tuple[str, str, str, str]]:
         """
         Compares the key-value-pairs of a given ReducedConfig file to those of self. That means the first given pair is
         compared to the first pair of the self, both second pairs are compared and so on. Pairs of pairs that don't
@@ -73,12 +81,17 @@ class ConfigFile(ReducedConfigFile):
         """
         if len(self.get_key_value_pairs()) == len(updated_file.get_key_value_pairs()):
             result: List[Tuple[str, str, str, str]] = []
-            for old_pair, new_pair in zip(self.get_key_value_pairs(), updated_file.get_key_value_pairs()):
+            for old_pair, new_pair in zip(
+                self.get_key_value_pairs(), updated_file.get_key_value_pairs()
+            ):
                 if old_pair != new_pair:  # otherwise, there is no change
                     result.append((old_pair[0], new_pair[0], old_pair[1], new_pair[1]))
             return result
         else:
-            raise InternalException("Internal Error: Wrong amount of update-pairs in " + self.get_file_name())
+            raise InternalException(
+                "Internal Error: Wrong amount of update-pairs in "
+                + self.get_file_name()
+            )
 
     # private methods
 
@@ -92,13 +105,19 @@ class ConfigFile(ReducedConfigFile):
         with self.__file.open() as file:
             lines: List[str] = file.readlines()
             for line in lines:
-                if line[0] != '#':  # otherwise, line is comment
-                    words: List[str] = line.split(' ')
-                    if len(words) >= 3 and words[1] == "=":  # the general expression is met
+                if line[0] != "#":  # otherwise, line is comment
+                    words: List[str] = line.split(" ")
+                    if (
+                        len(words) >= 3 and words[1] == "="
+                    ):  # the general expression is met
                         key: str = words[0]
                         value_semicolon: str = words[2]
-                        if len(value_semicolon) >= 2 and value_semicolon.__contains__(";"):  # pair is terminated by ';'
-                            value: str = value_semicolon.split(";")[0]  # only str before ';' is of interest
+                        if len(value_semicolon) >= 2 and value_semicolon.__contains__(
+                            ";"
+                        ):  # pair is terminated by ';'
+                            value: str = value_semicolon.split(";")[
+                                0
+                            ]  # only str before ';' is of interest
                             result.append((key, value))
 
         return result
@@ -106,7 +125,7 @@ class ConfigFile(ReducedConfigFile):
     def __write_changes_to_file(self, changes: List[Tuple[str, str, str, str]]):
         """
         Takes a list of format (old_key, new_key, old_value, new_value) and replaces the old pairs in the file of the
-        self with the corresponding new pairs. In this process the contents of the whole file are loaded into the 
+        self with the corresponding new pairs. In this process the contents of the whole file are loaded into the
         working memory.
         An error is thrown if one of the old pairs isn't found in the file.
         """
@@ -117,8 +136,12 @@ class ConfigFile(ReducedConfigFile):
             for old_key, new_key, old_value, new_value in changes:
                 old_line: str = old_key + " = " + old_value + ";"
                 if old_line not in content:
-                    raise InternalException("Internal Error: Pair: " + str((old_key, old_value)) +
-                                    "doesn't occur in file: " + self.get_file_name())
+                    raise InternalException(
+                        "Internal Error: Pair: "
+                        + str((old_key, old_value))
+                        + "doesn't occur in file: "
+                        + self.get_file_name()
+                    )
                 new_line: str = new_key + " = " + new_value + ";"
                 content = content.replace(old_line, new_line)
             file = open(self.get_file(), "w")

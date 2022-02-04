@@ -11,8 +11,11 @@ from .reduced_config_file import ReducedConfigFile
 from .config_file import ConfigFile
 from .version_number import VersionNumber
 from Implementierung.workflow.workflow_instance import WorkflowInstance
-from Implementierung.ExceptionPackage.MatFlowException import DoubleTemplateNameException, InternalException, \
-    DoubleWorkflowInstanceNameException
+from Implementierung.ExceptionPackage.MatFlowException import (
+    DoubleTemplateNameException,
+    InternalException,
+    DoubleWorkflowInstanceNameException,
+)
 from Implementierung.Database.TemplateData import TemplateData
 from Implementierung.Database.WorkflowData import WorkflowData
 
@@ -22,6 +25,7 @@ class WorkflowManager:
     This class provides a singleton object that receives all requests addressed to this package.
     This class is also communicating with the API of Airflow as well as with the Database package.
     """
+
     # exceptions are missing TODO
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
@@ -39,8 +43,8 @@ class WorkflowManager:
     def get_instance(cls):
         """Returns the singleton object of the WorkflowManager class.
 
-            Returns the singleton object if already existing otherwise calls the private constructor.
-            """
+        Returns the singleton object if already existing otherwise calls the private constructor.
+        """
         if cls.__instance is None:
             # Creating new instance
             cls.__instance = cls.__new__(cls)
@@ -74,7 +78,8 @@ class WorkflowManager:
         template.set_dag_definition_file(new_path)
 
     def create_workflow_instance_from_template(
-            self, template_name: str, workflow_instance_name: str, config_files: Path):
+        self, template_name: str, workflow_instance_name: str, config_files: Path
+    ):
         """Causes the instantiation of a workflow instance under the use of a workflow template.
 
         Args:
@@ -86,23 +91,30 @@ class WorkflowManager:
         # get the template object corresponding to the name
         template_path: Path = self.__template_base_directory / (template_name + ".py")
         if not os.path.isfile(template_path):
-            raise InternalException("Internal Error: " + template_name + " isn't a known template name.")
+            raise InternalException(
+                "Internal Error: " + template_name + " isn't a known template name."
+            )
         template: Template = Template(template_name, template_path)
 
         # check if the workflow_instance_name is already used
         existing_names: List[str] = os.listdir(self.__versions_base_directory)
-        if workflow_instance_name in existing_names:  # otherwise, the name is a valid identifier
+        if (
+            workflow_instance_name in existing_names
+        ):  # otherwise, the name is a valid identifier
             raise DoubleWorkflowInstanceNameException("")
 
         # try to create a WorkflowInstance object
         workflow_instance: WorkflowInstance = WorkflowInstance(
-            workflow_instance_name, template.get_dag_definition_file(), config_files)  # maybe EmptyDagFolderException
+            workflow_instance_name, template.get_dag_definition_file(), config_files
+        )  # maybe EmptyDagFolderException
 
         # now we create a new directory for the instance
         instance_path: Path = self.__versions_base_directory / workflow_instance_name
         os.mkdir(instance_path)
         # dag_path: Path = instance_path / (template_name + ".py")
-        shutil.copy(template.get_dag_definition_file(), instance_path)  # copy dag definition file
+        shutil.copy(
+            template.get_dag_definition_file(), instance_path
+        )  # copy dag definition file
 
         # under that dir we create another called "current_conf" that contains all files for the execution
         # the version of the file always matches the current version of the wf instance
@@ -134,7 +146,9 @@ class WorkflowManager:
             Path: Image with visual representation of the given dag
 
         """
-        return Path("workflow/tests/dummy_dag.png")  # TODO this is only a dummy implementation
+        return Path(
+            "workflow/tests/dummy_dag.png"
+        )  # TODO this is only a dummy implementation
 
     def get_template_names(self) -> List[str]:
         """Returns the names of all templates.
@@ -145,8 +159,12 @@ class WorkflowManager:
             List[str]: Collection of all template names
 
         """
-        file_names: List[str] = os.listdir(self.__template_base_directory)  # still has name extensions
-        return [os.path.splitext(file_name)[0] for file_name in file_names]  # removed extensions
+        file_names: List[str] = os.listdir(
+            self.__template_base_directory
+        )  # still has name extensions
+        return [
+            os.path.splitext(file_name)[0] for file_name in file_names
+        ]  # removed extensions
 
     def get_template_from_name(self, template_name: str) -> Template:
         """Returns template identified by the given name.
@@ -160,8 +178,14 @@ class WorkflowManager:
             Template: Desired template
 
         """
-        if not os.listdir(self.__template_base_directory).__contains__(template_name + ".py"):
-            raise InternalException("Internal Error: Selected template: " + template_name + " doesn't exist.")
+        if not os.listdir(self.__template_base_directory).__contains__(
+            template_name + ".py"
+        ):
+            raise InternalException(
+                "Internal Error: Selected template: "
+                + template_name
+                + " doesn't exist."
+            )
         # otherwise, the template is available
         template_path: Path = self.__template_base_directory / (template_name + ".py")
         return Template(template_name, template_path)
@@ -179,7 +203,8 @@ class WorkflowManager:
         return self.__workflow_data.get_names_of_workflows_and_config_files()
 
     def get_key_value_pairs_from_config_file(
-            self, workflow_instance_name: str, config_file_name: str) -> ReducedConfigFile:
+        self, workflow_instance_name: str, config_file_name: str
+    ) -> ReducedConfigFile:
         """Returns the collection of all key value pairs in the specified config-file.
 
         Requests the desired config-file from the current version of the named workflow instance from the database.
@@ -194,12 +219,19 @@ class WorkflowManager:
             List[Tuple[str, str]]: The list of key value pairs in the config file
 
         """
-        file_path: Path = self.__workflow_data.get_config_file_from_active_workflow_instance(
-            workflow_instance_name, config_file_name)
+        file_path: Path = (
+            self.__workflow_data.get_config_file_from_active_workflow_instance(
+                workflow_instance_name, config_file_name
+            )
+        )
         return ConfigFile(config_file_name, file_path)
 
     def create_new_version_of_workflow_instance(
-            self, workflow_instance_name: str, changed_files: List[ReducedConfigFile], version_note: str):
+        self,
+        workflow_instance_name: str,
+        changed_files: List[ReducedConfigFile],
+        version_note: str,
+    ):
         """Causes the creation of a new version of the workflow instance in the database.
 
         The new version is obtained by overwriting the given changed files and adopting all other files of the
@@ -214,19 +246,33 @@ class WorkflowManager:
         """
         # first check if the wf instance exists
         if workflow_instance_name not in os.listdir(self.__versions_base_directory):
-            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+            raise InternalException(
+                "Internal Error: "
+                + workflow_instance_name
+                + " doesn't refer to a wf instance."
+            )
 
         # request current version from database
-        current_version_number: VersionNumber = \
-            VersionNumber(self.__workflow_data.get_active_version_of_workflow_instance(workflow_instance_name))
+        current_version_number: VersionNumber = VersionNumber(
+            self.__workflow_data.get_active_version_of_workflow_instance(
+                workflow_instance_name
+            )
+        )
 
         # calculate the new version number from the current one
-        existing_version_numbers: List[str] = self.__workflow_data.get_version_numbers_of_workflow_instance(
-            workflow_instance_name)
-        new_version_number: VersionNumber = current_version_number.get_successor(existing_version_numbers)
+        existing_version_numbers: List[
+            str
+        ] = self.__workflow_data.get_version_numbers_of_workflow_instance(
+            workflow_instance_name
+        )
+        new_version_number: VersionNumber = current_version_number.get_successor(
+            existing_version_numbers
+        )
 
         # create directory for the new version
-        workflow_dir: Path = self.__versions_base_directory / workflow_instance_name  # this dir should already exist
+        workflow_dir: Path = (
+            self.__versions_base_directory / workflow_instance_name
+        )  # this dir should already exist
         version_dir: Path = workflow_dir / new_version_number.get_dir_name()
         os.makedirs(version_dir)  # create new dir
 
@@ -234,7 +280,12 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
-            file_path = self.__versions_base_directory / workflow_instance_name / "current_conf" / (file_name + ".conf")
+            file_path = (
+                self.__versions_base_directory
+                / workflow_instance_name
+                / "current_conf"
+                / (file_name + ".conf")
+            )
             old_files.append(file_path)
 
         # copy the old files into the new directory
@@ -244,37 +295,51 @@ class WorkflowManager:
         # apply all the changes to the files in the new directory
         for update in changed_files:
             file_name: str = update.get_file_name()
-            changed_file: ConfigFile = ConfigFile(file_name, version_dir / (file_name + ".conf"))
+            changed_file: ConfigFile = ConfigFile(
+                file_name, version_dir / (file_name + ".conf")
+            )
             changed_file.apply_changes(update)
 
         # make new files read-only? TODO
 
         # create new DatabaseVersion object and make createVersion-request in the WorkflowData
-        new_version: DatabaseVersion = DatabaseVersion(new_version_number, version_note, version_dir)
+        new_version: DatabaseVersion = DatabaseVersion(
+            new_version_number, version_note, version_dir
+        )
         self.__workflow_data.create_new_version_of_workflow_instance(
-            workflow_instance_name, new_version, current_version_number.get_number())
+            workflow_instance_name, new_version, current_version_number.get_number()
+        )
 
-    def get_versions_from_workflow_instance(self, workflow_instance_name: str) -> List[FrontendVersion]:
+    def get_versions_from_workflow_instance(
+        self, workflow_instance_name: str
+    ) -> List[FrontendVersion]:
         """Returns a detailed overview of all versions of the given workflow instance.
 
-                Requests information about all the versions of the given workflow instance from the database.
-                Afterwards calculates the difference to the predecessor for every version and returns that information
-                in combination with the version numbers and version notes.
+        Requests information about all the versions of the given workflow instance from the database.
+        Afterwards calculates the difference to the predecessor for every version and returns that information
+        in combination with the version numbers and version notes.
 
-                Args:
-                    workflow_instance_name (str): The identifier of the workflow instance
+        Args:
+            workflow_instance_name (str): The identifier of the workflow instance
 
-                Returns:
-                    List[FrontendVersion]: The list version objects that contain the required information
+        Returns:
+            List[FrontendVersion]: The list version objects that contain the required information
 
-                """
+        """
         # make sure the instance exists
         if workflow_instance_name not in os.listdir(self.__versions_base_directory):
-            raise InternalException("Internal Error: " + workflow_instance_name + " doesn't refer to a wf instance.")
+            raise InternalException(
+                "Internal Error: "
+                + workflow_instance_name
+                + " doesn't refer to a wf instance."
+            )
 
         # request to database to get a DatabaseVersion object for every version
-        versions: List[DatabaseVersion] = \
-            self.__workflow_data.get_database_versions_of_workflow_instance(workflow_instance_name)
+        versions: List[
+            DatabaseVersion
+        ] = self.__workflow_data.get_database_versions_of_workflow_instance(
+            workflow_instance_name
+        )
 
         # create result buffer
         frontend_versions: List[FrontendVersion] = []
@@ -283,15 +348,22 @@ class WorkflowManager:
         for version in versions:
             # find out the predecessor version
             if version.get_version_number().get_number() != "1":
-                predecessor_number: VersionNumber = version.get_version_number().get_predecessor()
+                predecessor_number: VersionNumber = (
+                    version.get_version_number().get_predecessor()
+                )
                 changed_dir: Path = version.get_changed_config_files()
                 file_names: List[str] = os.listdir(changed_dir)
 
                 # get the unchanged file for all changed files
                 comparison_files: List[Tuple[str, Path]] = []
                 for file_name in file_names:
-                    file_path: Path = self.__workflow_data.get_config_file_from_workflow_instance(
-                        workflow_instance_name, file_name, predecessor_number.get_number())
+                    file_path: Path = (
+                        self.__workflow_data.get_config_file_from_workflow_instance(
+                            workflow_instance_name,
+                            file_name,
+                            predecessor_number.get_number(),
+                        )
+                    )
                     comparison_files.append((file_name, file_path))
 
                 # calculate the FrontendVersion and put it into the result list
@@ -300,7 +372,9 @@ class WorkflowManager:
         # return result
         return frontend_versions
 
-    def set_active_version_through_number(self, workflow_instance_name: str, version_number: str):
+    def set_active_version_through_number(
+        self, workflow_instance_name: str, version_number: str
+    ):
         """Changes the active version of a workflow instance in the database.
 
         Before requesting the change in the database a call to the airflow api is made to make sure the workflow
@@ -312,13 +386,17 @@ class WorkflowManager:
 
         """
         # first check if the instance is currently running
-        dag_request = requests.get(self.__airflow_address + "api/v1/dags/{dag_id}/details")
+        dag_request = requests.get(
+            self.__airflow_address + "api/v1/dags/{dag_id}/details"
+        )
         # TODO
 
         # TODO adjust current_conf-dir
 
         # if not tell database to change the active version
-        self.__workflow_data.set_active_version_through_number(workflow_instance_name, version_number)
+        self.__workflow_data.set_active_version_through_number(
+            workflow_instance_name, version_number
+        )
         pass
 
     # private methods

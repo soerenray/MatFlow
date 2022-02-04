@@ -7,6 +7,7 @@ class WorkflowVersion:
     It's main task is to switch between the two different representations of versions one in the frontend,
     one in the database.
     """
+
     __note: str
     __version_number: VersionNumber
 

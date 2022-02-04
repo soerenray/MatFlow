@@ -14,7 +14,9 @@ class TestVersionNumber(TestCase):
             self.assertEqual(version_number.get_number(), number)
 
         for number in invalid_numbers:
-            expected_msg: str = "Internal Error: " + number + " isn't a valid version number."
+            expected_msg: str = (
+                "Internal Error: " + number + " isn't a valid version number."
+            )
             with self.assertRaises(InternalException) as context:
                 VersionNumber(number)
             self.assertTrue(expected_msg in str(context.exception))
