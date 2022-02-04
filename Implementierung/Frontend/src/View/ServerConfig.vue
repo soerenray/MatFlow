@@ -6,7 +6,7 @@
       </v-toolbar>
     </div>
     <div style="padding-top: 20px">
-      <v-data-table :headers="tableHeaders" :items="items" item-key="name">
+      <v-data-table :headers="tableHeaders" :items="servers" item-key="name">
         <template v-slot:[`item.name`]="{ item }"
           ><v-text-field disabled v-model="item.name"></v-text-field
         ></template>
