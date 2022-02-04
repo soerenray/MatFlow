@@ -3,21 +3,14 @@ import Server from '../Classes/Server'
 class ServerConfig {
     private _tableHeaders: object[]
     private _servers: Server[]
-    private _serverName: string
-    private _serverAddres: string
-
     /**
     *
     * @param tableHeaders The tableHeaders
     * @param servers The servers
-    * @param serverName The serverName
-    * @param serverAddres The serverAddres
     */
-    constructor(tableHeaders: object[], servers: Server[], serverName: string, serverAddres: string,) {
+    constructor(tableHeaders: object[], servers: Server[],) {
         this._tableHeaders = tableHeaders
         this._servers = servers
-        this._serverName = serverName
-        this._serverAddres = serverAddres
     }
 
     /**
@@ -36,22 +29,6 @@ class ServerConfig {
         return this._servers
     }
 
-    /**
-    * Gets the serverName
-    * @returns _serverName
-    */
-    public get serverName(): string {
-        return this._serverName
-    }
-
-    /**
-    * Gets the serverAddres
-    * @returns _serverAddres
-    */
-    public get serverAddres(): string {
-        return this._serverAddres
-    }
-
 
     /**
     * Sets the value of _tableHeaders
@@ -67,21 +44,5 @@ class ServerConfig {
     */
     public set servers(servers: Server[]) {
         this._servers = servers
-    }
-
-    /**
-    * Sets the value of _serverName
-    * @param serverName The new value of _serverName
-    */
-    public set serverName(serverName: string) {
-        this._serverName = serverName
-    }
-
-    /**
-    * Sets the value of _serverAddres
-    * @param serverAddres The new value of _serverAddres
-    */
-    public set serverAddres(serverAddres: string) {
-        this._serverAddres = serverAddres
     }
 }
