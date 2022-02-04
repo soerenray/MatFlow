@@ -1,5 +1,6 @@
 import filecmp
 import os
+import pathlib
 import shutil
 from typing import List
 import mock
@@ -30,7 +31,7 @@ class TestWorkflowManager(TestCase):
     w_man: WorkflowManager = WorkflowManager.get_instance()
 
     # initialize paths
-    base_path: Path = Path("test_files/workflow_manager")
+    base_path: Path = Path(__file__).parent / "test_files/workflow_manager"
     temp_path: Path = base_path / "templates"
     wf_path: Path = base_path / "wf_instances"
 
@@ -520,12 +521,9 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
 
 
 class TestCopyFilesWithExtension(TestWorkflowManager):
-    base_path_copy_whole_dir: Path = Path(
-        "test_files/workflow_manager/copyFilesWithExtension"
-    )
-    dst_dir: Path = base_path_copy_whole_dir / "dst"
-
     def setUp(self):
+        self.base_path_copy_whole_dir: Path = self.base_path / "copyFilesWithExtension"
+        self.dst_dir: Path = self.base_path_copy_whole_dir / "dst"
         # always clear the destination directory
         if os.path.exists(self.dst_dir):
             shutil.rmtree(self.dst_dir)

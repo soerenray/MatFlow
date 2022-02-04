@@ -17,9 +17,10 @@ class TestConfigFile(TestCase):
     def setUp(self):
         # set up paths and config-file objects
 
-        self.path1 = Path("test_files/config_file/test1.conf")
+        self.base_path: Path = Path(__file__).parent / "test_files/config_file"
+        self.path1 = self.base_path / "test1.conf"
         self.config1 = ConfigFile("test1", self.path1)
-        self.path1_updated = Path("test_files/config_file/test1updated.conf")
+        self.path1_updated = self.base_path / "test1updated.conf"
         self.config1_update = ReducedConfigFile(
             "test1",
             [
@@ -31,7 +32,7 @@ class TestConfigFile(TestCase):
         )
 
         # prepare the contents of the backup file
-        self.back_up_path = Path("test_files/config_file/test1backUp.conf")
+        self.back_up_path = self.base_path / "test1backUp.conf"
         backup_file1: TextIO = open(self.back_up_path)
         self.config1_contend = backup_file1.read()
         backup_file1.close()
