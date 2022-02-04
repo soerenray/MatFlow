@@ -11,9 +11,6 @@
         :items="servers"
         item-key="serverName"
       >
-        <template v-slot:[`item.serverName`]="{ item }"
-          ><v-text-field disabled v-model="item.serverName"></v-text-field
-        ></template>
         <template v-slot:[`item.containerLimit`]="{ item }"
           ><v-text-field v-model="item.containerLimit"></v-text-field
         ></template>
