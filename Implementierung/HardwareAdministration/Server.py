@@ -92,27 +92,32 @@ class Server:
             return True
         else:
             return False
-        
 
     @classmethod
-    def extract_server(cls, request_details: request) -> Server:
+    def extract_server(cls, json_details: str) -> Server:
         """
         extracts json details and builds a new Server based off of these json details
 
         Args:
-            request_details(request): contains encoded server
+            json_details(str): contains encoded server
 
         Returns:
             Server: decoded server object
         """
-        decoded_json: dict = json.loads(request_details.get_json())
+        decoded_json: dict = json.loads(json_details)
         name: str = decoded_json[keys.server_name]
         ip_address: str = decoded_json[keys.server_address_name]
         status: str = decoded_json[keys.server_status_name]
         container_limit: int = int(decoded_json[keys.container_limit_name])
         resources: List[Tuple[str, str]] = decoded_json[keys.server_resources_name]
         executing: bool = bool(decoded_json[keys.selected_for_execution_name])
-        server: Server = Server(name, ip_address, status, container_limit, executing, resources)
+        server: Server = Server()
+        server.setName(name)
+        server.setStatus(status)
+        server.setRessources(resources)
+        server.setSelectedForExecution(executing)
+        server.setContainerLimit(container_limit)
+        server.setAddress(ip_address)
         return server
 
     def encode_server(self) -> dict:

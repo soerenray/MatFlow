@@ -4,6 +4,8 @@ import os
 from pathlib import Path
 from typing import List, Tuple
 from flask import request
+
+from Implementierung.ExceptionPackage.MatFlowException import ConverterException
 from Implementierung.FrontendAPI import keys, utilities
 import json
 
@@ -79,34 +81,38 @@ class ReducedConfigFile:
         return out_dict
 
     @classmethod
-    def extract_config(cls, request_details: request) -> ReducedConfigFile:
+    def extract_config(cls, json_details: str) -> ReducedConfigFile:
         """
         extracts json details and builds a new ReducedConfigFile based off of these json details
 
         Args:
-            request_details(request): contains encoded reduced config file
+            json_details(str): contains encoded reduced config file
 
         Returns:
             ReducedConfigFile: the extracted reduced config file
         """
-        decoded_json: dict = json.loads(request_details.get_json())
+        decoded_json: dict = json.loads(json_details)
+        if keys.config_file_name not in decoded_json:
+            raise ConverterException("no file name")
+        if keys.key_value_pairs_name not in decoded_json:
+            raise ConverterException("no key value pairs")
         name: str = decoded_json[keys.config_file_name]
         key_value_pairs: List[Tuple[str, str]] = decoded_json[keys.key_value_pairs_name]
         reduced_config: ReducedConfigFile = ReducedConfigFile(name, key_value_pairs)
         return reduced_config
 
     @classmethod
-    def extract_multiple_configs(cls, request_details: request) -> List[ReducedConfigFile]:
+    def extract_multiple_configs(cls, json_details: str) -> List[ReducedConfigFile]:
         """
         extracts json details and builds a new ReducedConfigFile array based off of these json details
 
         Args:
-            request_details(request): contains encoded reduced config files
+            json_details(str): contains encoded reduced config files
 
         Returns:
             ReducedConfigFile[]: the extracted reduced config files
         """
-        decoded_json: dict = json.loads(request_details.get_json())
+        decoded_json: dict = json.loads(json_details)
         lists_of_json_configs: List[dict] = decoded_json[keys.config_files]
         configs: List[ReducedConfigFile] = []
         for json_config in lists_of_json_configs:
@@ -115,19 +121,19 @@ class ReducedConfigFile:
         return configs
 
     @classmethod
-    def extract_multiple_config_files(cls, request_details: request) -> Path:
+    def extract_multiple_config_files(cls, json_details: str) -> Path:
         """
         extracts encoded config files and dumps them into a temporary directory
 
         Args:
-            request_details(request): request from api
+            json_details(str): contains encoded config files
 
         Returns:
             Path to saved configs
         """
         save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, utilities.temp_in_path,
                                                           keys.config_save_path))
-        decoded_json: dict = json.loads(request_details.get_json())
+        decoded_json: dict = json.loads(json_details)
         lists_of_encoded_configs: List[dict] = decoded_json[keys.config_files]
         # config files are encoded like this: {configFiles: [{configFileName: "bla", file: "encoded_file"}, {..}, ..]}
         for encoded_config in lists_of_encoded_configs:

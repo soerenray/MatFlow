@@ -1,7 +1,7 @@
 from __future__ import annotations
 from flask import request
 from pathlib import Path
-from Implementierung.ExceptionPackage.MatFlowException import InvalidDagFileException
+from Implementierung.ExceptionPackage.MatFlowException import InvalidDagFileException, ConverterException
 from Implementierung.FrontendAPI import keys, utilities
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
@@ -76,17 +76,19 @@ class Template:
         return True
 
     @classmethod
-    def extract_template(cls, request_details: request) -> Template:
+    def extract_template(cls, json_details: str) -> Template:
         """
         extracts json details and builds a new Template based off of these json details
 
         Args:
-            request_details(String): contains encoded template
+            json_details(str): contains encoded template
 
         Returns:
             Template: decoded template object
         """
-        decoded_json = json.loads(request_details.get_json())
+        decoded_json = json.loads(json_details)
+        if keys.template_name not in decoded_json:
+            raise ConverterException("no valid name")
         name: str = decoded_json[keys.template_name]
         file_path: Path = cls.extract_dag_file(decoded_json)
         template: Template = Template(name, file_path)
@@ -104,8 +106,16 @@ class Template:
             path to saved file
         """
 
+        if keys.file_key not in decoded_json:
+            raise ConverterException("no file")
+        if keys.dag_definition_name not in decoded_json:
+            raise ConverterException("no file name")
+        filename: str = decoded_json[keys.dag_definition_name]
+        _, file_extension = os.path.splitext(filename)
+        # dag files are exclusively python files
+        if file_extension != '.py':
+            raise ConverterException("not .py file")
         dag_file = utilities.decode_file(decoded_json[keys.file_key])
-        filename: str = secure_filename(dag_file.filename)
         save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, utilities.temp_in_path,
                                                           keys.dag_save_path))
         file_path: str = os.path.join(save_dir, filename)

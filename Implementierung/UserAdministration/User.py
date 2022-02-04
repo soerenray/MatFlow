@@ -62,17 +62,17 @@ class User:
         self._password = password
 
     @classmethod
-    def extract_user(cls, request_details: request) -> User:
+    def extract_user(cls, json_details: str) -> User:
         """
         extracts json details and builds a new User based off of these json details
 
         Args:
-            request_details(request): contains encoded user
+            json_details(str): contains encoded user
 
         Returns:
             User: decoded user object
         """
-        decoded_json: dict = json.loads(request_details.get_json())
+        decoded_json: dict = json.loads(json_details)
         user_name: str = decoded_json[keys.user_name]
         status: str = decoded_json[keys.user_status_name]
         privilege: str = decoded_json[keys.user_privilege_name]
