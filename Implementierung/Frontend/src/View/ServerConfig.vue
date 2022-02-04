@@ -6,27 +6,28 @@
       </v-toolbar>
     </div>
     <div style="padding-top: 20px">
-      <v-data-table :headers="tableHeaders" :items="servers" item-key="name">
-        <template v-slot:[`item.name`]="{ item }"
-          ><v-text-field disabled v-model="item.name"></v-text-field
+      <v-data-table
+        :headers="tableHeaders"
+        :items="servers"
+        item-key="serverName"
+      >
+        <template v-slot:[`item.serverName`]="{ item }"
+          ><v-text-field disabled v-model="item.serverName"></v-text-field
         ></template>
-        <template v-slot:[`item.limit`]="{ item }"
-          ><v-text-field v-model="item.limit"></v-text-field
+        <template v-slot:[`item.containerLimit`]="{ item }"
+          ><v-text-field v-model="item.containerLimit"></v-text-field
         ></template>
-        <template v-slot:[`item.dagLocation`]="{ item }"
-          ><v-text-field v-model="item.dagLocation"></v-text-field
+        <template v-slot:[`item.selectedForExecution`]="{}"
+          ><v-checkbox disabled></v-checkbox
         ></template>
-        <template v-slot:[`item.delete`]="{}"
-          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn
+        <template v-slot:[`item.serverResources`]="{}"
+          ><v-btn icon><memory-icon></memory-icon></v-btn
         ></template>
         <template v-slot:[`item.apply`]="{}"
           ><v-btn color="green" outlined>apply changes</v-btn></template
         >
-        <template v-slot:[`item.serverResources`]="{}"
-          ><v-btn icon><memory-icon></memory-icon></v-btn
-        ></template>
-        <template v-slot:[`item.server`]="{}"
-          ><v-checkbox disabled></v-checkbox
+        <template v-slot:[`item.delete`]="{}"
+          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn
         ></template>
       </v-data-table>
     </div>
@@ -38,11 +39,11 @@ import Server from "../Classes/Server";
 
 const serverConfigObject = new ServerConfig(
   [
-    { text: "Server location name", value: "name" },
-    { text: "Address", value: "address" },
-    { text: "Status", value: "status" },
-    { text: "Container limit", value: "limit" },
-    { text: "Select server for execution", value: "server" },
+    { text: "Server location name", value: "serverName" },
+    { text: "Address", value: "serverAddress" },
+    { text: "Status", value: "serverStatus" },
+    { text: "Container limit", value: "containerLimit" },
+    { text: "Select server for execution", value: "selectedForExecution" },
     { text: "Configurate server resources", value: "serverResources" },
     { text: "apply changes", value: "apply" },
     { text: "delete server", value: "delete" },
@@ -54,7 +55,7 @@ const serverConfigObject = new ServerConfig(
       5,
       true,
       "kit-materialwissenschaften",
-      [["cpu1", '50%']]
+      [["cpu1", "50%"]]
     ),
   ]
 );
@@ -71,13 +72,13 @@ export default {
       },
     },
     servers: {
-      get: function(): Server[] {
-        return serverConfigObject.servers
+      get: function (): Server[] {
+        return serverConfigObject.servers;
       },
-      set: function(servers: Server[]) {
-        serverConfigObject.servers = servers
-      }
-    }
+      set: function (servers: Server[]) {
+        serverConfigObject.servers = servers;
+      },
+    },
   },
 };
 </script>
