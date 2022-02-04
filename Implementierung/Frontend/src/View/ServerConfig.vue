@@ -68,19 +68,17 @@ export default {
   components: { EditKeyValuePairs },
   name: "ServerConfig",
   methods: {
-    pushServerAndPullServers() {
-      this.pushServer();
+    pushServerAndPullServers(serverName: string) {
+      this.pushServer(serverName);
       this.pullServers();
     },
     pullServers() {
-      console.log(backendServerCommunicatorObject.pullServers());
       this.servers = backendServerCommunicatorObject.pullServers();
     },
-    pushServer() {
-      console.log("push");
+    pushServer(serverName: string) {
       backendServerCommunicatorObject.pushServer(this.servers[0]);
     },
-    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
+    changeAllKeyValuePairs(serverName: string,newKeyValuePairs: Array<[string, string]>) {
       this.servers[0].serverResources.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
@@ -88,6 +86,12 @@ export default {
         }
       );
     },
+    findServerByServerName(serverName: string): Server {
+      let serverIndex = this.servers.findIndex((server: Server) => {
+        return server.serverName == serverName
+      })
+      return this.servers[serverIndex]
+    }
   },
   computed: {
     tableHeaders: {
