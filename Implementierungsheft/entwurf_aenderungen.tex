@@ -1,0 +1,71 @@
+\section{Entwurfsumentscheidungen}
+    	
+  
+\subsection{Memento} 	
+    	 The memento pattern is used to set a view to the default state. Every view has its default
+    	 state that is created at the start of the view. When a user makes an input, the view and
+    	 its state changes. Whenever a user sends a request to the backend-server, the view should
+    	 be reset, so that no mistakes are made on future requests. The memento pattern comes in
+    	 place and sets the default state of the view and the view displays it accordingly. In
+    	 the future it would be possible to safe inputs and load them as the view's new state.
+    	\begin{figure}[H]
+            \label{API}
+            \centerline{\includegraphics[scale=0.5]{res/Memento.png}}
+            \caption{Memento package}
+    	\end{figure}
+    	\newpage
+    	
+\subsection{JSON Converter}
+    \subsubsection{Frontend}
+    	A controler handels every request to convert a JSON-object into a class object.
+    	The controler takes in a string with the classname and the JSON-object, calls the 
+    	method create...ObjectFromJSON in the corresponding class and returns the created object. 
+    	\begin{figure}[H]
+            \label{API}
+            \centerline{\includegraphics[scale=0.5]{res/Controler.png}}
+            \caption{Controler package}
+    	\end{figure}
+    \subsubsection{API} \label{json_backend}
+        \begin{figure}[H]
+            \label{API}
+            \centerline{\includegraphics[scale=0.5]{res/api.drawio.pdf}}
+            \caption{API package}
+        \end{figure}
+        \vspace{0.3in}
+        Im Backend sind auch analog zum Frontend zwei JSON Converter(jewils von und zu) vorhanden.
+        Diese Entwurfsentscheidung wurde aber verworfen, da sie das Kapselungsprinzip verletzt.
+        Von nun an sind alle in den Converter vorhandenen Methoden direkt als Klassen- (von JSON)
+        oder Objektmethoden (zu JSON) direkt in den jeweiligen Klassen implementiert. Als Beispiel: 
+        encode\texttt{\_}template(template: Template) und extract\texttt{\_}template(json\texttt{\_}details: String): Template
+        sind nun als encode\texttt{\_}template(self): str und \texttt{\@}classmethod extract\texttt{\_}template: Template 
+        in Template vorhanden.    
+
+
+\subsection{JSON Status Code}
+Wie man auch in der \nameref{API} sieht, ist die Bereitstellung eines Status Codes bei einem request an die API nicht eindeutig
+dem Entwurf zu entnehmen, deswegen hier noch einmal eine saubere Erläuterung:
+Es wird bei einer Anfrage an die API diese Anfrage durchgeführt. Je nachdem ob sie nicht erfolgreich war (MatFlowException 
+geworfen, spezieller Status Code vorhanden) oder doch erfolgreich war (success Status Code und eventuell Daten vorhanden) 
+wird in der Klasse ExceptionHandler die Antwort in json gebaut und an den Client zurück geschickt. 
+Der Client bekommt also \textbf{immer} eine Antwort mit einem json response body, indem sich der status code befindet. 
+Es handelt sich hier also nur um eine Anlehnung an die bereits etablierten HTTP Status Codes.
+
+\subsection{Authentifizierung} \label{Cookie}
+Im Frontend kann man theoretisch unabhängig der User Privilegien mittels URL Manipulation auf alle 
+Seiten zugreifen. Um dies zu verhindern, wird im Backernd ein einzigartiges Cookie erstellt, wenn sich der Benutzer einloggt. 
+Bei jeder Anfrage aus dem Frontend wird dieser Cookie dann mitgeliefert und verhindert unerlaubten Zugriff.
+
+\subsection{keys} \label{Cookie}
+Zur Kapselung der JSON Keys wurde im FrontendAPI package eine eigenes Modul eingeführt.
+
+\input{user_administration_aenderungen}
+\input{hardware_administration_aenderungen}
+
+
+
+%TODO an alle: Entwurfsänderungen hinzufügen
+\input{workflow_aenderungen} % Florian
+% ich werde hier in meiner externen file die subsections "Kommunikation von Dateien innerhalb der Serveranwendung" und "Änderungen im Workflow-Package" hinzufügen. Im ersteren Kapitel würde ich auch die von meinem package angelegte und verwaltete File-System-Struktur erklären. Nur damit sich das nicht zu sehr mit Lukas Text überschneidet
+
+
+\input{datenbank_aenderungen} %Lukas

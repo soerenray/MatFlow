@@ -1,5 +1,5 @@
 \section{Datenbank}
-Die Datenbank wird durch eine MySQL Datenbank umgesetzt.
+Die Datenbank wird durch eine MySQL Datenbank umgesetzt. Hierbei werden zu speichernde Dateien lediglich als Pfad in die Datenbank eingetragen. Die eigentlichen Daten sind auf dem Server angelegt.
 \subsection{Datenbankaufbau}
 \begin{figure}[h]
 	\centering
@@ -14,20 +14,22 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{Server} & & \\
 	\hline
-	ip & String & $key; notNull$ \\
+	ip & varchar(50) & $key$ \\
 	\hline
-	name & String & $key; notNull$ \\
+	name & varchar(255) & $key$ \\
 	\hline
 \end{dataTable}
 
 \paragraph{}
 \begin{dataTable}
 	\hline
-	\textbf{Workflow\_Template} &  & \\
+	\textbf{WorkflowTemplate} &  & \\
 	\hline
-	name & String & $key; notNull$ \\
+	template\textunderscore ID & int & $key; Auto\textunderscore Increment$\\
 	\hline
-	dag & .py -File & $notNull$\\
+	name & varchar(255) & $notNull$ \\
+	\hline
+	dag & varchar(255) & $notNull$\\
 	\hline
 \end{dataTable}
 
@@ -36,11 +38,9 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{Workflow} &  & \\
 	\hline
-	name & String & $key; notNull$ \\
+	name & varchar(255) & $key$ \\
 	\hline
-	files & String & $notNull$ \\
-	\hline
-	dag & .py  -File & $notNull$\\
+	dag & varchar(255) & $notNull$\\
 	\hline
 \end{dataTable}
 
@@ -49,11 +49,11 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{FolderFile} &  & \\
 	\hline
-	wfname & String & $key; notNull;$ name from Workflow\\
+	filesID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
-	filesID & int & $key; notNull$ \\
+	wfname & varchar(255) & $notNull;$ name from Workflow\\
 	\hline
-	file & File & $notNull$\\
+	file & varchar(255) & $notNull$\\
 	\hline
 \end{dataTable}
 
@@ -62,11 +62,13 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{Version} & & \\
 	\hline
-	wfName & String & $key; notNull;$ name from Workflow\\
+	ID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
-	version & String & $key; notNull$ \\
+	wfName & varchar(255) & name from Workflow\\
 	\hline
-	note & String & \\
+	version & varchar(127) & $notNull$ \\
+	\hline
+	note & varchar(1000) & \\
 	\hline
 \end{dataTable}
 
@@ -75,9 +77,9 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{ActiveVersion} & & \\
 	\hline
-	wfName & String & $key; notNull;$ name from Workflow\\
+	wfName & varchar(255) & $key;$ name from Workflow\\
 	\hline
-	version & String & $notNull;$ from Version\\
+	version & varchar(127) &  from Version\\
 	\hline
 \end{dataTable}
 
@@ -86,11 +88,11 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{VersionFile} & & \\
 	\hline
-	wfName & String & $key; notNull;$ name from Workflow\\
+	versionID & int & $key;$ ID from Version \\
 	\hline
-	version & String & $key; notNull;$ from Version \\
+	filename & varchar(255) & $key$\\
 	\hline
-	confKey & String & $key; notNull;$ from ConfFiles \\
+	confKey & int & $notNull;$ from ConfFiles \\
 	\hline
 \end{dataTable}
 
@@ -99,9 +101,9 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{ConfFile} & & \\
 	\hline
-	confKey & String & $key; notNull$ \\
+	confKey & int & $key; Auto\textunderscore Increment$ \\
 	\hline
-	file & .conf -File & $notNull$ \\
+	file & varchar(255) & $notNull$ \\
 	\hline
 \end{dataTable}
 
@@ -110,13 +112,11 @@ Aus dem Entity Relationship Diagramm in Abbildung \ref{fig:er_diagram} folgt, da
 	\hline
 	\textbf{ResultFile} &  & \\
 	\hline
-	wfname & String & $key; notNull;$ name from Workflow\\
+	versionID & int & $key;$ ID from Version \\
 	\hline
-	version & String & $key; notNull;$ from Version \\
+	filesID & int & $key; Auto\textunderscore Increment$ \\
 	\hline
-	filesID & int & $key; notNull$ \\
-	\hline
-	file & File & $notNull$\\
+	file & varchar(255) & $notNull$\\
 	\hline
 \end{dataTable}
 
