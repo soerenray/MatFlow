@@ -129,6 +129,9 @@ export default {
   beforeCreate: function () {
     Vue.observable(editKeyValuePairsObject);
   },
+  created: function() {
+    this.initialiseKeyValuePairs()
+  },
   watch: {
     fileName: function () {
       this.initialiseKeyValuePairs();

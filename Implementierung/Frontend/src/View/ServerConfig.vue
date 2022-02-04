@@ -72,15 +72,23 @@ export default {
     };
   },
   methods: {
-    pushServerAndPullServers(server: Server) {
-      this.pushServer(server);
+    pushServerAndPullServers() {
+      this.pushServer();
       this.pullServers();
     },
     pullServers() {
       this.servers = backendServerCommunicatorObject.pullServers();
     },
-    pushServer(server: Server) {
-      backendServerCommunicatorObject.pushServer(server);
+    pushServer() {
+      backendServerCommunicatorObject.pushServer(this.servers[0]);
+    },
+    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
+      this.servers[0].serverResources.forEach(
+        (keyValuePair: [string, string], index: number) => {
+          keyValuePair[0] = newKeyValuePairs[index][0];
+          keyValuePair[1] = newKeyValuePairs[index][1];
+        }
+      );
     },
   },
   computed: {
