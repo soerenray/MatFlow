@@ -83,8 +83,8 @@ export default {
     EditKeyValuePairs,
   },
   methods: {
-    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
-      this.chosenConfigFile.keyValuePairs.forEach(
+    changeAllKeyValuePairs(configFileName: string, newKeyValuePairs: Array<[string, string]>) {
+      this.getConfigFileFromUpdatedConfigFiles(configFileName).keyValuePairs.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
@@ -119,7 +119,7 @@ export default {
       }
       return configFile;
     },
-    pushUpdatedConfigFilesToBackendServer() {
+    pushUpdatedConfigFilesToBackendServer(configFileName: string) {
       backendServerCommunicatorObject.pushConfigFilesWithWorkflowInstanceName(
         this.updatedConfigFiles,
         this.selectedWorkflowInstanceName

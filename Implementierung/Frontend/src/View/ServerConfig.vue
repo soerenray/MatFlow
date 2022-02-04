@@ -68,25 +68,37 @@ export default {
   components: { EditKeyValuePairs },
   name: "ServerConfig",
   methods: {
-    pushServerAndPullServers() {
-      this.pushServer();
+    pushServerAndPullServers(serverName: string) {
+      this.pushServer(serverName);
       this.pullServers();
     },
     pullServers() {
-      console.log(backendServerCommunicatorObject.pullServers());
       this.servers = backendServerCommunicatorObject.pullServers();
     },
-    pushServer() {
-      console.log("push");
-      backendServerCommunicatorObject.pushServer(this.servers[0]);
+    pushServer(serverName: string) {
+      backendServerCommunicatorObject.pushServer(
+        this.findServerByServerName(serverName)
+      );
     },
-    changeAllKeyValuePairs(newKeyValuePairs: Array<[string, string]>) {
-      this.servers[0].serverResources.forEach(
+    changeAllKeyValuePairs(
+      serverName: string,
+      newKeyValuePairs: Array<[string, string]>
+    ) {
+      this.findServerByServerName(serverName).serverResources.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
         }
       );
+    },
+    findServerByServerName(serverName: string): Server {
+      let serverIndex = this.servers.findIndex((server: Server) => {
+        return server.serverName == serverName;
+      });
+      if (serverIndex == -1) {
+        throw "No server with the name " + serverName + " was found";
+      }
+      return this.servers[serverIndex];
     },
   },
   computed: {
