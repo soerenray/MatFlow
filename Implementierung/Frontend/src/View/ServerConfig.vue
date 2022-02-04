@@ -76,10 +76,15 @@ export default {
       this.servers = backendServerCommunicatorObject.pullServers();
     },
     pushServer(serverName: string) {
-      backendServerCommunicatorObject.pushServer(this.servers[0]);
+      backendServerCommunicatorObject.pushServer(
+        this.findServerByServerName(serverName)
+      );
     },
-    changeAllKeyValuePairs(serverName: string,newKeyValuePairs: Array<[string, string]>) {
-      this.servers[0].serverResources.forEach(
+    changeAllKeyValuePairs(
+      serverName: string,
+      newKeyValuePairs: Array<[string, string]>
+    ) {
+      this.findServerByServerName(serverName).serverResources.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
@@ -88,10 +93,13 @@ export default {
     },
     findServerByServerName(serverName: string): Server {
       let serverIndex = this.servers.findIndex((server: Server) => {
-        return server.serverName == serverName
-      })
-      return this.servers[serverIndex]
-    }
+        return server.serverName == serverName;
+      });
+      if (serverIndex == -1) {
+        throw "No server with the name " + serverName + " was found";
+      }
+      return this.servers[serverIndex];
+    },
   },
   computed: {
     tableHeaders: {
