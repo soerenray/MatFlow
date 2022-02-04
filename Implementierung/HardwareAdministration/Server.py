@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import nmap,socket
+import nmap, socket
 import resource
 import json
 from typing import List, Tuple, Type
@@ -13,33 +13,32 @@ class Server:
     name: str
     address: str
     status: str
-    containerLimit:int
-    selectedForExecution:bool
+    containerLimit: int
+    selectedForExecution: bool
     cpuResource: resource
     vmemResource: resource
 
-
-    #Konstruktor
+    # Konstruktor
 
     def __init__(self):
         self.name = "server"
         hostname = socket.gethostname()
         self.address = socket.gethostbyname(hostname)
         self.status: bool = self.checkStatus()
-        self.containerLimit= 20
+        self.containerLimit = 20
         self.selectedForExecution = True
         # self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
         # self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
         self.cpuResource = resource.RLIMIT_CPU
         self.vmemResource = resource.RLIM_INFINITY
 
-# getter and setter methods
+    # getter and setter methods
     # name getter method
     def getName(self):
         return self.name
 
     # name setter method
-    def setName(self,name):
+    def setName(self, name):
         self.name = name
 
     # address getter method
@@ -47,7 +46,7 @@ class Server:
         return self.address
 
     # address setter method
-    def setAddress(self,address):
+    def setAddress(self, address):
         self.address = address
 
     # status getter method
@@ -55,7 +54,7 @@ class Server:
         return self.status
 
     # status setter method
-    def setStatus(self,status):
+    def setStatus(self, status):
         self.status = status
 
     # containerlimit getter method
@@ -63,7 +62,7 @@ class Server:
         return self.containerLimit
 
     # containerlimit setter method
-    def setContainerLimit(self,limit):
+    def setContainerLimit(self, limit):
         self.containerLimit = limit
 
     # selected for execution getter method
@@ -79,7 +78,7 @@ class Server:
         return self.ressources
 
     # Ressources setter method
-    def setRessources(self,ressources):
+    def setRessources(self, ressources):
         self.ressources = ressources
 
     # other methods:
@@ -135,9 +134,12 @@ class Server:
         container_limit: int = self.getContainerLimit()
         executing: bool = self.isSelectedForExecution()
         resources: List[Tuple[str, str]] = self.getRessources()
-        out_dict: dict = {keys.server_name: name, keys.server_address_name: ip_address, keys.server_status_name: status,
-                          keys.container_limit_name: container_limit, keys.selected_for_execution_name: executing,
-                          keys.server_resources_name: resources}
+        out_dict: dict = {
+            keys.server_name: name,
+            keys.server_address_name: ip_address,
+            keys.server_status_name: status,
+            keys.container_limit_name: container_limit,
+            keys.selected_for_execution_name: executing,
+            keys.server_resources_name: resources,
+        }
         return out_dict
-
-

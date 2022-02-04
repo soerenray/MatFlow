@@ -4,11 +4,12 @@ import json
 from typing import List
 
 from flask import request
+
 # User class
 #
 # username: the Users Username
-# status: the Users status (is either "active" or "inactive") 
-# privilege: the Users privilege, no privilege equals inactive status 
+# status: the Users status (is either "active" or "inactive")
+# privilege: the Users privilege, no privilege equals inactive status
 # password: the Users password
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
@@ -89,6 +90,11 @@ class User:
         """
 
         out_dict: dict = dict()
-        out_dict.update({keys.user_name: self.getUsername(), keys.user_status_name: self.getStatus(),
-                         keys.user_privilege_name: self.getPrivilege()})
+        out_dict.update(
+            {
+                keys.user_name: self.getUsername(),
+                keys.user_status_name: self.getStatus(),
+                keys.user_privilege_name: self.getPrivilege(),
+            }
+        )
         return out_dict

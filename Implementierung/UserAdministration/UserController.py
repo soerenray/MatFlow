@@ -2,13 +2,16 @@ from array import array
 from Implementierung.UserAdministration.User import User
 from requests.auth import HTTPBasicAuth
 import requests
-from Implementierung.ExceptionPackage.MatFlowException import UserExistsException, LoginException, SignUpException
-
+from Implementierung.ExceptionPackage.MatFlowException import (
+    UserExistsException,
+    LoginException,
+    SignUpException,
+)
 
 
 class UserController:
     # the authentification that's needed to do the Airflow Rest API calls
-    _basic = HTTPBasicAuth("","")
+    _basic = HTTPBasicAuth("", "")
 
     # CONSTRUCTOR
     #
@@ -16,15 +19,10 @@ class UserController:
     def __init__(self):
         self._basic = HTTPBasicAuth("airflow", "airflow")
 
-
-
-
-
     # METHODS
 
-
     # Getter- and Setter Methods:
-     
+
     # Authentication getter method:
     #
     # Returns the basic authentification
@@ -32,17 +30,15 @@ class UserController:
     def getAuth(self):
         return self._basic
 
-
-
     # Other Methods:
 
     # getAllUsersAndDetails method:
     #
     # this method uses the Airflow Rest API to return all the users and their details listed in the database
-    # 
+    #
     # "listUsers" is the response from the API call
-    #  
-    # the return of this method should look like this: 
+    #
+    # the return of this method should look like this:
     #     {
     #       "users": [
     #                 {
@@ -67,11 +63,12 @@ class UserController:
     #    }
 
     def getAllUsersAndDetails(self):
-        listUsers = requests.get("http://localhost:8080/api/v1/users", auth = self.getAuth())
+        listUsers = requests.get(
+            "http://localhost:8080/api/v1/users", auth=self.getAuth()
+        )
         if listUsers.status_code == 200:
             return listUsers.json()
 
-    
     # overrideUser method:
     #
     # this method receives a User with new parameters that needs an update in the database
@@ -94,22 +91,29 @@ class UserController:
         overridePrivilege = overrideUser.getPrivilege()
         overridePassword = overrideUser.getPassword()
         overrideAddress = "http://localhost:8080/api/v1/users/" + overrideUsername
-        getOverrideUser = requests.get(overrideAddress, auth = self.getAuth())
+        getOverrideUser = requests.get(overrideAddress, auth=self.getAuth())
         if getOverrideUser.status_code != 200:
             raise UserExistsException
         elif overrideStatus == "inactive":
             overridePrivilege = "Public"
         overridePayload = {
-               "email": ".", "first_name": ".", "last_name": ".", "roles": [{"name": overridePrivilege}], "username": overrideUsername, "password": overridePassword}
-        patchOverrideUser = requests.patch(overrideAddress, json = overridePayload, auth = self.getAuth())
+            "email": ".",
+            "first_name": ".",
+            "last_name": ".",
+            "roles": [{"name": overridePrivilege}],
+            "username": overrideUsername,
+            "password": overridePassword,
+        }
+        patchOverrideUser = requests.patch(
+            overrideAddress, json=overridePayload, auth=self.getAuth()
+        )
         if patchOverrideUser.status_code != 200:
             raise UserExistsException
-
 
     # deleteUser method:
     #
     # this method receives a User that needs to be deleted
-    # and deletes the User via the Airflow Rest API unless the Username doesn't exist 
+    # and deletes the User via the Airflow Rest API unless the Username doesn't exist
     # in the database
     #
     # deleteUsername: str
@@ -119,10 +123,9 @@ class UserController:
     def deleteUser(self, deleteUser: User):
         deleteUsername = deleteUser.getUsername()
         deleteUserAddress = "http://localhost:8080/api/v1/users/" + deleteUsername
-        deleteUserCode = requests.delete(deleteUserAddress, auth = self.getAuth())
+        deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
         if deleteUserCode.status_code != 200:
             raise UserExistsException
-
 
     # loginUser method:
     #
@@ -130,13 +133,15 @@ class UserController:
     # has been successfull.
     # If not the method throws the loginException
     #
-    #loginUserAddress: str
+    # loginUserAddress: str
 
     def loginUser(self, loginUsername: str, loginPassword: str):
         loginUserAddress = "http://localhost:8080/api/v1/users/" + loginUsername
-        if requests.get(loginUserAddress, auth = self.getAuth()).json()["password"] != loginPassword:
+        if (
+            requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
+            != loginPassword
+        ):
             raise LoginException
-
 
     # createUser:
     #
@@ -147,15 +152,23 @@ class UserController:
     #
     # createUserPayload: Payload of strings + "roles" is an Array of [{str : str}]
     # createUserStatusCode: API call Response
-    
-    def createUser(self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str):
+
+    def createUser(
+        self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str
+    ):
         if signUpPassword != signUpPasswordRepetition:
             raise SignUpException
         createUserAddress = "http://localhost:8080/api/v1/users"
         createUserPayload = {
-               "email": ".", "first_name": ".", "last_name": ".", "roles": [{"name": "Public"}], "username": signUpUsername, "password": signUpPassword}
-        createUserStatusCode = requests.post(createUserAddress, json =createUserPayload, auth = self.getAuth())
+            "email": ".",
+            "first_name": ".",
+            "last_name": ".",
+            "roles": [{"name": "Public"}],
+            "username": signUpUsername,
+            "password": signUpPassword,
+        }
+        createUserStatusCode = requests.post(
+            createUserAddress, json=createUserPayload, auth=self.getAuth()
+        )
         if createUserStatusCode.status_code != 200:
             raise UserExistsException
-        
-
