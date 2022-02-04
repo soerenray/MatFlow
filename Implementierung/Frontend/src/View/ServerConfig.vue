@@ -45,16 +45,7 @@ const serverConfigObject = new ServerConfig(
     { text: "apply changes", value: "apply" },
     { text: "delete server", value: "delete" },
   ],
-  [
-    new Server(
-      "123.123.11.1",
-      "running",
-      5,
-      true,
-      "kit-materialwissenschaften",
-      [["cpu1", "50%"]]
-    ),
-  ]
+  []
 );
 
 export default {
