@@ -53,7 +53,6 @@ const serverConfigObject = new ServerConfig(
       "123.123.11.1",
       "running",
       5,
-      "home/airflow/dags",
       true,
       "kit-materialwissenschaften",
       [["cpu1", '50%']]
