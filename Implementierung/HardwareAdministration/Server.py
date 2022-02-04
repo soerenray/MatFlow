@@ -5,6 +5,8 @@ import resource
 import json
 from typing import List, Tuple, Type
 from flask import request
+
+from Implementierung.ExceptionPackage.MatFlowException import ConverterException
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
@@ -74,12 +76,13 @@ class Server:
         self.selectedForExecution = selected
 
     # Ressources getter method
-    def getRessources(self) -> List[Tuple[str, str]]:
-        return self.ressources
+    def getRessources(self) -> Tuple[str, str]:
+        return str(self.vmemResource), str(self.cpuResource)
 
     # Ressources setter method
-    def setRessources(self, ressources):
-        self.ressources = ressources
+    def setRessources(self, ressources: Tuple[str, str]):
+        self.cpuResource = ressources[0]
+        self.vmemResource = ressources[1]
 
     # other methods:
 
@@ -106,11 +109,16 @@ class Server:
             Server: decoded server object
         """
         decoded_json: dict = json.loads(json_details)
+        keys_to_be_in = [keys.server_name, keys.server_address_name, keys.server_status_name,
+                         keys.container_limit_name, keys.server_resources_name, keys.selected_for_execution_name]
+        for key in keys_to_be_in:
+            if key not in decoded_json:
+                raise ConverterException(key + "not in json")
         name: str = decoded_json[keys.server_name]
         ip_address: str = decoded_json[keys.server_address_name]
         status: str = decoded_json[keys.server_status_name]
         container_limit: int = int(decoded_json[keys.container_limit_name])
-        resources: List[Tuple[str, str]] = decoded_json[keys.server_resources_name]
+        resources: Tuple[str, str] = decoded_json[keys.server_resources_name]
         executing: bool = bool(decoded_json[keys.selected_for_execution_name])
         server: Server = Server()
         server.setName(name)
@@ -133,7 +141,7 @@ class Server:
         status: bool = self.getStatus()
         container_limit: int = self.getContainerLimit()
         executing: bool = self.isSelectedForExecution()
-        resources: List[Tuple[str, str]] = self.getRessources()
+        resources: Tuple[str, str] = self.getRessources()
         out_dict: dict = {
             keys.server_name: name,
             keys.server_address_name: ip_address,

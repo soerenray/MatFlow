@@ -120,7 +120,6 @@ class Template:
         if file_extension != ".py":
             raise ConverterException("not .py file")
         dag_file = utilities.decode_file(decoded_json[keys.file_key])
-        filename: str = secure_filename(dag_file.filename)
         save_dir: str = utilities.create_dir(
             os.path.join(
                 utilities.parent_path, utilities.temp_in_path, keys.dag_save_path
