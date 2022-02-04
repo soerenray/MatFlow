@@ -25,6 +25,7 @@
               ></v-btn>
             </template>
             <edit-key-value-pairs
+              fileName="resources"
               :keyValuePairsFromParent="item.serverResources"
             ></edit-key-value-pairs>
           </v-dialog>
