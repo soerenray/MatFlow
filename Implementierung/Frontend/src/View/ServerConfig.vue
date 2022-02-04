@@ -49,6 +49,15 @@ const serverConfigObject = new ServerConfig(
 
 export default {
   name: "ServerConfig",
+  methods: {
+    pushServerAndPullServers(server: Server) {
+      this.pushServer(server);
+      backendServerCommunicatorObject.pullServers();
+    },
+    pushServer(server: Server) {
+      backendServerCommunicatorObject.pushServer(server);
+    },
+  },
   computed: {
     tableHeaders: {
       get: function (): object[] {
