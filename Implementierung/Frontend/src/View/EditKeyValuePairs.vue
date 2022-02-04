@@ -95,7 +95,7 @@ export default {
     },
     pushUpdatedConfigFilesToBackendServer() {
       this.changeAllKeyValuePairs();
-      this.$emit("update");
+      this.$emit("update", this.fileName);
     },
     changeAllKeyValuePairs() {
       let keyValuePairsAsTupleArray = this.keyValuePairs.map(
@@ -103,7 +103,7 @@ export default {
           return [keyValuePair.keyName, keyValuePair.keyValue];
         }
       );
-      this.$emit("changeAllKeyValuePairs", keyValuePairsAsTupleArray);
+      this.$emit("changeAllKeyValuePairs", this.fileName, keyValuePairsAsTupleArray);
     },
     initialiseKeyValuePairs() {
       editKeyValuePairsObject.keyValuePairs = [];
