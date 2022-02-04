@@ -10,8 +10,8 @@ from Implementierung.ExceptionPackage.MatFlowException import InternalException
 
 class TestDatabaseVersion(TestCase):
     def setUp(self):
-        self.base_path: str = "test_files/database_version/"
-        configs_dir1: Path = Path(self.base_path + "changed_files")
+        self.base_path: Path = Path(__file__).parent / "test_files/database_version/"
+        configs_dir1: Path = self.base_path / "changed_files"
         version_number: VersionNumber = VersionNumber("1.1")
         self.version1: DatabaseVersion = DatabaseVersion(
             version_number, "", configs_dir1
@@ -47,9 +47,7 @@ class TestGetFrontendVersion(TestDatabaseVersion):
 
         # Arrange
         comparison_names: List[str] = ["test2.conf"]
-        comparison_paths: List[Path] = [
-            Path(self.base_path + "too_many_files/test2.conf")
-        ]
+        comparison_paths: List[Path] = [self.base_path / "too_many_files/test2.conf"]
         comparison_files: List[Tuple[str, Path]] = list(
             zip(comparison_names, comparison_paths)
         )
@@ -69,9 +67,9 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # Arrange
         comparison_names: List[str] = ["test1.conf", "test2.conf", "test3.conf"]
         comparison_paths: List[Path] = [
-            Path(self.base_path + "too_many_files/test1.conf"),
-            Path(self.base_path + "too_many_files/test2.conf"),
-            Path(self.base_path + "too_many_files/test3.conf"),
+            self.base_path / "too_many_files/test1.conf",
+            self.base_path / "too_many_files/test2.conf",
+            self.base_path / "too_many_files/test3.conf",
         ]
         comparison_files: List[Tuple[str, Path]] = list(
             zip(comparison_names, comparison_paths)
@@ -92,8 +90,8 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # Arrange
         comparison_names: List[str] = ["test1.conf", "test3.conf"]
         comparison_paths: List[Path] = [
-            Path(self.base_path + "wrong_files/test1.conf"),
-            Path(self.base_path + "wrong_files/test3.conf"),
+            self.base_path / "wrong_files/test1.conf",
+            self.base_path / "wrong_files/test3.conf",
         ]
         comparison_files: List[Tuple[str, Path]] = list(
             zip(comparison_names, comparison_paths)
@@ -114,8 +112,8 @@ class TestGetFrontendVersion(TestDatabaseVersion):
         # Arrange
         comparison_names: List[str] = ["test1.conf", "test2.conf"]
         comparison_paths: List[Path] = [
-            Path(self.base_path + "previous_files/test1.conf"),
-            Path(self.base_path + "previous_files/test2.conf"),
+            self.base_path / "previous_files/test1.conf",
+            self.base_path / "previous_files/test2.conf",
         ]
         comparison_files: List[Tuple[str, Path]] = list(
             zip(comparison_names, comparison_paths)
