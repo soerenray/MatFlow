@@ -54,10 +54,10 @@
         <edit-key-value-pairs
           ref="editConfigFile"
           v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
-          v-on:pushUpdatedConfigFilesToBackendServer="
+          v-on:update="
             pushUpdatedConfigFilesToBackendServer
           "
-          v-on:resetChoosenConfigFileObject="resetChoosenConfigFileObject"
+          v-on:reset="resetChoosenConfigFileObject"
           :fileName="selectedConfigFileName"
           :keyValuePairsFromParent="keyValuePairs"
         ></edit-key-value-pairs>
