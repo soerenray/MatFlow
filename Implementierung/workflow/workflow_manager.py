@@ -26,7 +26,6 @@ class WorkflowManager:
     This class is also communicating with the API of Airflow as well as with the Database package.
     """
 
-    # exceptions are missing TODO
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
     __workflow_data: WorkflowData = WorkflowData.get_instance()

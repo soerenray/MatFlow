@@ -21,15 +21,27 @@ from Implementierung.ExceptionPackage.MatFlowException import (
 
 
 class TestWorkflowManager(TestCase):
-    base_path: Path = Path("test_files/workflow_manager")
+    w_man: WorkflowManager
+    base_path: Path
+    temp_path: Path
+    wf_path: Path
+
+    # initialize WorkflowManager
     w_man: WorkflowManager = WorkflowManager.get_instance()
-    w_man._WorkflowManager__versions_base_directory = base_path / "wf_instances"
-    w_man._WorkflowManager__template_base_directory = base_path / "templates"
+
+    # initialize paths
+    base_path: Path = Path("test_files/workflow_manager")
+    temp_path: Path = base_path / "templates"
+    wf_path: Path = base_path / "wf_instances"
+
+    # insert paths into WorkflowManager
+    w_man._WorkflowManager__versions_base_directory = temp_path
+    w_man._WorkflowManager__template_base_directory = wf_path
 
     def tearDown(self):
         # clean up dirs after every run
-        delete_dir_content(self.w_man._WorkflowManager__template_base_directory)
-        delete_dir_content(self.w_man._WorkflowManager__versions_base_directory)
+        delete_dir_content(self.temp_path)
+        delete_dir_content(self.wf_path)
 
 
 class TestCreateTemplate(TestWorkflowManager):
