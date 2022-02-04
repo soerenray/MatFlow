@@ -23,9 +23,6 @@
         <template v-slot:[`item.apply`]="{}"
           ><v-btn color="green" outlined>apply changes</v-btn></template
         >
-        <template v-slot:[`item.delete`]="{}"
-          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn
-        ></template>
       </v-data-table>
     </div>
   </v-app>
@@ -46,7 +43,6 @@ const serverConfigObject = new ServerConfig(
     { text: "Select server for execution", value: "selectedForExecution" },
     { text: "Configurate server resources", value: "serverResources" },
     { text: "apply changes", value: "apply" },
-    { text: "delete server", value: "delete" },
   ],
   []
 );
