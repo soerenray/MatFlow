@@ -4,7 +4,7 @@ class Server {
     private _containerLimit: number
     private _selectedForExecution: boolean
     private _serverName: string
-    private _serverResources: [string, string]
+    private _serverResources: Array<[string, string]>
 
     /**
     *
@@ -15,7 +15,7 @@ class Server {
     * @param serverName The serverName
     * @param serverResources The serverResources
     */
-    constructor(serverAddress: string, serverStatus: string, containerLimit: number, selectedForExecution: boolean, serverName: string, serverResources: [string, string],) {
+    constructor(serverAddress: string, serverStatus: string, containerLimit: number, selectedForExecution: boolean, serverName: string, serverResources: Array<[string, string]>,) {
         this._serverAddress = serverAddress
         this._serverStatus = serverStatus
         this._containerLimit = containerLimit
@@ -68,7 +68,7 @@ class Server {
     * Gets the serverResources
     * @returns _serverResources
     */
-    public get serverResources(): [string, string] {
+    public get serverResources(): Array<[string, string]> {
         return this._serverResources
     }
 
@@ -117,7 +117,7 @@ class Server {
     * Sets the value of _serverResources
     * @param serverResources The new value of _serverResources
     */
-    public set serverResources(serverResources: [string, string]) {
+    public set serverResources(serverResources: Array<[string, string]>) {
         this._serverResources = serverResources
     }
 }
