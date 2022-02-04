@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import os
 from pathlib import Path
 from typing import List, Tuple
@@ -12,6 +11,7 @@ class ReducedConfigFile:
     """
     This class holds all information to represent a config-file in the frontend.
     """
+
     __file_name: str
     __key_value_pairs: List[Tuple[str, str]]
 
@@ -96,7 +96,9 @@ class ReducedConfigFile:
         return reduced_config
 
     @classmethod
-    def extract_multiple_configs(cls, request_details: request) -> List[ReducedConfigFile]:
+    def extract_multiple_configs(
+        cls, request_details: request
+    ) -> List[ReducedConfigFile]:
         """
         extracts json details and builds a new ReducedConfigFile array based off of these json details
 
@@ -110,7 +112,10 @@ class ReducedConfigFile:
         lists_of_json_configs: List[dict] = decoded_json[keys.config_files]
         configs: List[ReducedConfigFile] = []
         for json_config in lists_of_json_configs:
-            config = ReducedConfigFile(json_config[keys.config_file_name], json_config[keys.key_value_pairs_name])
+            config = ReducedConfigFile(
+                json_config[keys.config_file_name],
+                json_config[keys.key_value_pairs_name],
+            )
             configs.append(config)
         return configs
 
@@ -125,14 +130,17 @@ class ReducedConfigFile:
         Returns:
             Path to saved configs
         """
-        save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, utilities.temp_in_path,
-                                                          keys.config_save_path))
+        save_dir: str = utilities.create_dir(
+            os.path.join(
+                utilities.parent_path, utilities.temp_in_path, keys.config_save_path
+            )
+        )
         decoded_json: dict = json.loads(request_details.get_json())
         lists_of_encoded_configs: List[dict] = decoded_json[keys.config_files]
         # config files are encoded like this: {configFiles: [{configFileName: "bla", file: "encoded_file"}, {..}, ..]}
         for encoded_config in lists_of_encoded_configs:
             config_file = utilities.decode_file(encoded_config[keys.file_key])
             config_name = encoded_config[keys.config_file_name]
-            with open(os.path.join(save_dir, config_name), 'wb') as file:
+            with open(os.path.join(save_dir, config_name), "wb") as file:
                 file.write(config_file)
         return Path(save_dir)

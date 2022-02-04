@@ -7,6 +7,7 @@ class VersionNumber:
     """
     This class represents string expressions that are valid version numbers
     """
+
     __number: str
 
     def __init__(self, number: str):
@@ -17,9 +18,11 @@ class VersionNumber:
         Args:
             number (str): The version number
         """
-        p: Pattern[str] = re.compile('1(\.[1-9][0-9]*)*')
+        p: Pattern[str] = re.compile("1(\.[1-9][0-9]*)*")
         if not p.fullmatch(number):
-            raise InternalException("Internal Error: " + number + " isn't a valid version number.")
+            raise InternalException(
+                "Internal Error: " + number + " isn't a valid version number."
+            )
         self.__number = number
 
     # getter
@@ -65,9 +68,13 @@ class VersionNumber:
 
         # otherwise, the version number has a predecessor
         version_number_components: List[str] = self.get_number().split(".")
-        version_number_components.pop(len(version_number_components)-1)  # remove last component of the version number
+        version_number_components.pop(
+            len(version_number_components) - 1
+        )  # remove last component of the version number
         point_seperator: str = "."
-        predecessor_str: str = point_seperator.join(version_number_components)  # reconnect the components
+        predecessor_str: str = point_seperator.join(
+            version_number_components
+        )  # reconnect the components
         return VersionNumber(predecessor_str)
 
     def get_successor(self, existing_version_numbers: List[str]):
@@ -86,6 +93,3 @@ class VersionNumber:
             if not existing_version_numbers.__contains__(possible_successor):
                 return VersionNumber(possible_successor)
             successor_postfix += 1  # otherwise, we try the next option
-
-
-

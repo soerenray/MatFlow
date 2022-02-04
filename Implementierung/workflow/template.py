@@ -14,6 +14,7 @@ class Template:
     This class represents a workflow template.
     It contains the identifying name of the template as well as a dag-definition-file.
     """
+
     __name: str
     __dag_definition_file: Path
 
@@ -106,8 +107,11 @@ class Template:
 
         dag_file = utilities.decode_file(decoded_json[keys.file_key])
         filename: str = secure_filename(dag_file.filename)
-        save_dir: str = utilities.create_dir(os.path.join(utilities.parent_path, utilities.temp_in_path,
-                                                          keys.dag_save_path))
+        save_dir: str = utilities.create_dir(
+            os.path.join(
+                utilities.parent_path, utilities.temp_in_path, keys.dag_save_path
+            )
+        )
         file_path: str = os.path.join(save_dir, filename)
         dag_file.save(file_path)
         return Path(file_path)
@@ -124,5 +128,7 @@ class Template:
         out_dict.update({keys.template_name: name})
         # path to file
         file_path: Path = self.get_dag_definition_file()
-        out_dict.update({keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name)})
+        out_dict.update(
+            {keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name)}
+        )
         return out_dict

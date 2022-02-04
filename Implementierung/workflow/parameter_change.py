@@ -1,17 +1,27 @@
 from Implementierung.FrontendAPI import keys
+
+
 class ParameterChange:
     """
     This class represents the change of a key-value pair.
     It contains the old as well as the new version of both the key and the value.
     Furthermore, it holds the name of the file the change was made in.
     """
+
     __old_key: str
     __new_key: str
     __old_value: str
     __new_value: str
     __config_file_name: str
 
-    def __init__(self, old_key: str, new_key: str, old_value: str, new_value: str, config_file_name: str):
+    def __init__(
+        self,
+        old_key: str,
+        new_key: str,
+        old_value: str,
+        new_value: str,
+        config_file_name: str,
+    ):
         """Constructor of class ParameterChange.
 
         Args:
@@ -118,6 +128,10 @@ class ParameterChange:
         Returns:
             encoded changes
         """
-        return {keys.config_file_name: self.__config_file_name, keys.old_key: self.__old_key,
-                keys.new_key: self.__new_key, keys.old_value: self.__old_value, keys.new_value: self.__new_value}
-
+        return {
+            keys.config_file_name: self.__config_file_name,
+            keys.old_key: self.__old_key,
+            keys.new_key: self.__new_key,
+            keys.old_value: self.__old_value,
+            keys.new_value: self.__new_value,
+        }
