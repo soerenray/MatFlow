@@ -23,7 +23,7 @@
               <v-row>
                 <div style="padding-left: 20px; padding-top: 5px">
                   <v-btn @click="resetChoosenConfigFileObject" color="yellow"
-                    >Pull files from Server</v-btn
+                    >Pull from Server</v-btn
                   >
                 </div>
                 <v-spacer></v-spacer>
