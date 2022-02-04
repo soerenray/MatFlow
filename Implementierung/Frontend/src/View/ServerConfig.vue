@@ -63,10 +63,10 @@ export default {
   computed: {
     tableHeaders: {
       get: function (): object[] {
-        return this.serverConfigObject.tableHeaders;
+        return serverConfigObject.tableHeaders;
       },
       set: function (tableHeaders: object[]) {
-        this.serverConfigObject.tableHeaders = tableHeaders;
+        serverConfigObject.tableHeaders = tableHeaders;
       },
     },
   },
