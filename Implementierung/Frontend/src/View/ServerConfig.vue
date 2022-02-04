@@ -17,14 +17,14 @@
           ><v-text-field v-model="item.dagLocation"></v-text-field
         ></template>
         <template v-slot:[`item.delete`]="{}"
-          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn></template
-        >
+          ><v-btn color="red" icon><delete-icon></delete-icon></v-btn
+        ></template>
         <template v-slot:[`item.apply`]="{}"
           ><v-btn color="green" outlined>apply changes</v-btn></template
         >
         <template v-slot:[`item.serverResources`]="{}"
-          ><v-btn icon><memory-icon></memory-icon></v-btn></template
-        >
+          ><v-btn icon><memory-icon></memory-icon></v-btn
+        ></template>
         <template v-slot:[`item.server`]="{}"
           ><v-checkbox></v-checkbox
         ></template>
