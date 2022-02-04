@@ -3,7 +3,7 @@ import os
 import pathlib
 import shutil
 from typing import List
-import mock
+import unittest.mock as mock
 from pathlib import Path
 from unittest import TestCase
 from Implementierung.workflow.workflow_manager import WorkflowManager
