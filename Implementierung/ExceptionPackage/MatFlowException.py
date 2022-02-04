@@ -185,6 +185,23 @@ class SignUpException(MatFlowException):
         super(SignUpException, self).__init__(message, self.__status_code)
 
 
+class ConverterException(MatFlowException):
+
+    """
+    This is an exception that is thrown when the conversion failed.
+    """
+
+    def __init__(self, message: str):
+        """
+        constructs a new ConverterException
+
+        Args:
+            message: The message that is displayed when this exception is thrown.
+        """
+        self.__status_code = 611
+        super(ConverterException, self).__init__(message, self.__status_code)
+
+
 class InternalException(MatFlowException):
     """
     Exception for dev purposes
