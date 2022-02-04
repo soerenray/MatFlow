@@ -34,6 +34,7 @@
 </template>
 <script lang="ts">
 import ServerConfig from "../Model/ServerConfig";
+import Server from "../Classes/Server";
 
 const serverConfigObject = new ServerConfig(
   [
@@ -48,13 +49,15 @@ const serverConfigObject = new ServerConfig(
     { text: "delete server", value: "delete" },
   ],
   [
-    {
-      name: "kit-materialwissenschaften",
-      address: "123.123.11.1",
-      status: "running",
-      limit: 5,
-      dagLocation: "home/airflow/dags",
-    },
+    new Server(
+      "123.123.11.1",
+      "running",
+      5,
+      "home/airflow/dags",
+      true,
+      "kit-materialwissenschaften",
+      [["cpu1", '50%']]
+    ),
   ]
 );
 
