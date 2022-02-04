@@ -3,16 +3,14 @@ from __future__ import annotations
 import json
 from typing import List
 
-from flask import request
-
 # User class
 #
 # username: the Users Username
 # status: the Users status (is either "active" or "inactive")
 # privilege: the Users privilege, no privilege equals inactive status
 # password: the Users password
+from Implementierung.ExceptionPackage.MatFlowException import ConverterException
 from Implementierung.FrontendAPI import keys
-from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 
 
 class User:
@@ -74,6 +72,11 @@ class User:
             User: decoded user object
         """
         decoded_json: dict = json.loads(json_details)
+        keys_to_check: List = [keys.user_name, keys.user_status_name, keys.user_privilege_name,
+                               keys.password_name]
+        for key in keys_to_check:
+            if key not in decoded_json:
+                raise ConverterException(key + "not found")
         user_name: str = decoded_json[keys.user_name]
         status: str = decoded_json[keys.user_status_name]
         privilege: str = decoded_json[keys.user_privilege_name]

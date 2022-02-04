@@ -15,8 +15,8 @@ def create_dir(path: str) -> str:
     created_dir: bool = False
     counter: int = 0
     while not created_dir:
-        try_path: str = os.path.join(path, keys.underscore, str(counter))
-        if os.path.isdir(try_path):
+        try_path: str = path + keys.underscore + str(counter)
+        if not os.path.isdir(try_path):
             os.makedirs(try_path)
             return try_path
         counter += 1
