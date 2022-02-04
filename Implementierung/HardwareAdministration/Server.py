@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import nmap, socket
+import nmap,socket
 import resource
 import json
 from typing import List, Tuple, Type
@@ -25,12 +25,13 @@ class Server:
         self.name = "server"
         hostname = socket.gethostname()
         self.address = socket.gethostbyname(hostname)
-        self.status = self.checkStatus(self)
+        self.status: bool = self.checkStatus()
         self.containerLimit= 20
         self.selectedForExecution = True
-        self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
-        self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
-
+        # self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
+        # self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
+        self.cpuResource = resource.RLIMIT_CPU
+        self.vmemResource = resource.RLIM_INFINITY
 
 # getter and setter methods
     # name getter method
@@ -85,13 +86,14 @@ class Server:
 
     # check status method:
     def checkStatus(self):
-        scanner = nmap.PortScanner()
-        host = socket.gethostbyname(self.getAddress)
-        scanner.scan(host, "1","-v")
-        if scanner[host].state() == "UP":
-            return True
-        else:
-            return False
+        # scanner = nmap.PortScanner()
+        # host = socket.gethostbyname(self.getAddress())
+        # scanner.scan(host, "1","-v")
+        # if scanner[host].state() == "UP":
+        #     return True
+        # else:
+        #     return False
+        return True
 
     @classmethod
     def extract_server(cls, json_details: str) -> Server:
@@ -129,7 +131,7 @@ class Server:
         """
         name: str = self.getName()
         ip_address: str = self.getAddress()
-        status: str = self.getStatus()
+        status: bool = self.getStatus()
         container_limit: int = self.getContainerLimit()
         executing: bool = self.isSelectedForExecution()
         resources: List[Tuple[str, str]] = self.getRessources()
