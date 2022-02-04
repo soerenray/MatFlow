@@ -109,8 +109,14 @@ class Server:
             Server: decoded server object
         """
         decoded_json: dict = json.loads(json_details)
-        keys_to_be_in = [keys.server_name, keys.server_address_name, keys.server_status_name,
-                         keys.container_limit_name, keys.server_resources_name, keys.selected_for_execution_name]
+        keys_to_be_in = [
+            keys.server_name,
+            keys.server_address_name,
+            keys.server_status_name,
+            keys.container_limit_name,
+            keys.server_resources_name,
+            keys.selected_for_execution_name,
+        ]
         for key in keys_to_be_in:
             if key not in decoded_json:
                 raise ConverterException(key + "not in json")
