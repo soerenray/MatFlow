@@ -31,6 +31,7 @@
   </v-app>
 </template>
 <script lang="ts">
+import Vue from "vue";
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
 
@@ -67,6 +68,11 @@ export default {
         serverConfigObject.servers = servers;
       },
     },
+  },
+  beforeCreate: function () {
+    // Vue is oberserving data in the data property.
+    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    Vue.observable(serverConfigObject);
   },
 };
 </script>
