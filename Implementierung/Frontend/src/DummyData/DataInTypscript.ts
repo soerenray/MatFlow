@@ -55,7 +55,9 @@ function pullServers2() {
 }
 
 function pushServer(server: Server) {
-    servers = [new Server(server.serverAddress, server.serverStatus, server.containerLimit, server.selectedForExecution, server.serverName, server.serverResources)]
+    servers = [new Server(JSON.parse(JSON.stringify(server.serverAddress)), JSON.parse(JSON.stringify(server.serverStatus)), 
+        JSON.parse(JSON.stringify(server.containerLimit)), JSON.parse(JSON.stringify(server.selectedForExecution)), 
+        JSON.parse(JSON.stringify(server.serverName)), JSON.parse(JSON.stringify(server.serverResources)))]
 }
 
 function deepCopyConfigFile(configFile: ConfigFile): ConfigFile {
