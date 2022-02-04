@@ -8,7 +8,7 @@
     <div style="padding-top: 20px">
       <v-data-table :headers="header" :items="items" item-key="name">
         <template v-slot:[`item.name`]="{ item }"
-          ><v-text-field v-model="item.name"></v-text-field
+          ><v-text-field disabled v-model="item.name"></v-text-field
         ></template>
         <template v-slot:[`item.limit`]="{ item }"
           ><v-text-field v-model="item.limit"></v-text-field
@@ -26,7 +26,7 @@
           ><v-btn icon><memory-icon></memory-icon></v-btn
         ></template>
         <template v-slot:[`item.server`]="{}"
-          ><v-checkbox></v-checkbox
+          ><v-checkbox disabled></v-checkbox
         ></template>
       </v-data-table>
     </div>
