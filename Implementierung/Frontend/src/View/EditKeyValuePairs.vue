@@ -4,12 +4,12 @@
       <v-card>
         <v-row>
           <v-col>
-            <v-row>
+            <v-row style="padding-top: 10px">
               <div>
                 <v-btn text color="primary"> Key name </v-btn>
               </div>
               <v-spacer></v-spacer>
-              <div style="padding-top: 15px; padding-right: 290px">
+              <div style="padding-right: 290px">
                 <v-btn text color="primary"> Value </v-btn>
               </div>
             </v-row>
