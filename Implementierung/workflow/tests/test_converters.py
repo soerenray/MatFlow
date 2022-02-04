@@ -8,6 +8,8 @@ from unittest.mock import patch, Mock, mock_open
 import flask
 from Implementierung.ExceptionPackage.MatFlowException import ConverterException
 from Implementierung.FrontendAPI import keys, utilities
+from Implementierung.workflow.frontend_version import FrontendVersion
+from Implementierung.workflow.parameter_change import ParameterChange
 from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
 
@@ -244,12 +246,44 @@ class ReducedConfigTest(unittest.TestCase):
                     with patch("builtins.open", mock_open(read_data="data")):
                         path: Path = ReducedConfigFile.extract_multiple_config_files(to_dump)
                         self.assertEqual(path, Path("/"))
-                        
 
-class FrontendVersionTest:
-    def test_sth(self):
-        pass
 
+class FrontendVersionTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.change = Mock()
+        self.version_number = Mock()
+        self.frontend_version = FrontendVersion(self.version_number, "scooby", [self.change])
+
+    # can only be valid
+    def test_encode_version_valid(self):
+        expected = {keys.version_note_name: "scooby", keys.frontend_versions_changes: ["boo"],
+                    keys.version_number_name: 1}
+        with patch.object(self.version_number, "get_number", return_value=1):
+            with patch.object(self.change, "encode", return_value="boo"):
+                encoded = self.frontend_version.encode_version()
+                self.assertEqual(encoded, expected)
+
+    def test_encode_call_get_number(self):
+        with patch.object(self.version_number, "get_number", return_value=1) as mock_method:
+            with patch.object(self.change, "encode", return_value="boo"):
+                encoded = self.frontend_version.encode_version()
+                assert mock_method.call_count > 0
+
+    def test_encode_call_encode(self):
+        with patch.object(self.version_number, "get_number", return_value=1) :
+            with patch.object(self.change, "encode", return_value="boo")as mock_method:
+                encoded = self.frontend_version.encode_version()
+                assert mock_method.call_count > 0
+
+
+class ParameterChangeTest(unittest.TestCase):
+    # encoding can only be valid
+    def test_encoding_valid(self):
+        change: ParameterChange = ParameterChange("scooby", "dooby", "doo", "hoo", "Pluto")
+        expected = {keys.config_file_name: "Pluto", keys.old_key: "scooby",
+                keys.new_key: "dooby", keys.old_value: "doo", keys.new_value: "hoo"}
+        self.assertEqual(expected, change.encode())
+        
 
 if __name__ == '__main__':
     unittest.main()
