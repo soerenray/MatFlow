@@ -90,12 +90,25 @@ class UserController:
         overrideStatus = overrideUser.getStatus()
         overridePrivilege = overrideUser.getPrivilege()
         overridePassword = overrideUser.getPassword()
+
+        # now we build our api call address
+         
         overrideAddress = "http://localhost:8080/api/v1/users/" + overrideUsername
         getOverrideUser = requests.get(overrideAddress, auth=self.getAuth())
+
+        # we check if the response is what we wanted
+
+
         if getOverrideUser.status_code != 200:
             raise UserExistsException
+
+        # if the override status is inactive we don't want to update their privilege
+
         elif overrideStatus == "inactive":
             overridePrivilege = "Public"
+
+        # this are the parameters that will get changed
+
         overridePayload = {
             "email": ".",
             "first_name": ".",
@@ -107,6 +120,16 @@ class UserController:
         patchOverrideUser = requests.patch(
             overrideAddress, json=overridePayload, auth=self.getAuth()
         )
+
+
+        # we patch the user
+
+        patchOverrideUser = requests.patch(
+            overrideAddress, json=overridePayload, auth=self.getAuth()
+        )
+
+        # and check the response
+
         if patchOverrideUser.status_code != 200:
             raise UserExistsException
 
@@ -122,8 +145,18 @@ class UserController:
 
     def deleteUser(self, deleteUser: User):
         deleteUsername = deleteUser.getUsername()
+
+        # we build our address
+
         deleteUserAddress = "http://localhost:8080/api/v1/users/" + deleteUsername
         deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
+
+        # delete the User via the api call
+
+        deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
+
+        # and check the Response
+
         if deleteUserCode.status_code != 200:
             raise UserExistsException
 
@@ -136,7 +169,19 @@ class UserController:
     # loginUserAddress: str
 
     def loginUser(self, loginUsername: str, loginPassword: str):
+
+        # we build our address
+
         loginUserAddress = "http://localhost:8080/api/v1/users/" + loginUsername
+        if (
+            requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
+            != loginPassword
+        ):
+            raise LoginException
+
+
+        # and check the password
+
         if (
             requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
             != loginPassword
@@ -156,9 +201,17 @@ class UserController:
     def createUser(
         self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str
     ):
+        # we check if the passwords are identical
+
+
         if signUpPassword != signUpPasswordRepetition:
             raise SignUpException
+        
+        # we build our address
+
         createUserAddress = "http://localhost:8080/api/v1/users"
+
+        # this is the Payload we use to create the User
         createUserPayload = {
             "email": ".",
             "first_name": ".",
@@ -170,5 +223,12 @@ class UserController:
         createUserStatusCode = requests.post(
             createUserAddress, json=createUserPayload, auth=self.getAuth()
         )
+
+        # we make the API call to create the User
+        createUserStatusCode = requests.post(
+            createUserAddress, json=createUserPayload, auth=self.getAuth()
+        )
+
+        # and check the response
         if createUserStatusCode.status_code != 200:
             raise UserExistsException
