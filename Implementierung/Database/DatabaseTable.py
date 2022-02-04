@@ -241,7 +241,7 @@ class DatabaseTable:
         db.close()
 
 
-# TODO vvv delete before shipping vvv
+# TODO vvv delete or move before shipping vvv
 def init_tests():
     print("TEST IN DatabaseTable START")
     print(

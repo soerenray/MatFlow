@@ -1,7 +1,10 @@
+import os.path
+
 from Implementierung.ExceptionPackage import MatFlowException
 from Implementierung.Database.DatabaseTable import DatabaseTable
 from Implementierung.workflow.workflow_instance import WorkflowInstance
 from Implementierung.workflow.database_version import DatabaseVersion
+from Implementierung.workflow.version_number import VersionNumber
 from pathlib import Path
 from typing import Dict, List
 import re
@@ -260,8 +263,6 @@ class WorkflowData:
     ) -> List[DatabaseVersion]:
         """Return all DatabaseVersions of a Workflow.
 
-        Extended description of function.
-
         Args:
             wf_name(str): name of workflow
 
@@ -269,6 +270,68 @@ class WorkflowData:
             DatabaseVersion[]: all versions as DatabaseVersion objects
 
         """
+        # different approach for version 1 and all following Versions:
+        # 1) every file in version 1 is 'changed'
+        get_version_one_files = """SELECT cf.file, v.note
+                                             FROM (SELECT * 
+                                                   FROM Version 
+                                                   WHERE wfName = %s 
+                                                   AND version = %s) v, VersionFile vf, ConfFile cf
+                                             WHERE v.ID = vf.versionID 
+                                             AND vf.confKey = cf.confKey
+                                             """
+
+        # 2) compare old and new version and get file path of new version file
+        get_other_version_file = """SELECT v1.file, v1.note
+                                    FROM (SELECT confKey, file
+                                          FROM (SELECT * 
+                                              FROM Version v
+                                              WHERE wfName = %s
+                                              AND version = %s) v, VersionFile vf, ConfFile cf
+                                          WHERE v.ID = vf.versionID
+                                          AND cf.confKey = vf.confKey) v1 LEFT JOIN
+                                         (SELECT confKey
+                                          FROM (SELECT * 
+                                              FROM Version 
+                                              WHERE wfName = %s
+                                              AND version = %s) v, VersionFile vf
+                                          WHERE v.ID = vf.versionID) v2 ON v1.confKey = v2.confKey
+                                    WHERE NOT v1.confKey = v2.confKey
+                                    """
+
+        versions = self.get_version_numbers_of_workflow_instance(wf_name)
+        database_versions: List[DatabaseVersion] = []  # return value
+        for version in versions:
+            version_number = VersionNumber(version)
+
+            if version == "1":
+                # get one file path and cut of the file name to get the path
+                version_file = self.__databaseTable.get_one(
+                    get_version_one_files, (wf_name, version)
+                )
+
+                # file -> (filepath, note)
+                database_version = DatabaseVersion(
+                    version_number,
+                    version_file[1],
+                    os.path.dirname(Path(version_file[0])),
+                )
+                database_versions.append(database_version)
+                continue
+
+            # else
+            version_file = self.__databaseTable.get_one(
+                get_other_version_file,
+                (wf_name, version, wf_name, version_number.get_predecessor()),
+            )
+
+            # file -> (filepath, note)
+            database_version = DatabaseVersion(
+                version_number, version_file[1], os.path.dirname(Path(version_file[0]))
+            )
+            database_versions.append(database_version)
+
+        return database_versions
 
     def set_active_version_through_number(self, wf_name: str, version: str):
         """Set the active version of a workflow in ActiveVersion table.
@@ -344,6 +407,7 @@ class WorkflowData:
         for (version,) in raw_versions:
             versions.append(version)
 
+        versions.sort(key=lambda x: list(map(int, x.split("."))))
         return versions
 
 
