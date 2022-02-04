@@ -26,7 +26,7 @@
             </template>
             <edit-key-value-pairs
               v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
-              v-on:push="pushServer"
+              v-on:update="pushServer"
               v-on:reset="pullServers"
               :fileName="item.serverName"
               :keyValuePairsFromParent="item.serverResources"
