@@ -1,5 +1,4 @@
 from typing import List
-
 from Implementierung.FrontendAPI import keys
 from Implementierung.FrontendAPI.ExceptionHandler import ExceptionHandler
 from Implementierung.workflow.workflow_version import WorkflowVersion
@@ -11,9 +10,12 @@ class FrontendVersion(WorkflowVersion):
     """
     This class inherits from Version and is specialized to satisfy the need for information of the client application.
     """
+
     __changes: List[ParameterChange]
 
-    def __init__(self, version_number: VersionNumber, note: str, changes: List[ParameterChange]):
+    def __init__(
+        self, version_number: VersionNumber, note: str, changes: List[ParameterChange]
+    ):
         """Constructor of class FrontendVersion.
 
         Args:
@@ -54,7 +56,9 @@ class FrontendVersion(WorkflowVersion):
         """
         out_dict: dict = dict()
         out_dict.update({keys.version_note_name: self.get_note()})
-        out_dict.update({keys.version_number_name: self.get_version_number().get_number()})
+        out_dict.update(
+            {keys.version_number_name: self.get_version_number().get_number()}
+        )
         changes_list: List[dict] = []
         for change in self.get_changes():
             changes_list.append(change.encode())
