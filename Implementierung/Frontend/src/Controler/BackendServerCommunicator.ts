@@ -65,7 +65,7 @@ class BackendServerCommunicator {
     }
     public pushUser(user: User): void { updateUser(user) }
     public pushDeleteUser(user: User): void { deleteUser(user) }
-    public pullServers(): Server[] { return pullServers2s() }
+    public pullServers(): Server[] { return pullServers2() }
     public pushServer(server: Server): void { pushServer(server) }
 }
 
