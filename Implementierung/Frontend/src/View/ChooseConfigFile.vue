@@ -42,7 +42,12 @@
                   configFileName
                 )
               "
-              :style="{ background: colorForConfigFileName(configFileName) }"
+              :style="{
+                background: colorForConfigFileName(
+                  this.updatedConfigFiles,
+                  configFileName
+                ),
+              }"
             >
               {{ configFileName }}
             </v-col>
@@ -54,9 +59,7 @@
         <edit-key-value-pairs
           ref="editConfigFile"
           v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
-          v-on:update="
-            pushUpdatedConfigFilesToBackendServer
-          "
+          v-on:update="pushUpdatedConfigFilesToBackendServer"
           v-on:reset="resetChoosenConfigFileObject"
           :fileName="selectedConfigFileName"
           :keyValuePairsFromParent="keyValuePairs"
@@ -83,24 +86,51 @@ export default {
     EditKeyValuePairs,
   },
   methods: {
-    changeAllKeyValuePairs(configFileName: string, newKeyValuePairs: Array<[string, string]>) {
-      this.getConfigFileFromUpdatedConfigFiles(configFileName).keyValuePairs.forEach(
+    changeAllKeyValuePairs(
+      configFileName: string,
+      newKeyValuePairs: Array<[string, string]>
+    ) {
+      this.updateKeyValuePairs(
+        // Gets the neccessary config file out of all config files that were requested from the server
+        this.getConfigFileFromUpdatedConfigFiles(
+          this.updatedConfigFiles,
+          configFileName
+        ).keyValuePairs,
+        newKeyValuePairs
+      );
+    },
+    updateKeyValuePairs(
+      oldKetValuePairs: Array<[string, string]>,
+      newKeyValuePairs: Array<[string, string]>
+    ) {
+      oldKetValuePairs.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
         }
       );
     },
-    colorForConfigFileName: function (configFileName: string): string {
+    colorForConfigFileName: function (
+      updatedConfigFiles: ConfigFile[],
+      configFileName: string
+    ): string {
       if (this.selectedConfigFileName === configFileName) {
         return "#a9cce3";
-      } else if (this.isConfigFileNameInUpdatedConfigFiles(configFileName)) {
+      } else if (
+        this.isConfigFileNameInUpdatedConfigFiles(
+          updatedConfigFiles,
+          configFileName
+        )
+      ) {
         return "#a3e4d7";
       }
       return "#FFFFFF";
     },
-    isConfigFileNameInUpdatedConfigFiles(configFileName: string): boolean {
-      return this.updatedConfigFiles
+    isConfigFileNameInUpdatedConfigFiles(
+      updatedConfigFiles: ConfigFile[],
+      configFileName: string
+    ): boolean {
+      return updatedConfigFiles
         .map(function (configFile: ConfigFile) {
           return configFile.configFileName;
         })
@@ -108,12 +138,13 @@ export default {
         ? false
         : true;
     },
-    getConfigFileFromUpdatedConfigFiles(configFileName: string): ConfigFile {
-      let configFile = this.updatedConfigFiles.find(
-        (configFile: ConfigFile) => {
-          return configFileName === configFile.configFileName;
-        }
-      );
+    getConfigFileFromUpdatedConfigFiles(
+      updatedConfigFiles: ConfigFile[],
+      configFileName: string
+    ): ConfigFile {
+      let configFile = updatedConfigFiles.find((configFile: ConfigFile) => {
+        return configFileName === configFile.configFileName;
+      });
       if (configFile === undefined) {
         return new ConfigFile();
       }
@@ -158,7 +189,10 @@ export default {
     ) {
       this.selectedConfigFileName = selectedConfigFileName;
       if (
-        !this.isConfigFileNameInUpdatedConfigFiles(this.selectedConfigFileName)
+        !this.isConfigFileNameInUpdatedConfigFiles(
+          this.updatedConfigFiles,
+          this.selectedConfigFileName
+        )
       ) {
         this.chosenConfigFile =
           backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
@@ -168,6 +202,7 @@ export default {
         this.updatedConfigFiles.push(this.chosenConfigFile);
       } else {
         this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(
+          this.updatedConfigFiles,
           this.selectedConfigFileName
         );
       }
