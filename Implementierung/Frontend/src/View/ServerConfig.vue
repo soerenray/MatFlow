@@ -78,7 +78,6 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import EditKeyValuePairs from "../View/EditKeyValuePairs.vue";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import ServerConfig from "../Model/ServerConfig";
 import Server from "../Classes/Server";
@@ -99,7 +98,6 @@ const serverConfigObject = new ServerConfig(
 );
 
 export default {
-  components: { EditKeyValuePairs },
   name: "ServerConfig",
   methods: {
     pushServerAndPullServers(serverName: string) {
