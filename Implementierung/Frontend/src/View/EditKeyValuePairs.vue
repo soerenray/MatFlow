@@ -23,7 +23,7 @@
               <v-row>
                 <div style="padding-left: 20px; padding-top: 5px">
                   <v-btn @click="resetChoosenConfigFileObject" color="yellow"
-                    >Pull from Server</v-btn
+                    >Revert all files</v-btn
                   >
                 </div>
                 <v-spacer></v-spacer>
@@ -31,7 +31,7 @@
                   <v-btn
                     @click="pushUpdatedConfigFilesToBackendServer"
                     color="blue"
-                    >Push to Server</v-btn
+                    >Save all files</v-btn
                   >
                 </div>
               </v-row>
