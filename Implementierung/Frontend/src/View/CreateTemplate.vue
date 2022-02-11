@@ -83,7 +83,7 @@ export default {
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(
-        this.createTemplateObject(this.templateBlueprintFile(), this.newTemplateName)
+        this.createTemplateObject(createTemplateObject.templateFolder, this.newTemplateName)
       );
     },
     createTemplateObject(templateBlueprintFile: File, templateName: string): Template {
@@ -91,12 +91,6 @@ export default {
         templateBlueprintFile,
         templateName
       );
-    },
-    templateBlueprintFile(): File {
-      if (createTemplateObject.templateFolder.name !== "emptyFile") {
-        return createTemplateObject.templateFolder;
-      }
-      return new File([], "emptyFile", { type: "application/zip" });
     },
   },
   computed: {
