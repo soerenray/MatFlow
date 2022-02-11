@@ -43,14 +43,13 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import logInMemento from "../Memento/LogInMemento"
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import LogIn from "../Model/LogIn";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const logInObject = new LogIn();
 
-const logInMementoObject = new logInMemento(logInObject.createLogInMemento())
+const logInMementoObject = logInObject.createLogInMemento()
 
 export default {
   name: "LogIn",
@@ -66,7 +65,7 @@ export default {
       );
     },
     resetView() {
-      logInObject.setLogInMemento(logInMementoObject.logInObject)
+      logInObject.setLogInMemento(logInMementoObject)
     }
   },
   computed: {

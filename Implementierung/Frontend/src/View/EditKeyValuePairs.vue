@@ -23,7 +23,7 @@
               <v-row>
                 <div style="padding-left: 20px; padding-top: 5px">
                   <v-btn @click="resetChoosenConfigFileObject" color="yellow"
-                    >Pull from Server</v-btn
+                    >Revert all files</v-btn
                   >
                 </div>
                 <v-spacer></v-spacer>
@@ -31,7 +31,7 @@
                   <v-btn
                     @click="pushUpdatedConfigFilesToBackendServer"
                     color="blue"
-                    >Push to Server</v-btn
+                    >Save all files</v-btn
                   >
                 </div>
               </v-row>
@@ -98,12 +98,20 @@ export default {
       this.$emit("update", this.fileName);
     },
     changeAllKeyValuePairs() {
-      let keyValuePairsAsTupleArray = this.keyValuePairs.map(
+      this.$emit(
+        "changeAllKeyValuePairs",
+        this.fileName,
+        this.getKeyValuePairsAsTupleArray(this.keyValuePairs)
+      );
+    },
+    getKeyValuePairsAsTupleArray(
+      keyValuePairs: Array<KeyValuePair>
+    ): Array<[string, string]> {
+      return keyValuePairs.map(
         (keyValuePair: KeyValuePair): [string, string] => {
           return [keyValuePair.keyName, keyValuePair.keyValue];
         }
       );
-      this.$emit("changeAllKeyValuePairs", this.fileName, keyValuePairsAsTupleArray);
     },
     initialiseKeyValuePairs() {
       editKeyValuePairsObject.keyValuePairs = [];
@@ -126,12 +134,6 @@ export default {
       },
     },
   },
-  beforeCreate: function () {
-    Vue.observable(editKeyValuePairsObject);
-  },
-  created: function() {
-    this.initialiseKeyValuePairs()
-  },
   watch: {
     fileName: function () {
       this.initialiseKeyValuePairs();
@@ -139,6 +141,12 @@ export default {
     keyValuePairsFromParent: function () {
       this.initialiseKeyValuePairs();
     },
+  },
+  beforeCreate: function () {
+    Vue.observable(editKeyValuePairsObject);
+  },
+  created: function () {
+    this.initialiseKeyValuePairs();
   },
 };
 </script>

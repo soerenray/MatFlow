@@ -44,16 +44,13 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import SignUpMemento from "../Memento/SignUpMemento";
 import BackenderServerCommunicator from "../Controler/BackendServerCommunicator";
 import SignUp from "../Model/SignUp";
 
 const backendServerCommunicatorObject = new BackenderServerCommunicator();
 const signUpObject = new SignUp();
 
-const signUpMementoObject = new SignUpMemento(
-  signUpObject.createSignUpMemento()
-);
+const signUpMementoObject = signUpObject.createSignUpMemento()
 
 export default {
   name: "SignUp",
@@ -70,7 +67,7 @@ export default {
       );
     },
     resetView() {
-      signUpObject.setSignUpMemento(signUpMementoObject.signUpObject);
+      signUpObject.setSignUpMemento(signUpMementoObject);
     },
   },
   computed: {

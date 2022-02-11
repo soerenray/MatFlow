@@ -83,22 +83,14 @@ export default {
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(
-        this.createTemplateObject()
+        this.createTemplateObject(createTemplateObject.templateFolder, this.newTemplateName)
       );
     },
-    createTemplateObject(): Template {
+    createTemplateObject(templateBlueprintFile: File, templateName: string): Template {
       return new Template(
-        this.templateBlueprintFile(),
-        createTemplateObject.chosenTemplateName
+        templateBlueprintFile,
+        templateName
       );
-    },
-    templateBlueprintFile(): File {
-      if (createTemplateObject.templateFolder.name !== "emptyFile") {
-        return createTemplateObject.templateFolder;
-      } else if (createTemplateObject.templateFolder.name !== "emptyFile") {
-        return createTemplateObject.templateFolder;
-      }
-      return new File([], "emptyFile", { type: "application/zip" });
     },
   },
   computed: {
