@@ -33,7 +33,7 @@
               <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    @click="selectNewVersionObject(item)"
+                    @click="selectedVersionObject = (item)"
                     icon
                     v-bind="attrs"
                     v-on="on"
@@ -78,9 +78,6 @@ export default {
     KeyValuePairs,
   },
   methods: {
-    selectNewVersionObject: function (selectedVersionObject: Version) {
-      versionControlObject.selectedVersionObject = selectedVersionObject;
-    },
     selectWorkflowInstanceNameAndPullVersions(
       selectedWorkflowInstanceName: string
     ) {

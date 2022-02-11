@@ -25,7 +25,7 @@
               ></v-btn>
             </template>
             <edit-key-value-pairs
-              v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+              v-on:changeAllKeyValuePairs="changeAllKeyValuePairsInServerResources"
               v-on:update="pushServer"
               v-on:reset="pullServers"
               :fileName="item.serverName"
@@ -77,22 +77,31 @@ export default {
     },
     pushServer(serverName: string) {
       backendServerCommunicatorObject.pushServer(
-        this.findServerByServerName(serverName)
+        this.findServerByServerName(this.servers, serverName)
       );
     },
-    changeAllKeyValuePairs(
+    changeAllKeyValuePairsInServerResources(
       serverName: string,
       newKeyValuePairs: Array<[string, string]>
     ) {
-      this.findServerByServerName(serverName).serverResources.forEach(
+      this.updateKeyValuePairs(
+        this.findServerByServerName(this.servers, serverName).serverResources,
+        newKeyValuePairs
+      );
+    },
+    updateKeyValuePairs(
+      oldKeyValuePairs: Array<[string, string]>,
+      newKeyValuePairs: Array<[string, string]>
+    ) {
+      oldKeyValuePairs.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
         }
       );
     },
-    findServerByServerName(serverName: string): Server {
-      let serverIndex = this.servers.findIndex((server: Server) => {
+    findServerByServerName(servers: Server[], serverName: string): Server {
+      let serverIndex = servers.findIndex((server: Server) => {
         return server.serverName == serverName;
       });
       if (serverIndex == -1) {
