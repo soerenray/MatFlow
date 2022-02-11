@@ -24,17 +24,51 @@
                 ><memory-icon></memory-icon
               ></v-btn>
             </template>
-            <edit-key-value-pairs
-              v-on:changeAllKeyValuePairs="changeAllKeyValuePairsInServerResources"
-              v-on:update="pushServer"
-              v-on:reset="pullServers"
-              :fileName="item.serverName"
-              :keyValuePairsFromParent="item.serverResources"
-            ></edit-key-value-pairs>
+            <div style="width: 700px">
+              <v-card>
+                <v-row>
+                  <v-col>
+                    <v-row style="padding-top: 10px">
+                      <div>
+                        <v-btn text color="primary"> Key name </v-btn>
+                      </div>
+                      <v-spacer></v-spacer>
+                      <div style="padding-right: 290px">
+                        <v-btn text color="primary"> Value </v-btn>
+                      </div>
+                    </v-row>
+                  </v-col>
+                  <v-col>
+                    <v-card
+                      v-for="(keyValuePair, index) in item.serverResources"
+                      :key="index"
+                    >
+                      <v-row>
+                        <div style="padding-top: 15px; padding-left: 20px">
+                          <v-text-field
+                            v-model="keyValuePair[0]"
+                            solo
+                            dense
+                          ></v-text-field>
+                        </div>
+                        <v-spacer></v-spacer>
+                        <div style="padding-top: 15px; padding-right: 50px">
+                          <v-text-field
+                            v-model="keyValuePair[1]"
+                            style="width: 400px"
+                            dense
+                          ></v-text-field>
+                        </div>
+                      </v-row>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </div>
           </v-dialog>
         </template>
         <template v-slot:[`item.apply`]="{ item }"
-          ><v-btn @click="pushServerAndPullServers(item)" color="green" outlined
+          ><v-btn @click="pushServerAndPullServers(item.serverName)" color="green" outlined
             >apply changes</v-btn
           ></template
         >
@@ -78,26 +112,6 @@ export default {
     pushServer(serverName: string) {
       backendServerCommunicatorObject.pushServer(
         this.findServerByServerName(this.servers, serverName)
-      );
-    },
-    changeAllKeyValuePairsInServerResources(
-      serverName: string,
-      newKeyValuePairs: Array<[string, string]>
-    ) {
-      this.updateKeyValuePairs(
-        this.findServerByServerName(this.servers, serverName).serverResources,
-        newKeyValuePairs
-      );
-    },
-    updateKeyValuePairs(
-      oldKeyValuePairs: Array<[string, string]>,
-      newKeyValuePairs: Array<[string, string]>
-    ) {
-      oldKeyValuePairs.forEach(
-        (keyValuePair: [string, string], index: number) => {
-          keyValuePair[0] = newKeyValuePairs[index][0];
-          keyValuePair[1] = newKeyValuePairs[index][1];
-        }
       );
     },
     findServerByServerName(servers: Server[], serverName: string): Server {
