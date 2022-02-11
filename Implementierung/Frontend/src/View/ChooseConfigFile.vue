@@ -44,7 +44,7 @@
               "
               :style="{
                 background: colorForConfigFileName(
-                  this.updatedConfigFiles,
+                  updatedConfigFiles,
                   configFileName
                 ),
               }"
@@ -60,7 +60,7 @@
           ref="editConfigFile"
           v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
           v-on:update="pushUpdatedConfigFilesToBackendServer"
-          v-on:reset="resetChoosenConfigFileObject"
+          v-on:reset="resetChoosenConfigFileObjects"
           :fileName="selectedConfigFileName"
           :keyValuePairsFromParent="keyValuePairs"
         ></edit-key-value-pairs>
@@ -156,7 +156,7 @@ export default {
         this.selectedWorkflowInstanceName
       );
     },
-    resetChoosenConfigFileObject() {
+    resetChoosenConfigFileObjects() {
       chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
         backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
       this.updatedConfigFiles = [];
