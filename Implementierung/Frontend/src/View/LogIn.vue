@@ -43,7 +43,6 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import logInMemento from "../Memento/LogInMemento"
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 import LogIn from "../Model/LogIn";
 
