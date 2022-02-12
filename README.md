@@ -1,4 +1,4 @@
-# pse-worfklow-project
+# pse-worfklow-project frontend
 
 ## Project setup
 ```
