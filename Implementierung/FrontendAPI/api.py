@@ -139,13 +139,23 @@ class FrontendAPI:
         """
         try:
             details = FrontendAPI.user_controller.getAllUsersAndDetails()
+            print(details)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         else:
-            list_of_users_airflow = details["users"]["users"]
-        return ExceptionHandler.success(
-            {keys.all_users: details}
-        )
+            list_of_users_airflow = details["users"]
+            out_list = []
+            for user in list_of_users_airflow:
+                status = user["active"]
+                name = user["username"]
+                # "roles": [{"name": "Admin"}
+                privilege = user["roles"][0]["name"]
+                user_dict = {keys.user_name: name, keys.user_status_name: status,
+                             keys.user_privilege_name: privilege}
+                out_list.append(user_dict)
+            return ExceptionHandler.success(
+                {keys.all_users: out_list}
+            )
 
     @staticmethod
     @app.route("/set_user_details", methods=["PUT"])
