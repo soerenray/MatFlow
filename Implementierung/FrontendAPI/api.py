@@ -7,7 +7,9 @@ from flask import Flask, request
 
 # for production api:
 from waitress import serve
-from Implementierung.ExceptionPackage.MatFlowException import MatFlowException
+from Implementierung.ExceptionPackage.MatFlowException import MatFlowException, ConverterException, \
+    AirflowConnectionException
+from requests.exceptions import ConnectionError
 from Implementierung.FrontendAPI import utilities, keys
 from Implementierung.UserAdministration.UserController import UserController
 from Implementierung.UserAdministration.User import User
@@ -16,9 +18,7 @@ from Implementierung.workflow.reduced_config_file import ReducedConfigFile
 from Implementierung.workflow.template import Template
 from Implementierung.workflow.workflow_manager import WorkflowManager
 from .ExceptionHandler import ExceptionHandler
-from Implementierung.HardwareAdministration.Hardware_Controller import (
-    Hardware_Controller,
-)
+from Implementierung.HardwareAdministration.Hardware_Controller import Hardware_Controller
 from Implementierung.HardwareAdministration.Server import Server
 
 # according to Flask docs this command should be on modular level
@@ -117,6 +117,8 @@ class FrontendAPI:
             FrontendAPI.hardware_controller.setServer(server)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -129,19 +131,18 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
-        # TODO anpassen
-        """
-        {"users": {"total_entries": 1, "users": [{"active": true, 
-        "changed_on": "2021-12-24T18:01:58.734189", "created_on": "2021-12-24T18:01:58.734079", 
-        "email": "airflowadmin@example.com", "fail_login_count": 0, "first_name": "Airflow", 
-        "last_login": "2022-02-17T14:07:47.375984", "last_name": "Admin", "login_count": 5, 
-        "roles": [{"name": "Admin"}], "username": "airflow"}]}, "statusCode": 607}
-        """
+        # This is how a response with one user looks like
+        # {"users": {"total_entries": 1, "users": [{"active": true,
+        # "changed_on": "2021-12-24T18:01:58.734189", "created_on": "2021-12-24T18:01:58.734079",
+        # "email": "airflowadmin@example.com", "fail_login_count": 0, "first_name": "Airflow",
+        # "last_login": "2022-02-17T14:07:47.375984", "last_name": "Admin", "login_count": 5,
+        # "roles": [{"name": "Admin"}], "username": "airflow"}]}, "statusCode": 607}
         try:
             details = FrontendAPI.user_controller.getAllUsersAndDetails()
-            print(details)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except ConnectionError:
+            return ExceptionHandler.handle_exception(AirflowConnectionException("Start Airflow container"))
         else:
             list_of_users_airflow = details["users"]
             out_list = []
@@ -172,6 +173,10 @@ class FrontendAPI:
             FrontendAPI.user_controller.overrideUser(user)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
+        except ConnectionError:
+            return ExceptionHandler.handle_exception(AirflowConnectionException("Start Airflow container"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -190,6 +195,10 @@ class FrontendAPI:
             FrontendAPI.user_controller.deleteUser(user)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
+        except ConnectionError:
+            return ExceptionHandler.handle_exception(AirflowConnectionException("Start Airflow container"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -213,6 +222,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             for version in versions:
                 list_of_versions.append(version.encode_version())
@@ -236,6 +247,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -262,6 +275,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -286,6 +301,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(file.encode_config())
 
@@ -310,6 +327,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -346,6 +365,10 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
+        except ConnectionError:
+            return ExceptionHandler.handle_exception(AirflowConnectionException("Start Airflow container"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -367,6 +390,10 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
+        except ConnectionError:
+            return ExceptionHandler.handle_exception(AirflowConnectionException("Start Airflow container"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -384,6 +411,8 @@ class FrontendAPI:
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(dict())
 
@@ -417,6 +446,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(template.encode_template())
 
@@ -441,6 +472,8 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
+        except TypeError:
+            return ExceptionHandler.handle_exception(ConverterException("false/ no json provided"))
         else:
             return ExceptionHandler.success(
                 utilities.encode_file(file_path, keys.dag_picture_name)

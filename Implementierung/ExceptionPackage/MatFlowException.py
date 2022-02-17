@@ -202,6 +202,22 @@ class ConverterException(MatFlowException):
         super(ConverterException, self).__init__(message, self.__status_code)
 
 
+class AirflowConnectionException(MatFlowException):
+    """
+    Exception when airflow container has not been started yet.
+    """
+    def __init__(self, message: str):
+        """
+        constructs new AirflowConncetionException
+
+        Args:
+            message: The message that is displayed when this exception is thrown.
+        """
+        self.__status_code = 612
+        super(AirflowConnectionException, self).__init__(message, self.__status_code)
+
+
+
 class InternalException(MatFlowException):
     """
     Exception for dev purposes
