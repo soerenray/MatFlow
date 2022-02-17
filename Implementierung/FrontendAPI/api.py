@@ -129,8 +129,22 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
+        # TODO anpassen
+        """
+        {"users": {"total_entries": 1, "users": [{"active": true, 
+        "changed_on": "2021-12-24T18:01:58.734189", "created_on": "2021-12-24T18:01:58.734079", 
+        "email": "airflowadmin@example.com", "fail_login_count": 0, "first_name": "Airflow", 
+        "last_login": "2022-02-17T14:07:47.375984", "last_name": "Admin", "login_count": 5, 
+        "roles": [{"name": "Admin"}], "username": "airflow"}]}, "statusCode": 607}
+        """
+        try:
+            details = FrontendAPI.user_controller.getAllUsersAndDetails()
+        except MatFlowException as exception:
+            return ExceptionHandler.handle_exception(exception)
+        else:
+            list_of_users_airflow = details["users"]["users"]
         return ExceptionHandler.success(
-            {keys.all_users: FrontendAPI.user_controller.getAllUsersAndDetails()}
+            {keys.all_users: details}
         )
 
     @staticmethod

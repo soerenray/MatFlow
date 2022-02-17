@@ -66,7 +66,7 @@ class Hardware_Controller:
         #
 
     def getServer(self) -> Server:
-        return self.Server
+        return self._Server
 
     def setServer(self, server: Server):
-        self.Server = server
+        self._Server = server
