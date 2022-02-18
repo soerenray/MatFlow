@@ -31,7 +31,7 @@
             <v-col>
               <v-file-input
                 v-model="configFolder"
-                :clearable=false
+                :clearable="false"
                 accept="application/zip"
                 label="Config file folder"
               ></v-file-input>
@@ -54,7 +54,7 @@
           <v-col>
             <v-file-input
               v-model="workflowInstanceFolder"
-              :clearable=false
+              :clearable="false"
               accept="application/zip"
               label="Workflow-folder"
             ></v-file-input
@@ -114,19 +114,22 @@ export default {
         "create workflow-instance from template"
       ) {
         backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
-          this.createWorkflowInstanceObject()
+          this.createWorkflowInstanceObject(
+            this.workflowInstanceFolder,
+            this.workflowInstanceName
+          )
         );
       } else {
         backendServerCommunicatorObject.pushExistingWorkflowInstance(
-          createWorkflowInstanceObject.workflowInstanceFolder
+          this.workflowInstanceFolder
         );
       }
     },
-    createWorkflowInstanceObject(): WorkflowInstance {
-      return new WorkflowInstance(
-        createWorkflowInstanceObject.workflowInstanceFolder,
-        createWorkflowInstanceObject.workflowInstanceName
-      );
+    createWorkflowInstanceObject(
+      workflowInstanceFolder: File,
+      workflowInstanceName: string
+    ): WorkflowInstance {
+      return new WorkflowInstance(workflowInstanceFolder, workflowInstanceName);
     },
   },
   computed: {

@@ -2,7 +2,7 @@
   <v-app>
     <div style="width: 700px; padding-top: 10px">
       <v-card>
-        <v-card style='padding-bottom: 35px'>
+        <v-card style="padding-bottom: 35px">
           <v-row>
             <div style="padding-left: 20px; padding-top: 5px">
               <v-btn @click="resetChoosenConfigFileObject" color="yellow"
@@ -101,6 +101,9 @@ export default {
     },
     initialiseKeyValuePairs() {
       editKeyValuePairsObject.keyValuePairs = [];
+      if (this.keyValuePairsFromParent === undefined) {
+        throw Error("keyValuePairsFromParents is undefined");
+      }
       if (this.fileName !== "") {
         this.keyValuePairsFromParent.forEach(
           (keyValuePairFromParent: [string, string]) => {

@@ -1,0 +1,3 @@
+describe('UserAdministration.vue', () => {
+    it('', () => { })
+})

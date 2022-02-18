@@ -33,7 +33,7 @@
               <v-dialog v-model="dialogKeyValuePairs" max-width="600px">
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    @click="selectedVersionObject = (item)"
+                    @click="selectedVersionObject = item"
                     icon
                     v-bind="attrs"
                     v-on="on"
@@ -157,7 +157,8 @@ export default {
   },
   beforeCreate: function () {
     // Vue is oberserving data in the data property.
-    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
+    // Vue.observable has to be used to make an object outside of data reactive:
+    // https://v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(versionControlObject);
   },
   created: function () {

@@ -7,16 +7,18 @@ import Template from '../Classes/Template'
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '../Classes/WorkflowInstance'
 
+type workflowInstanceNameAsString = keyof typeof versions
+
 class BackendServerCommunicator {
     public constructor() { }
     public pushLogIn(userName: string, userPassword: string): void { return }
     public pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void { return }
-    public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
+    // public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
     public pushCreateTemplate(template: Template): void { return }
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
     public pushExistingWorkflowInstance(workflowInstanceAsZip: File): void { return }
     public pullTemplatesName(): string[] { return templateNames }
-    public pullTemplateWithName(templateName: string): Template { return }
+    // public pullTemplateWithName(templateName: string): Template { return }
     public pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
     public pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
         if (workflowInstanceName === "workflowInstance1") {
@@ -54,7 +56,7 @@ class BackendServerCommunicator {
             }
         }
     }
-    public pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Version[] { return versions[workflowInstanceName] }
+    public pullVersionsWithWorkflowInstanceName(workflowInstanceName: workflowInstanceNameAsString): Version[] { return versions[workflowInstanceName] }
     public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
     public pullUsers(): User[] {
         let tempUsers: User[] = []
