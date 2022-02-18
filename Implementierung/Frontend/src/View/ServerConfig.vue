@@ -68,7 +68,10 @@
           </v-dialog>
         </template>
         <template v-slot:[`item.apply`]="{ item }"
-          ><v-btn @click="pushServerAndPullServers(item.serverName)" color="green" outlined
+          ><v-btn
+            @click="pushServerAndPullServers(item.serverName)"
+            color="green"
+            outlined
             >apply changes</v-btn
           ></template
         >
@@ -119,7 +122,7 @@ export default {
       if (serverIndex == -1) {
         throw "No server with the name " + serverName + " was found";
       }
-      return this.servers[serverIndex];
+      return servers[serverIndex];
     },
   },
   computed: {

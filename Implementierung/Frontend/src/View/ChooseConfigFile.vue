@@ -45,6 +45,7 @@
               :style="{
                 background: colorForConfigFileName(
                   updatedConfigFiles,
+                  selectedConfigFileName,
                   configFileName
                 ),
               }"
@@ -77,11 +78,14 @@ import ChooseConfigFile from "../Model/ChooseConfigFile";
 import ConfigFile from "../Classes/ConfigFile";
 import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
 
-const backendServerCommunicatorObject = new BackendServerCommunicator();
-const chooseConfigFileObject = new ChooseConfigFile();
-
 export default {
   name: "ChooseConfigFile",
+  data: function () {
+    return {
+      backendServerCommunicatorObject: new BackendServerCommunicator(),
+      chooseConfigFileObject: new ChooseConfigFile(),
+    };
+  },
   components: {
     EditKeyValuePairs,
   },
@@ -100,10 +104,10 @@ export default {
       );
     },
     updateKeyValuePairs(
-      oldKetValuePairs: Array<[string, string]>,
+      oldKeyValuePairs: Array<[string, string]>,
       newKeyValuePairs: Array<[string, string]>
     ) {
-      oldKetValuePairs.forEach(
+      oldKeyValuePairs.forEach(
         (keyValuePair: [string, string], index: number) => {
           keyValuePair[0] = newKeyValuePairs[index][0];
           keyValuePair[1] = newKeyValuePairs[index][1];
@@ -112,9 +116,10 @@ export default {
     },
     colorForConfigFileName: function (
       updatedConfigFiles: ConfigFile[],
+      selectedConfigFileName: string,
       configFileName: string
     ): string {
-      if (this.selectedConfigFileName === configFileName) {
+      if (selectedConfigFileName === configFileName) {
         return "#a9cce3";
       } else if (
         this.isConfigFileNameInUpdatedConfigFiles(
@@ -130,35 +135,38 @@ export default {
       updatedConfigFiles: ConfigFile[],
       configFileName: string
     ): boolean {
-      return updatedConfigFiles
-        .map(function (configFile: ConfigFile) {
-          return configFile.configFileName;
-        })
-        .indexOf(configFileName) === -1
-        ? false
-        : true;
+      if (updatedConfigFiles !== undefined) {
+        return updatedConfigFiles
+          .map(function (configFile: ConfigFile) {
+            return configFile.configFileName;
+          })
+          .indexOf(configFileName) === -1
+          ? false
+          : true;
+      }
+      return false;
     },
     getConfigFileFromUpdatedConfigFiles(
       updatedConfigFiles: ConfigFile[],
       configFileName: string
-    ): ConfigFile {
+    ): ConfigFile{
       let configFile = updatedConfigFiles.find((configFile: ConfigFile) => {
         return configFileName === configFile.configFileName;
       });
       if (configFile === undefined) {
-        return new ConfigFile();
+        throw new Error("There is no configFile with name " + configFileName);
       }
       return configFile;
     },
     pushUpdatedConfigFilesToBackendServer(configFileName: string) {
-      backendServerCommunicatorObject.pushConfigFilesWithWorkflowInstanceName(
+      this.backendServerCommunicatorObject.pushConfigFilesWithWorkflowInstanceName(
         this.updatedConfigFiles,
         this.selectedWorkflowInstanceName
       );
     },
     resetChoosenConfigFileObjects() {
-      chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-        backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+      this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
+        this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
       this.updatedConfigFiles = [];
       this.chosenConfigFile =
         this.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
@@ -171,7 +179,7 @@ export default {
       workflowInstanceName: string,
       configFileName: string
     ): ConfigFile {
-      return backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+      return this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
         workflowInstanceName,
         configFileName
       );
@@ -195,7 +203,7 @@ export default {
         )
       ) {
         this.chosenConfigFile =
-          backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+          this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName
           );
@@ -213,7 +221,7 @@ export default {
       return this.chosenConfigFile.keyValuePairs;
     },
     workflowInstancesName: function (): string[] {
-      return chooseConfigFileObject.workflowIntancesAndConfigFilesNames.map(
+      return this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames.map(
         (x) => x[0]
       );
     },
@@ -223,52 +231,53 @@ export default {
       if (indexOfSelectedWorkflowInstanceName === -1) {
         return [];
       }
-      return chooseConfigFileObject.workflowIntancesAndConfigFilesNames[
+      return this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames[
         indexOfSelectedWorkflowInstanceName
       ][1];
     },
     chosenConfigFile: {
       get: function (): ConfigFile {
-        return chooseConfigFileObject.chosenConfigFile;
+        return this.chooseConfigFileObject.chosenConfigFile;
       },
       set: function (chosenConfigFile: ConfigFile) {
-        chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
+        this.chooseConfigFileObject.chosenConfigFile = chosenConfigFile;
       },
     },
     updatedConfigFiles: {
       get: function (): ConfigFile[] {
-        return chooseConfigFileObject.updatedConfigFiles;
+        return this.chooseConfigFileObject.updatedConfigFiles;
       },
       set: function (updatedConfigFiles: ConfigFile[]) {
-        chooseConfigFileObject.updatedConfigFiles = updatedConfigFiles;
+        this.chooseConfigFileObject.updatedConfigFiles = updatedConfigFiles;
       },
     },
     selectedWorkflowInstanceName: {
       get: function (): string {
-        return chooseConfigFileObject.selectedWorkflowInstanceName;
+        return this.chooseConfigFileObject.selectedWorkflowInstanceName;
       },
       set: function (selectedWorkflowInstanceName: string) {
-        chooseConfigFileObject.selectedWorkflowInstanceName =
+        this.chooseConfigFileObject.selectedWorkflowInstanceName =
           selectedWorkflowInstanceName;
       },
     },
     selectedConfigFileName: {
       get: function (): string {
-        return chooseConfigFileObject.selectedConfigFileName;
+        return this.chooseConfigFileObject.selectedConfigFileName;
       },
       set: function (selectedConfigFileName: string) {
-        chooseConfigFileObject.selectedConfigFileName = selectedConfigFileName;
+        this.chooseConfigFileObject.selectedConfigFileName =
+          selectedConfigFileName;
       },
     },
   },
-  beforeCreate: function () {
+  created: function () {
     // Vue is oberserving data in the data property.
     // The object choosenConfigFileObject wouldn't update, when the parameters are
     // initialized in data
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
-    Vue.observable(chooseConfigFileObject);
-    chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-      backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+    Vue.observable(this.chooseConfigFileObject);
+    this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
+      this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
   },
 };
 </script>
