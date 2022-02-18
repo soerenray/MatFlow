@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 class Tests(unittest.TestCase):
 
-    # User tests
+    # User workflowtests
 
     # setUp sets up a testUser and a testUserController
     def setUp(self):
@@ -20,11 +20,11 @@ class Tests(unittest.TestCase):
     #    requests.delete("http://localhost:8080/api/v1/users/testUsername", auth = self.testUserController.getAuth)
     #    requests.delete("http://localhost:8080/api/v1/users/overrideUsername", auth = self.testUserController.getAuth)
 
-    # tests the getUsername method and the User Constructor
+    # workflowtests the getUsername method and the User Constructor
     def testGetUsername(self):
         self.assertEqual("testUsername", self.testUser.getUsername())
 
-    # UserController tests
+    # UserController workflowtests
 
     # test Authentification in the Constructor
     def testAuth(self):
