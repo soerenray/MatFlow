@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 class ServerData:
     __instance = None
-    __databaseTable = DatabaseTable.get_instance()
+    databaseTable = DatabaseTable.get_instance()
 
     @staticmethod
     def get_instance():
@@ -35,7 +35,7 @@ class ServerData:
         # insert values
         query = "INSERT INTO Server (ip, name) VALUES (%s, %s)"
         # execute
-        self.__databaseTable.set(query, (ip_address, name))
+        self.databaseTable.set(query, (ip_address, name))
         return
 
     def get_server(self) -> List[Tuple[str, str]]:
@@ -51,7 +51,7 @@ class ServerData:
             string[]: 2-element list with format [<IP>,<Name>]
         """
         query = "SELECT * FROM Server;"  # get all entries
-        data = self.__databaseTable.get(query)
+        data = self.databaseTable.get(query)
         if not data:
             # throw exception no entry?
             return data
