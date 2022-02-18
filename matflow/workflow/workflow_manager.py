@@ -145,7 +145,7 @@ class WorkflowManager:
 
         """
         return Path(
-            "workflow/tests/dummy_dag.png"
+            "workflow/workflowtests/dummy_dag.png"
         )  # TODO this is only a dummy implementation
 
     def get_template_names(self) -> List[str]:

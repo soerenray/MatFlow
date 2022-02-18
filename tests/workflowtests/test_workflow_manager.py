@@ -576,7 +576,7 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
         # Assert
         self.assertTrue(equal)
 
-    # now we can start with the tests for the actual method
+    # now we can start with the workflowtests for the actual method
     def test_empty_dir(self):
         # Arrange
         src_path: Path = self.base_path_copy_whole_dir / "src1"
