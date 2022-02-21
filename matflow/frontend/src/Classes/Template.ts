@@ -54,8 +54,8 @@ class Template {
     */
      public static createTemplateObjectFromJSON(JSONObj: string): Template {
         const parsed = JSON.parse(JSONObj)
-        const decodedFile = dataURLtoFile(parsed.Keys.dag_definition_name, Keys.dag_definition_name);
-        return new Template(decodedFile, parsed.Keys.template_name)
+        const decodedFile = dataURLtoFile(parsed.dag_definition_name, Keys.dag_definition_name);
+        return new Template(decodedFile, parsed.template_name)
     }
 }
 

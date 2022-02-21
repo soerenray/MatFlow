@@ -72,12 +72,13 @@ class User {
     * */
      public static createUserObjectFromJSON(JSONObj: string): User {
         const parsed = JSON.parse(JSONObj)
-        console.log(parsed.user_name)
-        return new User(parsed.Keys.user_name, parsed.Keys.user_status_name, parsed.Keys.user_privilege_name)
+        console.log('parsed ', parsed)
+        console.log('username', parsed.user_name)
+        return new User(parsed.user_name, parsed.user_status_name, parsed.user_privilege_name)
     }
 }
 
-const jsonString = JSON.stringify({userName: "Soeren", userStatus: "bhceb", userPrivilege: "ndne"})
+const jsonString = JSON.stringify({user_name: "Soeren", user_status: "bhceb", user_privilege: "ndne"})
 console.log(jsonString)
 User.createUserObjectFromJSON(jsonString)
 export default User
