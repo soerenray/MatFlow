@@ -44,6 +44,7 @@ Run server application:
 ```
 nomad job run matflow_nomad.hcl
 ```
+This creates a virtualenv environment. If you want to use a pipenv environment instead, replace pip with pipenv in the commands above. 
 
 ## Testing
 **Client application**<br>
