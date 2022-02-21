@@ -1,7 +1,7 @@
 import os.path
 
 from matflow.exceptionpackage import MatFlowException
-from matflow import DatabaseTable
+from matflow.database.DatabaseTable import DatabaseTable
 from matflow.workflow.workflow_instance import WorkflowInstance
 from matflow.workflow.database_version import DatabaseVersion
 from matflow.workflow.version_number import VersionNumber
