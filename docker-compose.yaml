@@ -267,5 +267,16 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  mysql-db:
+    image:8.0.28
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: databaseshema
+
 volumes:
   postgres-db-volume:
