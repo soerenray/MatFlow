@@ -23,7 +23,7 @@ This project is built using
 
 ## Installation
 MatFlow is implemented as a client-server application, thus having two seperate installation guides.
-You need to have npm and python(more specifically, pip) installed.
+You need to have npm, Nomad and python(more specifically, pip) installed.
 
 **Client application**<br>
 Install client application dependencies:
