@@ -25,7 +25,7 @@ This project is built using
 MatFlow is implemented as a client-server application, thus having two seperate installation guides.
 You need to have npm and python(more specifically, pip) installed.
 
-**Client application**
+**Client application**<br>
 Install client application dependencies:
 ```
 npm install
@@ -35,7 +35,7 @@ Run client application:
 npm run serve
 ```
 
-**Server application**
+**Server application** <br>
 Install server application dependencies:
 ```
 pip install -r requirements.txt
