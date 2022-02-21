@@ -1,4 +1,4 @@
-import SignUp from "../Model/SignUp";
+import SignUp from "@Model/SignUp";
 
 class SignUpMemento {
     private _signUpObject: SignUp

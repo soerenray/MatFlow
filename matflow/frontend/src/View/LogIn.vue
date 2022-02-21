@@ -43,8 +43,8 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import LogIn from "../Model/LogIn";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
+import LogIn from "@Model/LogIn";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const logInObject = new LogIn();

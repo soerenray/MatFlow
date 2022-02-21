@@ -75,10 +75,10 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import CreateWorkflowInstance from "../Model/CreateWorkflowInstance";
-import CreateWorkflowInstanceCaretaker from "../Memento/CreateWorkflowInstanceCaretaker";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import WorkflowInstance from "../Classes/WorkflowInstance";
+import CreateWorkflowInstance from "@Model/CreateWorkflowInstance";
+import CreateWorkflowInstanceCaretaker from "@Memento/CreateWorkflowInstanceCaretaker";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
+import WorkflowInstance from "@Classes/WorkflowInstance";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createWorkflowInstanceObject = new CreateWorkflowInstance(

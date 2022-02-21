@@ -1,4 +1,4 @@
-import CreateWorkflowInstance from '../Model/CreateWorkflowInstance'
+import CreateWorkflowInstance from '@Model/CreateWorkflowInstance'
 
 class CreateWorkflowInstanceMemento {
     private _createWorkflowInstanceObject: CreateWorkflowInstance

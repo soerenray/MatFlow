@@ -1,8 +1,8 @@
-import ConfigFile from '../Classes/ConfigFile'
-import User from '../Classes/User'
-import Server from '../Classes/Server'
-import Version from '../Classes/Version'
-import WorkflowInstance from '../Classes/WorkflowInstance'
+import ConfigFile from '@Classes/ConfigFile'
+import User from '@Classes/User'
+import Server from '@Classes/Server'
+import Version from '@Classes/Version'
+import WorkflowInstance from '@Classes/WorkflowInstance'
 
 // pullTemplates
 let templateNames: string[] = [

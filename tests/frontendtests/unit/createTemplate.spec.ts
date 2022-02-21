@@ -1,6 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
-import Template from '../../src/Classes/Template'
-import CreateTemplate from '../../src/View/CreateTemplate.vue'
+import Template from '@Classes/Template'
+import CreateTemplate from '@View/CreateTemplate.vue'
+
+import Vue from 'vue'
+Vue.config.silent = true;
 
 describe('CreateTemplate.vue', () => {
     // (method) createTemplateObject(templateBlueprintFile: File, templateName: string): Template
@@ -11,6 +14,7 @@ describe('CreateTemplate.vue', () => {
         const templateName = 'temp1'
 
         // Tests if the template is created of the file and templateName
+        // @ts-ignore
         expect(wrapper.vm.createTemplateObject(file, templateName)).toEqual(new Template(file, templateName))
     })
 })

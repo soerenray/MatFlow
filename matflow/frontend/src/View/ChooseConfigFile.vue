@@ -74,9 +74,9 @@
 import Vue from "vue";
 
 import EditKeyValuePairs from "./EditKeyValuePairs.vue";
-import ChooseConfigFile from "../Model/ChooseConfigFile";
-import ConfigFile from "../Classes/ConfigFile";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
+import ChooseConfigFile from "@Model/ChooseConfigFile";
+import ConfigFile from "@Classes/ConfigFile";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
 
 export default {
   name: "ChooseConfigFile",

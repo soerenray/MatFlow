@@ -1,4 +1,4 @@
-import LogIn from "../Model/LogIn"
+import LogIn from "@Model/LogIn"
 
 class LogInMemento {
     private _logInObject: LogIn
