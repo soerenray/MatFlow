@@ -45,7 +45,11 @@ Run server application:
 nomad job run matflow_nomad.hcl
 ```
 
-
+## Testing
+**Client application**<br>
+Run unit-tests:
+```
+npm run test:unit
 
 ## Credits
 MatFlow was developed for the Karlsruher Institut für Technolgie by Florian Küfner, Soeren Raymond, Alessandro Santospirito, Lukas Wilhelm and Nils Wolters.
