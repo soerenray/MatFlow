@@ -1,6 +1,9 @@
 import { shallowMount } from '@vue/test-utils'
-import WorkflowInstance from '../../src/Classes/WorkflowInstance'
-import CreateWorkflowInstance from '../../src/View/CreateWorkflowInstance.vue'
+import WorkflowInstance from '@Classes/WorkflowInstance'
+import CreateWorkflowInstance from '@View/CreateWorkflowInstance.vue'
+
+import Vue from 'vue'
+Vue.config.silent = true;
 
 describe('CreateWorkflowInstance.vue', () => {
     // (method) createWorkflowInstanceObject(workflowInstanceFolder: File, workflowInstanceName: string): WorkflowInstance

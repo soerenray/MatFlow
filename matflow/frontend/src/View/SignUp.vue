@@ -44,8 +44,8 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import BackenderServerCommunicator from "../Controler/BackendServerCommunicator";
-import SignUp from "../Model/SignUp";
+import BackenderServerCommunicator from "@Controler/BackendServerCommunicator";
+import SignUp from "@Model/SignUp";
 
 const backendServerCommunicatorObject = new BackenderServerCommunicator();
 const signUpObject = new SignUp();

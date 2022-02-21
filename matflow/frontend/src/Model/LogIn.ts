@@ -1,4 +1,4 @@
-import LogInMemento from "../Memento/LogInMemento"
+import LogInMemento from "@Memento/LogInMemento"
 
 class LogIn {
     private _userName: string

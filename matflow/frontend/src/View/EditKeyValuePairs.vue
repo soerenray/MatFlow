@@ -54,7 +54,7 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import EditKeyValuePairs from "../Model/EditKeyValuePairs";
+import EditKeyValuePairs from "@Model/EditKeyValuePairs";
 
 let editKeyValuePairsObject = new EditKeyValuePairs();
 

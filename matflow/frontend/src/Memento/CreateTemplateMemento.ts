@@ -1,4 +1,4 @@
-import CreateTemplate from "../Model/CreateTemplate"
+import CreateTemplate from "@Model/CreateTemplate"
 
 class CreateTemplateMemento {
     private _createTemplateObject: CreateTemplate

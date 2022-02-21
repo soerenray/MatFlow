@@ -67,9 +67,9 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import User from "../Classes/User";
-import UserAdministration from "../Model/UserAdministration";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
+import User from "@Classes/User";
+import UserAdministration from "@Model/UserAdministration";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const userAdministrationObject = new UserAdministration(

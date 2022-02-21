@@ -1,4 +1,4 @@
-import Server from '../Classes/Server'
+import Server from '@Classes/Server'
 
 class ServerConfig {
     private _tableHeaders: object[]

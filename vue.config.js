@@ -1,11 +1,13 @@
 const path = require('path')
+const basUrlSrc = "matflow/frontend/src"
+const basUrlPublic = "matflow/frontend/public"
 
 module.exports = {
   lintOnSave: true,
   pages: {
     index: {
-      entry: 'Implementierung/Frontend/src/main.ts',
-      template: 'Implementierung/Frontend/public/index.html'
+      entry: basUrlSrc + '/main.ts',
+      template: basUrlPublic + '/index.html'
     }
   },
   transpileDependencies: [
@@ -14,18 +16,13 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'Implementierung/Frontend/src/')
+        '@': path.resolve(__dirname, basUrlSrc),
+        "@Classes": path.resolve(__dirname, basUrlSrc + '/Classes'),
+        "@Controler": path.resolve(__dirname, basUrlSrc + '/Controler'),
+        "@Memento": path.resolve(__dirname, basUrlSrc + '/Memento'),
+        "@Model": path.resolve(__dirname, basUrlSrc + '/Model'),
+        "@View": path.resolve(__dirname, basUrlSrc + '/View'),
       }
     }
   },
-  chainWebpack: config => {
-    config
-      .plugin('copy')
-      .use(require('copy-webpack-plugin'), [[{
-        from: path.resolve(__dirname, 'Implementierung/Frontend/public'),
-        to: path.resolve(__dirname, 'dist'),
-        toType: 'dir',
-        ignore: ['.DS_Store']
-      }]])
-  }
 }

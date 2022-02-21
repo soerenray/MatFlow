@@ -52,10 +52,10 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import CreateTemplate from "../Model/CreateTemplate";
-import CreateTemplateCaretaker from "../Memento/CreateTemplateCaretaker";
-import Template from "../Classes/Template";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
+import CreateTemplate from "@Model/CreateTemplate";
+import CreateTemplateCaretaker from "@Memento/CreateTemplateCaretaker";
+import Template from "@Classes/Template";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const createTemplateObject = new CreateTemplate();

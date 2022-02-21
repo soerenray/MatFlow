@@ -1,6 +1,9 @@
 import { shallowMount } from "@vue/test-utils"
-import Server from "../../src/Classes/Server"
-import ServerConfig from "../../src/View/ServerConfig.vue"
+import Server from "@Classes/Server"
+import ServerConfig from "@View/ServerConfig.vue"
+
+import Vue from 'vue'
+Vue.config.silent = true;
 
 describe('ServerConfig.vue', () => {
     // (method) findServerByServerName(servers: Server[], serverName: string): Server

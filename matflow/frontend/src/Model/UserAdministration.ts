@@ -1,4 +1,4 @@
-import User from '../Classes/User'
+import User from '@Classes/User'
 
 class UserAdministration {
     private _tableHeaders: object[]
