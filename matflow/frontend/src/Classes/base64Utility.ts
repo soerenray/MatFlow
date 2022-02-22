@@ -31,9 +31,8 @@ function dataURLtoFile(dataurl: string, filename: string): File {
  * @param filename of file
  * @returns File object
  */
- function dataURLtoFileNoMime(dataurl: string, filename: string): File {
+function dataURLtoFileNoMime(dataurl: string, filename: string): File {
 
-    
     const bstr = atob(dataurl)
     let n = bstr.length
     const u8arr = new Uint8Array(n)
