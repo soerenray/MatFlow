@@ -1,3 +1,5 @@
+import { Keys } from "./Keys"
+
 class Version {
     private _versionNumber: string
     private _versionNote: string
@@ -62,6 +64,17 @@ class Version {
     */
     public set parameterChanges(parameterChanges: Array<[string, string]>) {
         this._parameterChanges = parameterChanges
+    }
+
+    /**
+    * extracts JSON to Version object
+    * @param JSONObj The JSON encoded Version
+    * @returns Version object
+    * */
+     public static createVersionObjectFromJSON(JSONObj: string): Version {
+        const parsed = JSON.parse(JSONObj)
+        return new Version(parsed[Keys.version_number_name], parsed[Keys.version_note_name],
+            parsed[Keys.frontend_versions_changes])
     }
 }
 
