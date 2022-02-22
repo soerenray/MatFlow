@@ -1,5 +1,6 @@
 import { dataURLtoFile } from "./base64Utility"
 import { Keys } from "./Keys"
+
 class Template {
     private _dagDefinitionFile: File
     private _templateName: string
@@ -54,7 +55,7 @@ class Template {
     */
      public static createTemplateObjectFromJSON(JSONObj: string): Template {
         const parsed = JSON.parse(JSONObj)
-        const decodedFile = dataURLtoFile(parsed.dag_definition_name, Keys.dag_definition_name);
+        const decodedFile = dataURLtoFile(parsed[Keys.dag_definition_name], Keys.dag_definition_name);
         return new Template(decodedFile, parsed.template_name)
     }
 }

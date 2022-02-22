@@ -129,8 +129,8 @@ class Server {
     */
      public static createServerObjectFromJSON(JSONObj: string): Server {
         const parsed = JSON.parse(JSONObj)
-        return new Server(parsed.server_address_name, parsed.server_status_name, parsed.container_limit_name,
-            parsed.selected_for_execution_name, parsed.server_name, parsed.server_resources_name)
+        return new Server(parsed.server_address_name, parsed[Keys.server_status_name], parsed[Keys.container_limit_name],
+            parsed[Keys.selected_for_execution_name], parsed[Keys.server_name], parsed[Keys.server_resources_name])
     }
 }
 
