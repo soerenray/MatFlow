@@ -81,9 +81,9 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import ServerConfig from "../Model/ServerConfig";
-import Server from "../Classes/Server";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
+import ServerConfig from "@Model/ServerConfig";
+import Server from "@Classes/Server";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
 const serverConfigObject = new ServerConfig(

@@ -1,11 +1,11 @@
-import ConfigFile from '../Classes/ConfigFile'
-import User from '../Classes/User'
-import Server from '../Classes/Server'
-import Version from '../Classes/Version'
-import Template from '../Classes/Template'
+import ConfigFile from '@Classes/ConfigFile'
+import User from '@Classes/User'
+import Server from '@Classes/Server'
+import Version from '@Classes/Version'
+import Template from '@Classes/Template'
 
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
-import WorkflowInstance from '../Classes/WorkflowInstance'
+import WorkflowInstance from '@Classes/WorkflowInstance'
 
 type workflowInstanceNameAsString = keyof typeof versions
 

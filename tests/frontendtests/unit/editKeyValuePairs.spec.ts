@@ -1,6 +1,9 @@
 import { shallowMount } from "@vue/test-utils"
-import EditKeyValuePairsModel from "../../src/Model/EditKeyValuePairs"
-import EditKeyValuePairsView from "../../src/View/EditKeyValuePairs.vue"
+import EditKeyValuePairsModel from "@Model/EditKeyValuePairs"
+import EditKeyValuePairsView from "@View/EditKeyValuePairs.vue"
+
+import Vue from 'vue'
+Vue.config.silent = true;
 
 describe('EditKeyValuePairs.vue', () => {
     // (method) getKeyValuePairsAsTupleArray(keyValuePairs: Array<KeyValuePair>): Array<[string, string]>

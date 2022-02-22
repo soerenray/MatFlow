@@ -1,3 +1,4 @@
+import { Keys } from "./Keys"
 class Server {
     private _serverAddress: string
     private _serverStatus: string
@@ -119,6 +120,17 @@ class Server {
     */
     public set serverResources(serverResources: Array<[string, string]>) {
         this._serverResources = serverResources
+    }
+
+    /**
+    * extracts JSON to Server object
+    * @param JSONObj The JSON encoded server
+    * @returns Server object
+    */
+     public static createServerObjectFromJSON(JSONObj: string): Server {
+        const parsed = JSON.parse(JSONObj)
+        return new Server(parsed.server_address_name, parsed[Keys.server_status_name], parsed[Keys.container_limit_name],
+            parsed[Keys.selected_for_execution_name], parsed[Keys.server_name], parsed[Keys.server_resources_name])
     }
 }
 

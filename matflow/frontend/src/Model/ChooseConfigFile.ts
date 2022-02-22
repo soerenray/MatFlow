@@ -1,4 +1,4 @@
-import ConfigFile from "../Classes/ConfigFile"
+import ConfigFile from "@Classes/ConfigFile"
 
 class ChooseConfigFile {
     private _workflowIntancesAndConfigFilesNames: Array<[string, string[]]>

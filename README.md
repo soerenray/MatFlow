@@ -23,9 +23,9 @@ This project is built using
 
 ## Installation
 MatFlow is implemented as a client-server application, thus having two seperate installation guides.
-You need to have npm and python(more specifically, pip) installed.
+You need to have npm, Nomad and python(more specifically, pip) installed.
 
-**Client application**
+**Client application**<br>
 Install client application dependencies:
 ```
 npm install
@@ -35,7 +35,7 @@ Run client application:
 npm run serve
 ```
 
-**Server application**
+**Server application** <br>
 Install server application dependencies:
 ```
 pip install -r requirements.txt
@@ -44,8 +44,14 @@ Run server application:
 ```
 nomad job run matflow_nomad.hcl
 ```
+This creates a virtualenv environment. If you want to use a pipenv environment instead, replace pip with pipenv in the commands above. 
 
-
+## Testing
+**Client application**<br>
+Run unit-tests:
+```
+npm run test:unit
+```
 
 ## Credits
 MatFlow was developed for the Karlsruher Institut für Technolgie by Florian Küfner, Soeren Raymond, Alessandro Santospirito, Lukas Wilhelm and Nils Wolters.

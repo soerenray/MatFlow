@@ -15,8 +15,8 @@ from matflow.exceptionpackage.MatFlowException import (
     InternalException,
     DoubleWorkflowInstanceNameException,
 )
-from matflow.database import TemplateData
-from matflow.database import WorkflowData
+from matflow.database.TemplateData import TemplateData
+from matflow.database.WorkflowData import WorkflowData
 
 
 class WorkflowManager:

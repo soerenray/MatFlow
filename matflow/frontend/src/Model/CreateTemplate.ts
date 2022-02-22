@@ -1,4 +1,4 @@
-import CreateTemplateMemento from "../Memento/CreateTemplateMemento"
+import CreateTemplateMemento from "@Memento/CreateTemplateMemento"
 
 class CreateTemplate {
     private _newTemplateName: string

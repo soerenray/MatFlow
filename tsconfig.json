@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "baseUrl": ".",
+    "baseUrl": "matflow/frontend/src",
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/vuetify/types"
@@ -22,9 +22,21 @@
       "jest"
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@Classes/*": [
+        "Classes/*"
+      ],
+      "@Controler/*": [
+        "Controler/*"
+      ],
+      "@Memento/*": [
+        "Memento/*"
+      ],
+      "@Model/*": [
+        "Model/*"
+      ],
+      "@View/*": [
+        "View/*"
+      ],
     },
     "lib": [
       "esnext",
@@ -34,11 +46,11 @@
     ]
   },
   "include": [
-    "Implementierung/Frontend/src/**/*.ts",
-    "Implementierung/Frontend/src/**/*.tsx",
-    "Implementierung/Frontend/src/**/*.vue",
-    "Implementierung/Frontend/tests/**/*.ts",
-    "Implementierung/Frontend/tests/**/*.tsx"
+    "matflow/frontend/src/**/*.ts",
+    "matflow/frontend/src/**/*.tsx",
+    "matflow/frontend/src/**/*.vue",
+    "tests/frontendtests/**/*.ts",
+    "tests/frontendtests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

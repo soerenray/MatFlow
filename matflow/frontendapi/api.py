@@ -13,7 +13,7 @@ from matflow.exceptionpackage.MatFlowException import (
 )
 from requests.exceptions import ConnectionError
 from matflow.frontendapi import utilities, keys
-from matflow.useradministration import UserController
+from matflow.useradministration.UserController import UserController
 from matflow.useradministration.User import User
 from matflow.workflow.frontend_version import FrontendVersion
 from matflow.workflow.reduced_config_file import ReducedConfigFile

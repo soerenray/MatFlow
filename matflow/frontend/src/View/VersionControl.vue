@@ -59,9 +59,9 @@
 
 <script lang='ts'>
 import Vue from "vue";
-import BackendServerCommunicator from "../Controler/BackendServerCommunicator";
-import Version from "../Classes/Version";
-import VersionControl from "../Model/VersionControl";
+import BackendServerCommunicator from "@Controler/BackendServerCommunicator";
+import Version from "@Classes/Version";
+import VersionControl from "@Model/VersionControl";
 import KeyValuePairs from "./KeyValuePairs.vue";
 
 const backendServerCommunicatorObject = new BackendServerCommunicator();
