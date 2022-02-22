@@ -1,3 +1,5 @@
+import { dataURLtoFileNoMime } from "./base64Utility"
+import { Keys } from "./Keys"
 import Template from "./Template"
 
 class WorkflowInstance extends Template {
@@ -48,6 +50,18 @@ class WorkflowInstance extends Template {
     */
     public set activeVersionNumber(activeVersionNumber: string) {
         this._activeVersionNumber = activeVersionNumber
+    }
+
+    /**
+    * extracts JSON to User object
+    * @param JSONObj The JSON encoded User
+    * @returns User object
+    * */
+     public static createWorkflowInstanceObjectFromJSON(JSONObj: string): WorkflowInstance {
+        const parsed = JSON.parse(JSONObj)
+        const dagFile: File = dataURLtoFileNoMime(parsed[Keys.dag_definition_name], parsed[Keys.dag_save_path])
+        return new WorkflowInstance(dagFile, parsed[Keys.template_name], parsed[Keys.versions_name], 
+            parsed[Keys.version_number_name])
     }
 }
 

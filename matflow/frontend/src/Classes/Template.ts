@@ -1,4 +1,4 @@
-import { dataURLtoFile } from "./base64Utility"
+import { dataURLtoFileNoMime } from "./base64Utility"
 import { Keys } from "./Keys"
 
 class Template {
@@ -55,7 +55,7 @@ class Template {
     */
      public static createTemplateObjectFromJSON(JSONObj: string): Template {
         const parsed = JSON.parse(JSONObj)
-        const decodedFile = dataURLtoFile(parsed[Keys.dag_definition_name], Keys.dag_definition_name);
+        const decodedFile = dataURLtoFileNoMime(parsed[Keys.dag_definition_name], parsed[Keys.dag_save_path]);
         return new Template(decodedFile, parsed[Keys.template_name])
     }
 }
