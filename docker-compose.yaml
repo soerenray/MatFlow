@@ -274,6 +274,8 @@ services:
     restart: always
     ports:
       - 3306:3306
+    expose: 
+      - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: databaseshema
