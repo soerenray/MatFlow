@@ -202,25 +202,6 @@ class TestWorkflowData(TestWorkflowDataSetup):
                 self.assertIn(file.name, str(arg_list[i]))
                 i += 1
 
-    def test_get_config_file_from_workflow_instance(self):
-        # Arrange
-        wf_name = "workflow1"
-        conf_name = "config_file name"
-        version = "1"
-        planed_result = Path("path")
-
-        with patch.object(
-            DatabaseTable, "get_one", return_value=(planed_result.name,)
-        ) as mock_get_one:
-            # Act
-            result = self.workflow_data.get_config_file_from_workflow_instance(
-                wf_name, conf_name, version
-            )
-
-            # Assert
-            mock_get_one.assert_called()
-            self.assertEqual(planed_result, result)
-
     def test_get_active_version_of_workflow_instance1(self):
         # test if workflow is in database
         # Arrange
@@ -286,3 +267,156 @@ class TestWorkflowData(TestWorkflowDataSetup):
                 call_args = str(mock_get_one.call_args_list)
                 self.assertIn(wf_name, call_args)
                 self.assertIn(conf_name, call_args)
+
+    def test_get_config_file_from_workflow_instance(self):
+        # Arrange
+        wf_name = "workflow1"
+        conf_name = "config_file name"
+        version = "1"
+        planed_result = Path("path")
+
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(planed_result.name,)
+        ) as mock_get_one:
+            # Act
+            result = self.workflow_data.get_config_file_from_workflow_instance(
+                wf_name, conf_name, version
+            )
+
+            # Assert
+            mock_get_one.assert_called()
+            self.assertEqual(planed_result, result)
+
+    def test_set_active_version_through_number1(self):
+        # if workflow and version exist
+        # Arrange
+        wf_name = "workflow1"
+        version = "2"
+        with patch.object(DatabaseTable, "modify") as mock_modify:
+            with patch.object(
+                DatabaseTable,
+                "check_for",
+                return_value=True,  # workflow with correct version exist
+            ) as mock_check_for:
+                # Act
+                self.workflow_data.set_active_version_through_number(wf_name, version)
+
+                # Assert
+                mock_check_for.assert_called_once()
+                checkfor_args = mock_check_for.call_args
+                self.assertIn(wf_name, str(checkfor_args))
+                self.assertIn(version, str(checkfor_args))
+
+                mock_modify.assert_called_once()
+                modify_args = mock_modify.call_args
+                self.assertIn(wf_name, str(modify_args))
+                self.assertIn(version, str(modify_args))
+
+    def test_set_active_version_through_number2(self):
+        # if workflow and version do NOT exist
+        # Arrange
+        wf_name = "workflow1"
+        version = "2"
+        with patch.object(DatabaseTable, "modify") as mock_modify:
+            with patch.object(
+                DatabaseTable,
+                "check_for",
+                return_value=True,  # workflow with correct version exist
+            ) as mock_check_for:
+                mock_check_for.side_effect = InternalException("Error msg")
+                with self.assertRaises(InternalException) as error:
+                    self.assertRaises(
+                        InternalException,
+                        self.workflow_data.set_active_version_through_number(
+                            wf_name, version
+                        ),
+                    )
+
+    def test_set_active_version_through_number3(self):
+        # if active version cannot be updated and MySQL throws an error
+        # Arrange
+        wf_name = "workflow1"
+        version = "2"
+        with patch.object(DatabaseTable, "modify") as mock_modify:
+            with patch.object(
+                DatabaseTable,
+                "check_for",
+                return_value=True,  # workflow with correct version exist
+            ) as mock_check_for:
+                mock_modify.side_effect = InternalException("Error msg")
+                with self.assertRaises(InternalException) as error:
+                    self.assertRaises(
+                        InternalException,
+                        self.workflow_data.set_active_version_through_number(
+                            wf_name, version
+                        ),
+                    )
+
+    def test_get_active_version_of_workflow_instance1(self):
+        # if workflow is in database
+        # Arrange
+        wf_name = "workflow 42"
+        value = "1.45.789.2"
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(value,)
+        ) as mock_get_one:
+            # Act
+            result = self.workflow_data.get_active_version_of_workflow_instance(wf_name)
+
+            # Assert
+            mock_get_one.assert_called_once()
+            self.assertIn(wf_name, str(mock_get_one.call_args))
+
+            self.assertEqual(result, value)
+
+    def test_get_active_version_of_workflow_instance2(self):
+        # if workflow is NOT in database
+        # Arrange
+        wf_name = "workflow 42"
+        value = "1.45.789.2"
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(value,)
+        ) as mock_get_one:
+            mock_get_one.side_effect = InternalException("Error")
+            # Act
+            with self.assertRaises(InternalException) as error:
+                self.assertRaises(
+                    InternalException,
+                    self.workflow_data.get_active_version_of_workflow_instance(wf_name),
+                )
+
+    def test_get_version_numbers_of_workflow_instance(self):
+        # Arrange
+        wf_name = "workflow12"
+        value = [
+            ("1",),
+            ("2",),
+            ("1.1",),
+            ("1.2",),
+            ("1.2.1",),
+            ("1.4",),
+            ("1.1.34",),
+            ("1.12",),
+            ("3",),
+        ]
+        sorted_value = ["1", "1.1", "1.1.34", "1.2", "1.2.1", "1.4", "1.12", "2", "3"]
+        with patch.object(
+            DatabaseTable,
+            "get_multiple",
+            return_value=value,
+        ) as mock_get_multiple:
+            # Act
+            result = self.workflow_data.get_version_numbers_of_workflow_instance(
+                wf_name
+            )
+
+            # Assert
+            # call has correct workflow name
+            self.assertIn(wf_name, str(mock_get_multiple.call_args))
+
+            # same List
+            self.assertListEqual(result, sorted_value)
+
+    # TODO
+    def test_get_database_versions_of_workflow_instance(self):
+        wf_name = "workflow1"
