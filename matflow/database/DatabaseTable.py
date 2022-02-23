@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 from matflow.exceptionpackage import MatFlowException
 import mysql.connector
 
@@ -25,7 +28,13 @@ class DatabaseTable:
         Parameters are set in file mydb.conf."""
 
         # read from file instead of hard-coding
-        return mysql.connector.connect(option_files="mydb.conf")
+        # mydb.conf is in same dir
+        #current file path
+        p = Path(__file__)
+        # dir path
+        dir_abs = p.parent.absolute()
+        path_to_conf = os.path.join(dir_abs, "mydb.conf")
+        return mysql.connector.connect(option_files=path_to_conf)
 
     def set(self, create: str, arguments: tuple) -> None:
         """Set new values into tables in database.
