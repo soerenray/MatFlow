@@ -48,7 +48,7 @@ class TestWorkflowData(TestWorkflowDataSetup):
         # basic test if all functions are called
         # Arrange
         workflow = WorkflowInstance("workflow1", Path(".test"), Path("."))
-        ex_path = Path(".")
+        ex_path = Path("./testfiles")
 
         with patch.object(
             DatabaseTable,
@@ -153,3 +153,136 @@ class TestWorkflowData(TestWorkflowDataSetup):
         version_number = VersionNumber("1.2")
         path = Path("./testfiles")
         new_version = DatabaseVersion(version_number, "note", path)
+        old_version_number = "1"
+
+        with patch.object(
+            DatabaseTable,
+            "get_one",
+            return_value=(2,),
+        ) as mock_get_one:
+            with patch.object(
+                DatabaseTable,
+                "set",
+            ) as mock_set:
+
+                # Act
+                self.workflow_data.create_new_version_of_workflow_instance(
+                    wf_name, new_version, old_version_number
+                )
+
+                # Assert
+
+                # Assert that correct parameters were used somewhere
+                arg_list = mock_set.call_args_list
+                i = 0
+                # first call of set is for setting new version of workflow
+                self.assertIn(wf_name, str(arg_list[i]))
+                self.assertIn(version_number.get_number(), str(arg_list[i]))
+                i += 1
+                # two calls per file. Insert into ConfFile and insert into Versionfile
+                for file in path.iterdir():
+                    self.assertIn(file.name, str(arg_list[i]))
+                    i += 1
+                    self.assertIn(file.name, str(arg_list[i]))
+                    i += 1
+
+            arg_list = mock_get_one.call_args_list
+            i = 0
+            # get key calls for workflow name
+            # new version
+            self.assertIn(wf_name, str(arg_list[i]))
+            self.assertIn(version_number.get_number(), str(arg_list[i]))
+            i += 1
+            # old version
+            self.assertIn(wf_name, str(arg_list[i]))
+            self.assertIn(old_version_number, str(arg_list[i]))
+            i += 1
+            # file
+            for file in path.iterdir():
+                self.assertIn(file.name, str(arg_list[i]))
+                i += 1
+
+    def test_get_config_file_from_workflow_instance(self):
+        # Arrange
+        wf_name = "workflow1"
+        conf_name = "config_file name"
+        version = "1"
+        planed_result = Path("path")
+
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(planed_result.name,)
+        ) as mock_get_one:
+            # Act
+            result = self.workflow_data.get_config_file_from_workflow_instance(
+                wf_name, conf_name, version
+            )
+
+            # Assert
+            mock_get_one.assert_called()
+            self.assertEqual(planed_result, result)
+
+    def test_get_active_version_of_workflow_instance1(self):
+        # test if workflow is in database
+        # Arrange
+        wf_name = "workflow1"
+        version = "1_1_2_3"
+
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(version,)
+        ) as mock_get_one:
+            # Act
+            result = self.workflow_data.get_active_version_of_workflow_instance(wf_name)
+
+            # Assert
+            self.assertEqual(result, version)
+            mock_get_one.assert_called_once()
+
+    def test_get_active_version_of_workflow_instance2(self):
+        # test if workflow is NOT in database
+        # Arrange
+        wf_name = "workflow1"
+        version = "1_1_2_3"
+
+        with patch.object(
+            DatabaseTable,
+            "get_one",
+            return_value=version,
+        ) as mock_get_one:
+            mock_get_one.side_effect = InternalException("Error msg")
+            with self.assertRaises(InternalException) as error:
+                self.assertRaises(
+                    InternalException,
+                    self.workflow_data.get_active_version_of_workflow_instance(wf_name),
+                )
+
+    def test_get_config_file_from_active_workflow_instance(self):
+        # relies on get_active_version_of_workflow_instance
+
+        # Arrange
+        wf_name = "workflow1"
+        conf_name = "file name"
+        conf_path = Path("file path")
+        with patch.object(
+            DatabaseTable, "get_one", return_value=(conf_path.name,)
+        ) as mock_get_one:
+            with patch.object(
+                WorkflowData,
+                "get_active_version_of_workflow_instance",
+                return_value="1.1",
+            ) as mock_get_active_version:
+                # Act
+                result = (
+                    self.workflow_data.get_config_file_from_active_workflow_instance(
+                        wf_name, conf_name
+                    )
+                )
+
+                # Assert
+                self.assertEqual(result, conf_path)
+                # Assert functions used
+                mock_get_active_version.assert_called_once()
+                mock_get_one.assert_called()
+                # Assert arguments in query
+                call_args = str(mock_get_one.call_args_list)
+                self.assertIn(wf_name, call_args)
+                self.assertIn(conf_name, call_args)

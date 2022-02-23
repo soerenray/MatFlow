@@ -139,7 +139,6 @@ class WorkflowData:
 
         return workflow_dict
 
-    # TODO Revision/Testing needed: 'worked' first try, something's wrong!
     def create_new_version_of_workflow_instance(
         self, wf_name: str, new_version: DatabaseVersion, old_version_nr: str
     ):
@@ -159,8 +158,12 @@ class WorkflowData:
         new_entry = "INSERT INTO Version (wfName, version) VALUES (%s, %s)"
         self.__databaseTable.set(new_entry, (wf_name, new_version_nr))
         # get keys of versions out of Version table
-        new_version_index = self.__get_key_of_workflow_version(wf_name, new_version_nr)
-        old_version_index = self.__get_key_of_workflow_version(wf_name, old_version_nr)
+        new_version_index: str = self.__get_key_of_workflow_version(
+            wf_name, new_version_nr
+        )
+        old_version_index: str = self.__get_key_of_workflow_version(
+            wf_name, old_version_nr
+        )
 
         # get all new file paths
         new_files = []
@@ -188,15 +191,15 @@ class WorkflowData:
             )
 
         # connect old, not updated files of previous version
-        # query is also saved as 'copy old not updated files -query.txt'
+        # 'oldVersion' and 'newVersion' are used to get a better understanding of the query
         copy_old_files = (
             "INSERT INTO VersionFile (versionID, filename, confKey) SELECT newVersion, filename, "
             "confKey	FROM VersionFile	WHERE versionID = 'oldVersion'    AND filename    NOT IN ("
             "Select filename		FROM VersionFile        WHERE versionID = 'newVersion'); "
         )
         copy_old_files = copy_old_files.replace(
-            "newVersion", new_version_index
-        ).replace("oldVersion", old_version_index)
+            "newVersion", str(new_version_index)
+        ).replace("oldVersion", str(old_version_index))
         self.__databaseTable.set(copy_old_files, ())
 
     def get_config_file_from_workflow_instance(
@@ -252,7 +255,9 @@ class WorkflowData:
         active_version = self.get_active_version_of_workflow_instance(wf_name)
         active_version_key = self.__get_key_of_workflow_version(wf_name, active_version)
 
-        file = self.__databaseTable.get_one(get_file_query, (active_version_key,))
+        file = self.__databaseTable.get_one(
+            get_file_query, (active_version_key, conf_name)
+        )
 
         return Path(file[0])
 
