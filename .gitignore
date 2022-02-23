@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex
 
@@ -337,8 +336,8 @@ package-lock.*
 # Pycharm dirs
 __pycache__
 
-=======
 .DS_Store
 .idea/
->>>>>>> project_setup
 
+# database generated on docker-compose up
+.mysql-data/*
