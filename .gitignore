@@ -341,3 +341,6 @@ __pycache__
 
 # database generated on docker-compose up
 .mysql-data/*
+
+# airflow logs
+logs/*
