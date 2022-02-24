@@ -1,23 +1,23 @@
-CREATE TABLE Server (
+CREATE TABLE IF NOT EXISTS Server (
    ip varchar(50) NOT NULL,
    name varchar(255) NOT NULL,
    PRIMARY KEY (ip)
 );
 
-CREATE TABLE WorkflowTemplate (
+CREATE TABLE IF NOT EXISTS WorkflowTemplate (
    template_ID INTEGER AUTO_INCREMENT,
    name varchar(255),
    dag varchar(255),
    PRIMARY KEY (template_ID)
 );
 
-CREATE TABLE Workflow (
+CREATE TABLE IF NOT EXISTS Workflow (
    name varchar(255),
    dag varchar(255) NOT NULL,
    PRIMARY KEY (name)
 );
 
-CREATE TABLE FolderFile (
+CREATE TABLE IF NOT EXISTS FolderFile (
    wfName varchar(255),
    fileID INTEGER AUTO_INCREMENT,
    file varchar(255),
@@ -25,7 +25,7 @@ CREATE TABLE FolderFile (
    FOREIGN KEY (wfname) REFERENCES Workflow(name)
 );
 
-CREATE TABLE Version (
+CREATE TABLE IF NOT EXISTS Version (
    ID INTEGER AUTO_INCREMENT,
    wfName varchar(255) NOT NULL,
    version varchar(127) NOT NULL,
@@ -34,20 +34,20 @@ CREATE TABLE Version (
    FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
-CREATE TABLE ActiveVersion (
+CREATE TABLE IF NOT EXISTS ActiveVersion (
    wfName varchar(255),
    version varchar(127) NOT NULL,
    PRIMARY KEY (wfName),
    FOREIGN KEY (wfName) REFERENCES Workflow(name)
 );
 
-CREATE TABLE ConfFile (
+CREATE TABLE IF NOT EXISTS ConfFile (
    confKey INTEGER NOT NULL AUTO_INCREMENT,
    file varchar(255) NOT NULL,
    PRIMARY KEY (confKey)
 );
 
-CREATE TABLE VersionFile (
+CREATE TABLE IF NOT EXISTS VersionFile (
    versionID INTEGER,
    filename varchar(255),
    confKey INTEGER NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE VersionFile (
    FOREIGN KEY (confKey) REFERENCES ConfFile(confKey)
 );
 
-CREATE TABLE ResultFile (
+CREATE TABLE IF NOT EXISTS ResultFile (
    fileID INTEGER NOT NULL AUTO_INCREMENT,
    versionID INTEGER,
    file varchar(255),

@@ -18,6 +18,7 @@ class DatabaseTable:
         if DatabaseTable.__instance is not None:
             raise Exception("This class is a singleton!")
         else:
+            self.setup_database()
             DatabaseTable.__instance = self
             return
 
@@ -228,7 +229,8 @@ class DatabaseTable:
         cursor = db.cursor()
 
         # queries outsourced to avoid overly long lines in code
-        database_setup_file = open("Database_Table_Setup.txt", "r")
+        path = Path(__file__).parent
+        database_setup_file = open(os.path.join(path, "Database_Table_Setup.txt"), "r")
         database_setup = database_setup_file.read().replace("\n", "").split(";")
 
         # actual queries

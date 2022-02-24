@@ -1,3 +1,4 @@
+import base64
 import os
 from base64 import b64encode, b64decode
 from pathlib import Path
@@ -35,19 +36,23 @@ def encode_file(file_path: Path, key: str) -> dict:
     """
     out_dict: dict = dict()
     with open(file_path, "rb") as file:
-        out_dict.update({key: b64encode(file.read())})
+        encoding = b64encode(file.read()).decode("utf-8")
+        out_dict.update({key: encoding})
     os.remove(file_path)
     return out_dict
 
 
-def decode_file(encoded_file: str):
+def decode_file(encoded_file: str, file_path: str):
     """
     decodes a file in base64 encoding
 
     Args:
         encoded_file(str): encoded file
+        file_path(str): path of file
 
     Returns:
         decoded file
     """
-    return b64decode(encoded_file)
+    with open(file_path, "w+") as file:
+        file.write((base64.b64decode(encoded_file)).decode("utf-8"))
+    return file
