@@ -91,15 +91,13 @@ class UserController:
         overridePassword = overrideUser.getPassword()
 
         # now we build our api call address
-
         overrideAddress = "http://localhost:8080/api/v1/users/" + overrideUsername
         getOverrideUser = requests.get(overrideAddress, auth=self.getAuth())
 
         # we check if the response is what we wanted
 
         if getOverrideUser.status_code != 200:
-            raise UserExistsException
-
+            raise UserExistsException("")
         # if the override status is inactive we don't want to update their privilege
 
         elif overrideStatus == "inactive":
@@ -128,7 +126,7 @@ class UserController:
         # and check the response
 
         if patchOverrideUser.status_code != 200:
-            raise UserExistsException
+            raise UserExistsException("")
 
     # deleteUser method:
     #
@@ -155,7 +153,7 @@ class UserController:
         # and check the Response
 
         if deleteUserCode.status_code != 200:
-            raise UserExistsException
+            raise UserExistsException("")
 
     # loginUser method:
     #
@@ -174,7 +172,7 @@ class UserController:
             requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
             != loginPassword
         ):
-            raise LoginException
+            raise LoginException("")
 
         # and check the password
 
@@ -182,7 +180,7 @@ class UserController:
             requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
             != loginPassword
         ):
-            raise LoginException
+            raise LoginException("")
 
     # createUser:
     #
@@ -200,7 +198,7 @@ class UserController:
         # we check if the passwords are identical
 
         if signUpPassword != signUpPasswordRepetition:
-            raise SignUpException
+            raise SignUpException("")
 
         # we build our address
 
@@ -226,4 +224,4 @@ class UserController:
 
         # and check the response
         if createUserStatusCode.status_code != 200:
-            raise UserExistsException
+            raise UserExistsException("")

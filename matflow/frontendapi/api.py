@@ -287,7 +287,7 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.workflow_instance_name, keys.versions_name], decoded_json)
+            check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
             version_note: str = decoded_json[keys.version_note_name]
             configs: List[
