@@ -116,14 +116,13 @@ class Template:
         # dag files are exclusively python files
         if file_extension != ".py":
             raise ConverterException("not .py file")
-        dag_file = utilities.decode_file(decoded_json[keys.file_key])
         save_dir: str = utilities.create_dir(
             os.path.join(
                 utilities.parent_path, utilities.temp_in_path, keys.dag_save_path
             )
         )
         file_path: str = os.path.join(save_dir, filename)
-        dag_file.save(file_path)
+        dag_file = utilities.decode_file(decoded_json[keys.file_key], file_path)
         return Path(file_path)
 
     def encode_template(self) -> dict:
