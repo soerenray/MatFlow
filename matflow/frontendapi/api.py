@@ -136,12 +136,15 @@ class FrontendAPI:
         Returns:
              String: json-dumped object containing the above described information
         """
-        # This is how a response with one user looks like
-        # {"users": {"total_entries": 1, "users": [{"active": true,
-        # "changed_on": "2021-12-24T18:01:58.734189", "created_on": "2021-12-24T18:01:58.734079",
-        # "email": "airflowadmin@example.com", "fail_login_count": 0, "first_name": "Airflow",
-        # "last_login": "2022-02-17T14:07:47.375984", "last_name": "Admin", "login_count": 5,
-        # "roles": [{"name": "Admin"}], "username": "airflow"}]}, "statusCode": 607}
+        # This is how a response looks like
+        # {'total_entries': 2, 'users': [
+        # {'active': True, 'changed_on': '2022-02-24T21:16:07.771595', 'created_on': '2022-02-24T21:16:07.771470',
+        # 'email': 'airflowadmin@example.com', 'fail_login_count': 0, 'first_name': 'Airflow',
+        # 'last_login': '2022-02-25T14:40:36.356283', 'last_name': 'Admin', 'login_count': 183,
+        # 'roles': [{'name': 'Admin'}], 'username': 'airflow'},
+        # {'active': True, 'changed_on': '2022-02-25T08:49:46.339749', 'created_on': '2022-02-25T08:49:46.339308',
+        # 'email': '.', 'fail_login_count': 0, 'first_name': '.', 'last_login': '2022-02-25T08:58:08.301726',
+        # 'last_name': '.', 'login_count': 3, 'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
         try:
             details = FrontendAPI.user_controller.getAllUsersAndDetails()
         except MatFlowException as exception:
@@ -294,8 +297,6 @@ class FrontendAPI:
             configs: List[
                 ReducedConfigFile
             ] = ReducedConfigFile.extract_multiple_configs(request.get_json())
-            print(configs)
-            print(configs[0].get_file_name())
             FrontendAPI.workflow_manager.create_new_version_of_workflow_instance(
                 wf_instance_name, configs, version_note
             )

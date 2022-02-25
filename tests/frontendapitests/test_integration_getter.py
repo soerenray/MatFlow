@@ -117,11 +117,12 @@ class IntegrationTest(unittest.TestCase):
 
     def test_get_all_users(self):
         got = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
+        print(got)
         expected = json.loads(json.dumps({keys.all_users: [{keys.user_name: "airflow",
                                                             keys.user_status_name: True,
                                           keys.user_privilege_name: "Admin"},{keys.user_name: "first_user",
                                                             keys.user_status_name: True,
-                                          keys.user_privilege_name: "Public"}],
+                                          keys.user_privilege_name: "Admin"}],
                                           keys.status_code_name: 607}))
         self.assertEqual(expected, got)
 
