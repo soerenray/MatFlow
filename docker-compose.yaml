@@ -269,7 +269,7 @@ services:
 
   mysql-db:
     image: mysql:8.0.28
-    platform: linux/x86_64
+    # platform: linux/x86_64
     volumes:
       - "./.mysql-data/db:/var/lib/mysql"
     restart: always
