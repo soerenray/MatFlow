@@ -2,8 +2,10 @@ import json
 import unittest
 from copy import deepcopy
 from unittest.mock import patch, Mock
-from matflow.frontendapi.api import app, FrontendAPI
-from matflow.frontendapi import keys
+from matflow.database.DatabaseTable import DatabaseTable
+with patch.object(DatabaseTable, "get_instance", return_value=""):
+    from matflow.frontendapi.api import app, FrontendAPI
+    from matflow.frontendapi import keys
 from matflow.exceptionpackage.MatFlowException import InternalException
 from matflow.useradministration.User import User
 
@@ -31,9 +33,32 @@ class UserTest(unittest.TestCase):
             keys.user_privilege_name: "user",
             keys.password_name: "jinkies",
         }
-        self.all_users: dict = {
-            keys.all_users: [self.expected_dict_user_1, self.expected_dict_user_2]
-        }
+        self.all_users: dict = {'total_entries': 2,
+                                'users': [{'active': True,
+                                           'changed_on': '2022-02-24T21:16:07.771595',
+                                           'created_on': '2022-02-24T21:16:07.771470',
+                                           'email': 'airflowadmin@example.com',
+                                           'fail_login_count': 0,
+                                           'first_name': 'Airflow',
+                                           'last_login': '2022-02-25T14:40:36.356283',
+                                           'last_name': 'Admin', 'login_count': 183,
+                                           'roles': [{'name': 'Admin'}],
+                                           'username': 'airflow'},
+                                          {'active': True,
+                                           'changed_on': '2022-02-25T08:49:46.339749',
+                                           'created_on': '2022-02-25T08:49:46.339308',
+                                           'email': '.', 'fail_login_count': 0,
+                                           'first_name': '.',
+                                           'last_login': '2022-02-25T08:58:08.301726',
+                                           'last_name': '.', 'login_count': 3,
+                                           'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
+
+        self.all_users_response = json.loads(json.dumps({keys.all_users: [{keys.user_name: "airflow",
+                                                    keys.user_status_name: True,
+                                                    keys.user_privilege_name: "Admin"},
+                                                                          {keys.user_name: "first_user",
+                                                                           keys.user_status_name: True,
+                                                                           keys.user_privilege_name: "Admin"}]}))
         self.failed_dict = {
             keys.status_code_name: InternalException(
                 "scooby not found"
@@ -52,16 +77,17 @@ class UserTest(unittest.TestCase):
             # no exceptions possible
 
     def test_getAllUsersAndDetails_response(self):
+        # TODO failed noch
         # we only get an array of users
         with patch.object(
             FrontendAPI.user_controller.__class__,
             "getAllUsersAndDetails",
-            return_value=self.all_users[keys.all_users],
+            return_value=self.all_users,
         ):
             got = self.app.get("get_all_users_and_details")
             # content not relevant, Nils has to test this
             retrieved_json = json.loads(got.get_data())
-            expected_response: dict = deepcopy(self.all_users)
+            expected_response: dict = deepcopy(self.all_users_response)
             expected_response.update(success_response)
             # get rid of python native data types
             expected_response = json.loads(json.dumps(expected_response))
