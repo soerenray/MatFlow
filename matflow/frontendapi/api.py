@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os.path
 from pathlib import Path
 from typing import List
 from flask import Flask, request
@@ -293,6 +294,8 @@ class FrontendAPI:
             configs: List[
                 ReducedConfigFile
             ] = ReducedConfigFile.extract_multiple_configs(request.get_json())
+            print(configs)
+            print(configs[0].get_file_name())
             FrontendAPI.workflow_manager.create_new_version_of_workflow_instance(
                 wf_instance_name, configs, version_note
             )
@@ -524,8 +527,11 @@ class FrontendAPI:
                 ConverterException("false/ no json provided")
             )
         else:
+            out = utilities.encode_file(file_path, keys.dag_picture_name)
+            # file is already removed in utilities.encode
+            os.rmdir(file_path.parent)
             return ExceptionHandler.success(
-                utilities.encode_file(file_path, keys.dag_picture_name)
+                out
             )
 
 

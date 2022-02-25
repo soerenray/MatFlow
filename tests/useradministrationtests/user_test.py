@@ -1,7 +1,5 @@
 import json
 import unittest
-
-# TODO User test cases encoding/decoding
 from copy import deepcopy
 from unittest.mock import patch
 

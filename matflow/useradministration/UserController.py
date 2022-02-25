@@ -144,15 +144,14 @@ class UserController:
         # we build our address
 
         deleteUserAddress = "http://localhost:8080/api/v1/users/" + deleteUsername
-        deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
 
         # delete the User via the api call
 
         deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
 
-        # and check the Response
+        # and check the Response (204 is success)
 
-        if deleteUserCode.status_code != 200:
+        if deleteUserCode.status_code != 204:
             raise UserExistsException("")
 
     # loginUser method:
@@ -168,16 +167,13 @@ class UserController:
         # we build our address
 
         loginUserAddress = "http://localhost:8080/api/v1/users/" + loginUsername
-        if (
-            requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
-            != loginPassword
-        ):
-            raise LoginException("")
+        response = requests.get(loginUserAddress, auth=self.getAuth()).json()
 
         # and check the password
 
         if (
-            requests.get(loginUserAddress, auth=self.getAuth()).json()["password"]
+            # @Nils: existiert nicht
+            response["password"]
             != loginPassword
         ):
             raise LoginException("")

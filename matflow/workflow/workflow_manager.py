@@ -17,6 +17,7 @@ from matflow.exceptionpackage.MatFlowException import (
 )
 from matflow.database.TemplateData import TemplateData
 from matflow.database.WorkflowData import WorkflowData
+from ..frontendapi import utilities
 
 
 class WorkflowManager:
@@ -144,9 +145,13 @@ class WorkflowManager:
             Path: Image with visual representation of the given dag
 
         """
-        return Path(
-            "workflow/workflowtests/dummy_dag.png"
-        )  # TODO this is only a dummy implementation
+        out_path = utilities.create_dir(os.path.join(utilities.temp_in_path, "temp_dag_picture"))
+        # TODO Dummy implementation
+        shutil.copyfile(os.path.join(Path(utilities.temp_in_path).parent, "dummy_dag.png"),
+                        os.path.join(out_path, "dummy_dag.png"))
+        print(os.path.join(out_path, "dummy_dag.png"))
+        print(os.path.isfile(os.path.join(out_path, "dummy_dag.png")))
+        return Path(os.path.join(out_path, "dummy_dag.png"))
 
     def get_template_names(self) -> List[str]:
         """Returns the names of all templates.
@@ -249,13 +254,14 @@ class WorkflowManager:
                 + workflow_instance_name
                 + " doesn't refer to a wf instance."
             )
-
         # request current version from database
+        # TODO findet es nicht iwie
         current_version_number: VersionNumber = VersionNumber(
             self.__workflow_data.get_active_version_of_workflow_instance(
                 workflow_instance_name
             )
         )
+        print(current_version_number)
 
         # calculate the new version number from the current one
         existing_version_numbers: List[
