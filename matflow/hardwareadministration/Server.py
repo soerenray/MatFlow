@@ -79,8 +79,8 @@ class Server:
 
     # Ressources setter method
     def setRessources(self, ressources: Tuple[str, str]):
-        self.cpuResource = ressources[0]
-        self.vmemResource = ressources[1]
+        self.cpuResource = ressources[1]
+        self.vmemResource = ressources[0]
 
     # other methods:
 
