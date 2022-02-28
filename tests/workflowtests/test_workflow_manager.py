@@ -5,7 +5,10 @@ from typing import List
 import unittest.mock as mock
 from pathlib import Path
 from unittest import TestCase
-from matflow.workflow.workflow_manager import WorkflowManager
+from matflow.database.DatabaseTable import DatabaseTable
+
+with mock.patch.object(DatabaseTable, "get_instance", return_value=""):
+    from matflow.workflow.workflow_manager import WorkflowManager
 from matflow.workflow.reduced_config_file import ReducedConfigFile
 from matflow.workflow.database_version import DatabaseVersion
 from matflow.workflow.frontend_version import FrontendVersion
@@ -100,7 +103,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # set up the base path for the conf folders
         self.conf_base_path: Path = self.base_path / "conf_folders"
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_template_name(self, mock_wf_data):
         # Arrange
         unknown_name: str = "unknown"
@@ -122,7 +125,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # test that the database interface wasn't called
         self.assertFalse(mock_wf_data.create_wf_instance.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_only_conf_files(self, mock_wf_data):
         # a valid creation, the config folder only consisting of conf-files
         # Arrange
@@ -157,7 +160,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         self.assertTrue(os.path.isdir(expected_path))
         self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_empty_config_folder(self, mock_wf_data):
         # Arrange
         instance_name: str = "instance1"
@@ -178,7 +181,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # test that the database interface wasn't called
         self.assertFalse(mock_wf_data.create_wf_instance.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_double_instance_name(self, mock_wf_data):
         # first repeat 'test_valid_only_conf_files' from above without testing, then try to create the same instance
         # again -> should raise a DoubleWorkflowInstanceNameException
@@ -210,7 +213,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # test that the database interface was only called the first time (the call_count doesn't change)
         self.assertEqual(mock_wf_data.create_wf_instance.call_count, 1)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_mixed_files(self, mock_wf_data):
         # a valid creation, the config folder only consisting of conf-files as well as other files
         # Arrange
@@ -298,7 +301,7 @@ class TestGetTemplateAndNames(TestWorkflowManager):
 
 
 class TestCreateNewVersion(TestWorkflowManager):
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def setUp(self, mock_wf_data):
         # create a template first
         dag_file_t1: Path = self.base_path / "tpl1.py"
@@ -335,7 +338,7 @@ class TestCreateNewVersion(TestWorkflowManager):
         )
         self.version_note: str = "empty note"
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_instance(self, mock_wf_data):
         # Arrange
         unknown_instance_name: str = "unknown"
@@ -359,7 +362,7 @@ class TestCreateNewVersion(TestWorkflowManager):
         # make sure the database wasn't called
         self.assertFalse(mock_wf_data.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_create_multiple_versions(self, mock_wf_data):
         # in this test everything is supposed to go right. versions 1.1, 1.2, 1.1.1 are subsequently created
         # Arrange v1_1
@@ -452,7 +455,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         empty_folder: Path = self.base_path / "wf_instances"
         self.w_man._WorkflowManager__versions_base_directory = empty_folder
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_instance(self, mock_wf_data):
         # Arrange
         unknown_instance_name: str = "unknown"
@@ -471,7 +474,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         # make sure the database wasn't called
         self.assertFalse(mock_wf_data.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_instance(self, mock_wf_data):
         # Arrange
         instance_name: str = "instance1"
