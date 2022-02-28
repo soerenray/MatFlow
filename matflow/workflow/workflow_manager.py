@@ -14,6 +14,7 @@ from matflow.exceptionpackage.MatFlowException import (
     DoubleTemplateNameException,
     InternalException,
     DoubleWorkflowInstanceNameException,
+    WorkflowInstanceRunningException,
 )
 from matflow.database.TemplateData import TemplateData
 from matflow.database.WorkflowData import WorkflowData
@@ -145,10 +146,14 @@ class WorkflowManager:
             Path: Image with visual representation of the given dag
 
         """
-        out_path = utilities.create_dir(os.path.join(utilities.temp_in_path, "temp_dag_picture"))
+        out_path = utilities.create_dir(
+            os.path.join(utilities.temp_in_path, "temp_dag_picture")
+        )
         # TODO Dummy implementation
-        shutil.copyfile(os.path.join(Path(utilities.temp_in_path).parent, "dummy_dag.png"),
-                        os.path.join(out_path, "dummy_dag.png"))
+        shutil.copyfile(
+            os.path.join(Path(utilities.temp_in_path).parent, "dummy_dag.png"),
+            os.path.join(out_path, "dummy_dag.png"),
+        )
         print(os.path.join(out_path, "dummy_dag.png"))
         print(os.path.isfile(os.path.join(out_path, "dummy_dag.png")))
         return Path(os.path.join(out_path, "dummy_dag.png"))
@@ -389,19 +394,42 @@ class WorkflowManager:
             version_number (str): The number of the new active version
 
         """
-        # first check if the instance is currently running
-        dag_request = requests.get(
-            self.__airflow_address + "api/v1/dags/{dag_id}/details"
-        )
-        # TODO
+        # first check if the workflow instance exists
+        if not os.path.isdir(self.__versions_base_directory / workflow_instance_name):
+            raise InternalException(
+                "Internal Error: "
+                + workflow_instance_name
+                + " doesn't refer to a wf instance."
+            )
 
-        # TODO adjust current_conf-dir
+        # then check if the instance is currently running
+        if self.__is_workflow_instance_running(workflow_instance_name):
+            raise WorkflowInstanceRunningException("")
 
-        # if not tell database to change the active version
+        # finally, check if the workflow instance has a version with the given number
+        new_version_number: VersionNumber = VersionNumber(version_number)
+        if not os.path.isdir(
+            self.__versions_base_directory
+            / workflow_instance_name
+            / new_version_number.get_dir_name()
+        ):
+            raise InternalException(
+                "Internal Error: Workflow instance "
+                + workflow_instance_name
+                + " has no version '"
+                + version_number
+                + "'."
+            )
+
+        # if everything is fine tell database to change the active version
         self.__workflow_data.set_active_version_through_number(
             workflow_instance_name, version_number
         )
-        pass
+
+        # and after that adjust the configs in the "current_conf" directory of the wf instance
+        current_conf_dir: Path = (
+            self.__versions_base_directory / workflow_instance_name / "current_conf"
+        )
 
     # private methods
 
