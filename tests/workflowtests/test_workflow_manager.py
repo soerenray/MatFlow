@@ -5,7 +5,10 @@ from typing import List
 import unittest.mock as mock
 from pathlib import Path
 from unittest import TestCase
-from matflow.workflow.workflow_manager import WorkflowManager
+from matflow.database.DatabaseTable import DatabaseTable
+
+with mock.patch.object(DatabaseTable, "get_instance", return_value=""):
+    from matflow.workflow.workflow_manager import WorkflowManager
 from matflow.workflow.reduced_config_file import ReducedConfigFile
 from matflow.workflow.database_version import DatabaseVersion
 from matflow.workflow.frontend_version import FrontendVersion
@@ -16,6 +19,7 @@ from matflow.exceptionpackage.MatFlowException import (
     InternalException,
     DoubleWorkflowInstanceNameException,
     EmptyConfigFolderException,
+    WorkflowInstanceRunningException,
 )
 
 
@@ -100,7 +104,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # set up the base path for the conf folders
         self.conf_base_path: Path = self.base_path / "conf_folders"
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_template_name(self, mock_wf_data):
         # Arrange
         unknown_name: str = "unknown"
@@ -122,7 +126,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # test that the database interface wasn't called
         self.assertFalse(mock_wf_data.create_wf_instance.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_only_conf_files(self, mock_wf_data):
         # a valid creation, the config folder only consisting of conf-files
         # Arrange
@@ -157,28 +161,29 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         self.assertTrue(os.path.isdir(expected_path))
         self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
-    def test_empty_config_folder(self, mock_wf_data):
-        # Arrange
-        instance_name: str = "instance1"
-        conf_folder: Path = self.conf_base_path / "empty_folder"
+    # in theory test works but it's commented out because empty folders aren't a thing with git
+    #    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    #    def test_empty_config_folder(self, mock_wf_data):
+    #        # Arrange
+    #        instance_name: str = "instance1"
+    #        conf_folder: Path = self.conf_base_path / "empty_folder"
+    #
+    #        # insert the mock object in the right attribute
+    #        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+    #
+    #        # Act + Assert
+    #        self.assertRaises(
+    #            EmptyConfigFolderException,
+    #            self.w_man.create_workflow_instance_from_template,
+    #            self.name_t1,
+    #            instance_name,
+    #            conf_folder,
+    #        )
+    #
+    #        # test that the database interface wasn't called
+    #        self.assertFalse(mock_wf_data.create_wf_instance.called)
 
-        # insert the mock object in the right attribute
-        self.w_man._WorkflowManager__workflow_data = mock_wf_data
-
-        # Act + Assert
-        self.assertRaises(
-            EmptyConfigFolderException,
-            self.w_man.create_workflow_instance_from_template,
-            self.name_t1,
-            instance_name,
-            conf_folder,
-        )
-
-        # test that the database interface wasn't called
-        self.assertFalse(mock_wf_data.create_wf_instance.called)
-
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_double_instance_name(self, mock_wf_data):
         # first repeat 'test_valid_only_conf_files' from above without testing, then try to create the same instance
         # again -> should raise a DoubleWorkflowInstanceNameException
@@ -210,7 +215,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # test that the database interface was only called the first time (the call_count doesn't change)
         self.assertEqual(mock_wf_data.create_wf_instance.call_count, 1)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_mixed_files(self, mock_wf_data):
         # a valid creation, the config folder only consisting of conf-files as well as other files
         # Arrange
@@ -298,7 +303,7 @@ class TestGetTemplateAndNames(TestWorkflowManager):
 
 
 class TestCreateNewVersion(TestWorkflowManager):
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def setUp(self, mock_wf_data):
         # create a template first
         dag_file_t1: Path = self.base_path / "tpl1.py"
@@ -335,7 +340,7 @@ class TestCreateNewVersion(TestWorkflowManager):
         )
         self.version_note: str = "empty note"
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_instance(self, mock_wf_data):
         # Arrange
         unknown_instance_name: str = "unknown"
@@ -359,7 +364,7 @@ class TestCreateNewVersion(TestWorkflowManager):
         # make sure the database wasn't called
         self.assertFalse(mock_wf_data.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_create_multiple_versions(self, mock_wf_data):
         # in this test everything is supposed to go right. versions 1.1, 1.2, 1.1.1 are subsequently created
         # Arrange v1_1
@@ -452,7 +457,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         empty_folder: Path = self.base_path / "wf_instances"
         self.w_man._WorkflowManager__versions_base_directory = empty_folder
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_instance(self, mock_wf_data):
         # Arrange
         unknown_instance_name: str = "unknown"
@@ -471,7 +476,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         # make sure the database wasn't called
         self.assertFalse(mock_wf_data.called)
 
-    @mock.patch("Implementierung.workflow.workflow_manager.WorkflowData")
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_valid_instance(self, mock_wf_data):
         # Arrange
         instance_name: str = "instance1"
@@ -518,6 +523,91 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         self.assertEqual("1.2", frontend_versions[2].get_version_number().get_number())
 
 
+class TestSetActiveVersionByNumber(TestGetVersionsFromWorkflowInstance):
+    # this class inherits from TestGetVersionsFromWorkflowInstance because we want the same setUp and tearDown methods
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_with_unknown_instance(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        unknown_instance_name: str = "unknown"
+        any_number: str = ""  # should be irrelevant
+        # make sure the mock method says the wf isn't running
+        mock_running.return_value = False
+        expected_msg: str = (
+            "Internal Error: "
+            + unknown_instance_name
+            + " doesn't refer to a wf instance."
+        )
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.set_active_version_through_number(
+                unknown_instance_name, any_number
+            )
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # assert no calls to the airflow api
+        self.assertFalse(mock_running.called)
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_while_instance_running(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        # make sure the mock method says the wf is running
+        mock_running.return_value = True
+        instance_name: str = "instance1"
+        new_version: str = "1.1"
+
+        # Act + Assert
+        self.assertRaises(
+            WorkflowInstanceRunningException,
+            self.w_man.set_active_version_through_number,
+            instance_name,
+            new_version,
+        )
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_with_unknown_number(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        # make sure the mock method says the wf isn't running
+        mock_running.return_value = False
+        instance_name: str = "instance1"
+        wrong_number: str = "1.5"  # actually there is no version 1.5
+        expected_msg: str = (
+            "Internal Error: Workflow instance "
+            + instance_name
+            + " has no version '"
+            + wrong_number
+            + "'."
+        )
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.set_active_version_through_number(instance_name, wrong_number)
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
+
+
 class TestCopyFilesWithExtension(TestWorkflowManager):
     def setUp(self):
         self.base_path_copy_whole_dir: Path = self.base_path / "copyFilesWithExtension"
@@ -532,7 +622,7 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
         # in this test I compare dirs with different tree structure
         # Arrange
         dir1: Path = self.base_path_copy_whole_dir
-        dir2: Path = self.base_path_copy_whole_dir / "src2"
+        dir2: Path = self.base_path_copy_whole_dir / "src3"
 
         # Act
         equal: bool = are_dir_trees_equal(dir1, dir2)
@@ -543,8 +633,8 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
     def test_are_dir_trees_equal_same_dir(self):
         # in this test I compare a dir to itself
         # Arrange
-        dir1: Path = self.base_path_copy_whole_dir / "src2"
-        dir2: Path = self.base_path_copy_whole_dir / "src2"
+        dir1: Path = self.base_path_copy_whole_dir / "src3"
+        dir2: Path = self.base_path_copy_whole_dir / "src3"
 
         # Act
         equal: bool = are_dir_trees_equal(dir1, dir2)
@@ -577,17 +667,19 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
         self.assertTrue(equal)
 
     # now we can start with the workflowtests for the actual method
-    def test_empty_dir(self):
-        # Arrange
-        src_path: Path = self.base_path_copy_whole_dir / "src1"
 
-        # Act
-        self.w_man._WorkflowManager__copy_files_with_extension(
-            src_path, self.dst_dir, ""
-        )
-
-        # Assert
-        self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
+    # this does not work because empty folders can't be tracked by git
+    # def test_empty_dir(self):
+    #     # Arrange
+    #     src_path: Path = self.base_path_copy_whole_dir / "src1"
+    #
+    #     # Act
+    #     self.w_man._WorkflowManager__copy_files_with_extension(
+    #         src_path, self.dst_dir, ""
+    #     )
+    #
+    #     # Assert
+    #     self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
 
     # this is no longer ment to work, the src directory has to be flat
     #    def test_dir_with_subdir(self):
