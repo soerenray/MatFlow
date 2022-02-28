@@ -19,6 +19,7 @@ from matflow.exceptionpackage.MatFlowException import (
     InternalException,
     DoubleWorkflowInstanceNameException,
     EmptyConfigFolderException,
+    WorkflowInstanceRunningException,
 )
 
 
@@ -520,6 +521,91 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
             "1.1.1", frontend_versions[1].get_version_number().get_number()
         )
         self.assertEqual("1.2", frontend_versions[2].get_version_number().get_number())
+
+
+class TestSetActiveVersionByNumber(TestGetVersionsFromWorkflowInstance):
+    # this class inherits from TestGetVersionsFromWorkflowInstance because we want the same setUp and tearDown methods
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_with_unknown_instance(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        unknown_instance_name: str = "unknown"
+        any_number: str = ""  # should be irrelevant
+        # make sure the mock method says the wf isn't running
+        mock_running.return_value = False
+        expected_msg: str = (
+            "Internal Error: "
+            + unknown_instance_name
+            + " doesn't refer to a wf instance."
+        )
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.set_active_version_through_number(
+                unknown_instance_name, any_number
+            )
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # assert no calls to the airflow api
+        self.assertFalse(mock_running.called)
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_while_instance_running(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        # make sure the mock method says the wf is running
+        mock_running.return_value = True
+        instance_name: str = "instance1"
+        new_version: str = "1.1"
+
+        # Act + Assert
+        self.assertRaises(
+            WorkflowInstanceRunningException,
+            self.w_man.set_active_version_through_number,
+            instance_name,
+            new_version,
+        )
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
+
+    @mock.patch.object(
+        WorkflowManager, "_WorkflowManager__is_workflow_instance_running"
+    )
+    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    def test_with_unknown_number(self, mock_wf_data, mock_running):
+        # Arrange
+        # put the mock in place
+        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+        # make sure the mock method says the wf isn't running
+        mock_running.return_value = False
+        instance_name: str = "instance1"
+        wrong_number: str = "1.5"  # actually there is no version 1.5
+        expected_msg: str = (
+            "Internal Error: Workflow instance "
+            + instance_name
+            + " has no version '"
+            + wrong_number
+            + "'."
+        )
+
+        # Act + Assert
+        with self.assertRaises(InternalException) as context:
+            self.w_man.set_active_version_through_number(instance_name, wrong_number)
+        self.assertTrue(expected_msg in str(context.exception))
+
+        # assert no calls to the database were made
+        self.assertFalse(mock_wf_data.called)
 
 
 class TestCopyFilesWithExtension(TestWorkflowManager):
