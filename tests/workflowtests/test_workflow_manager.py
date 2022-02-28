@@ -160,26 +160,27 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         self.assertTrue(os.path.isdir(expected_path))
         self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
 
-    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
-    def test_empty_config_folder(self, mock_wf_data):
-        # Arrange
-        instance_name: str = "instance1"
-        conf_folder: Path = self.conf_base_path / "empty_folder"
-
-        # insert the mock object in the right attribute
-        self.w_man._WorkflowManager__workflow_data = mock_wf_data
-
-        # Act + Assert
-        self.assertRaises(
-            EmptyConfigFolderException,
-            self.w_man.create_workflow_instance_from_template,
-            self.name_t1,
-            instance_name,
-            conf_folder,
-        )
-
-        # test that the database interface wasn't called
-        self.assertFalse(mock_wf_data.create_wf_instance.called)
+    # in theory test works but it's commented out because empty folders aren't a thing with git
+    #    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
+    #    def test_empty_config_folder(self, mock_wf_data):
+    #        # Arrange
+    #        instance_name: str = "instance1"
+    #        conf_folder: Path = self.conf_base_path / "empty_folder"
+    #
+    #        # insert the mock object in the right attribute
+    #        self.w_man._WorkflowManager__workflow_data = mock_wf_data
+    #
+    #        # Act + Assert
+    #        self.assertRaises(
+    #            EmptyConfigFolderException,
+    #            self.w_man.create_workflow_instance_from_template,
+    #            self.name_t1,
+    #            instance_name,
+    #            conf_folder,
+    #        )
+    #
+    #        # test that the database interface wasn't called
+    #        self.assertFalse(mock_wf_data.create_wf_instance.called)
 
     @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_double_instance_name(self, mock_wf_data):
@@ -535,7 +536,7 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
         # in this test I compare dirs with different tree structure
         # Arrange
         dir1: Path = self.base_path_copy_whole_dir
-        dir2: Path = self.base_path_copy_whole_dir / "src2"
+        dir2: Path = self.base_path_copy_whole_dir / "src3"
 
         # Act
         equal: bool = are_dir_trees_equal(dir1, dir2)
@@ -546,8 +547,8 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
     def test_are_dir_trees_equal_same_dir(self):
         # in this test I compare a dir to itself
         # Arrange
-        dir1: Path = self.base_path_copy_whole_dir / "src2"
-        dir2: Path = self.base_path_copy_whole_dir / "src2"
+        dir1: Path = self.base_path_copy_whole_dir / "src3"
+        dir2: Path = self.base_path_copy_whole_dir / "src3"
 
         # Act
         equal: bool = are_dir_trees_equal(dir1, dir2)
@@ -580,17 +581,19 @@ class TestCopyFilesWithExtension(TestWorkflowManager):
         self.assertTrue(equal)
 
     # now we can start with the workflowtests for the actual method
-    def test_empty_dir(self):
-        # Arrange
-        src_path: Path = self.base_path_copy_whole_dir / "src1"
 
-        # Act
-        self.w_man._WorkflowManager__copy_files_with_extension(
-            src_path, self.dst_dir, ""
-        )
-
-        # Assert
-        self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
+    # this does not work because empty folders can't be tracked by git
+    # def test_empty_dir(self):
+    #     # Arrange
+    #     src_path: Path = self.base_path_copy_whole_dir / "src1"
+    #
+    #     # Act
+    #     self.w_man._WorkflowManager__copy_files_with_extension(
+    #         src_path, self.dst_dir, ""
+    #     )
+    #
+    #     # Assert
+    #     self.assertTrue(are_dir_trees_equal(src_path, self.dst_dir))
 
     # this is no longer ment to work, the src directory has to be flat
     #    def test_dir_with_subdir(self):
