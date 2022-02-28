@@ -8,6 +8,9 @@ test.py
 # filter out files in pycache directory
 *.pyc
 
+# don't commit the MANIFEST file
+MANIFEST
+
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
