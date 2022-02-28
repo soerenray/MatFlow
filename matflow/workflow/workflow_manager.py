@@ -433,6 +433,13 @@ class WorkflowManager:
 
     # private methods
 
+    def __is_workflow_instance_running(self, wf_instance_name: str) -> bool:
+        # makes request to the airflow API to find out if the given workflow is running
+        dag_request = requests.get(
+            self.__airflow_address + "api/v1/dags/{dag_id}/details"
+        )
+        return False  # TODO
+
     @staticmethod
     def __copy_files_with_extension(src: Path, dst: Path, extension: str):
         # this method shall copy all files under src (we assume the dir is flat) with the given file extension
