@@ -16,7 +16,6 @@ This project is built using
     * Apache Airflow
 * TypeScript
 * MySQL
-* Nomad 
 * Docker
 
 
