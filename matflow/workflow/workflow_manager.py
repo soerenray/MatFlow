@@ -30,8 +30,8 @@ class WorkflowManager:
     __instance = None
     __template_data: TemplateData = TemplateData.get_instance()
     __workflow_data: WorkflowData = WorkflowData.get_instance()
-    __versions_base_directory: Path = Path("")  # TODO
-    __template_base_directory: Path = Path("")  # TODO
+    __versions_base_directory: Path = Path(__file__).parent / "wf_instances"
+    __template_base_directory: Path = Path(__file__).parent / "templates"
     __airflow_dag_folder: Path = Path("")  # TODO
     __airflow_address: str = "http://localhost:8080/"  # TODO
     __initial_version_note = "initial version"
@@ -48,6 +48,11 @@ class WorkflowManager:
         if cls.__instance is None:
             # Creating new instance
             cls.__instance = cls.__new__(cls)
+        # check if the dirs are created yet
+        if not os.path.isdir(cls.__versions_base_directory):
+            os.mkdir(cls.__versions_base_directory)
+        if not os.path.isdir(cls.__template_base_directory):
+            os.mkdir(cls.__template_base_directory)
         return cls.__instance
 
     def create_template(self, template: Template):
