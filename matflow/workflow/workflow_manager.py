@@ -79,6 +79,10 @@ class WorkflowManager:
 
         # maybe make the file ro TODO
 
+        # delete the temporary file + wrapping folder
+        os.remove(template.get_dag_definition_file())
+        os.rmdir(template.get_dag_definition_file().parent)
+
         # adjust the attribute of the template
         template.set_dag_definition_file(new_path)
 
@@ -138,6 +142,12 @@ class WorkflowManager:
         # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
         workflow_instance.activate_instance(self.__airflow_dag_folder)
         # TODO -> write "activate_instance" in WorkflowInstance
+
+        # delete the temporary config folder + wrapping folder
+        for file in os.listdir(config_files):
+            os.remove(config_files / file)
+        os.remove(config_files)
+        os.rmdir(config_files.parent)
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph
