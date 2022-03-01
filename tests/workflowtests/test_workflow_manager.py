@@ -41,6 +41,13 @@ class TestWorkflowManager(TestCase):
     w_man._WorkflowManager__versions_base_directory = temp_path
     w_man._WorkflowManager__template_base_directory = wf_path
 
+    def setUp(self):
+        # make sure empty dirs exist (git doesn't allow to push them)
+        if not os.path.isdir(self.temp_path):
+            os.mkdir(self.temp_path)
+        if not os.path.isdir(self.wf_path):
+            os.mkdir(self.wf_path)
+
     def tearDown(self):
         # clean up dirs after every run
         delete_dir_content(self.temp_path)
@@ -49,6 +56,7 @@ class TestWorkflowManager(TestCase):
 
 class TestCreateTemplate(TestWorkflowManager):
     def setUp(self):
+        super(TestCreateTemplate, self).setUp()
         self.dag_file_t1: Path = self.base_path / "tpl1.py"
         self.t1: Template = Template("t1", self.dag_file_t1)
 
@@ -95,6 +103,7 @@ class TestCreateTemplate(TestWorkflowManager):
 
 class TestCreateInstanceFromTemplate(TestWorkflowManager):
     def setUp(self):
+        super(TestCreateInstanceFromTemplate, self).setUp()
         # create a possible template, that can be used for creation
         dag_file_t1: Path = self.base_path / "tpl1.py"
         self.name_t1: str = "t1"
@@ -254,6 +263,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
 
 class TestGetTemplateAndNames(TestWorkflowManager):
     def setUp(self):
+        super(TestGetTemplateAndNames, self).setUp()
         # create tree different templates
         self.dag_file: Path = self.base_path / "tpl1.py"
         t1: Template = Template("t1", self.dag_file)
@@ -305,6 +315,7 @@ class TestGetTemplateAndNames(TestWorkflowManager):
 class TestCreateNewVersion(TestWorkflowManager):
     @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def setUp(self, mock_wf_data):
+        super(TestCreateNewVersion, self).setUp()
         # create a template first
         dag_file_t1: Path = self.base_path / "tpl1.py"
         t1: Template = Template("t1", dag_file_t1)
@@ -433,6 +444,7 @@ class TestCreateNewVersion(TestWorkflowManager):
 
 class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
     def setUp(self):
+        super(TestGetVersionsFromWorkflowInstance, self).setUp()
         # we want to work on an instance with multiple versions for that there is a dir prepared
         prepared_folder: Path = self.base_path / "wf_instances_prepared"
         self.w_man._WorkflowManager__versions_base_directory = prepared_folder
@@ -610,6 +622,7 @@ class TestSetActiveVersionByNumber(TestGetVersionsFromWorkflowInstance):
 
 class TestCopyFilesWithExtension(TestWorkflowManager):
     def setUp(self):
+        super(TestCopyFilesWithExtension, self).setUp()
         self.base_path_copy_whole_dir: Path = self.base_path / "copyFilesWithExtension"
         self.dst_dir: Path = self.base_path_copy_whole_dir / "dst"
         # always clear the destination directory
