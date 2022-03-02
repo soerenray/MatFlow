@@ -2,6 +2,7 @@ import base64
 import json
 import os.path
 import resource
+import shutil
 import unittest
 import socket
 from pathlib import Path
@@ -18,26 +19,34 @@ from matflow.workflow.workflow_manager import WorkflowManager
 class IntegrationTest(unittest.TestCase):
     app = app.test_client()
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.test_create_wf_instance()
-        cls.test_create_template()
-        cls.test_create_user()
+    # @classmethod
+    def setUp(self) -> None:
+        self.test_create_wf_instance()
+        self.test_create_template()
+        self.test_create_user()
         # cls.test_create_version()
 
     def tearDown(self) -> None:
         # deletes all folders in temp_in
-        dir_path = Path(__file__).parent.parent.parent
-        path_to_temp_in = os.path.join(dir_path, "matflow", "frontendapi", "temp_in")
-        for dir in os.listdir(path_to_temp_in):
-            if os.path.isdir(os.path.join(path_to_temp_in, dir)):
-                print("delete dir: " + dir)
-                for element in os.listdir(os.path.join(path_to_temp_in, dir)):
-                    os.remove(os.path.join(path_to_temp_in, dir, element))
-                os.rmdir(os.path.join(path_to_temp_in, dir))
-            elif os.path.isfile(dir):
-                print("delete file: " + dir)
-                os.remove(dir)
+        dir_path: Path = Path(__file__).parent.parent.parent
+        path_to_temp_in: Path = dir_path / "matflow" / "frontendapi" / "temp_in"
+        delete_dir_content(path_to_temp_in)
+
+        # also reset the template and wf_instance folders
+        wf_instances_path = dir_path / "matflow" / "workflow" / "wf_instances"
+        delete_dir_content(wf_instances_path)
+        templates_path = dir_path / "matflow" / "workflow" / "templates"
+        delete_dir_content(templates_path)
+
+        # for file in os.listdir(path_to_temp_in):
+        #     if os.path.isdir(os.path.join(path_to_temp_in, file)):
+        #         print("delete dir: " + file)
+        #         for element in os.listdir(os.path.join(path_to_temp_in, file)):
+        #             os.remove(os.path.join(path_to_temp_in, file, element))
+        #         os.rmdir(os.path.join(path_to_temp_in, file))
+        #     elif os.path.isfile(file):
+        #         print("delete file: " + file)
+        #         os.remove(file)
 
     @classmethod
     @unittest.skip("siehe unten, gleiche Methode in anderer Klasse")
@@ -299,7 +308,7 @@ class IntegrationTest(unittest.TestCase):
         )
         self.assertEqual(got, {keys.status_code_name: 607})
 
-    @unittest.skip("Florian Pfad")
+    # @unittest.skip("Florian Pfad")
     def test_get_all_wf_instances(self):
         # Fehler bei Query bei Lukas, siehe Slack
         got = json.loads(
@@ -307,10 +316,11 @@ class IntegrationTest(unittest.TestCase):
                 "get_all_wf_instances_names_and_config_file_names"
             ).get_data()
         )
+        print("hallo hier ist die instance")
         print(got)
         # TODO Florian fix
         # der Fehler den ich (Flo) bekomme ist ein KeyError ->  es gibt den key "keys.workflow_instance_names" nicht
-        self.assertIn("test_instance", got[keys.workflow_instance_names])
+        self.assertIn("test_instance", got[keys.names_and_configs])
 
     @unittest.skip("Versions läuft schief")
     def test_get_wf_instance_versions_test(self):
@@ -426,7 +436,7 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(True, True)
 
 
-class SetUpTester(unittest.TestCase):
+class SetUpTester(IntegrationTest):
     def setUp(self) -> None:
         self.app = app.test_client()
 
@@ -508,6 +518,16 @@ class SetUpTester(unittest.TestCase):
             self.app.post("create_version_of_wf_instance", json=send_off).get_data()
         )
         self.assertEqual(got, {keys.status_code_name: 607})
+
+
+# utility method
+def delete_dir_content(dir_path: Path):
+    for content in os.listdir(dir_path):
+        content_path: Path = dir_path / content
+        if os.path.isfile(content_path) or os.path.islink(content_path):
+            os.unlink(content_path)
+        elif os.path.isdir(content_path):
+            shutil.rmtree(content_path)
 
 
 if __name__ == "__main__":
