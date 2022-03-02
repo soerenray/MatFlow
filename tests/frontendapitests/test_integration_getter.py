@@ -436,9 +436,21 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(True, True)
 
 
-class SetUpTester(IntegrationTest):
+class SetUpTester(unittest.TestCase):
     def setUp(self) -> None:
         self.app = app.test_client()
+
+    def tearDown(self) -> None:
+        # deletes all folders in temp_in
+        dir_path: Path = Path(__file__).parent.parent.parent
+        path_to_temp_in: Path = dir_path / "matflow" / "frontendapi" / "temp_in"
+        delete_dir_content(path_to_temp_in)
+
+        # also reset the template and wf_instance folders
+        wf_instances_path = dir_path / "matflow" / "workflow" / "wf_instances"
+        delete_dir_content(wf_instances_path)
+        templates_path = dir_path / "matflow" / "workflow" / "templates"
+        delete_dir_content(templates_path)
 
     def test_create_user(self):
         payload = json.dumps(
