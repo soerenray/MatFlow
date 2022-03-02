@@ -146,8 +146,7 @@ class WorkflowManager:
         # delete the temporary config folder + wrapping folder
         for file in os.listdir(config_files):
             os.remove(config_files / file)
-        os.remove(config_files)
-        os.rmdir(config_files.parent)
+        os.rmdir(config_files)
 
     def get_dag_representation_from_template(self, template: Template) -> Path:
         """Takes a dag file and a dag name and returns a preview of the defined graph

@@ -6,8 +6,11 @@ import shutil
 import unittest
 import socket
 from pathlib import Path
+from typing import List
+
 from matflow.frontendapi.api import app
 from matflow.frontendapi import keys, utilities
+import matflow.database.DatabaseTable
 
 # Docker compose/nomad must have been started
 # All fail cases have been caught in unittests. We want to test integrity, so only use cases that
@@ -21,8 +24,8 @@ class IntegrationTest(unittest.TestCase):
 
     # @classmethod
     def setUp(self) -> None:
-        self.test_create_wf_instance()
         self.test_create_template()
+        self.test_create_wf_instance()
         self.test_create_user()
         # cls.test_create_version()
 
@@ -37,6 +40,20 @@ class IntegrationTest(unittest.TestCase):
         delete_dir_content(wf_instances_path)
         templates_path = dir_path / "matflow" / "workflow" / "templates"
         delete_dir_content(templates_path)
+
+        # reset all tables in database
+        table_names: List[str] = [
+            "VersionFile",
+            "ConfFile",
+            "ResultFile",
+            "ActiveVersion",
+            "Version",
+            "FolderFile",
+            "Workflow",
+            "WorkflowTemplate",
+            "Server",
+        ]
+        matflow.database.DatabaseTable.clear_tables(table_names)
 
         # for file in os.listdir(path_to_temp_in):
         #     if os.path.isdir(os.path.join(path_to_temp_in, file)):
@@ -423,7 +440,7 @@ class IntegrationTest(unittest.TestCase):
                 "get_graph_for_temporary_template", json=send_off
             ).get_data()
         )
-        print("result: " + str(got))
+        # print("result: " + str(got))
         self.assertEqual(
             got,
             {
