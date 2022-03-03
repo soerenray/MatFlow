@@ -57,26 +57,27 @@ class IntegrationTest(unittest.TestCase):
         #         print("delete file: " + file)
         #         os.remove(file)
 
-    @classmethod
-    @unittest.skip("siehe unten, gleiche Methode in anderer Klasse")
-    def test_create_version(cls):
-        # TODO failes noch
-        send_off = json.dumps(
-            {
-                keys.workflow_instance_name: "test_instance",
-                keys.version_note_name: "note to self: don't code at 2 am",
-                keys.config_files: [
-                    {
-                        keys.config_file_name: "test_conf1.conf",
-                        keys.key_value_pairs_name: [("hello", "world")],
-                    }
-                ],
-            }
-        )
-
-        got = json.loads(
-            cls.app.post("create_version_of_wf_instance", json=send_off).get_data()
-        )
+    # relaced through help method (bottom of file)
+    # @classmethod
+    # @unittest.skip("siehe unten, gleiche Methode in anderer Klasse")
+    # def test_create_version(cls):
+    #     # TODO failes noch
+    #     send_off = json.dumps(
+    #         {
+    #             keys.workflow_instance_name: "test_instance",
+    #             keys.version_note_name: "note to self: don't code at 2 am",
+    #             keys.config_files: [
+    #                 {
+    #                     keys.config_file_name: "test_conf1.conf",
+    #                     keys.key_value_pairs_name: [("hello", "world")],
+    #                 }
+    #             ],
+    #         }
+    #     )
+    #
+    #     got = json.loads(
+    #         cls.app.post("create_version_of_wf_instance", json=send_off).get_data()
+    #     )
 
     # relaced through help method (bottom of file)
     # @classmethod
@@ -382,13 +383,18 @@ class IntegrationTest(unittest.TestCase):
         self.assertIn("test_template", got[keys.template_names])
 
     def test_get_template(self):
+        # Arrange
         input_data = json.dumps({keys.template_name: "test_template"})
-        got = json.loads(
-            self.__class__.app.get("get_template", json=input_data).get_data()
-        )
         with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
             read_file = file.read()
             encoded_dag = base64.b64encode(read_file).decode("utf-8")
+
+        # Act
+        got = json.loads(
+            self.__class__.app.get("get_template", json=input_data).get_data()
+        )
+
+        # Assert
         self.assertEqual(
             got,
             {
@@ -429,7 +435,6 @@ class IntegrationTest(unittest.TestCase):
                 "get_graph_for_temporary_template", json=send_off
             ).get_data()
         )
-        # print("result: " + str(got))
         self.assertEqual(
             got,
             {
