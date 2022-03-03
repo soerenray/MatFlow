@@ -347,3 +347,6 @@ __pycache__
 
 # airflow logs
 logs/*
+
+# pycharm pro free trial folder
+tests/frondendapitests/_trial_temp/*
