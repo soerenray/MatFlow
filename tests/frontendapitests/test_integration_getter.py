@@ -8,6 +8,8 @@ import socket
 from pathlib import Path
 from typing import List
 
+from flask.testing import FlaskClient
+
 from matflow.frontendapi.api import app
 from matflow.frontendapi import keys, utilities
 import matflow.database.DatabaseTable
@@ -30,30 +32,7 @@ class IntegrationTest(unittest.TestCase):
         # cls.test_create_version()
 
     def tearDown(self) -> None:
-        # deletes all folders in temp_in
-        dir_path: Path = Path(__file__).parent.parent.parent
-        path_to_temp_in: Path = dir_path / "matflow" / "frontendapi" / "temp_in"
-        delete_dir_content(path_to_temp_in)
-
-        # also reset the template and wf_instance folders
-        wf_instances_path = dir_path / "matflow" / "workflow" / "wf_instances"
-        delete_dir_content(wf_instances_path)
-        templates_path = dir_path / "matflow" / "workflow" / "templates"
-        delete_dir_content(templates_path)
-
-        # reset all tables in database
-        table_names: List[str] = [
-            "VersionFile",
-            "ConfFile",
-            "ResultFile",
-            "ActiveVersion",
-            "Version",
-            "FolderFile",
-            "Workflow",
-            "WorkflowTemplate",
-            "Server",
-        ]
-        matflow.database.DatabaseTable.clear_tables(table_names)
+        tear_down(app)
 
         # for file in os.listdir(path_to_temp_in):
         #     if os.path.isdir(os.path.join(path_to_temp_in, file)):
@@ -327,16 +306,12 @@ class IntegrationTest(unittest.TestCase):
 
     # @unittest.skip("Florian Pfad")
     def test_get_all_wf_instances(self):
-        # Fehler bei Query bei Lukas, siehe Slack
         got = json.loads(
             self.__class__.app.get(
                 "get_all_wf_instances_names_and_config_file_names"
             ).get_data()
         )
-        print("hallo hier ist die instance")
         print(got)
-        # TODO Florian fix
-        # der Fehler den ich (Flo) bekomme ist ein KeyError ->  es gibt den key "keys.workflow_instance_names" nicht
         self.assertIn("test_instance", got[keys.names_and_configs])
 
     @unittest.skip("Versions läuft schief")
@@ -375,14 +350,16 @@ class IntegrationTest(unittest.TestCase):
         manager = WorkflowManager.get_instance()
         print(manager.get_names_of_workflows_and_config_files())
 
-    @unittest.skip("Florian Pfad")
     def test_get_all_wf_instances_names_and_config_files_names(self):
-        # TODO Florian Pfad oder nich in db geschrieben?
         got = json.loads(
             self.__class__.app.get(
                 "get_all_wf_instances_names_and_config_file_names"
             ).get_data()
         )
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
+        expected_dict: dict = {"test_instance": ["test1.conf"]}
+        self.assertEqual(expected_dict, dict(got)[keys.names_and_configs])
         print(got)
 
     def test_get_all_template_names(self):
@@ -458,16 +435,7 @@ class SetUpTester(unittest.TestCase):
         self.app = app.test_client()
 
     def tearDown(self) -> None:
-        # deletes all folders in temp_in
-        dir_path: Path = Path(__file__).parent.parent.parent
-        path_to_temp_in: Path = dir_path / "matflow" / "frontendapi" / "temp_in"
-        delete_dir_content(path_to_temp_in)
-
-        # also reset the template and wf_instance folders
-        wf_instances_path = dir_path / "matflow" / "workflow" / "wf_instances"
-        delete_dir_content(wf_instances_path)
-        templates_path = dir_path / "matflow" / "workflow" / "templates"
-        delete_dir_content(templates_path)
+        tear_down(self.app)
 
     def test_create_user(self):
         payload = json.dumps(
@@ -557,6 +525,34 @@ def delete_dir_content(dir_path: Path):
             os.unlink(content_path)
         elif os.path.isdir(content_path):
             shutil.rmtree(content_path)
+
+
+def tear_down(client: FlaskClient):
+    # shared tear down method from both test cases
+    # deletes all folders in temp_in
+    dir_path: Path = Path(__file__).parent.parent.parent
+    path_to_temp_in: Path = dir_path / "matflow" / "frontendapi" / "temp_in"
+    delete_dir_content(path_to_temp_in)
+
+    # also reset the template and wf_instance folders
+    wf_instances_path = dir_path / "matflow" / "workflow" / "wf_instances"
+    delete_dir_content(wf_instances_path)
+    templates_path = dir_path / "matflow" / "workflow" / "templates"
+    delete_dir_content(templates_path)
+
+    # reset all tables in database
+    table_names: List[str] = [
+        "VersionFile",
+        "ConfFile",
+        "ResultFile",
+        "ActiveVersion",
+        "Version",
+        "FolderFile",
+        "Workflow",
+        "WorkflowTemplate",
+        "Server",
+    ]
+    matflow.database.DatabaseTable.clear_tables(table_names)
 
 
 if __name__ == "__main__":
