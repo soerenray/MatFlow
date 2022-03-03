@@ -6,7 +6,7 @@ import shutil
 import unittest
 import socket
 from pathlib import Path
-from typing import List
+from typing import List, Tuple
 
 from flask.testing import FlaskClient
 
@@ -327,28 +327,34 @@ class IntegrationTest(unittest.TestCase):
         print(got)
         # TODO version erst vorher erstellen
 
-    @unittest.skip("Florian Pfad")
+    @unittest.skip("Lukas: Unknown column 'cf.conf' in 'field list'")
     def test_get_config_from_wf_instance(self):
-        dir_path = Path(__file__).parent.parent.parent
-        # conf_name = os.path.join(dir_path, "matflow", "frontendapi","temp_in", "config_0",
-        #                          "test1.conf")
+        # TODO Lukas (Fehler siehe skip header)
+        # Arrange
         conf_name = os.path.join("test1.conf")
-        print(conf_name)
         input_data = json.dumps(
             {
                 keys.workflow_instance_name: "test_instance",
                 keys.config_file_name: conf_name,
             }
         )
-        # TODO richtigen Config File Namen rausfinden Florian
+
+        # Act
         got = json.loads(
             self.__class__.app.get(
                 "get_config_from_wf_instance", json=input_data
             ).get_data()
         )
-        print(got)
-        manager = WorkflowManager.get_instance()
-        print(manager.get_names_of_workflows_and_config_files())
+
+        # Assert
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
+        expected_pairs = List[Tuple[str, str]] = [
+            ("find", "this_pair"),
+            ("this_one", "as_well"),
+            ("three ", "3"),
+        ]
+        self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
     def test_get_all_wf_instances_names_and_config_files_names(self):
         got = json.loads(
