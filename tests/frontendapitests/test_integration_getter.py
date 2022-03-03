@@ -26,13 +26,24 @@ class IntegrationTest(unittest.TestCase):
 
     # @classmethod
     def setUp(self) -> None:
-        self.test_create_template()
-        self.test_create_wf_instance()
-        self.test_create_user()
+        self.app = app.test_client()
+        create_user(self.app, "first_user")
+        create_template(
+            self.app,
+            "test_template",
+            "daggy.py",
+            Path(__file__).parent / "res" / "dag_test.py",
+        )
+        create_wf_instance(
+            self.app,
+            "test_instance",
+            "test_template",
+            Path(__file__).parent / "res" / "conf_folder_test1",
+        )
         # cls.test_create_version()
 
     def tearDown(self) -> None:
-        tear_down(app)
+        tear_down(self.app)
 
         # for file in os.listdir(path_to_temp_in):
         #     if os.path.isdir(os.path.join(path_to_temp_in, file)):
@@ -126,6 +137,7 @@ class IntegrationTest(unittest.TestCase):
 
     @classmethod
     def test_create_template(cls):
+        # Arrange
         template_name = "test_template"
         dag_name = "daggy.py"
         with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
@@ -137,10 +149,16 @@ class IntegrationTest(unittest.TestCase):
             keys.file_key: encoded_dag,
         }
         send_off = json.dumps(input_dict)
+        expected_status: int = 607
+
+        # Act
         got = json.loads(cls.app.post("create_template", json=send_off).get_data())
-        print(got)
+
+        # Assert
+        cls.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     def test_create_templat_double(self):
+        # Arrange
         template_name = "test_template"
         dag_name = "daggy.py"
         with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
@@ -152,9 +170,13 @@ class IntegrationTest(unittest.TestCase):
             keys.file_key: encoded_dag,
         }
         send_off = json.dumps(input_dict)
+
+        # Act
         got = json.loads(
             self.__class__.app.post("create_template", json=send_off).get_data()
         )
+
+        # Assert
         self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 602})))
 
     def test_get_all_users(self):
@@ -304,7 +326,7 @@ class IntegrationTest(unittest.TestCase):
         )
         self.assertEqual(got, {keys.status_code_name: 607})
 
-    # @unittest.skip("Florian Pfad")
+    # same as "test_get_all_wf_instances_names_and_config_files_names"
     def test_get_all_wf_instances(self):
         got = json.loads(
             self.__class__.app.get(
@@ -444,61 +466,31 @@ class SetUpTester(unittest.TestCase):
         tear_down(self.app)
 
     def test_create_user(self):
-        payload = json.dumps(
-            {
-                keys.user_name: "first_user",
-                keys.password_name: "default",
-                keys.repeat_password_name: "default",
-            }
-        )
-        got = json.loads(self.app.post("register_user", json=payload).get_data())
+        user_name: str = "first_user"
+        got: str = create_user(self.app, user_name)
         print(got)
+        # actually it should always be a
         a = got == {keys.status_code_name: 607}
         b = got == {keys.status_code_name: 601}
-        result = (True == a) or (True == b)
+        result = a or b
         self.assertEqual(True, result)
 
     def test_create_wf_instance(self):
         wf_name = "test_instance"
         template_name = "test_template"
-        with open(Path(__file__).parent / "res" / "test1.conf", "rb") as file:
-            read_file = file.read()
-            encoded_config = base64.b64encode(read_file)
-        input_wf_dict = {
-            keys.workflow_instance_name: wf_name,
-            keys.template_name: template_name,
-            keys.config_files: [
-                {
-                    keys.file_key: encoded_config.decode("utf-8"),
-                    keys.config_file_name: "test1.conf",
-                }
-            ],
-        }
-        send_off = json.dumps(input_wf_dict)
-        got = json.loads(
-            self.app.post("create_workflow_instance", json=send_off).get_data()
-        )
-        a = got == {keys.status_code_name: 604}
-        b = got == {keys.status_code_name: 607}
-        self.assertEqual(True, (a or b))
+        conf_path: Path = Path(__file__).parent / "res" / "conf_folder_test1"
+        got = create_wf_instance(self.app, wf_name, template_name, conf_path)
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     def test_create_template(self):
-        template_name = "test_template"
-        dag_name = "daggy.py"
-        with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
-            read_file = file.read()
-            encoded_dag = base64.b64encode(read_file).decode("utf-8")
-        input_dict = {
-            keys.template_name: template_name,
-            keys.dag_definition_name: dag_name,
-            keys.file_key: encoded_dag,
-        }
-        send_off = json.dumps(input_dict)
-        got = json.loads(self.app.post("create_template", json=send_off).get_data())
+        template_name: str = "test_template"
+        dag_name: str = "daggy.py"
+        dag_path: Path = Path(__file__).parent / "res" / "dag_test.py"
+        got = create_template(self.app, template_name, dag_name, dag_path)
         print(got)
-        a = got == {keys.status_code_name: 602}
-        b = got == {keys.status_code_name: 607}
-        self.assertEqual(True, a or b)
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     @unittest.skip(
         "Florian und Lukas, die Version ist nicht in der db, wf instanz ist aber schon gemerkt"
@@ -531,6 +523,55 @@ def delete_dir_content(dir_path: Path):
             os.unlink(content_path)
         elif os.path.isdir(content_path):
             shutil.rmtree(content_path)
+
+
+def create_user(client: FlaskClient, name: str) -> str:
+    payload = json.dumps(
+        {
+            keys.user_name: name,
+            keys.password_name: "default",
+            keys.repeat_password_name: "default",
+        }
+    )
+    return json.loads(client.post("register_user", json=payload).get_data())
+
+
+def create_template(
+    client: FlaskClient, name: str, dag_name: str, file_path: Path
+) -> str:
+    with open(file_path, "rb") as file:
+        read_file = file.read()
+        encoded_dag = base64.b64encode(read_file).decode("utf-8")
+    input_dict = {
+        keys.template_name: name,
+        keys.dag_definition_name: dag_name,
+        keys.file_key: encoded_dag,
+    }
+    send_off = json.dumps(input_dict)
+    return json.loads(client.post("create_template", json=send_off).get_data())
+
+
+def create_wf_instance(
+    client: FlaskClient, name: str, template_name: str, conf_path: Path
+):
+    all_configs_encoded: List[dict] = []
+    for file_name in os.listdir(conf_path):
+        with open(conf_path / file_name, "rb") as file:
+            read_file = file.read()
+            encoded_config = base64.b64encode(read_file)
+            all_configs_encoded.append(
+                {
+                    keys.file_key: encoded_config.decode("utf-8"),
+                    keys.config_file_name: file_name,
+                }
+            )
+    input_wf_dict = {
+        keys.workflow_instance_name: name,
+        keys.template_name: template_name,
+        keys.config_files: all_configs_encoded,
+    }
+    send_off = json.dumps(input_wf_dict)
+    return json.loads(client.post("create_workflow_instance", json=send_off).get_data())
 
 
 def tear_down(client: FlaskClient):
