@@ -349,4 +349,4 @@ __pycache__
 logs/*
 
 # pycharm pro free trial folder
-tests/frondendapitests/_trial_temp/*
+tests/frontendapitests/_trial_temp/*
