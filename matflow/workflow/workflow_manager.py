@@ -303,11 +303,13 @@ class WorkflowManager:
         old_files: List[Path] = []
         for file in changed_files:
             file_name = file.get_file_name()
+            if ".conf" not in file_name:
+                file_name += ".conf"
             file_path = (
                 self.__versions_base_directory
                 / workflow_instance_name
                 / "current_conf"
-                / (file_name + ".conf")
+                / file_name
             )
             old_files.append(file_path)
 
@@ -318,9 +320,9 @@ class WorkflowManager:
         # apply all the changes to the files in the new directory
         for update in changed_files:
             file_name: str = update.get_file_name()
-            changed_file: ConfigFile = ConfigFile(
-                file_name, version_dir / (file_name + ".conf")
-            )
+            if ".conf" not in file_name:
+                file_name += ".conf"
+            changed_file: ConfigFile = ConfigFile(file_name, version_dir / file_name)
             changed_file.apply_changes(update)
 
         # make new files read-only? TODO

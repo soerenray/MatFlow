@@ -166,6 +166,7 @@ class IntegrationTest(unittest.TestCase):
         expected_status: int = 602  # double template exception
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
+    # TODO scheitert ziemlich sicher daran, dass alle User als Admins created werden user_roles != userPriveleges
     def test_get_all_users(self):
         got = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
         print(got)
@@ -412,9 +413,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(got, {keys.status_code_name: 607})
 
     def test_get_graph_for_temporary_template(self):
-        # Achtung: DoubleTemplateNameException beachten
-        # TODO Florian: es wäre cool, wenn das contemporary template dann auch gelöscht wird
-        # TODO Florian da wird iwie immer ne .py generiert. Warum? Sollte das nicht ne conf sein?
         template_name = "test_template_contemporary_14"
         dag_name = "daggy.py"
         with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
@@ -471,7 +469,6 @@ class SetUpTester(unittest.TestCase):
 
         # prepare instance
         wf_name = "test_instance"
-        template_name = "test_template"
         conf_path: Path = Path(__file__).parent / "res" / "conf_folder_test1"
 
         # Act
@@ -482,35 +479,52 @@ class SetUpTester(unittest.TestCase):
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     def test_create_template(self):
+        # Arrange
         template_name: str = "test_template"
         dag_name: str = "daggy.py"
         dag_path: Path = Path(__file__).parent / "res" / "dag_test.py"
+
+        # Act
         got = create_template(self.app, template_name, dag_name, dag_path)
-        print(got)
+
+        # Assert
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
-    @unittest.skip(
-        "Florian und Lukas, die Version ist nicht in der db, wf instanz ist aber schon gemerkt"
-    )
+    # TODO Lukas: "Not all parameters were used in the SQL statement"
     def test_create_version(self):
-        send_off = json.dumps(
+        # Arrange
+        # create a template first
+        template_name: str = "test_template"
+        dag_name: str = "daggy.py"
+        dag_path: Path = Path(__file__).parent / "res" / "dag_test.py"
+        create_template(self.app, template_name, dag_name, dag_path)
+
+        # then create an instance
+        instance_name: str = "test_instance"
+        conf_path: Path = Path(__file__).parent / "res" / "conf_folder_test1"
+        create_wf_instance(self.app, instance_name, template_name, conf_path)
+
+        # finally, prepare the new version
+        note: str = "note to self: don't code at 2 am"
+        config_files: List[dict] = [
             {
-                keys.workflow_instance_name: "test_instance",
-                keys.version_note_name: "note to self: don't code at 2 am",
-                keys.config_files: [
-                    {
-                        keys.config_file_name: "test_conf1.conf",
-                        keys.key_value_pairs_name: [("hello", "world")],
-                    }
+                keys.config_file_name: "test1.conf",
+                keys.key_value_pairs_name: [
+                    ("i_was", "replaced"),
+                    ("this_one", "as_well"),
+                    ("four", "4"),
+                    ("also", "find_me"),
                 ],
             }
-        )
+        ]
 
-        got = json.loads(
-            self.app.post("create_version_of_wf_instance", json=send_off).get_data()
-        )
-        self.assertEqual(got, {keys.status_code_name: 607})
+        # Act
+        got = create_wf_version(self.app, instance_name, note, config_files)
+
+        # Assert
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
 
 # utility method
@@ -551,7 +565,7 @@ def create_template(
 
 def create_wf_instance(
     client: FlaskClient, name: str, template_name: str, conf_path: Path
-):
+) -> str:
     all_configs_encoded: List[dict] = []
     for file_name in os.listdir(conf_path):
         with open(conf_path / file_name, "rb") as file:
@@ -570,6 +584,21 @@ def create_wf_instance(
     }
     send_off = json.dumps(input_wf_dict)
     return json.loads(client.post("create_workflow_instance", json=send_off).get_data())
+
+
+def create_wf_version(
+    client: FlaskClient, instance_name: str, note: str, config_files: List[dict]
+) -> str:
+    send_off = json.dumps(
+        {
+            keys.workflow_instance_name: instance_name,
+            keys.version_note_name: note,
+            keys.config_files: config_files,
+        }
+    )
+    return json.loads(
+        client.post("create_version_of_wf_instance", json=send_off).get_data()
+    )
 
 
 def tear_down(client: FlaskClient):
