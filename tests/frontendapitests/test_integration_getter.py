@@ -11,6 +11,7 @@ from typing import List, Tuple
 from flask.testing import FlaskClient
 
 from matflow.frontendapi.api import app
+from matflow.frontendapi.api import FrontendAPI
 from matflow.frontendapi import keys, utilities
 import matflow.database.DatabaseTable
 
@@ -18,6 +19,7 @@ import matflow.database.DatabaseTable
 # All fail cases have been caught in unittests. We want to test integrity, so only use cases that
 # should work, meaning all use cases that don't throw exceptions
 # The goal is not to test every aspect (done in unittest, it is to test teh integrity of the software
+from matflow.useradministration.UserController import UserController
 from matflow.workflow.workflow_manager import WorkflowManager
 
 
@@ -460,10 +462,22 @@ class SetUpTester(unittest.TestCase):
         self.assertEqual(True, result)
 
     def test_create_wf_instance(self):
+        # Arrange
+        # create a template first
+        template_name: str = "test_template"
+        dag_name: str = "daggy.py"
+        dag_path: Path = Path(__file__).parent / "res" / "dag_test.py"
+        create_template(self.app, template_name, dag_name, dag_path)
+
+        # prepare instance
         wf_name = "test_instance"
         template_name = "test_template"
         conf_path: Path = Path(__file__).parent / "res" / "conf_folder_test1"
+
+        # Act
         got = create_wf_instance(self.app, wf_name, template_name, conf_path)
+
+        # Assert
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
@@ -584,6 +598,10 @@ def tear_down(client: FlaskClient):
         "Server",
     ]
     matflow.database.DatabaseTable.clear_tables(table_names)
+
+    # delete all users
+    user_controller: UserController = UserController()
+    user_controller.deleteAllUsers()
 
 
 if __name__ == "__main__":
