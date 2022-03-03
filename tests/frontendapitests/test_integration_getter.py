@@ -76,108 +76,93 @@ class IntegrationTest(unittest.TestCase):
             cls.app.post("create_version_of_wf_instance", json=send_off).get_data()
         )
 
-    @classmethod
-    def test_create_user(cls):
-        payload = json.dumps(
-            {
-                keys.user_name: "first_user",
-                keys.password_name: "default",
-                keys.repeat_password_name: "default",
-            }
-        )
-        got = json.loads(cls.app.post("register_user", json=payload).get_data())
-        print(got)
+    # relaced through help method (bottom of file)
+    # @classmethod
+    # def test_create_user(cls):
+    #     payload = json.dumps(
+    #         {
+    #             keys.user_name: "first_user",
+    #             keys.password_name: "default",
+    #             keys.repeat_password_name: "default",
+    #         }
+    #     )
+    #     got = json.loads(cls.app.post("register_user", json=payload).get_data())
+    #     print(got)
 
-    @classmethod
-    def test_create_wf_instance(cls):
-        wf_name = "test_instance"
-        template_name = "test_template"
-        with open(Path(__file__).parent / "res" / "test1.conf", "rb") as file:
-            read_file = file.read()
-            encoded_config = base64.b64encode(read_file)
-        input_wf_dict = {
-            keys.workflow_instance_name: wf_name,
-            keys.template_name: template_name,
-            keys.config_files: [
-                {
-                    keys.file_key: encoded_config.decode("utf-8"),
-                    keys.config_file_name: "test1.conf",
-                }
-            ],
-        }
-        send_off = json.dumps(input_wf_dict)
-        got = json.loads(
-            cls.app.post("create_workflow_instance", json=send_off).get_data()
-        )
-        print(got)
+    # relaced through help method (bottom of file)
+    # @classmethod
+    # def test_create_wf_instance(cls):
+    #     wf_name = "test_instance"
+    #     template_name = "test_template"
+    #     with open(Path(__file__).parent / "res" / "test1.conf", "rb") as file:
+    #         read_file = file.read()
+    #         encoded_config = base64.b64encode(read_file)
+    #     input_wf_dict = {
+    #         keys.workflow_instance_name: wf_name,
+    #         keys.template_name: template_name,
+    #         keys.config_files: [
+    #             {
+    #                 keys.file_key: encoded_config.decode("utf-8"),
+    #                 keys.config_file_name: "test1.conf",
+    #             }
+    #         ],
+    #     }
+    #     send_off = json.dumps(input_wf_dict)
+    #     got = json.loads(
+    #         cls.app.post("create_workflow_instance", json=send_off).get_data()
+    #     )
+    #     print(got)
 
     def test_create_wf_instance_double(self):
+        # Arrange
         wf_name = "test_instance"
         template_name = "test_template"
-        with open(Path(__file__).parent / "res" / "test1.conf", "rb") as file:
-            read_file = file.read()
-            encoded_config = base64.b64encode(read_file)
-        input_wf_dict = {
-            keys.workflow_instance_name: wf_name,
-            keys.template_name: template_name,
-            keys.config_files: [
-                {
-                    keys.file_key: encoded_config.decode("utf-8"),
-                    keys.config_file_name: "test1.conf",
-                }
-            ],
-        }
-        send_off = json.dumps(input_wf_dict)
-        got = json.loads(
-            self.__class__.app.post(
-                "create_workflow_instance", json=send_off
-            ).get_data()
-        )
-        self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 604})))
+        conf_path: Path = Path(__file__).parent / "res" / "conf_folder_test1"
 
-    @classmethod
-    def test_create_template(cls):
+        # Act
+        # this wf_instance was already created in the setup
+        got = create_wf_instance(self.app, wf_name, template_name, conf_path)
+
+        # Assert
+        expected_status: int = 604  # double wf instance exception
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
+
+    # relaced through help method (bottom of file)
+    # @classmethod
+    # def test_create_template(cls):
+    #     # Arrange
+    #     template_name = "test_template"
+    #     dag_name = "daggy.py"
+    #     with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
+    #         read_file = file.read()
+    #         encoded_dag = base64.b64encode(read_file).decode("utf-8")
+    #     input_dict = {
+    #         keys.template_name: template_name,
+    #         keys.dag_definition_name: dag_name,
+    #         keys.file_key: encoded_dag,
+    #     }
+    #     send_off = json.dumps(input_dict)
+    #     expected_status: int = 607
+    #
+    #     # Act
+    #     got = json.loads(cls.app.post("create_template", json=send_off).get_data())
+    #
+    #     # Assert
+    #     cls.assertEqual(expected_status, dict(got)[keys.status_code_name])
+
+    def test_create_template_double(self):
         # Arrange
         template_name = "test_template"
         dag_name = "daggy.py"
-        with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
-            read_file = file.read()
-            encoded_dag = base64.b64encode(read_file).decode("utf-8")
-        input_dict = {
-            keys.template_name: template_name,
-            keys.dag_definition_name: dag_name,
-            keys.file_key: encoded_dag,
-        }
-        send_off = json.dumps(input_dict)
-        expected_status: int = 607
+        dag_path = Path(__file__).parent / "res" / "dag_test.py"
 
         # Act
-        got = json.loads(cls.app.post("create_template", json=send_off).get_data())
+        # this template was already created in the setup
+        got = create_template(self.app, template_name, dag_name, dag_path)
 
         # Assert
-        cls.assertEqual(expected_status, dict(got)[keys.status_code_name])
-
-    def test_create_templat_double(self):
-        # Arrange
-        template_name = "test_template"
-        dag_name = "daggy.py"
-        with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
-            read_file = file.read()
-            encoded_dag = base64.b64encode(read_file).decode("utf-8")
-        input_dict = {
-            keys.template_name: template_name,
-            keys.dag_definition_name: dag_name,
-            keys.file_key: encoded_dag,
-        }
-        send_off = json.dumps(input_dict)
-
-        # Act
-        got = json.loads(
-            self.__class__.app.post("create_template", json=send_off).get_data()
-        )
-
-        # Assert
-        self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 602})))
+        expected_status: int = 602  # double template exception
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     def test_get_all_users(self):
         got = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
@@ -314,7 +299,6 @@ class IntegrationTest(unittest.TestCase):
             },
             all[keys.all_users],
         )
-        IntegrationTest.test_create_user()
 
     @unittest.skip("no support in api")
     def test_login(self):
