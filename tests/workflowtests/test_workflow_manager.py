@@ -1,6 +1,7 @@
 import filecmp
 import os
 import shutil
+import unittest
 from typing import List
 import unittest.mock as mock
 from pathlib import Path
@@ -38,15 +39,39 @@ class TestWorkflowManager(TestCase):
     wf_path: Path = base_path / "wf_instances"
 
     # insert paths into WorkflowManager
-    w_man._WorkflowManager__versions_base_directory = temp_path
-    w_man._WorkflowManager__template_base_directory = wf_path
+    w_man._WorkflowManager__versions_base_directory = wf_path
+    w_man._WorkflowManager__template_base_directory = temp_path
 
     def setUp(self):
         # make sure empty dirs exist (git doesn't allow to push them)
-        if not os.path.isdir(self.temp_path):
-            os.mkdir(self.temp_path)
-        if not os.path.isdir(self.wf_path):
-            os.mkdir(self.wf_path)
+        conf_path: Path = self.base_path / "conf_folders"
+        folders: List[Path] = [
+            self.temp_path,
+            self.wf_path,
+            conf_path / "folder1",
+            conf_path / "folder2",
+            conf_path / "create_version",
+            self.base_path / "template1",
+        ]
+        for folder in folders:
+            if not os.path.isdir(folder):
+                os.mkdir(folder)
+
+        # restore deleted files
+        files: List[Path] = [
+            Path("template1") / "tpl1.py",
+            Path("conf_folders") / "folder1" / "file1.conf",
+            Path("conf_folders") / "folder1" / "file2.conf",
+            Path("conf_folders") / "folder2" / "file1.conf",
+            Path("conf_folders") / "folder2" / "file2.conf",
+            Path("conf_folders") / "folder2" / "png_file.png",
+            Path("conf_folders") / "create_version" / "test1.conf",
+            Path("conf_folders") / "create_version" / "test2.conf",
+        ]
+        backup_path: Path = self.base_path / "backup_stuff"
+        for file in files:
+            if not os.path.isfile(self.base_path / file):
+                shutil.copy(backup_path / file, self.base_path / file)
 
     def tearDown(self):
         # clean up dirs after every run
@@ -57,7 +82,7 @@ class TestWorkflowManager(TestCase):
 class TestCreateTemplate(TestWorkflowManager):
     def setUp(self):
         super(TestCreateTemplate, self).setUp()
-        self.dag_file_t1: Path = self.base_path / "tpl1.py"
+        self.dag_file_t1: Path = self.base_path / "template1" / "tpl1.py"
         self.t1: Template = Template("t1", self.dag_file_t1)
 
     # create valid template
@@ -72,7 +97,11 @@ class TestCreateTemplate(TestWorkflowManager):
         )
         self.assertTrue(os.path.isfile(expected_path))
         # check if the content of the file was successfully copied
-        self.assertTrue(filecmp.cmp(self.dag_file_t1, expected_path))
+        self.assertTrue(
+            filecmp.cmp(
+                make_path_to_backup(self.base_path, self.dag_file_t1), expected_path
+            )
+        )
 
     # test double template exception
     def test_create_template_twice(self):
@@ -89,6 +118,14 @@ class TestCreateTemplate(TestWorkflowManager):
 
         # Act
         self.w_man.create_template(self.t1)
+
+        # restore the dag file
+        os.mkdir(self.dag_file_t1.parent)
+        shutil.copy(
+            make_path_to_backup(self.base_path, self.dag_file_t1), self.dag_file_t1
+        )
+
+        # then create second template
         self.w_man.create_template(t2)
 
         # Assert
@@ -105,7 +142,7 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
     def setUp(self):
         super(TestCreateInstanceFromTemplate, self).setUp()
         # create a possible template, that can be used for creation
-        dag_file_t1: Path = self.base_path / "tpl1.py"
+        dag_file_t1: Path = self.base_path / "template1" / "tpl1.py"
         self.name_t1: str = "t1"
         t1: Template = Template("t1", dag_file_t1)
         self.w_man.create_template(t1)
@@ -163,12 +200,20 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # is there a "current_conf"-dir underneath, mirroring the ingoing folder?
         expected_path: Path = expected_instance_path / "current_conf"
         self.assertTrue(os.path.isdir(expected_path))
-        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+        self.assertTrue(
+            are_dir_trees_equal(
+                expected_path, make_path_to_backup(self.base_path, conf_folder)
+            )
+        )
 
         # is there a "1"-dir underneath the instance dir that contains only the conf-files of the ingoing folder?
         expected_path: Path = expected_instance_path / "1"
         self.assertTrue(os.path.isdir(expected_path))
-        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+        self.assertTrue(
+            are_dir_trees_equal(
+                expected_path, make_path_to_backup(self.base_path, conf_folder)
+            )
+        )
 
     # in theory test works but it's commented out because empty folders aren't a thing with git
     #    @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
@@ -253,25 +298,38 @@ class TestCreateInstanceFromTemplate(TestWorkflowManager):
         # is there a "current_conf"-dir underneath, mirroring the ingoing folder?
         expected_path: Path = expected_instance_path / "current_conf"
         self.assertTrue(os.path.isdir(expected_path))
-        self.assertTrue(are_dir_trees_equal(expected_path, conf_folder))
+        self.assertTrue(
+            are_dir_trees_equal(
+                expected_path, make_path_to_backup(self.base_path, conf_folder)
+            )
+        )
 
         # is there a "1"-dir underneath the instance dir that contains only the conf-files of the ingoing folder?
         expected_path: Path = expected_instance_path / "1"
         self.assertTrue(os.path.isdir(expected_path))
-        self.assertTrue(are_dir_trees_equal(expected_path, only_conf_dir))
+        self.assertTrue(
+            are_dir_trees_equal(
+                expected_path, make_path_to_backup(self.base_path, only_conf_dir)
+            )
+        )
 
 
 class TestGetTemplateAndNames(TestWorkflowManager):
     def setUp(self):
         super(TestGetTemplateAndNames, self).setUp()
         # create tree different templates
-        self.dag_file: Path = self.base_path / "tpl1.py"
+        self.dag_file: Path = self.base_path / "template1" / "tpl1.py"
         t1: Template = Template("t1", self.dag_file)
         self.t2: Template = Template("t2", self.dag_file)
         t3: Template = Template("t3", self.dag_file)
-        self.w_man.create_template(t1)
-        self.w_man.create_template(self.t2)
-        self.w_man.create_template(t3)
+        for template in [t1, self.t2, t3]:
+            self.w_man.create_template(template)
+
+            # restore the dag file
+            os.mkdir(self.dag_file.parent)
+            shutil.copy(
+                make_path_to_backup(self.base_path, self.dag_file), self.dag_file
+            )
 
     def test_get_template_names(self):
         # Arrange
@@ -317,7 +375,7 @@ class TestCreateNewVersion(TestWorkflowManager):
     def setUp(self, mock_wf_data):
         super(TestCreateNewVersion, self).setUp()
         # create a template first
-        dag_file_t1: Path = self.base_path / "tpl1.py"
+        dag_file_t1: Path = self.base_path / "template1" / "tpl1.py"
         t1: Template = Template("t1", dag_file_t1)
         self.w_man.create_template(t1)
 
@@ -335,8 +393,8 @@ class TestCreateNewVersion(TestWorkflowManager):
         )
 
         # apart from that we need actual updates for our files in form of ReducedConfigFiles
-        name_config1: str = "test1"
-        name_config2: str = "test2"
+        name_config1: str = "test1.conf"
+        name_config2: str = "test2.conf"
         self.file1_v1_1: ReducedConfigFile = ReducedConfigFile(
             name_config1, [("i_was", "changed"), ("key2", "value2"), ("me", "too")]
         )
@@ -624,6 +682,7 @@ class TestWorkflowInstanceRunning(TestWorkflowManager):
     # not an unittest - requires the server app to run
     # not automated
     # an automated integration test for this will follow
+    @unittest.skip("only activate after docker-compose")
     def test_is_running(self):
         dag_ids: List[str] = [
             "example_bash_operator",
@@ -778,3 +837,16 @@ def delete_dir_content(dir_path: Path):
             os.unlink(content_path)
         elif os.path.isdir(content_path):
             shutil.rmtree(content_path)
+
+
+def make_path_to_backup(base_path: Path, path: Path) -> Path:
+    stack: List[str] = []
+    while path != base_path:
+        # remove the path after base path
+        stack.append(os.path.basename(os.path.normpath(path)))
+        path = path.parent
+    result: Path = base_path / "backup_stuff"
+    stack.reverse()
+    for folder in stack:
+        result = result / folder
+    return result

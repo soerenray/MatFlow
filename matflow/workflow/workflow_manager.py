@@ -146,7 +146,6 @@ class WorkflowManager:
 
         # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
         workflow_instance.activate_instance(self.__airflow_dag_folder)
-        # TODO -> write "activate_instance" in WorkflowInstance
 
         # delete the temporary config folder + wrapping folder
         for file in os.listdir(config_files):
