@@ -16,7 +16,6 @@ This project is built using
     * Apache Airflow
 * TypeScript
 * MySQL
-* Nomad 
 * Docker
 
 
@@ -32,7 +31,7 @@ npm install
 ```
 Run client application:
 ```
-npm run serve
+npm run serve -- --port 8081
 ```
 
 **Server application** <br>
@@ -42,7 +41,7 @@ pip install -r requirements.txt
 ```
 Run server application:
 ```
-nomad job run matflow_nomad.hcl
+docker-compose up
 ```
 This creates a virtualenv environment. If you want to use a pipenv environment instead, replace pip with pipenv in the commands above. 
 
