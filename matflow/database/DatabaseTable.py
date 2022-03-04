@@ -30,7 +30,7 @@ class DatabaseTable:
 
         # read from file instead of hard-coding
         # mydb.conf is in same dir
-        #current file path
+        # current file path
         p = Path(__file__)
         # dir path
         dir_abs = p.parent.absolute()
@@ -282,7 +282,8 @@ def remove(tables):
 
 def clear_tables(tables):
     """helping function for clearing all tables"""
-    db = mysql.connector.connect(option_files="mydb.conf")
+    conf_path: Path = Path(__file__).parent / "mydb.conf"
+    db = mysql.connector.connect(option_files=str(conf_path))
 
     cursor = db.cursor()
 

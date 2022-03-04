@@ -1,3 +1,4 @@
+from matflow.frontendapi import keys
 from matflow.useradministration.User import User
 from requests.auth import HTTPBasicAuth
 import requests
@@ -5,6 +6,7 @@ from matflow.exceptionpackage.MatFlowException import (
     UserExistsException,
     LoginException,
     SignUpException,
+    InternalException,
 )
 
 
@@ -221,3 +223,17 @@ class UserController:
         # and check the response
         if createUserStatusCode.status_code != 200:
             raise UserExistsException("")
+
+    # auxiliary method for testing
+    def deleteAllUsers(self):
+        details = self.getAllUsersAndDetails()
+        for user in dict(details)[keys.all_users]:
+            username: str = dict(user)["username"]
+            if username != "airflow":
+                delete_address = "http://localhost:8080/api/v1/users/" + username
+                # delete the User via the api call
+                response = requests.delete(delete_address, auth=self.getAuth())
+
+                # and check the Response (204 is success)
+                if response.status_code != 204:
+                    raise InternalException("Internal Error in delete_all_users")
