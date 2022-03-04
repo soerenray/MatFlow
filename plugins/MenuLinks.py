@@ -26,11 +26,12 @@ create_workflow_instance = {
     "category": "Develop"
 }
 
-log_in = {
-    "name": "LogIn",
-    "href": discover_matflow_port("LogIn"),
-    "category": "Authentication"
-}
+# matflow login is deprecated
+# log_in = {
+#    "name": "LogIn",
+#    "href": discover_matflow_port("LogIn"),
+#    "category": "Authentication"
+#}
 
 sign_up = {
     "name": "SignUp",
@@ -60,5 +61,5 @@ version_control = {
 class MatflowMenuPlugin(AirflowPlugin):
     name = "Matflow Menu Plugin"
     appbuilder_menu_items = [choose_config_file, create_template, create_workflow_instance,
-                             log_in, sign_up, server_config, user_administration, version_control]
+                             sign_up, server_config, user_administration, version_control]
 

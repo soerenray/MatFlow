@@ -177,6 +177,7 @@ class UserTest(unittest.TestCase):
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
 
+    @unittest.skip("Login deprecated")
     def test_verify_login_call_login(self):
         with patch.object(
             FrontendAPI.user_controller.__class__, "loginUser"
@@ -187,6 +188,7 @@ class UserTest(unittest.TestCase):
             )
             assert mock_method.call_count > 0
 
+    @unittest.skip("Login deprecated")
     def test_verify_login_response_fail(self):
         with patch.object(
             FrontendAPI.user_controller.__class__,
@@ -200,6 +202,7 @@ class UserTest(unittest.TestCase):
             retrieved_json: dict = json.loads(got.get_data())
             self.assertEqual(retrieved_json, self.failed_dict)
 
+    @unittest.skip("Login deprecated")
     def test_verify_login_response_valid(self):
         with patch.object(FrontendAPI.user_controller.__class__, "loginUser"):
             got = self.app.get(

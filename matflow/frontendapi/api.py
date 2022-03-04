@@ -4,13 +4,15 @@ import json
 import os.path
 from pathlib import Path
 from typing import List
+
+from deprecated import deprecated
 from flask import Flask, request
 
 # for production api:
 from matflow.exceptionpackage.MatFlowException import (
     MatFlowException,
     ConverterException,
-    AirflowConnectionException,
+    AirflowConnectionException, LoginException,
 )
 from requests.exceptions import ConnectionError
 from matflow.frontendapi import utilities, keys
@@ -386,6 +388,7 @@ class FrontendAPI:
 
     @staticmethod
     @app.route("/verify_login", methods=["GET"])
+    @deprecated(reason="Please use airflow login", version="1.0")
     def verify_login() -> str:
         """
         verifies username with associated password via username and password
@@ -394,11 +397,12 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.user_name, keys.password_name], decoded_json)
-            FrontendAPI.user_controller.loginUser(
-                decoded_json[keys.user_name], decoded_json[keys.password_name]
-            )
+            raise LoginException("Use airflow login")
+            # decoded_json: dict = json.loads(request.get_json())
+            # check_routine([keys.user_name, keys.password_name], decoded_json)
+            # FrontendAPI.user_controller.loginUser(
+            #     decoded_json[keys.user_name], decoded_json[keys.password_name]
+            # )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -409,8 +413,6 @@ class FrontendAPI:
             return ExceptionHandler.handle_exception(
                 AirflowConnectionException("Start Airflow container")
             )
-        else:
-            return ExceptionHandler.success(dict())
 
     @staticmethod
     @app.route("/register_user", methods=["POST"])
