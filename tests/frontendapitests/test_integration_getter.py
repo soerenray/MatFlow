@@ -42,7 +42,20 @@ class IntegrationTest(unittest.TestCase):
             "test_template",
             Path(__file__).parent / "res" / "conf_folder_test1",
         )
-        # cls.test_create_version()
+        # TODO comment back in after test_create_version is working
+        # note: str = "note to self: don't code at 2 am"
+        # config_files: List[dict] = [
+        #     {
+        #         keys.config_file_name: "test1.conf",
+        #         keys.key_value_pairs_name: [
+        #             ("i_was", "replaced"),
+        #             ("this_one", "as_well"),
+        #             ("four", "4"),
+        #             ("also", "find_me"),
+        #         ],
+        #     }
+        # ]
+        # create_wf_version(self.app, "test_instance", note, config_files)
 
     def tearDown(self) -> None:
         tear_down(self.app)
@@ -363,6 +376,7 @@ class IntegrationTest(unittest.TestCase):
             ("find", "this_pair"),
             ("this_one", "as_well"),
             ("three ", "3"),
+            ("also", "find_me"),
         ]
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
@@ -406,7 +420,7 @@ class IntegrationTest(unittest.TestCase):
 
     @unittest.skip("Version klappt nicht")
     def test_replace_version(self):
-        # TODO Florian complete
+        # TODO Florian nachdem test_create_version läuft
         payload = {
             keys.workflow_instance_name: "test_instance",
             keys.version_number_name: "Florian bitte" "einfuegen",
