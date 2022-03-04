@@ -620,6 +620,25 @@ class TestSetActiveVersionByNumber(TestGetVersionsFromWorkflowInstance):
         self.assertFalse(mock_wf_data.called)
 
 
+class TestWorkflowInstanceRunning(TestWorkflowManager):
+    # not an unittest - requires the server app to run
+    # not automated
+    # an automated integration test for this will follow
+    def test_is_running(self):
+        dag_ids: List[str] = [
+            "example_bash_operator",
+            "example_branch_datetime_operator_2",
+            "example_branch_dop_operator_v3",
+            "example_branch_labels",
+            "example_branch_operator",
+        ]
+        for dag in dag_ids:
+            is_running: bool = (
+                self.w_man._WorkflowManager__is_workflow_instance_running(dag)
+            )
+            print(dag + " is running: " + str(is_running))
+
+
 class TestCopyFilesWithExtension(TestWorkflowManager):
     def setUp(self):
         super(TestCopyFilesWithExtension, self).setUp()
