@@ -372,11 +372,11 @@ class IntegrationTest(unittest.TestCase):
         # Assert
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
-        expected_pairs = List[Tuple[str, str]] = [
-            ("find", "this_pair"),
-            ("this_one", "as_well"),
-            ("three ", "3"),
-            ("also", "find_me"),
+        expected_pairs: List[List[str, str]] = [
+            ["find", "this_pair"],
+            ["this_one", "as_well"],
+            ["three", "3"],
+            ["also", "find_me"],
         ]
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
