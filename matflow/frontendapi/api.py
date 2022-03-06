@@ -5,7 +5,7 @@ import os.path
 from pathlib import Path
 from typing import List
 
-from deprecated import deprecated
+#from deprecated import deprecated
 from flask import Flask, request
 
 # for production api:
@@ -388,7 +388,7 @@ class FrontendAPI:
 
     @staticmethod
     @app.route("/verify_login", methods=["GET"])
-    @deprecated(reason="Please use airflow login", version="1.0")
+  #  @deprecated(reason="Please use airflow login", version="1.0")
     def verify_login() -> str:
         """
         verifies username with associated password via username and password

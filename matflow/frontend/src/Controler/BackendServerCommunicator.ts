@@ -7,6 +7,8 @@ import Template from '@Classes/Template'
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '@Classes/WorkflowInstance'
 
+const axios = require('axios')
+
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
@@ -67,7 +69,18 @@ class BackendServerCommunicator {
     }
     public pushUser(user: User): void { updateUser(user) }
     public pushDeleteUser(user: User): void { deleteUser(user) }
-    public pullServers(): Server[] { return pullServers2() }
+    public async pullServers(): Server[] { 
+        let servers: Server[] = []
+        await axios.get('http://localhost:5000/get_server_details')
+        .then(function (response) {
+            console.log(response)
+            const data = response.data
+            servers = [new Server(data.serverAddress, 'running', data.containerLimit, data.selectedForExecution, data.serverName, [["cpu1", "50%"]])]
+        })
+        return servers
+        // funktioniert. Es sind aber dummy daten
+        // return pullServers2()
+    }
     public pushServer(server: Server): void { pushServer(server) }
 }
 

@@ -10,7 +10,15 @@
         :headers="tableHeaders"
         :items="servers"
         item-key="serverName"
-      >
+      >// servers = [new Server(
+        //                 "123.123.11.1",
+        //                 "running",
+        //                 5,
+        //                 true,
+        //                 "kit-materialwissenschaften",
+        //                 [["cpu1", "50%"]]
+        //             )]
+        
         <template v-slot:[`item.containerLimit`]="{ item }"
           ><v-text-field v-model="item.containerLimit"></v-text-field
         ></template>
@@ -156,8 +164,9 @@ export default {
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(serverConfigObject);
   },
-  created: function () {
-    this.servers = backendServerCommunicatorObject.pullServers();
+  created: async function () {
+    this.servers = await backendServerCommunicatorObject.pullServers();
+    console.log('frontend', this.servers)
   },
 };
 </script>
