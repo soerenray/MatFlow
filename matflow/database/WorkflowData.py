@@ -175,7 +175,7 @@ class WorkflowData:
         file_insert = "INSERT INTO ConfFile (file) VALUES (%s)"
         get_file_key = "SELECT confKey FROM ConfFile WHERE file = %s"
         file_to_version = (
-            "INSERT INTO VersionFile (versionID, filename, confKey) VALUES ({},%s,{})"
+            "INSERT INTO VersionFile (versionID, filename, confKey) VALUES (%s,%s,%s)"
         )
         for file in new_files:
             # inject new file
@@ -245,10 +245,10 @@ class WorkflowData:
 
         """
         # NOTE: possible in one query, split up for intelligibility
-        get_file_query = """SELECT cf.conf 
+        get_file_query = """SELECT cf.file 
                             FROM ConfFile cf INNER JOIN VersionFile vf 
                             ON cf.confKey = vf.confKey
-                            WHERE version = %s
+                            WHERE versionID = %s
                             AND filename = %s
                             """
         # get version key

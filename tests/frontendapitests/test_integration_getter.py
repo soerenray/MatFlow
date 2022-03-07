@@ -350,7 +350,7 @@ class IntegrationTest(unittest.TestCase):
         print(got)
         # TODO version erst vorher erstellen
 
-    @unittest.skip("Lukas: Unknown column 'cf.conf' in 'field list'")
+    # @unittest.skip("Lukas: Unknown column 'cf.conf' in 'field list'")
     def test_get_config_from_wf_instance(self):
         # TODO Lukas (Fehler siehe skip header)
         # Arrange
@@ -372,11 +372,11 @@ class IntegrationTest(unittest.TestCase):
         # Assert
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
-        expected_pairs = List[Tuple[str, str]] = [
-            ("find", "this_pair"),
-            ("this_one", "as_well"),
-            ("three ", "3"),
-            ("also", "find_me"),
+        expected_pairs: List[List[str, str]] = [
+            ["find", "this_pair"],
+            ["this_one", "as_well"],
+            ["three", "3"],
+            ["also", "find_me"],
         ]
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
@@ -510,7 +510,6 @@ class SetUpTester(unittest.TestCase):
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
-    # TODO Lukas: "Not all parameters were used in the SQL statement"
     def test_create_version(self):
         # Arrange
         # create a template first
