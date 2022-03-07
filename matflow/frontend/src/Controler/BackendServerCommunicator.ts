@@ -3,6 +3,7 @@ import User from '@Classes/User'
 import Server from '@Classes/Server'
 import Version from '@Classes/Version'
 import Template from '@Classes/Template'
+import {constants} from '@Controler/Keys';
 
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '@Classes/WorkflowInstance'
@@ -13,7 +14,10 @@ type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
     public constructor() { }
-    public pushLogIn(userName: string, userPassword: string): void { return }
+
+    // (Florian) logIn of airflow is used
+    // public pushLogIn(userName: string, userPassword: string): void { return }
+
     public pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void { return }
     // public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
     public pushCreateTemplate(template: Template): void { return }
