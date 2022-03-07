@@ -3,22 +3,55 @@ import User from '@Classes/User'
 import Server from '@Classes/Server'
 import Version from '@Classes/Version'
 import Template from '@Classes/Template'
-import {constants} from '@Controler/Keys';
+import {keys} from '@Controler/Keys';
 
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '@Classes/WorkflowInstance'
+import user from "@Classes/User";
 
-const axios = require('axios')
+const axios = require('axios');
 
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
+    static serverAddress: string = 'http://127.0.0.1:5000/'
+
     public constructor() { }
 
     // (Florian) logIn of airflow is used
     // public pushLogIn(userName: string, userPassword: string): void { return }
 
-    public pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void { return }
+    public async pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void {
+        await axios.post( this.serverAddress + keys.registerUser, {
+            [keys.userName]: userName,
+            [keys.passwordName]: userPassword,
+            [keys.repeatPasswordName]: userPasswordRepeated
+        })
+        .then(function (response) {
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                case 601:
+                    // username already exists
+                    break;
+                case 610:
+                    // sign up exception - i don't really know what that means
+                    break;
+                case 612:
+                    // airflow connection exception
+                    break;
+                default:
+                    // should not occur, maybe print status code
+                    break;
+            }
+        })
+        .catch(function (error) {
+            // transfer error
+        });
+    }
+
+
     // public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
     public pushCreateTemplate(template: Template): void { return }
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
@@ -73,7 +106,7 @@ class BackendServerCommunicator {
     }
     public pushUser(user: User): void { updateUser(user) }
     public pushDeleteUser(user: User): void { deleteUser(user) }
-    public async pullServers(): Server[] { 
+    public async pullServers(): Promise<Server[]> {
         let servers: Server[] = []
         await axios.get('http://localhost:5000/get_server_details')
         .then(function (response) {
