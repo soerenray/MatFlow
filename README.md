@@ -7,8 +7,6 @@ MatFlow also extends the admin's abilities by adding a hardware administration f
 For some machine learning tasks, DAGs might not be the best way to go. That's why we are providing a custom operator called the AlternatingOperator. This operator executes a given amount of tasks in a LOOP for either a set amount of times or until a certain condition is met, e.g. machine learning model has > 0.9 performance on a validation set.
 
 
-
-
 ## Technolgies used
 
 This project is built using
@@ -18,7 +16,6 @@ This project is built using
 * TypeScript
 * MySQL
 * Docker
-
 
 
 ## Installation
@@ -50,6 +47,13 @@ Run unit-tests:
 ```
 npm run test:unit
 ```
+
+## Operator
+If you want to try out the alternating operator, check out the tutorial_matflow DAG.
+<br>
+<br>
+![Matflow DAG](airflow_example.png)
+<br>
 
 ## Credits
 MatFlow was developed for the Karlsruher Institut für Technolgie by Florian Küfner, Soeren Raymond, Alessandro Santospirito, Lukas Wilhelm and Nils Wolters. If you wish to further develop this project, please be so kind as to mention us. Thanks!
