@@ -286,9 +286,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
     def test_get_all_wf_instances_names_and_config_files_names(self):
-        # TODO Lukas
-        # error in "get_names_of_workflows_and_config_files()" of WorkflowData.py
-        # get duplicate file names if there is more than one version
         got = json.loads(
             self.__class__.app.get(
                 "get_all_wf_instances_names_and_config_file_names"
