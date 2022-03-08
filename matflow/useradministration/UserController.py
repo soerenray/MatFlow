@@ -11,27 +11,13 @@ from matflow.exceptionpackage.MatFlowException import (
 
 
 class UserController:
-    # the authentification that's needed to do the Airflow Rest API calls
-    _basic = HTTPBasicAuth("", "")
 
     # CONSTRUCTOR
     #
-    # has no parameters and sets the own basic authentification
-    def __init__(self):
-        self._basic = HTTPBasicAuth("airflow", "airflow")
+    #def __init__(self):
 
     # METHODS
 
-    # Getter- and Setter Methods:
-
-    # Authentication getter method:
-    #
-    # Returns the basic authentification
-
-    def getAuth(self):
-        return self._basic
-
-    # Other Methods:
 
     # getAllUsersAndDetails method:
     #
@@ -63,9 +49,9 @@ class UserController:
     #      "total_entries": 0
     #    }
 
-    def getAllUsersAndDetails(self):
+    def getAllUsersAndDetails(self, basic: HTTPBasicAuth):
         listUsers = requests.get(
-            "http://localhost:8080/api/v1/users", auth=self.getAuth()
+            "http://localhost:8080/api/v1/users", auth= basic
         )
         if listUsers.status_code == 200:
             return listUsers.json()
@@ -86,7 +72,7 @@ class UserController:
     # overridePayload: Payload of strings + "roles" is an Array of [{str : str}]
     # patchOverrideUser: API call Response
 
-    def overrideUser(self, overrideUser: User):
+    def overrideUser(self, overrideUser: User, basic: HTTPBasicAuth):
         overrideUsername = overrideUser.getUsername()
         overrideStatus = overrideUser.getStatus()
         overridePrivilege = overrideUser.getPrivilege()
@@ -94,7 +80,7 @@ class UserController:
 
         # now we build our api call address
         overrideAddress = "http://localhost:8080/api/v1/users/" + overrideUsername
-        getOverrideUser = requests.get(overrideAddress, auth=self.getAuth())
+        getOverrideUser = requests.get(overrideAddress, auth=basic)
 
         # we check if the response is what we wanted
 
@@ -116,13 +102,13 @@ class UserController:
             "password": overridePassword,
         }
         patchOverrideUser = requests.patch(
-            overrideAddress, json=overridePayload, auth=self.getAuth()
+            overrideAddress, json=overridePayload, auth=basic
         )
 
         # we patch the user
 
         patchOverrideUser = requests.patch(
-            overrideAddress, json=overridePayload, auth=self.getAuth()
+            overrideAddress, json=overridePayload, auth=basic
         )
 
         # and check the response
@@ -140,7 +126,7 @@ class UserController:
     # deleteUserAddress: str
     # deleteUserCode: API call Response
 
-    def deleteUser(self, deleteUser: User):
+    def deleteUser(self, deleteUser: User, basic: HTTPBasicAuth):
         deleteUsername = deleteUser.getUsername()
 
         # we build our address
@@ -149,36 +135,12 @@ class UserController:
 
         # delete the User via the api call
 
-        deleteUserCode = requests.delete(deleteUserAddress, auth=self.getAuth())
+        deleteUserCode = requests.delete(deleteUserAddress, auth=basic)
 
         # and check the Response (204 is success)
 
         if deleteUserCode.status_code != 204:
             raise UserExistsException("")
-
-    # loginUser method:
-    #
-    # this method receives Username and Password and confirms if the login
-    # has been successfull.
-    # If not the method throws the loginException
-    #
-    # loginUserAddress: str
-
-    def loginUser(self, loginUsername: str, loginPassword: str):
-
-        # we build our address
-
-        loginUserAddress = "http://localhost:8080/api/v1/users/" + loginUsername
-        response = requests.get(loginUserAddress, auth=self.getAuth()).json()
-
-        # and check the password
-
-        if (
-            # @Nils: existiert nicht
-            response["password"]
-            != loginPassword
-        ):
-            raise LoginException("")
 
     # createUser:
     #
@@ -191,7 +153,7 @@ class UserController:
     # createUserStatusCode: API call Response
 
     def createUser(
-        self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str
+        self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: HTTPBasicAuth
     ):
         # we check if the passwords are identical
 
@@ -212,12 +174,12 @@ class UserController:
             "password": signUpPassword,
         }
         createUserStatusCode = requests.post(
-            createUserAddress, json=createUserPayload, auth=self.getAuth()
+            createUserAddress, json=createUserPayload, auth=basic
         )
 
         # we make the API call to create the User
         createUserStatusCode = requests.post(
-            createUserAddress, json=createUserPayload, auth=self.getAuth()
+            createUserAddress, json=createUserPayload, auth=basic
         )
 
         # and check the response
@@ -225,14 +187,14 @@ class UserController:
             raise UserExistsException("")
 
     # auxiliary method for testing
-    def deleteAllUsers(self):
+    def deleteAllUsers(self, basic: HTTPBasicAuth):
         details = self.getAllUsersAndDetails()
         for user in dict(details)[keys.all_users]:
             username: str = dict(user)["username"]
             if username != "airflow":
                 delete_address = "http://localhost:8080/api/v1/users/" + username
                 # delete the User via the api call
-                response = requests.delete(delete_address, auth=self.getAuth())
+                response = requests.delete(delete_address, auth=basic)
 
                 # and check the Response (204 is success)
                 if response.status_code != 204:
