@@ -1,9 +1,6 @@
 import unittest
-from pathlib import Path
-from typing import Dict, List
 from unittest.mock import patch, Mock
 
-from matflow.exceptionpackage.MatFlowException import InternalException
 
 from matflow.database.DatabaseTable import DatabaseTable
 from matflow.database.ServerData import ServerData
@@ -22,13 +19,7 @@ class TestServerDataSetup(unittest.TestCase):
     status2 = "deactivated"
 
     def setUp(self) -> None:
-        # DatabaseTable has to be patched in because it automatically tries to connect to an external Database
-        with patch.object(
-            DatabaseTable,
-            "get_instance",
-            return_value=None,
-        ) as mock_get_instance:
-            self.server_data = ServerData.get_instance()
+        self.server_data = ServerData.get_instance()
 
         self.test_server1 = Server()
         self.test_server1.setName(self.name1)
@@ -63,7 +54,7 @@ class TestServerData(TestServerDataSetup):
 
             # Assert
             database_table_patch.assert_called_once()
-            args = database_table_patch.call_args()
+            args = str(database_table_patch.call_args)
             self.assertIn("INSERT INTO", args)
             # Only name and address are saved in database
             self.assertIn(self.name1, args)
@@ -78,7 +69,7 @@ class TestServerData(TestServerDataSetup):
 
             # Assert
             database_table_patch.assert_called_once()
-            args = database_table_patch.call_args()
+            args = str(database_table_patch.call_args)
             # Only name and address are saved in database
             self.assertIn(self.name2, args)
             self.assertIn(self.ip2, args)
