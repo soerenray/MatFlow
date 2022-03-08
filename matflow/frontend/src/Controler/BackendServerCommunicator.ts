@@ -9,20 +9,20 @@ import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getW
 import WorkflowInstance from '@Classes/WorkflowInstance'
 import user from "@Classes/User";
 
-const axios = require('axios');
+const axios = require('axios').default;
 
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
-    static serverAddress: string = 'http://127.0.0.1:5000/'
+    static serverAddress: string = 'http://127.0.0.1:5000'
 
     public constructor() { }
 
     // (Florian) logIn of airflow is used
     // public pushLogIn(userName: string, userPassword: string): void { return }
 
-    public async pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void {
-        await axios.post( this.serverAddress + keys.registerUser, {
+    public pushSignUp(userName: string, userPassword: string, userPasswordRepeated: string): void {
+        axios.post( BackendServerCommunicator.serverAddress + keys.registerUser, {
             [keys.userName]: userName,
             [keys.passwordName]: userPassword,
             [keys.repeatPasswordName]: userPasswordRepeated
@@ -38,8 +38,14 @@ class BackendServerCommunicator {
                 case 610:
                     // sign up exception - i don't really know what that means
                     break;
+                case 611:
+                    // converter in backend failed
+                    break;
                 case 612:
                     // airflow connection exception
+                    break;
+                case 666:
+                    // something went wrong in the backend internally
                     break;
                 default:
                     // should not occur, maybe print status code
@@ -51,10 +57,46 @@ class BackendServerCommunicator {
         });
     }
 
-
     // public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
-    public pushCreateTemplate(template: Template): void { return }
+
+    public pushCreateTemplate(template: Template): void {
+        // encode the dag file
+        let encoded_file = this.encode_file(template.dagDefinitionFile)
+        axios.post( BackendServerCommunicator.serverAddress + keys.createTemplate, {
+            [keys.templateName]: template.templateName,
+            [keys.dagDefinitionName]: template.dagDefinitionFile.name,
+            [keys.fileKey]: encoded_file
+        })
+        .then(function (response) {
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                case 602:
+                    // template name already exists
+                    break;
+                case 603:
+                    // invalid dag file
+                    break;
+                case 611:
+                    // converter in backend failed
+                    break;
+                case 666:
+                    // something went wrong in the backend internally
+                    break;
+                default:
+                    // should not occur, maybe print status code
+                    break;
+            }
+        })
+        .catch(function (error) {
+            // transfer error
+        });
+    }
+
+    // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
+
     public pushExistingWorkflowInstance(workflowInstanceAsZip: File): void { return }
     public pullTemplatesName(): string[] { return templateNames }
     // public pullTemplateWithName(templateName: string): Template { return }
@@ -119,6 +161,8 @@ class BackendServerCommunicator {
         // return pullServers2()
     }
     public pushServer(server: Server): void { pushServer(server) }
+
+    private encode_file(file: File): string {return ""} // TODO
 }
 
 export default BackendServerCommunicator
