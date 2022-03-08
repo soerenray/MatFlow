@@ -97,8 +97,21 @@ class BackendServerCommunicator {
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
 
+    // TODO Either unzip in frontend or create new api call
     public pushExistingWorkflowInstance(workflowInstanceAsZip: File): void { return }
-    public pullTemplatesName(): string[] { return templateNames }
+
+    public async pullTemplatesName(): Promise<string[]> {
+        let templateNames: string[] = []
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getAllTemplateNames)
+        .then(function (response) {
+            // console.log(response)
+            let data = response.data;
+            templateNames = data[keys.templateNames]; 
+        })
+        return templateNames;
+        
+    }
+
     // public pullTemplateWithName(templateName: string): Template { return }
     public pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
     public pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
