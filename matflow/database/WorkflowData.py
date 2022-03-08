@@ -326,7 +326,12 @@ class WorkflowData:
             # else
             version_file = self.__databaseTable.get_one(
                 get_other_version_file,
-                (wf_name, version, wf_name, version_number.get_predecessor()),
+                (
+                    wf_name,
+                    version,
+                    wf_name,
+                    version_number.get_predecessor().get_number(),
+                ),
             )
 
             # file -> (filepath, note)
