@@ -50,3 +50,5 @@ old_key: str = "oldKey"
 new_key: str = "newKey"
 old_value: str = "oldValue"
 new_value: str = "newValue"
+
+auth_tag: str = "auth_tag"

@@ -4,7 +4,6 @@ from requests.auth import HTTPBasicAuth
 import requests
 from matflow.exceptionpackage.MatFlowException import (
     UserExistsException,
-    LoginException,
     SignUpException,
     InternalException,
 )
@@ -14,7 +13,8 @@ class UserController:
 
     # CONSTRUCTOR
     #
-    #def __init__(self):
+    def __init__(self):
+        pass
 
     # METHODS
 
