@@ -41,6 +41,7 @@ MarkupSafe = "==2.0.1"
 PyYAML = "==6.0"
 Werkzeug = "==2.0.2"
 Django = "*"
+deprecated = "*"
 
 [dev-packages]
 
