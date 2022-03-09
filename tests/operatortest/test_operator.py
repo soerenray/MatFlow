@@ -97,7 +97,7 @@ class OperatorTest(unittest.TestCase):
 
     def test_conditional_with_context(self):
         operators = [Print2OperatorContext(n=4, task_id="8"), Print2OperatorContext(n=4, task_id="9")]
-        alternating = AlternatingOperator(operators=operators, n_tasks=4, task_id="7")
+        alternating = AlternatingOperator(operators=operators, task_id="7")
         alternating.execute("")
         self.assertEqual(operators[0].n, 0)
         self.assertEqual(operators[1].n, 0)

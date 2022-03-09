@@ -3,6 +3,9 @@ import requests
 import shutil
 from pathlib import Path
 from typing import List, Tuple, Dict
+
+from requests.auth import HTTPBasicAuth
+
 from .frontend_version import FrontendVersion
 from .database_version import DatabaseVersion
 from .template import Template
@@ -15,10 +18,11 @@ from matflow.exceptionpackage.MatFlowException import (
     InternalException,
     DoubleWorkflowInstanceNameException,
     WorkflowInstanceRunningException,
+    AirflowConnectionException,
 )
 from matflow.database.TemplateData import TemplateData
 from matflow.database.WorkflowData import WorkflowData
-from ..frontendapi import utilities
+from ..frontendapi import utilities, keys
 
 
 class WorkflowManager:
@@ -32,8 +36,9 @@ class WorkflowManager:
     __workflow_data: WorkflowData = WorkflowData.get_instance()
     __versions_base_directory: Path = Path(__file__).parent / "wf_instances"
     __template_base_directory: Path = Path(__file__).parent / "templates"
-    __airflow_dag_folder: Path = Path("")  # TODO
-    __airflow_address: str = "http://localhost:8080/"  # TODO
+    __airflow_dag_folder: Path = Path(__file__).parent.parent.parent / "dags"
+    __airflow_address: str = "http://localhost:8080/"
+    __airflow_authentication: HTTPBasicAuth = HTTPBasicAuth("airflow", "airflow")
     __initial_version_note = "initial version"
 
     def __init__(self):
@@ -141,7 +146,6 @@ class WorkflowManager:
 
         # overwrite dag_id in the dag definition file + add  it to the airflow dag folder
         workflow_instance.activate_instance(self.__airflow_dag_folder)
-        # TODO -> write "activate_instance" in WorkflowInstance
 
         # delete the temporary config folder + wrapping folder
         for file in os.listdir(config_files):
@@ -451,10 +455,14 @@ class WorkflowManager:
 
     def __is_workflow_instance_running(self, wf_instance_name: str) -> bool:
         # makes request to the airflow API to find out if the given workflow is running
-        dag_request = requests.get(
-            self.__airflow_address + "api/v1/dags/{dag_id}/details"
-        )
-        return False  # TODO
+        # TODO right now the instance counts as running if it isn't paused
+        dag_address: str = self.__airflow_address + "api/v1/dags/" + wf_instance_name
+        dag_info = requests.get(dag_address, auth=self.__airflow_authentication)
+        status: int = dag_info.status_code
+        if status != 200:
+            raise AirflowConnectionException("Airflow response: " + str(status))
+        else:
+            return not dag_info.json()["is_paused"]
 
     @staticmethod
     def __copy_files_with_extension(src: Path, dst: Path, extension: str):

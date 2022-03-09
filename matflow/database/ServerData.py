@@ -5,7 +5,7 @@ from typing import List, Tuple
 
 class ServerData:
     __instance = None
-    databaseTable = DatabaseTable.get_instance()
+    databaseTable: DatabaseTable
 
     @staticmethod
     def get_instance():
@@ -18,6 +18,7 @@ class ServerData:
             raise Exception("This class is a singleton!")
         else:
             ServerData.__instance = self
+            self.databaseTable = DatabaseTable.get_instance()
 
     def write_server(self, server: Server):
         """Write new Server into database.
@@ -51,9 +52,9 @@ class ServerData:
             string[]: 2-element list with format [<IP>,<Name>]
         """
         query = "SELECT * FROM Server;"  # get all entries
-        data = self.databaseTable.get(query)
+        data = self.databaseTable.get_multiple(query, ())
         if not data:
-            # throw exception no entry?
+            # throw exception on no entry?
             return data
 
         return data
