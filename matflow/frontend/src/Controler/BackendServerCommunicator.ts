@@ -189,8 +189,39 @@ class BackendServerCommunicator {
             }
         }
     }
-    public pullVersionsWithWorkflowInstanceName(workflowInstanceName: workflowInstanceNameAsString): Version[] { return versions[workflowInstanceName] }
-    public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void { return }
+    public async pullVersionsWithWorkflowInstanceName(workflowInstanceName: workflowInstanceNameAsString): Promise<Version[]> {
+    //    let versions: Version[] = []
+    //    await axios.get(BackendServerCommunicator.serverAddress + keys.getWfInstanceVersions)
+    //    .then(function (response) {
+    //        // console.log(response)
+    //        let data = response.data;
+    //        if (data[keys.statusCodeName] == 607) {
+    //            for (let version_dict in data[keys.versionsName]){
+    //                  // TODO how are the changes stored?
+    //            }
+    //        } else {
+    //            // error occurred
+    //        }
+    //    })
+    //    return versions;
+    }
+    public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void {
+        axios.put( BackendServerCommunicator.serverAddress + keys.replaceWfInstanceVersion, {
+            [keys.workflowInstanceName]: workflowInstanceName,
+            [keys.versionNumberName]: versionNumber,
+        })
+        .then(function (response) {
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
+        })
+    }
+
     public pullUsers(): User[] {
         let tempUsers: User[] = []
         users.forEach((user: User) => {
