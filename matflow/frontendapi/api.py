@@ -5,6 +5,7 @@ import os.path
 from pathlib import Path
 from typing import List
 
+import requests.utils
 from deprecated import deprecated
 from flask import Flask, request
 
@@ -15,7 +16,6 @@ from matflow.exceptionpackage.MatFlowException import (
     AirflowConnectionException, LoginException,
 )
 from requests.exceptions import ConnectionError
-from matflow.authentification.Auth import Auth
 from matflow.frontendapi import utilities, keys
 from matflow.useradministration.UserController import UserController
 from matflow.useradministration.User import User
@@ -149,8 +149,7 @@ class FrontendAPI:
         # 'email': '.', 'fail_login_count': 0, 'first_name': '.', 'last_login': '2022-02-25T08:58:08.301726',
         # 'last_name': '.', 'login_count': 3, 'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
         try:
-            json_details = request.get_json()
-            auth_tag = Auth.extract_auth_tag(json_details)
+            auth_tag = request.authorization
             details = FrontendAPI.user_controller.getAllUsersAndDetails(auth_tag)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -185,7 +184,7 @@ class FrontendAPI:
         """
         try:
             json_details = request.get_json()
-            auth_tag = Auth.extract_auth_tag(json_details)
+            auth_tag = request.authorization
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.overrideUser(user, auth_tag)
         except MatFlowException as exception:
@@ -212,7 +211,7 @@ class FrontendAPI:
         """
         try:
             json_details = request.get_json()
-            auth_tag = Auth.extract_auth_tag(json_details)
+            auth_tag = request.authorization
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.deleteUser(user, auth_tag)
         except MatFlowException as exception:
@@ -430,7 +429,7 @@ class FrontendAPI:
         """
         try:
             json_details = request.get_json()
-            auth_tag = Auth.extract_auth_tag(json_details)
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
             check_routine(keys_to_check, decoded_json)
