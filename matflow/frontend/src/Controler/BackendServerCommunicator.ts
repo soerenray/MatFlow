@@ -95,7 +95,25 @@ class BackendServerCommunicator {
     }
 
     // TODO the workflowInstance object doesn't contain the conf folder
-    public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { return }
+    public pushCreateWorkflowInstanceFromTemplate(
+        workflowInstanceName: string, templateName: string, zippedConfFiles: File): void {
+        let encoded_zip_file = this.encode_file(zippedConfFiles)
+        axios.post( BackendServerCommunicator.serverAddress + keys.createWfInstance, {
+            [keys.workflowInstanceName]: workflowInstanceName,
+            [keys.templateName]: templateName,
+            [keys.configFiles]: encoded_zip_file
+        })
+        .then(function (response) {
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
+        })
+    }
 
     // TODO Either unzip in frontend or create new api call
     public pushExistingWorkflowInstance(workflowInstanceAsZip: File): void { return }
