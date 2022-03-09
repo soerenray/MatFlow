@@ -170,41 +170,53 @@ class BackendServerCommunicator {
     }
 
     public pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
-        if (workflowInstanceName === "workflowInstance1") {
-            if (configFiles[0]) {
-                setWfConf('wf1' + configFiles[0].configFileName, configFiles[0])
-            }
-            if (configFiles[1]) {
-                setWfConf('wf1' + configFiles[1].configFileName, configFiles[1])
-            }
-        } else if (workflowInstanceName === "workflowInstance2") {
-            if (configFiles[0]) {
-                setWfConf('wf2' + configFiles[0].configFileName, configFiles[0])
-            }
-            if (configFiles[1]) {
-                setWfConf('wf2' + configFiles[1].configFileName, configFiles[1])
-            }
-            if (configFiles[2]) {
-                setWfConf('wf2' + configFiles[2].configFileName, configFiles[2])
-            }
+        let configDicts = [];
+        for (let file of configFiles){
+            configDicts.push({
+                [keys.configFileName]: file.configFileName,
+                [keys.keyValuePairsName]: file.keyValuePairs
+            })
         }
+        axios.post( BackendServerCommunicator.serverAddress + keys.createVersionOfWfInstance, {
+            [keys.workflowInstanceName]: workflowInstanceName,
+            [keys.versionNoteName]: "",
+            [keys.configFiles]: configDicts
+        })
+        .then(function (response) {
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
+        })
     }
+
     public async pullVersionsWithWorkflowInstanceName(workflowInstanceName: workflowInstanceNameAsString): Promise<Version[]> {
-    //    let versions: Version[] = []
-    //    await axios.get(BackendServerCommunicator.serverAddress + keys.getWfInstanceVersions)
-    //    .then(function (response) {
-    //        // console.log(response)
-    //        let data = response.data;
-    //        if (data[keys.statusCodeName] == 607) {
-    //            for (let version_dict in data[keys.versionsName]){
-    //                  // TODO how are the changes stored?
-    //            }
-    //        } else {
-    //            // error occurred
-    //        }
-    //    })
-    //    return versions;
+        let versions: Version[] = []
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getWfInstanceVersions)
+        .then(function (response) {
+            // console.log(response)
+            let data = response.data;
+            if (data[keys.statusCodeName] == 607) {
+                for (let versionDict of data[keys.versionsName]){
+                    let versionNum: string = versionDict[keys.versionNumberName];
+                    let versionNote: string = versionDict[keys.versionNoteName];
+                    let changes: Array<[string, string]> = [];
+                    for (let change of versionDict[keys.frontendVersionsChanges]){
+                        changes.push([change[keys.oldKey] + ": " +  change[keys.oldValue], change[keys.newKey] + ": " +  change[keys.newValue]]);
+                    }
+                    versions.push(new Version(versionNum, versionNote, changes));
+                }
+            } else {
+                // error occurred
+            }
+        })
+        return versions;
     }
+
     public pushReplaceActiveVersionOfWorkflowInstance(workflowInstanceName: string, versionNumber: string): void {
         axios.put( BackendServerCommunicator.serverAddress + keys.replaceWfInstanceVersion, {
             [keys.workflowInstanceName]: workflowInstanceName,
@@ -229,6 +241,7 @@ class BackendServerCommunicator {
         })
         return tempUsers
     }
+
     public pushUser(user: User): void { updateUser(user) }
     public pushDeleteUser(user: User): void { deleteUser(user) }
     public async pullServers(): Promise<Server[]> {
