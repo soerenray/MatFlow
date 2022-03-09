@@ -124,7 +124,11 @@ class BackendServerCommunicator {
         .then(function (response) {
             // console.log(response)
             let data = response.data;
-            templateNames = data[keys.templateNames]; 
+            if (data[keys.statusCodeName] == 607) {
+                templateNames = data[keys.templateNames];
+            } else {
+                // error occurred
+            }
         })
         return templateNames;
         
@@ -138,30 +142,33 @@ class BackendServerCommunicator {
         .then(function (response) {
             // console.log(response)
             let data = response.data;
-            for (let wf_name in data[keys.namesAndConfigs]) {
-                let conf_files = data[keys.namesAndConfigs][wf_name];
-                result.push([wf_name, conf_files]);
+            if (data[keys.statusCodeName] == 607){
+                for (let wf_name in data[keys.namesAndConfigs]) {
+                    let conf_files = data[keys.namesAndConfigs][wf_name];
+                    result.push([wf_name, conf_files]);
+                }
+            } else {
+                // error occurred
             }
         })
         return result;
     }
 
-    public pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
-        if (workflowInstanceName === "workflowInstance1") {
-            if (configFileName === "conf1") {
-                return getWfConf('wf1conf1')
+    public async pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): Promise<ConfigFile> {
+        let conf_file: ConfigFile = new ConfigFile(); // initialize variable as "empty" config file
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getConfigFromWfInstance)
+        .then(function (response) {
+            // console.log(response)
+            let data = response.data;
+            if (data[keys.statusCodeName] == 607) {
+                conf_file = new ConfigFile(data[keys.configFileName], data[keys.keyValuePairsName]);
+            } else {
+                // error occurred
             }
-            return getWfConf('wf1conf2')
-        } else if (workflowInstanceName === "workflowInstance2") {
-            if (configFileName === "conf1") {
-                return getWfConf('wf2conf1')
-            } else if (configFileName === "conf2") {
-                return getWfConf('wf2conf2')
-            }
-            return getWfConf('wf2conf3')
-        }
-        return new ConfigFile()
+        })
+        return conf_file;
     }
+
     public pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
         if (workflowInstanceName === "workflowInstance1") {
             if (configFiles[0]) {
