@@ -131,7 +131,21 @@ class BackendServerCommunicator {
     }
 
     // public pullTemplateWithName(templateName: string): Template { return }
-    public pullWorkflowInstancesNameAndConfigFilesName(): Array<[string, string[]]> { return workflowInstancesNameAndConfigFilesName }
+
+    public async pullWorkflowInstancesNameAndConfigFilesName(): Promise<Array<[string, string[]]>> {
+        let result: Array<[string, string[]]> = []
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getAllWfInstancesNamesAndConfigFileNames)
+        .then(function (response) {
+            // console.log(response)
+            let data = response.data;
+            for (let wf_name in data[keys.namesAndConfigs]) {
+                let conf_files = data[keys.namesAndConfigs][wf_name];
+                result.push([wf_name, conf_files]);
+            }
+        })
+        return result;
+    }
+
     public pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): ConfigFile {
         if (workflowInstanceName === "workflowInstance1") {
             if (configFileName === "conf1") {
