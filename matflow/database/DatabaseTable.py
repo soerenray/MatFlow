@@ -192,6 +192,7 @@ class DatabaseTable:
 
         Args:
             query(str): mysql-query to get check
+            arguments(tuple): tuple with str values to prevent injections
 
         Returns:
             bool: true if existing value >= 1
