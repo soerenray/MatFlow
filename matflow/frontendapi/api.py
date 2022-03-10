@@ -2,17 +2,19 @@ from __future__ import annotations
 
 import json
 import os.path
+import traceback
 from pathlib import Path
 from typing import List
 
-#from deprecated import deprecated
+# from deprecated import deprecated
 from flask import Flask, request
 
 # for production api:
 from matflow.exceptionpackage.MatFlowException import (
     MatFlowException,
     ConverterException,
-    AirflowConnectionException, LoginException,
+    AirflowConnectionException,
+    LoginException,
 )
 from requests.exceptions import ConnectionError
 from matflow.frontendapi import utilities, keys
@@ -266,7 +268,9 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.workflow_instance_name, keys.version_number_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.version_number_name], decoded_json
+            )
             FrontendAPI.workflow_manager.set_active_version_through_number(
                 decoded_json[keys.workflow_instance_name],
                 decoded_json[keys.version_number_name],
@@ -293,7 +297,9 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.version_note_name], decoded_json
+            )
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
             version_note: str = decoded_json[keys.version_note_name]
             configs: List[
@@ -323,7 +329,9 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.workflow_instance_name, keys.config_file_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.config_file_name], decoded_json
+            )
             wf_name: str = decoded_json[keys.workflow_instance_name]
             config_name: str = decoded_json[keys.config_file_name]
             file: ReducedConfigFile = (
@@ -351,7 +359,9 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            check_routine([keys.workflow_instance_name, keys.template_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.template_name], decoded_json
+            )
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: Path = ReducedConfigFile.extract_multiple_config_files(
@@ -388,7 +398,7 @@ class FrontendAPI:
 
     @staticmethod
     @app.route("/verify_login", methods=["GET"])
-  #  @deprecated(reason="Please use airflow login", version="1.0")
+    #  @deprecated(reason="Please use airflow login", version="1.0")
     def verify_login() -> str:
         """
         verifies username with associated password via username and password
@@ -425,7 +435,11 @@ class FrontendAPI:
         """
         try:
             decoded_json: dict = json.loads(request.get_json())
-            keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
+            keys_to_check = [
+                keys.user_name,
+                keys.password_name,
+                keys.repeat_password_name,
+            ]
             check_routine(keys_to_check, decoded_json)
             FrontendAPI.user_controller.createUser(
                 decoded_json[keys.user_name],
@@ -459,7 +473,9 @@ class FrontendAPI:
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as error:
+            # print(error.args)
+            # print(traceback.format_exc())
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )
@@ -533,9 +549,7 @@ class FrontendAPI:
             out = utilities.encode_file(file_path, keys.dag_picture_name)
             # file is already removed in utilities.encode
             os.rmdir(file_path.parent)
-            return ExceptionHandler.success(
-                out
-            )
+            return ExceptionHandler.success(out)
 
 
 def check_routine(keys_to_check: List[str], decoded_json: dict) -> None:

@@ -195,12 +195,12 @@ export default {
       },
     },
   },
-  beforeCreate: function () {
+  beforeCreate: async function () {
     // Vue is oberserving data in the data property.
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(createWorkflowInstanceObject);
     createWorkflowInstanceObject.templatesName =
-      backendServerCommunicatorObject.pullTemplatesName();
+      await backendServerCommunicatorObject.pullTemplatesName();
   },
 };
 </script>
