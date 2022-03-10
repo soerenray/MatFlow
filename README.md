@@ -28,7 +28,7 @@ http://<Server IP>:8080
 ```
 
 **Server application** <br>
-Install server application dependencies:
+<!--Install server application dependencies:
 ```
 pip install -r requirements.txt
 npm install
@@ -39,6 +39,15 @@ Run server application:
 npm run serve -- --port 8081
 docker-compose up
 python3 -m matflow.main
+```-->
+
+Install server application dependencies:
+```
+docker-compose build
+```
+Run server application:
+```
+docker-compose up
 ```
 
 ## Testing
