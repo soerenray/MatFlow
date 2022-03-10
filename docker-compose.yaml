@@ -282,6 +282,28 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: qMyaU7AjPJ3Epsmc
       MYSQL_DATABASE: matflowdb
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+
+  matflow:
+    image: matflow_image
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    command: bash -c "cd /matflow_data/ && python3.8 -m matflow.main"
+    # healthcheck:
+      # test: curl --fail -s http://localhost:3306/ || exit 1
+      # interval: 1m30s
+      # timeout: 10s
+      # retries: 5
+    restart: always
+    build: .
+    ports:
+      - 8082:8082
+      - 8081:8081
+    expose:
+      - "8081"
+      - "8082"
 
 volumes:
   postgres-db-volume-2:
