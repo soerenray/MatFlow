@@ -245,8 +245,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertIn("test_instance", got[keys.names_and_configs])
 
     def test_get_wf_instance_versions_test(self):
-        # TODO Fehler bei Lukas
-        # "Column 'confKey' in field list is ambiguous"
         input_data = json.dumps({keys.workflow_instance_name: "test_instance"})
         got = json.loads(
             self.__class__.app.get(
