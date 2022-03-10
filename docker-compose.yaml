@@ -290,12 +290,7 @@ services:
     depends_on:
       mysql-db:
         condition: service_healthy
-    command: bash -c "cd /matflow_data/ && python3.8 -m matflow.main"
-    # healthcheck:
-      # test: curl --fail -s http://localhost:3306/ || exit 1
-      # interval: 1m30s
-      # timeout: 10s
-      # retries: 5
+    command: bash -c "cd /matflow_data/ && python3 -m matflow.main"
     restart: always
     build: .
     ports:
