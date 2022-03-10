@@ -4,6 +4,7 @@ import json
 import os.path
 from pathlib import Path
 from typing import List
+import base64
 
 import requests.utils
 from deprecated import deprecated
@@ -150,7 +151,8 @@ class FrontendAPI:
         # 'last_name': '.', 'login_count': 3, 'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
         try:
             auth_tag = request.authorization
-            details = FrontendAPI.user_controller.getAllUsersAndDetails(auth_tag)
+            details = FrontendAPI.user_controller.getAllUsersAndDetails((auth_tag["username"], auth_tag["password"]))
+
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except ConnectionError:
@@ -186,7 +188,7 @@ class FrontendAPI:
             json_details = request.get_json()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.overrideUser(user, auth_tag)
+            FrontendAPI.user_controller.overrideUser(user, (auth_tag["username"], auth_tag["password"]))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -213,7 +215,7 @@ class FrontendAPI:
             json_details = request.get_json()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.deleteUser(user, auth_tag)
+            FrontendAPI.user_controller.deleteUser(user, (auth_tag["username"], auth_tag["password"]))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -437,7 +439,7 @@ class FrontendAPI:
                 decoded_json[keys.user_name],
                 decoded_json[keys.password_name],
                 decoded_json[keys.repeat_password_name],
-                auth_tag
+                (auth_tag["username"], auth_tag["password"])
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)

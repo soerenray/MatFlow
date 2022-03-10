@@ -18,7 +18,6 @@ class UserController:
 
     # METHODS
 
-
     # getAllUsersAndDetails method:
     #
     # this method uses the Airflow Rest API to return all the users and their details listed in the database
@@ -49,9 +48,9 @@ class UserController:
     #      "total_entries": 0
     #    }
 
-    def getAllUsersAndDetails(self, basic: HTTPBasicAuth):
+    def getAllUsersAndDetails(self, basic: (str, str)):
         listUsers = requests.get(
-            "http://localhost:8080/api/v1/users", auth= basic
+            "http://localhost:8080/api/v1/users", auth=basic
         )
         if listUsers.status_code == 200:
             return listUsers.json()
@@ -72,7 +71,7 @@ class UserController:
     # overridePayload: Payload of strings + "roles" is an Array of [{str : str}]
     # patchOverrideUser: API call Response
 
-    def overrideUser(self, overrideUser: User, basic: HTTPBasicAuth):
+    def overrideUser(self, overrideUser: User, basic: str):
         overrideUsername = overrideUser.getUsername()
         overrideStatus = overrideUser.getStatus()
         overridePrivilege = overrideUser.getPrivilege()
@@ -153,7 +152,7 @@ class UserController:
     # createUserStatusCode: API call Response
 
     def createUser(
-        self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: HTTPBasicAuth
+            self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: HTTPBasicAuth
     ):
         # we check if the passwords are identical
 

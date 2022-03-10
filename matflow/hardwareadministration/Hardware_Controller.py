@@ -1,4 +1,4 @@
-import resource
+#import resource
 from matflow.database import ServerData
 from matflow.hardwareadministration.Server import Server
 
@@ -25,8 +25,8 @@ class Hardware_Controller:
         tempServerData.write_server(newServer)
 
     # setCPUResources
-    def setResources(self, newResource: resource, newSoft: int, newHard: int):
-        resource.setrlimit(newResource, newSoft, newHard)
+    #def setResources(self, newResource: resource, newSoft: int, newHard: int):
+    #    resource.setrlimit(newResource, newSoft, newHard)
 
     # Methods
 
