@@ -14,7 +14,7 @@ const axios = require('axios').default;
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
-    static serverAddress: string = 'http://127.0.0.1:5000'
+    static serverAddress: string = 'http://127.0.0.1:5000/'
 
     public constructor() { }
 
@@ -97,7 +97,7 @@ class BackendServerCommunicator {
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(
         workflowInstanceName: string, templateName: string, zippedConfFiles: File): void {
-        let encoded_zip_file = this.encode_file(zippedConfFiles)
+        let encoded_zip_file = this.encode_file(new File([], "emptyFile"))
         axios.post( BackendServerCommunicator.serverAddress + keys.createWfInstance, {
             [keys.workflowInstanceName]: workflowInstanceName,
             [keys.templateName]: templateName,
@@ -123,13 +123,15 @@ class BackendServerCommunicator {
         await axios.get(BackendServerCommunicator.serverAddress + keys.getAllTemplateNames)
         .then(function (response) {
             // console.log(response)
-            let data = response.data;
-            if (data[keys.statusCodeName] == 607) {
-                templateNames = data[keys.templateNames];
+            // let data = response.data;
+            if (response[keys.statusCodeName] == 607) {
+                templateNames = response[keys.templateNames];
             } else {
                 // error occurred
             }
         })
+        console.log("hallo eine nachricht");
+        console.log(templateNames);
         return templateNames;
         
     }

@@ -469,13 +469,18 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            template: Template = Template.extract_template(request.get_json())
+            json_str: str
+            if type(request.get_json()) != str:
+                json_str = json.dumps(request.get_json())
+            else:
+                json_str = request.get_json()
+            template: Template = Template.extract_template(json_str)
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError as error:
-            # print(error.args)
-            # print(traceback.format_exc())
+            print(error.args)
+            print(traceback.format_exc())
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )
