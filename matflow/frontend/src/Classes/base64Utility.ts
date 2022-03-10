@@ -43,3 +43,8 @@ function dataURLtoFileNoMime(dataurl: string, filename: string): File {
 
     return new File([u8arr], filename);
 }
+
+// TODO 
+function fileToDataURL(file: File): string{
+    return ""
+}
