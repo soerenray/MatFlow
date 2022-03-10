@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import socket
-#import resource
+import resource
 import json
 from typing import Tuple
 
@@ -27,10 +27,10 @@ class Server:
         self.status: bool = self.checkStatus()
         self.containerLimit = 20
         self.selectedForExecution = True
-        # self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
-        # self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
-        #self.cpuResource = resource.RLIMIT_CPU
-        #self.vmemResource = resource.RLIM_INFINITY
+        self.cpuResource = resource.setrlimit(resource.RLIMIT_CORE, resource.RLIM_INFINITY)
+        self.vmemResource = resource.setrlimit(resource.RLIMIT_VMEM, resource.RLIM_INFINITY)
+        self.cpuResource = resource.RLIMIT_CPU
+        self.vmemResource = resource.RLIM_INFINITY
 
     # getter and setter methods
     # name getter method
@@ -74,26 +74,25 @@ class Server:
         self.selectedForExecution = selected
 
     # Ressources getter method
-    #def getRessources(self) -> Tuple[str, str]:
-    #    return str(self.vmemResource), str(self.cpuResource)
+    def getRessources(self) -> Tuple[str, str]:
+        return str(self.vmemResource), str(self.cpuResource)
 
     # Ressources setter method
-    #def setRessources(self, ressources: Tuple[str, str]):
-    #    self.cpuResource = ressources[1]
-    #    self.vmemResource = ressources[0]
+    def setRessources(self, ressources: Tuple[str, str]):
+        self.cpuResource = ressources[1]
+        self.vmemResource = ressources[0]
 
     # other methods:
 
     # check status method:
     def checkStatus(self):
-        # scanner = nmap.PortScanner()
-        # host = socket.gethostbyname(self.getAddress())
-        # scanner.scan(host, "1","-v")
-        # if scanner[host].state() == "UP":
-        #     return True
-        # else:
-        #     return False
-        return True
+         scanner = nmap.PortScanner()
+         host = socket.gethostbyname(self.getAddress())
+         scanner.scan(host, "1","-v")
+         if scanner[host].state() == "UP":
+             return True
+         else:
+             return False
 
     @classmethod
     def extract_server(cls, json_details: str) -> Server:

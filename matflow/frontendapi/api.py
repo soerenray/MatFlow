@@ -4,7 +4,6 @@ import json
 import os.path
 from pathlib import Path
 from typing import List
-import base64
 
 import requests.utils
 from deprecated import deprecated
@@ -101,7 +100,8 @@ class FrontendAPI:
             String: json-dumped object containing the above described information
         """
         try:
-            server: Server = FrontendAPI.hardware_controller.getServer()
+            auth_tag = request.authorization
+            server: Server = FrontendAPI.hardware_controller.getServer(auth_tag["username"], auth_tag["password"])
             encoded_server: dict = server.encode_server()
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -121,7 +121,8 @@ class FrontendAPI:
         try:
             json_decoded = request.get_json()
             server: Server = Server.extract_server(json_decoded)
-            FrontendAPI.hardware_controller.setServer(server)
+            auth_tag = request.authorization
+            FrontendAPI.hardware_controller.setServer(server, auth_tag["username"], auth_tag["password"])
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
