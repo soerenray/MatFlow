@@ -56,6 +56,9 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
+    AIRFLOW__WEBSERVER__BASE_URL: 'http://gondolin.ipd.kit.edu/matflow/airflow'
+    AIRFLOW__CELERY__FLOWER_URL_PREFIX: '/matflow/flower'
+    AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: 'true'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
     - ./dags:/opt/airflow/dags
