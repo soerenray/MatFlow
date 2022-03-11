@@ -48,6 +48,7 @@ docker-compose build
 Run server application:
 ```
 docker-compose up
+python3 -m matflow.main
 ```
 
 ## Testing
