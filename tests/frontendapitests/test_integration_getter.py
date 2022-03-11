@@ -245,8 +245,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertIn("test_instance", got[keys.names_and_configs])
 
     def test_get_wf_instance_versions_test(self):
-        # TODO Fehler bei Lukas
-        # "Column 'confKey' in field list is ambiguous"
         input_data = json.dumps({keys.workflow_instance_name: "test_instance"})
         got = json.loads(
             self.__class__.app.get(
@@ -286,9 +284,6 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
     def test_get_all_wf_instances_names_and_config_files_names(self):
-        # TODO Lukas
-        # error in "get_names_of_workflows_and_config_files()" of WorkflowData.py
-        # get duplicate file names if there is more than one version
         got = json.loads(
             self.__class__.app.get(
                 "get_all_wf_instances_names_and_config_file_names"
