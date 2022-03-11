@@ -28,11 +28,10 @@ before_script:
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
-  - black . --check
 
 test:
   script:
     - python setup.py test
     - pip install black  # you can also use tox
-    - tox -e py36,flake8
+    - black . --check
 
