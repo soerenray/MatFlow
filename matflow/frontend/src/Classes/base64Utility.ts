@@ -1,4 +1,4 @@
-export { dataURLtoFile, dataURLtoFileNoMime }
+export { dataURLtoFile, dataURLtoFileNoMime, fileToDataURL }
 
 /**
  * This function converts base64 encoded files to File objects
@@ -44,7 +44,20 @@ function dataURLtoFileNoMime(dataurl: string, filename: string): File {
     return new File([u8arr], filename);
 }
 
-// TODO 
+/**
+ * This function converts File objects to base64 encoded files
+ * Implementation taken over from: https://stackoverflow.com/questions/53129002/converting-image-to-base64-string-in-typescript
+ * @param file the file object
+ * @returns file encoded as string
+ */
 function fileToDataURL(file: File): string{
-    return ""
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(){
+        return reader.result
+    };
+    reader.onerror = function (error) {
+        console.log('Error: ', error);
+    };
+    return "" // error has occured
 }
