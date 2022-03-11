@@ -33,14 +33,5 @@ test:
   script:
     - python setup.py test
     - pip install black  # you can also use tox
-    - tox -e py36,flake8
+    - black . --check
 
-run:
-  script:
-    - python setup.py bdist_wheel
-    # an alternative approach is to install and run:
-    - pip install dist/*
-    # run the command here
-  artifacts:
-    paths:
-      - dist/*.whl
