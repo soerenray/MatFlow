@@ -282,19 +282,9 @@ services:
       MYSQL_DATABASE: matflowdb
       MYSQL_USER: matflow_user
       MYSQL_PASSWORD: qMyaU7AjPJ3Epsmc
-    healthcheck:
-      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost']
-      # test: curl -I localhost:3306 || exit 1
-      # test: ["CMD", "matflow_user", "ping", "-h", "mysql-db"]
-      interval: 90s
-      timeout: 10s
-      retries: 2
 
   matflow_api:
     image: matflow_api
-    depends_on:
-      mysql-db:
-        condition: service_healthy
     restart: always
     build: 
       context: ./
