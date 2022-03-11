@@ -21,7 +21,9 @@ class ExceptionHandler:
             String: status code nested in json object
         """
         return json.dumps(
-            ExceptionHandler.send_status_code(exception.get_status_code(), dict())
+            ExceptionHandler.send_status_code(
+                exception.get_status_code(), {"error_message": exception.message}
+            )
         )
 
     @staticmethod

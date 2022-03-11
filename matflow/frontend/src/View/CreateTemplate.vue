@@ -78,8 +78,11 @@ export default {
       createTemplateObject.setCreateTemplateMemento(
         createTemplateCaretakerObject.createTemplateMementoObjects[0]
       );
-      createTemplateObject.templatesName =
-        backendServerCommunicatorObject.pullTemplatesName();
+      backendServerCommunicatorObject.pullTemplatesName().then(function (result){
+        createTemplateObject.templatesName = result;
+      });
+      //createTemplateObject.templatesName =
+      //  backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       backendServerCommunicatorObject.pushCreateTemplate(

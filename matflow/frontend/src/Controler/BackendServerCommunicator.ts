@@ -3,6 +3,7 @@ import User from '@Classes/User'
 import Server from '@Classes/Server'
 import Version from '@Classes/Version'
 import Template from '@Classes/Template'
+import {fileToDataURL} from '@Classes/base64Utility'
 import {keys} from '@Controler/Keys';
 
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
@@ -61,13 +62,21 @@ class BackendServerCommunicator {
 
     public pushCreateTemplate(template: Template): void {
         // encode the dag file
-        let encoded_file = this.encode_file(template.dagDefinitionFile)
-        axios.post( BackendServerCommunicator.serverAddress + keys.createTemplate, {
+        let encoded_file: string = fileToDataURL(new File([], "emptyFile.py")); // TODO dummy file
+        let config = {
+            "headers": {
+                "Content-Type": "application/json",
+            }
+        }
+        let data = {
             [keys.templateName]: template.templateName,
-            [keys.dagDefinitionName]: template.dagDefinitionFile.name,
+            [keys.dagDefinitionName]: "dummyName.py", // TODO dummy file name
             [keys.fileKey]: encoded_file
-        })
+        }
+        
+        axios.post( BackendServerCommunicator.serverAddress + keys.createTemplate, data, config)
         .then(function (response) {
+            console.log("pushTemplateResp", response)
             switch (response.data[keys.statusCodeName]) {
                 case 607:
                     // everything went fine
@@ -97,7 +106,7 @@ class BackendServerCommunicator {
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(
         workflowInstanceName: string, templateName: string, zippedConfFiles: File): void {
-        let encoded_zip_file = this.encode_file(new File([], "emptyFile"))
+        let encoded_zip_file = fileToDataURL(new File([], "emptyFile.py"))
         axios.post( BackendServerCommunicator.serverAddress + keys.createWfInstance, {
             [keys.workflowInstanceName]: workflowInstanceName,
             [keys.templateName]: templateName,
@@ -122,16 +131,13 @@ class BackendServerCommunicator {
         let templateNames: string[] = []
         await axios.get(BackendServerCommunicator.serverAddress + keys.getAllTemplateNames)
         .then(function (response) {
-            // console.log(response)
-            // let data = response.data;
-            if (response[keys.statusCodeName] == 607) {
-                templateNames = response[keys.templateNames];
+            let data = response.data;
+            if (data[keys.statusCodeName] == 607) {
+                templateNames = data[keys.templateNames];
             } else {
                 // error occurred
             }
         })
-        console.log("hallo eine nachricht");
-        console.log(templateNames);
         return templateNames;
         
     }

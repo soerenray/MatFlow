@@ -482,7 +482,9 @@ class FrontendAPI:
             print(error.args)
             print(traceback.format_exc())
             return ExceptionHandler.handle_exception(
-                ConverterException("false/ no json provided")
+                ConverterException(
+                    "false/ no json provided" + "Error: " + str(error.args)
+                )
             )
         else:
             return ExceptionHandler.success(dict())
