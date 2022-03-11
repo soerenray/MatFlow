@@ -277,28 +277,29 @@ services:
     restart: always
     ports:
       - 3306:3306
-    expose: 
-      - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: qMyaU7AjPJ3Epsmc
       MYSQL_DATABASE: matflowdb
-    healthcheck:
-      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      MYSQL_USER: matflow_user
+      MYSQL_PASSWORD: qMyaU7AjPJ3Epsmc
 
-  matflow:
-    image: matflow_image
-    depends_on:
-      mysql-db:
-        condition: service_healthy
-    command: bash -c "cd /matflow_data/ && python3 -m matflow.main"
+  matflow_api:
+    image: matflow_api
     restart: always
-    build: .
+    build: 
+      context: ./
+      dockerfile: ./docker_api/Dockerfile
     ports:
       - 8082:8082
+
+  matflow_web:
+    image: matflow_web
+    restart: always
+    build: 
+      context: ./
+      dockerfile: ./docker_web/Dockerfile
+    ports:
       - 8081:8081
-    expose:
-      - "8081"
-      - "8082"
 
 volumes:
   postgres-db-volume-2:
