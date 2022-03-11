@@ -283,8 +283,9 @@ services:
       MYSQL_ROOT_PASSWORD: qMyaU7AjPJ3Epsmc
       MYSQL_DATABASE: matflowdb
     healthcheck:
-      test: ["CMD", 'mysql', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      # test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
       # test: curl -I localhost:3306 || exit 1
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "mysql-db"]
       interval: 90s
       timeout: 10s
       retries: 2
