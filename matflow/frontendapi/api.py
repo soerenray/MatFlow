@@ -119,7 +119,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_decoded = request.get_json()
+            json_decoded = get_json_not_dict()
             server: Server = Server.extract_server(json_decoded)
             FrontendAPI.hardware_controller.setServer(server)
         except MatFlowException as exception:
@@ -183,7 +183,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_details = request.get_json()
+            json_details = get_json_not_dict()
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.overrideUser(user)
         except MatFlowException as exception:
@@ -209,7 +209,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_details = request.get_json()
+            json_details = get_json_not_dict()
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.deleteUser(user)
         except MatFlowException as exception:
@@ -237,7 +237,7 @@ class FrontendAPI:
         out_dict: dict = dict()
         list_of_versions: List[dict] = []
         try:
-            loaded = json.loads(request.get_json())
+            loaded = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name], loaded)
             wf_name: str = loaded[keys.workflow_instance_name]
             versions: List[
@@ -267,7 +267,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine(
                 [keys.workflow_instance_name, keys.version_number_name], decoded_json
             )
@@ -296,7 +296,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine(
                 [keys.workflow_instance_name, keys.version_note_name], decoded_json
             )
@@ -328,7 +328,7 @@ class FrontendAPI:
             String: json-dumped object containing encoded config file
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine(
                 [keys.workflow_instance_name, keys.config_file_name], decoded_json
             )
@@ -358,7 +358,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine(
                 [keys.workflow_instance_name, keys.template_name], decoded_json
             )
@@ -434,7 +434,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             keys_to_check = [
                 keys.user_name,
                 keys.password_name,
@@ -448,9 +448,11 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as error:
             return ExceptionHandler.handle_exception(
-                ConverterException("false/ no json provided")
+                ConverterException(
+                    "false/ no json provided" + " Error: " + str(error.args)
+                )
             )
         except ConnectionError:
             return ExceptionHandler.handle_exception(
@@ -469,12 +471,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_str: str
-            if type(request.get_json()) != str:
-                json_str = json.dumps(request.get_json())
-            else:
-                json_str = request.get_json()
-            template: Template = Template.extract_template(json_str)
+            template: Template = Template.extract_template(get_json_not_dict())
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -512,7 +509,7 @@ class FrontendAPI:
             String: json-dumped object containing encoded template
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.template_name], decoded_json)
             name = decoded_json[keys.template_name]
             template: Template = FrontendAPI.workflow_manager.get_template_from_name(
@@ -538,7 +535,7 @@ class FrontendAPI:
         """
         try:
             contemporary_template: Template = Template.extract_template(
-                request.get_json()
+                get_json_not_dict()
             )
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = (
@@ -563,6 +560,15 @@ def check_routine(keys_to_check: List[str], decoded_json: dict) -> None:
     for key in keys_to_check:
         if key not in decoded_json:
             raise TypeError
+
+
+def get_json_not_dict() -> str:
+    json_str: str
+    if type(request.get_json()) != str:
+        json_str = json.dumps(request.get_json())
+    else:
+        json_str = request.get_json()
+    return json_str
 
 
 ###################################
