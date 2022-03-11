@@ -278,14 +278,14 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_ROOT_PASSWORD: qMyaU7AjPJ3Epsmc
+      MYSQL_ROOT_PASSWORD: soeren
       MYSQL_DATABASE: matflowdb
       MYSQL_USER: matflow_user
-      MYSQL_PASSWORD: qMyaU7AjPJ3Epsmc
+      MYSQL_PASSWORD: soeren
     healthcheck:
-      # test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD' ]
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost']
       # test: curl -I localhost:3306 || exit 1
-      test: ["CMD", "matflow_user", "ping", "-h", "mysql-db"]
+      # test: ["CMD", "matflow_user", "ping", "-h", "mysql-db"]
       interval: 90s
       timeout: 10s
       retries: 2
