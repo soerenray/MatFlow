@@ -23,15 +23,26 @@ cache:
     - .cache/pip
     - venv/
 
+  
 before_script:
   - python --version  # For debugging
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
 
+stages:
+  - tests
+  - checkstyle_black
+
+
 test:
+  stage: tests
   script:
     - python setup.py test
-    - pip install black  # you can also use tox
-    - black . --check
 
+
+checkstyle:
+  stage: checkstyle_black
+  script:
+    - pip install black  
+    - black . --check
