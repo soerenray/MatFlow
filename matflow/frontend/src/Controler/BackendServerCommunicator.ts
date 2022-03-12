@@ -9,6 +9,7 @@ import {keys} from '@Controler/Keys';
 import { templateNames, workflowInstancesNameAndConfigFilesName, setWfConf, getWfConf, versions, users, deleteUser, updateUser, pullServers2, pushServer } from '../DummyData/DataInTypscript'
 import WorkflowInstance from '@Classes/WorkflowInstance'
 import user from "@Classes/User";
+import { Dictionary } from 'vue-router/types/router'
 
 const axios = require('axios').default;
 
@@ -29,6 +30,7 @@ class BackendServerCommunicator {
             [keys.repeatPasswordName]: userPasswordRepeated
         })
         .then(function (response) {
+            console.log("sign up resp: ", response);
             switch (response.data[keys.statusCodeName]) {
                 case 607:
                     // everything went fine
@@ -242,10 +244,20 @@ class BackendServerCommunicator {
         })
     }
 
-    public pullUsers(): User[] {
-        let tempUsers: User[] = []
-        users.forEach((user: User) => {
-            tempUsers.push(new User(user.userName, user.userStatus, user.userPrivilege))
+    public async pullUsers(): Promise<User[]> {
+        let tempUsers: User[] = [];
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getAllUsersAndDetails)
+        .then(function (response) {
+            console.log("get_users_resp", response)
+            let data = response.data;
+            if (data[keys.statusCodeName] == 607) {
+                let user_dicts = data[keys.allUsers]
+                for (let dict of user_dicts){
+                    tempUsers.push(new User(dict[keys.userName], dict[keys.userStatusName], dict[keys.userPrivilegeName]))
+                }
+            } else {
+                // error occurred
+            }
         })
         return tempUsers
     }

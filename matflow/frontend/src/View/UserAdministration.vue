@@ -93,7 +93,9 @@ export default {
     },
     pullUsersFromServer() {
       this.removeUsersFromComponent();
-      this.users = backendServerCommunicatorObject.pullUsers();
+      backendServerCommunicatorObject.pullUsers().then(function (result){
+        this.users = result;
+      });
     },
     pushUsersAndPullUsersFromServer() {
       this.users.forEach((user: User) => {
@@ -145,8 +147,9 @@ export default {
     Vue.observable(userAdministrationObject);
   },
   created: function () {
-    userAdministrationObject.users =
-      backendServerCommunicatorObject.pullUsers();
+      backendServerCommunicatorObject.pullUsers().then(function (result){
+        userAdministrationObject.users = result;
+      });
   },
 };
 </script>
