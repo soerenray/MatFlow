@@ -28,7 +28,7 @@ http://<Server IP>:8080
 ```
 
 **Server application** <br>
-<!--Install server application dependencies:
+Install server application dependencies:
 ```
 pip install -r requirements.txt
 npm install
@@ -37,16 +37,6 @@ This creates a virtualenv environment. If you want to use a pipenv environment i
 Run server application:
 ```
 npm run serve -- --port 8081
-docker-compose up
-python3 -m matflow.main
-```-->
-
-Install server application dependencies:
-```
-docker-compose build
-```
-Run server application:
-```
 docker-compose up
 python3 -m matflow.main
 ```

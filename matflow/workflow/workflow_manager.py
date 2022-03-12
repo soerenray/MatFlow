@@ -402,10 +402,7 @@ class WorkflowManager:
         return frontend_versions
 
     def set_active_version_through_number(
-        self,
-        workflow_instance_name: str,
-        version_number: str,
-        basic_auth: Tuple[str, str],
+        self, workflow_instance_name: str, version_number: str
     ):
         """Changes the active version of a workflow instance in the database.
 
@@ -415,7 +412,6 @@ class WorkflowManager:
         Args:
             workflow_instance_name (str): The name of the workflow instance of which the active version shall be changed
             version_number (str): The number of the new active version
-            basic_auth (Tuple[str, str]):
 
         """
         # first check if the workflow instance exists
@@ -427,7 +423,7 @@ class WorkflowManager:
             )
 
         # then check if the instance is currently running
-        if self.__is_workflow_instance_running(workflow_instance_name, basic_auth):
+        if self.__is_workflow_instance_running(workflow_instance_name):
             raise WorkflowInstanceRunningException("")
 
         # finally, check if the workflow instance has a version with the given number
@@ -457,13 +453,11 @@ class WorkflowManager:
 
     # private methods
 
-    def __is_workflow_instance_running(
-        self, wf_instance_name: str, basic_auth: Tuple[str, str]
-    ) -> bool:
+    def __is_workflow_instance_running(self, wf_instance_name: str) -> bool:
         # makes request to the airflow API to find out if the given workflow is running
         # TODO right now the instance counts as running if it isn't paused
         dag_address: str = self.__airflow_address + "api/v1/dags/" + wf_instance_name
-        dag_info = requests.get(dag_address, auth=basic_auth)
+        dag_info = requests.get(dag_address, auth=self.__airflow_authentication)
         status: int = dag_info.status_code
         if status != 200:
             raise AirflowConnectionException("Airflow response: " + str(status))
