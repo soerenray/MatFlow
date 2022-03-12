@@ -115,9 +115,6 @@ class UserController:
             "username": overrideUsername,
             "password": overridePassword,
         }
-        patchOverrideUser = requests.patch(
-            overrideAddress, json=overridePayload, auth=self.getAuth()
-        )
 
         # we patch the user
 
