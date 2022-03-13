@@ -96,14 +96,10 @@ describe('ServerConfig', () => {
   });
 
   it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should be applied", () => {
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).click().clear()
-      .type('kit-informatik');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).click().clear()
-      .type('123,456.78');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).click().clear()
-      .type('waiting');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).click().clear()
-      .type('10');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).invoke('val', 'kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).invoke('val', '123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).invoke('val', 'waiting')
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).invoke('val', '10')
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-informatik');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123,456.78');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'waiting');
@@ -111,14 +107,10 @@ describe('ServerConfig', () => {
   });
 
   it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should not change after 'apply changes' is pressed", () => {
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).click().clear()
-      .type('kit-informatik');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).click().clear()
-      .type('123,456.78');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).click().clear()
-      .type('waiting');
-    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).click().clear()
-      .type('10');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).invoke('val', 'kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).invoke('val', '123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).invoke('val', 'waiting')
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).invoke('val', '10')
     // bit hackie
     cy.then(() => {
       backendServerCommunicatorObject.servers = [
