@@ -27,7 +27,7 @@ BackendServerCommunicatorSimulation.prototype
     return new Promise((res) => setTimeout(res(this.workflowInstancesNameAndConfigFilesName), 500));
   };
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [['workflowInstance1', ['conf1', 'conf2']], ['workflowInstance2', ['conf1', 'conf2', 'conf3']]];
 
 beforeEach(
@@ -43,6 +43,12 @@ beforeEach(
     },
   }),
 );
+
+afterEach(() => {
+  backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+  backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [['workflowInstance1', ['conf1', 'conf2']], ['workflowInstance2', ['conf1', 'conf2', 'conf3']]];
+}
+)
 
 describe('ChooseConfigFile', () => {
   it('selected workflowInstances should be colored blue', () => {
@@ -93,30 +99,53 @@ describe('ChooseConfigFile', () => {
 
   it('previously selected configfiles should be colored green', () => {
     cy.contains('workflowInstance1').click();
+    cy.then(() => {
+        backendServerCommunicatorObject.configFile = workflow1Conf1;
+    })
     cy.contains('conf1').click();
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow1Conf2;
+  })
     cy.contains('conf2').click();
-    cy.wait(2000);
     // color in hex: #a3e4d7
     cy.contains('conf1').should('have.css', 'background-color', 'rgb(163, 228, 215)');
     cy.contains('conf1').click();
     // color in hex: #a3e4d7
     cy.contains('conf2').should('have.css', 'background-color', 'rgb(163, 228, 215)');
 
-    cy.contains('workflowInstance2').click();
-    cy.contains('conf1').click();
+    cy.contains('workflowInstance2').click();    
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf1;
+  })
+    cy.contains('conf1').click();    
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf2;
+  })
     cy.contains('conf2').click();
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf3;
+  })
     cy.contains('conf3').click();
     // color in hex: #a3e4d7
     cy.contains('conf1').should('have.css', 'background-color', 'rgb(163, 228, 215)');
     cy.contains('conf2').should('have.css', 'background-color', 'rgb(163, 228, 215)');
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf1;
+  })
     cy.contains('conf1').click();
     // color in hex: #a3e4d7
     cy.contains('conf3').should('have.css', 'background-color', 'rgb(163, 228, 215)');
   });
 
   it('After the click on "Revert all files" the color of all config-files should be white, excepct for the one selected that should be blue', () => {
-    cy.contains('workflowInstance1').click();
-    cy.contains('conf1').click();
+    cy.contains('workflowInstance1').click(); 
+      cy.then(() => {
+          backendServerCommunicatorObject.configFile = workflow1Conf1;
+      })
+    cy.contains('conf1').click();      
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow1Conf2;
+  })
     cy.contains('conf2').click();
     cy.contains('Revert all files').click();
     // color in hex: #a9cce3
@@ -124,8 +153,17 @@ describe('ChooseConfigFile', () => {
     cy.contains('conf1').should('have.css', 'background-color', 'rgb(255, 255, 255)');
 
     cy.contains('workflowInstance2').click();
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf1;
+  })
     cy.contains('conf1').click();
-    cy.contains('conf2').click();
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf2;
+  })
+    cy.contains('conf2').click();      
+    cy.then(() => {
+      backendServerCommunicatorObject.configFile = workflow2Conf3;
+  })
     cy.contains('conf3').click();
     cy.contains('Revert all files').click();
     cy.contains('conf1').should('have.css', 'background-color', 'rgb(255, 255, 255)');
