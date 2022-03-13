@@ -8,12 +8,14 @@ import vuetify from '@/plugins/vuetify';
 import EditKeyValuePairsView from '@View/EditKeyValuePairs.vue';
 import EditKeyValuePairsModel from '@Model/EditKeyValuePairs';
 
+let editKeyValuePairsObject = new EditKeyValuePairsModel()
+
 describe('EditKeyValuePairs', () => {
   beforeEach(
     mountCallback(EditKeyValuePairsView, {
       data() {
         return {
-          editKeyValuePairsObject: new EditKeyValuePairsModel(),
+          editKeyValuePairsObject: editKeyValuePairsObject,
         };
       },
       props: {
@@ -24,6 +26,10 @@ describe('EditKeyValuePairs', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    editKeyValuePairsObject = new EditKeyValuePairsModel()
+  })
 
   it('The key-value pairs contain the correct entries', () => {
     cy.get('[data-cy=keyEntry] .v-field__input').eq(0).should('have.value', 'key1');

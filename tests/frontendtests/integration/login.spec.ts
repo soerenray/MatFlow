@@ -3,32 +3,37 @@
 // @ts-nocheck
 /* eslint-disable */
 
-import { mount } from '@cypress/vue';
+import { mountCallback } from '@cypress/vue';
 import vuetify from '@/plugins/vuetify';
 import LogInView from '@View/LogIn.vue';
 import LogInModel from '@Model/LogIn';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+let logInObject = new LogInModel();
+let logInMementoObject = logInObject.createLogInMemento();
 
 describe('LogIn', () => {
-  beforeEach(() => {
-    const logInObject = new LogInModel();
-    const logInMementoObject = logInObject.createLogInMemento();
-
-    mount(LogInView, {
+  beforeEach(
+    mountCallback(LogInView, {
       data() {
         return {
-          backendServerCommunicatorObject,
-          logInObject,
-          logInMementoObject,
+          backendServerCommunicatorObject: backendServerCommunicatorObject,
+          logInObject: logInObject,
+          logInMementoObject: logInMementoObject,
         };
       },
       extensions: {
         use: vuetify,
-      },
-    });
-  });
+      }
+    })
+  )
+
+  afterEach(() => {
+    backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+    logInObject = new LogInModel();
+    logInMementoObject = logInObject.createLogInMemento();
+  })
 
   it('Email-Address and Password should be empty after the side is loaded', () => {
     cy.get('[data-cy=emailAddress] .v-field__input').should('have.value', '');
@@ -60,10 +65,17 @@ describe('LogIn', () => {
     cy.get('.mdi-eye-off');
   });
 
-  it('The eye-icon should be after after one clicl', () => {
+  it('The eye-icon should be open after one clicked on ', () => {
     cy.get('.mdi-eye-off').click();
     cy.get('.mdi-eye');
   });
+
+  it("The eye-icon should closed after clicked once and then clicking the 'login'-button", () => {
+    cy.get('.mdi-eye-off').click();
+    cy.get("[data-cy='loginButton']").click();
+    cy.get('.mdi-eye-off')
+  });
+
 
   it('The password field should be visible (have password tag) after clicking the eye-icon', () => {
     cy.get('.mdi-eye-off').click();

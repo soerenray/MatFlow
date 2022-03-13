@@ -23,18 +23,15 @@ BackendServerCommunicatorSimulation.prototype.pullServers = async function() {
   return new Promise((res) => setTimeout(res(this.servers), 500))
 }
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+backendServerCommunicatorObject.servers = [server1];
 
 describe('ServerConfig', () => {
-  // Add server1 to the servers array
-  before(() => {
-    backendServerCommunicatorObject.servers = [server1];
-  });
   beforeEach(
     mountCallback(ServerConfigView, {
       data() {
         return {
-          backendServerCommunicatorObject,
+          backendServerCommunicatorObject: backendServerCommunicatorObject,
           serverConfigObject: new ServerConfigModel(
             [
               { text: 'Server location name', value: 'serverName' },
@@ -58,6 +55,11 @@ describe('ServerConfig', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    backendServerCommunicatorObject =  new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject.servers = [server1];
+  })
 
   it('Table headers are displayed correctly in the correct order', () => {
     cy.get('[data-cy=tableHeader]')

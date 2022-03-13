@@ -15,17 +15,16 @@ BackendServerCommunicatorSimulation.prototype
     return new Promise((res) => setTimeout(res(this.templatesName), 500))
   }
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+const templatesName = ['Template1', 'Template2', 'Template3']
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+backendServerCommunicatorObject.templatesName = templatesName;
 
 describe('CreateTemplate', () => {
-  before(() => {
-    backendServerCommunicatorObject.templatesName = ['Template1', 'Template2', 'Template3'];
-  })
   beforeEach(
     mountCallback(CreateTemplateView, {
       data() {
         return {
-          backendServerCommunicatorObject,
+          backendServerCommunicatorObject: backendServerCommunicatorObject,
           createTemplateObject: new CreateTemplateModel(),
           createTemplateCaretakerObject: new CreateTemplateCaretaker(),
         };
@@ -35,6 +34,11 @@ describe('CreateTemplate', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject.templatesName = ['Template1', 'Template2', 'Template3'];
+  })
 
   it('Type the name of the template to template1', () => {
     cy.get('#nameOfTheTempalte').should('have.value', '');

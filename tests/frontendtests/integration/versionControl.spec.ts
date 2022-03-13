@@ -27,9 +27,7 @@ const workflowInstance2Version1 = new Version('2.1', 'changed name of key3', [['
 const workflowInstance2Version2 = new Version('2.2', 'fixed typo in key-value', [['key1: xy', 'key1: xy'], ['key2: 42', 'key2: 420'],
 ]);
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
-
-backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [
+const workflowInstancesNameAndConfigFilesName = [
   ['workflowInstance1', [
     'conf1',
     'conf2',
@@ -40,6 +38,8 @@ backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [
     'conf3',
   ]],
 ];
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesNameAndConfigFilesName
 
 describe('VersionControl workflowInstance-button check', () => {
   beforeEach(
@@ -60,6 +60,13 @@ describe('VersionControl workflowInstance-button check', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesNameAndConfigFilesName
+    
+  })
+
   it('There are exactly two workflowInstances to choose from', () => {
     cy.get('[data-cy=workflowInstancesName] .v-col').should('have.length', 2);
   });
@@ -116,6 +123,12 @@ describe('VersionControl table content check', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesNameAndConfigFilesName
+    
+  })
 
   it('The table-headers should contain the correct entries with the correct order', () => {
     cy.get('[data-cy=tableHeader] > tr > td').eq(0).should('have.text', 'Version number');

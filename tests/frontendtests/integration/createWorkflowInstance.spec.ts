@@ -15,8 +15,9 @@ BackendServerCommunicatorSimulation.prototype
    return new Promise((res) => setTimeout(res(this.templateNames), 500))
   }
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
-backendServerCommunicatorObject.templateNames = (['Template1', 'Template2', 'Template3']);
+const templatesName = ['Template1', 'Template2', 'Template3']
+let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+backendServerCommunicatorObject.templateNames = templatesName
 
 describe('CreateWorkflowInstance', () => {
   beforeEach(
@@ -36,6 +37,11 @@ describe('CreateWorkflowInstance', () => {
       },
     }),
   );
+
+  afterEach(() => {
+    backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject.templateNames = templatesName
+  })
 
   it('Type the name of the workflowInstance to workflowInstance1', () => {
     cy.get('#nameOfTheWorkflowInstance').should('have.value', '');
