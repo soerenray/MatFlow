@@ -107,14 +107,22 @@ class BackendServerCommunicator {
 
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(
-        workflowInstanceName: string, templateName: string, zippedConfFiles: File): void {
-        let encoded_zip_file = fileToDataURL(new File([], "emptyFile.py"))
+        workflowInstanceName: string, templateName: string, confFiles: File[]): void {
+        let confFilesDummy: File[] = [new File([], "emptyFile.conf")];
+        let confDict = [];
+        for (let file of confFilesDummy){
+            confDict.push({
+                [keys.configFileName]: file.name,
+                [keys.fileKey]: fileToDataURL(file)
+            })
+        }
         axios.post( BackendServerCommunicator.serverAddress + keys.createWfInstance, {
             [keys.workflowInstanceName]: workflowInstanceName,
             [keys.templateName]: templateName,
-            [keys.configFiles]: encoded_zip_file
+            [keys.configFiles]: confDict
         })
         .then(function (response) {
+            console.log("createInstanceResp", response);
             switch (response.data[keys.statusCodeName]) {
                 case 607:
                     // everything went fine

@@ -99,8 +99,10 @@ export default {
     pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
-      createWorkflowInstanceObject.templatesName =
-        backendServerCommunicatorObject.pullTemplatesName();
+      backendServerCommunicatorObject.pullTemplatesName()
+      .then((result) => {
+        createWorkflowInstanceObject.templatesName = result;
+      });
     },
     resetView() {
       createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
@@ -114,10 +116,9 @@ export default {
         "create workflow-instance from template"
       ) {
         backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
-          this.createWorkflowInstanceObject(
-            this.workflowInstanceFolder,
-            this.workflowInstanceName
-          )
+          this.workflowInstanceName,
+          this.selectedTemplateName,
+          [this.configFolder]
         );
       } else {
         backendServerCommunicatorObject.pushExistingWorkflowInstance(
