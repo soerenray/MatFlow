@@ -32,7 +32,7 @@
         <v-table>
           <thead data-cy="tableHeader">
             <tr>
-              <td v-for="header in tableHeaders" :item-key="header.name">
+              <td v-for="header in tableHeaders" :key="header.name">
                 {{ header.text }}
               </td>
             </tr>
@@ -90,7 +90,8 @@
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
 import Version from '@Classes/Version';
 import VersionControl from '@Model/VersionControl';
-import KeyValuePairs from './KeyValuePairs.vue';
+
+import KeyValuePairs from '@View/KeyValuePairs.vue';
 
 export default {
   name: 'VersionControl',

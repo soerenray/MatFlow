@@ -61,6 +61,7 @@ import EditKeyValuePairs from '@Model/EditKeyValuePairs';
 
 interface KeyValuePair {
   _keyName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   keyValuePairInstance: any;
   keyName: string;
   keyValue: string;

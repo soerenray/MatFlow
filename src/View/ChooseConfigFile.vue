@@ -44,23 +44,6 @@
             v-for="configFileName in configFilesName"
             :key="configFileName"
           >
-            <!-- <v-col
-              @click="
-                setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
-                  'configFileName'
-                )
-              "
-              :style="{
-                background: colorForConfigFileName(
-                  updatedConfigFiles,
-                  selectedConfigFileName,
-                  configFileName
-                ),
-              }"
-            >
-              {{ configFileName }}
-            </v-col>
-            <v-divider></v-divider> -->
           </div>
         </v-card>
       </div>
@@ -79,11 +62,10 @@
 
 <script lang='ts'>
 // @ts-nocheck
-
 import ChooseConfigFile from '@Model/ChooseConfigFile';
 import ConfigFile from '@Classes/ConfigFile';
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
-import EditKeyValuePairs from './EditKeyValuePairs.vue';
+import EditKeyValuePairs from '@View/EditKeyValuePairs.vue';
 
 export default {
   name: 'ChooseConfigFile',

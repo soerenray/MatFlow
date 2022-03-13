@@ -70,6 +70,7 @@
       "only-warn"
     ],
     "rules": {
+      "import/no-unresolved": "off",
       "no-underscore-dangle": "off",
       "import/no-cycle": "off",
       "@typescript-eslint/ban-ts-comment": "off"

@@ -53,7 +53,6 @@ describe('ChooseConfigFile', () => {
   });
 
   it('not selected workflowInstances should be colored white', () => {
-    console.log(cy);
     cy.contains('workflowInstance1').should('have.css', 'background-color', 'rgb(255, 255, 255)');
     cy.contains('workflowInstance2').should('have.css', 'background-color', 'rgb(255, 255, 255)');
   });
