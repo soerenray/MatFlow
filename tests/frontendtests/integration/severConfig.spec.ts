@@ -1,143 +1,149 @@
 /// <reference types="cypress" />
 
-import { mountCallback } from '@cypress/vue'
-import vuetify from '@/plugins/vuetify'
-import ServerConfigView from '@View/ServerConfig.vue'
-import ServerConfigModel from '@Model/ServerConfig'
-import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation'
-import Server from '@Classes/Server'
+import { mountCallback } from '@cypress/vue';
+import vuetify from '@/plugins/vuetify';
+import ServerConfigView from '@View/ServerConfig.vue';
+import ServerConfigModel from '@Model/ServerConfig';
+import Server from '@Classes/Server';
+import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
 const server1 = new Server(
-    "123.123.11.1",
-    "running",
-    5,
-    true,
-    "kit-materialwissenschaften",
-    [["cpu1", "50%"]]
-)
+  '123.123.11.1',
+  'running',
+  5,
+  true,
+  'kit-materialwissenschaften',
+  [['cpu1', '50%']],
+);
 
-BackendServerCommunicatorSimulation.prototype.pullServers = function () {
-    return this.servers
-}
+BackendServerCommunicatorSimulation.prototype.pullServers = async () => this.servers;
 
-const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation()
+const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 
 describe('ServerConfig', () => {
-    // Add server1 to the servers array
-    before(() => {
-        backendServerCommunicatorObject.servers = [server1]
-    })
-    beforeEach(
-        mountCallback(ServerConfigView, {
-            data: function () {
-                return {
-                    backendServerCommunicatorObject: backendServerCommunicatorObject,
-                    serverConfigObject: new ServerConfigModel(
-                        [
-                            { text: "Server location name", value: "serverName" },
-                            { text: "Address", value: "serverAddress" },
-                            { text: "Status", value: "serverStatus" },
-                            { text: "Container limit", value: "containerLimit" },
-                            {
-                                text: "Select server for execution",
-                                value: "selectedForExecution",
-                            },
-                            { text: "Configurate server resources", value: "serverResources" },
-                            { text: "apply changes", value: "apply" },
-                        ],
-                        [],
-                        false
-                    ),
-                };
-            },
-            extensions: {
-                use: vuetify
-            }
-        })
-    )
+  // Add server1 to the servers array
+  before(() => {
+    backendServerCommunicatorObject.servers = [server1];
+  });
+  beforeEach(
+    mountCallback(ServerConfigView, {
+      data() {
+        return {
+          backendServerCommunicatorObject,
+          serverConfigObject: new ServerConfigModel(
+            [
+              { text: 'Server location name', value: 'serverName' },
+              { text: 'Address', value: 'serverAddress' },
+              { text: 'Status', value: 'serverStatus' },
+              { text: 'Container limit', value: 'containerLimit' },
+              {
+                text: 'Select server for execution',
+                value: 'selectedForExecution',
+              },
+              { text: 'Configurate server resources', value: 'serverResources' },
+              { text: 'apply changes', value: 'apply' },
+            ],
+            [],
+            false,
+          ),
+        };
+      },
+      extensions: {
+        use: vuetify,
+      },
+    }),
+  );
 
-    it('Table headers are displayed correctly in the correct order', () => {
-        cy.get("[data-cy=tableHeader] > td").eq(0).should('have.text', 'Server location name')
-        cy.get("[data-cy=tableHeader] > td").eq(1).should('have.text', 'Address')
-        cy.get("[data-cy=tableHeader] > td").eq(2).should('have.text', 'Status')
-        cy.get("[data-cy=tableHeader] > td").eq(3).should('have.text', 'Container limit')
-        cy.get("[data-cy=tableHeader] > td").eq(4).should('have.text', 'Select server for execution')
-        cy.get("[data-cy=tableHeader] > td").eq(5).should('have.text', 'Configurate server resources')
-        cy.get("[data-cy=tableHeader] > td").eq(6).should('have.text', 'apply changes')
-    })
+  it('Table headers are displayed correctly in the correct order', () => {
+    cy.get('[data-cy=tableHeader] > td').eq(0).should('have.text', 'Server location name');
+    cy.get('[data-cy=tableHeader] > td').eq(1).should('have.text', 'Address');
+    cy.get('[data-cy=tableHeader] > td').eq(2).should('have.text', 'Status');
+    cy.get('[data-cy=tableHeader] > td').eq(3).should('have.text', 'Container limit');
+    cy.get('[data-cy=tableHeader] > td').eq(4).should('have.text', 'Select server for execution');
+    cy.get('[data-cy=tableHeader] > td').eq(5).should('have.text', 'Configurate server resources');
+    cy.get('[data-cy=tableHeader] > td').eq(6).should('have.text', 'apply changes');
+  });
 
-    it('Table body exists of exactly one element', () => {
-        cy.get("[data-cy=tableBody]").should('exist')
-    })
+  it('Table body exists of exactly one element', () => {
+    cy.get('[data-cy=tableBody]').should('exist');
+  });
 
-    it('Table body consits of exactly one element', () => {
-        cy.get("[data-cy=tableBody] > tr").should('have.length', 1)
-    })
+  it('Table body consits of exactly one element', () => {
+    cy.get('[data-cy=tableBody] > tr').should('have.length', 1);
+  });
 
-    it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values", () => {
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).should('have.value', 'kit-materialwissenschaften')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).should('have.value', '123.123.11.1')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).should('have.value', 'running')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).should('have.value', '5')
-    })
+  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values", () => {
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-materialwissenschaften');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123.123.11.1');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'running');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '5');
+  });
 
-    it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values afetr 'apply changes' is pressed", () => {
-        cy.get("[data-cy=applyChanges]").eq(0).click()
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).should('have.value', 'kit-materialwissenschaften')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).should('have.value', '123.123.11.1')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).should('have.value', 'running')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).should('have.value', '5')
-    })
+  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values afetr 'apply changes' is pressed", () => {
+    cy.get('[data-cy=applyChanges]').eq(0).click();
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-materialwissenschaften');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123.123.11.1');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'running');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '5');
+  });
 
-    it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should be applied", () => {
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).click().clear().type('kit-informatik')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).click().clear().type('123,456.78')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).click().clear().type('waiting')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).click().clear().type('10')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).should('have.value', 'kit-informatik')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).should('have.value', '123,456.78')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).should('have.value', 'waiting')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).should('have.value', '10')
-    })
+  it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should be applied", () => {
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).click().clear()
+      .type('kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).click().clear()
+      .type('123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).click().clear()
+      .type('waiting');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).click().clear()
+      .type('10');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'waiting');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '10');
+  });
 
-    it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should not change after 'apply changes' is pressed", () => {
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).click().clear().type('kit-informatik')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).click().clear().type('123,456.78')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).click().clear().type('waiting')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).click().clear().type('10')
-        // bit hackie
-        cy.then(() => {
-            backendServerCommunicatorObject.servers = [
-                new Server(
-                    "123,456.78",
-                    "waiting",
-                    10,
-                    true,
-                    "kit-informatik",
-                    [["cpu1", "50%"]]
-                )
-            ]
-        })
-        cy.get("[data-cy=applyChanges]").eq(0).click()
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(0).should('have.value', 'kit-informatik')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(1).should('have.value', '123,456.78')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(2).should('have.value', 'waiting')
-        cy.get("[data-cy=tableBody] > tr .v-field__input").eq(3).should('have.value', '10')
-    })
+  it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should not change after 'apply changes' is pressed", () => {
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).click().clear()
+      .type('kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).click().clear()
+      .type('123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).click().clear()
+      .type('waiting');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).click().clear()
+      .type('10');
+    // bit hackie
+    cy.then(() => {
+      backendServerCommunicatorObject.servers = [
+        new Server(
+          '123,456.78',
+          'waiting',
+          10,
+          true,
+          'kit-informatik',
+          [['cpu1', '50%']],
+        ),
+      ];
+    });
+    cy.get('[data-cy=applyChanges]').eq(0).click();
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-informatik');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123,456.78');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'waiting');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '10');
+  });
 
-    it("Server resources of server1 should contain the correct entries in the correct order", () => {
-        cy.get("[data-cy=serverResources]").eq(0).click()
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(0).should('have.value', 'cpu1')
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(1).should('have.value', '50%')
-        
-    })
+  it('Server resources of server1 should contain the correct entries in the correct order', () => {
+    cy.get('[data-cy=serverResources]').eq(0).click();
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(0).should('have.value', 'cpu1');
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(1).should('have.value', '50%');
+  });
 
-    it("The changes should be applyed, after typing new key-value-pairs in 'server resoureces'", () => {
-        cy.get("[data-cy=serverResources]").eq(0).click()
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(0).click().clear().type('cpu2')
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(1).click().clear().type('100%')
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(0).should('have.value', 'cpu2')
-        cy.get("[data-cy=keyValuePairs] .v-field__input").eq(1).should('have.value', '100%')
-        
-    })
-})
+  it("The changes should be applyed, after typing new key-value-pairs in 'server resoureces'", () => {
+    cy.get('[data-cy=serverResources]').eq(0).click();
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(0).click().clear()
+      .type('cpu2');
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(1).click().clear()
+      .type('100%');
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(0).should('have.value', 'cpu2');
+    cy.get('[data-cy=keyValuePairs] .v-field__input').eq(1).should('have.value', '100%');
+  });
+});

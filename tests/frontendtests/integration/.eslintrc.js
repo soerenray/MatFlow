@@ -7,6 +7,5 @@ module.exports = {
     'cypress/globals': true,
   },
   rules: {
-    strict: 'off',
   },
 };
