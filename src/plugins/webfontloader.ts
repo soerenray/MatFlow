@@ -3,7 +3,6 @@
  *
  * webfontloader documentation: https://github.com/typekit/webfontloader
  */
-/* eslint-disable */
 
 export async function loadFonts() {
   const webFontLoader = await import(/* webpackChunkName: "webfontloader" */'webfontloader');
