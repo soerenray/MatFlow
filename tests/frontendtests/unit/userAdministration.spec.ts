@@ -1,3 +1,3 @@
 describe('UserAdministration.vue', () => {
-    it('', () => { })
-})
+  it('', () => { });
+});
