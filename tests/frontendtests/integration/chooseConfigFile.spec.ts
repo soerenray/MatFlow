@@ -28,7 +28,7 @@ BackendServerCommunicatorSimulation.prototype
   };
 
 let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
-backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [['workflowInstance1', ['conf1', 'conf2']], ['workflowInstance2', ['conf1', 'conf2', 'conf3']]];
+backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesAndConfigFilesName
 
 beforeEach(
   mountCallback(ChooseConfigFileView, {
@@ -46,7 +46,7 @@ beforeEach(
 
 afterEach(() => {
   backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
-  backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [['workflowInstance1', ['conf1', 'conf2']], ['workflowInstance2', ['conf1', 'conf2', 'conf3']]];
+  backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesAndConfigFilesName
 }
 )
 

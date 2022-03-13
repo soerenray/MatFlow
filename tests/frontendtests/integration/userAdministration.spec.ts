@@ -19,6 +19,8 @@ const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation(
 const user1 = new User('name1', 'suspended', 'administrator');
 const user2 = new User('name2', 'pending', 'visitor');
 
+backendServerCommunicatorObject.users = [user1, user2];
+
 beforeEach(
   mountCallback(UserAdministrationView, {
     data() {
@@ -43,28 +45,16 @@ beforeEach(
   }),
 );
 
-describe('UserAdministration', () => {
-  // users are pulled at the very begining and 'before' runs before 'beforEach'
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
-  });
+afterEach(() => {
+  backendServerCommunicatorObject.users = [user1, user2];
+})
 
+describe('UserAdministration', () => {
   it('Should only contain two users after initialisation phase', () => {
     cy.get('[data-cy=userName]').should('have.length', 2);
     cy.get('[data-cy=userPriviliges]').should('have.length', 2);
     cy.get('[data-cy=userStatus]').should('have.length', 2);
     cy.get('[data-cy=delete]').should('have.length', 2);
-  });
-});
-
-describe('UserAdministration', () => {
-  // users are pulled at the very begining and 'before' runs before 'beforEach'
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
   });
 
   it('Checks if the users from the database are displayed correctly', () => {
@@ -78,14 +68,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userPriviliges] .v-select__selection-text').eq(1).should('have.text', 'pending');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'administrator');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(1).should('have.text', 'visitor');
-  });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
   });
 
   it('Deletes user1 and should only contain user2', () => {
@@ -102,14 +84,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userPriviliges] .v-select__selection-text').eq(0).should('have.text', 'pending');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'visitor');
   });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
-  });
 
   it('Deletes user2 and should only contain user1', () => {
     // a bit hackie, should be solved differently
@@ -124,14 +98,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userName] .v-field__input').eq(0).should('have.value', 'name1');
     cy.get('[data-cy=userPriviliges] .v-select__selection-text').eq(0).should('have.text', 'suspended');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'administrator');
-  });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
   });
 
   it('changes made to both users should be applied', () => {
@@ -152,14 +118,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'visitor');
     cy.get('[data-cy=userStatus] .v-select__selection-text ').eq(1).should('have.text', 'developer');
   });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
-  });
 
   it("Default values dont change after 'pull users from server'-button is pressed", () => {
     cy.get('[data-cy=pullUsersFromServer]').click();
@@ -169,14 +127,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userPriviliges] .v-select__selection-text').eq(1).should('have.text', 'pending');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'administrator');
     cy.get('[data-cy=userStatus] .v-select__selection-text ').eq(1).should('have.text', 'visitor');
-  });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
   });
 
   it("changes made to both users should be applied and the reverted after 'pull users from sever'-button is pressed", () => {
@@ -198,14 +148,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'administrator');
     cy.get('[data-cy=userStatus] .v-select__selection-text ').eq(1).should('have.text', 'visitor');
   });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
-  });
 
   it("Default values dont change after 'update users'-button is pressed", () => {
     cy.get('[data-cy=updateUsers]').click();
@@ -215,14 +157,6 @@ describe('UserAdministration', () => {
     cy.get('[data-cy=userPriviliges] .v-select__selection-text').eq(1).should('have.text', 'pending');
     cy.get('[data-cy=userStatus] .v-select__selection-text').eq(0).should('have.text', 'administrator');
     cy.get('[data-cy=userStatus] .v-select__selection-text ').eq(1).should('have.text', 'visitor');
-  });
-});
-
-describe('UserAdministration', () => {
-  before(() => {
-    cy.then(() => {
-      backendServerCommunicatorObject.users = [user1, user2];
-    });
   });
 
   it("changes made to both users should be applied and stay after pressing 'update users'- and then 'pull users from sever'-button", () => {
