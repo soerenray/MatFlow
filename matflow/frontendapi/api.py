@@ -365,14 +365,14 @@ class FrontendAPI:
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: Path = ReducedConfigFile.extract_multiple_config_files(
-                request.get_json()
+                get_json_not_dict()
             )
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(
                 template_name, wf_name, files
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as error:
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )
