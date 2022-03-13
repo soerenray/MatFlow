@@ -81,7 +81,7 @@ const userAdministrationObject = new UserAdministration(
   ],
   [],
   ["activated", "suspended", "pending"],
-  ["visitor", "developer", "Admin"]
+  ["Public", "User", "Admin"]  // TODO probably change those at given time
 );
 
 export default {
@@ -93,7 +93,7 @@ export default {
     },
     pullUsersFromServer() {
       this.removeUsersFromComponent();
-      backendServerCommunicatorObject.pullUsers().then(function (result){
+      backendServerCommunicatorObject.pullUsers().then((result) => {
         this.users = result;
       });
     },

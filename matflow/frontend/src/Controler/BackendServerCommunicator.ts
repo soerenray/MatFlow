@@ -267,7 +267,7 @@ class BackendServerCommunicator {
         [keys.userName]: user.userName,
         [keys.userStatusName]: user.userStatus,
         [keys.userPrivilegeName]: user.userPrivilege,
-        [keys.passwordName] : "unknown" // dummy_password
+        [keys.passwordName] : "airflow" // dummy_password
     })
     .then(function (response) {
         console.log("setUserResp:", response)
@@ -281,7 +281,32 @@ class BackendServerCommunicator {
         }
     }) }
     
-    public pushDeleteUser(user: User): void { deleteUser(user) }
+    public pushDeleteUser(user: User): void {
+        let config = {
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "data": {
+                [keys.userName]: user.userName,
+                [keys.userStatusName]: user.userStatus,
+                [keys.userPrivilegeName]: user.userPrivilege,
+                [keys.passwordName] : "airflow" // dummy_password
+            }
+        };
+        axios.delete(BackendServerCommunicator.serverAddress + keys.deleteUser, config)
+        .then(function (response) {
+            console.log("deleteUserResp:", response)
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
+        }) 
+    }
+
     public async pullServers(): Promise<Server[]> {
         let servers: Server[] = []
         await axios.get('http://localhost:5000/get_server_details')
