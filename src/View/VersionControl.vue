@@ -122,9 +122,10 @@ export default {
           this.selectedWorkflowInstanceName,
         );
     },
-    pullWorkflowInstancesName() {
-      this.workflowInstancesName = this.backendServerCommunicatorObject
-        .pullWorkflowInstancesNameAndConfigFilesName()
+    async pullWorkflowInstancesName() {
+      const tempWorkflowInstancesNameAndConfigFilesName = await this.backendServerCommunicatorObject
+        .pullWorkflowInstancesNameAndConfigFilesName();
+      this.workflowInstancesName = tempWorkflowInstancesNameAndConfigFilesName
         .map((workflowInstanceNameAndConfigFilesName) => workflowInstanceNameAndConfigFilesName[0]);
     },
     pushReplaceActiveVersionOfWorkflowInstance() {

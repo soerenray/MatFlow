@@ -60,13 +60,14 @@ describe('ServerConfig', () => {
   );
 
   it('Table headers are displayed correctly in the correct order', () => {
-    cy.get('[data-cy=tableHeader] > td').eq(0).should('have.text', 'Server location name');
-    cy.get('[data-cy=tableHeader] > td').eq(1).should('have.text', 'Address');
-    cy.get('[data-cy=tableHeader] > td').eq(2).should('have.text', 'Status');
-    cy.get('[data-cy=tableHeader] > td').eq(3).should('have.text', 'Container limit');
-    cy.get('[data-cy=tableHeader] > td').eq(4).should('have.text', 'Select server for execution');
-    cy.get('[data-cy=tableHeader] > td').eq(5).should('have.text', 'Configurate server resources');
-    cy.get('[data-cy=tableHeader] > td').eq(6).should('have.text', 'apply changes');
+    cy.get('[data-cy=tableHeader]')
+    cy.get('[data-cy=tableHeader] > tr > td').eq(0).should('have.text', 'Server location name');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(1).should('have.text', 'Address');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(2).should('have.text', 'Status');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(3).should('have.text', 'Container limit');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(4).should('have.text', 'Select server for execution');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(5).should('have.text', 'Configurate server resources');
+    cy.get('[data-cy=tableHeader] > tr > td').eq(6).should('have.text', 'apply changes');
   });
 
   it('Table body exists of exactly one element', () => {

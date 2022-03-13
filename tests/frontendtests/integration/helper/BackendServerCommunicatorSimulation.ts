@@ -27,7 +27,7 @@ class BackendServerCommunicatorSimulation extends BackendServerCommunicator {
 
     private _versions: Version[] = []
 
-    private _templateNames: string[] = []
+    private _templatesName: string[] = []
 
     private _workflowInstancesNameAndConfigFilesName: Array<[string, string[]]> = []
 
@@ -57,12 +57,12 @@ class BackendServerCommunicatorSimulation extends BackendServerCommunicator {
       this._configFile = deepCopyConfigFile(configFile);
     }
 
-    public get templateNames(): string[] {
-      return deepCopyStrings(this._templateNames);
+    public get templatesName(): string[] {
+      return deepCopyStrings(this._templatesName);
     }
 
-    public set templateNames(templateNames: string[]) {
-      this._templateNames = deepCopyStrings(templateNames);
+    public set templatesName(templatesName: string[]) {
+      this._templatesName = deepCopyStrings(templatesName);
     }
 
     public get versions(): Version[] {

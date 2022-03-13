@@ -12,19 +12,21 @@ import BackendServerCommunicatorSimulation from './helper/BackendServerCommunica
 
 BackendServerCommunicatorSimulation.prototype
   . pullTemplatesName = async function() {
-    return new Promise((res) => setTimeout(res(this.pullTemplatesName), 500))
+    return new Promise((res) => setTimeout(res(this.templatesName), 500))
   }
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
-backendServerCommunicatorObject.templateNames = ['Template1', 'Template2', 'Template3'];
 
 describe('CreateTemplate', () => {
+  before(() => {
+    backendServerCommunicatorObject.templatesName = ['Template1', 'Template2', 'Template3'];
+  })
   beforeEach(
     mountCallback(CreateTemplateView, {
       data() {
         return {
           backendServerCommunicatorObject,
-          chooseConfigFileObject: new CreateTemplateModel(),
+          createTemplateObject: new CreateTemplateModel(),
           createTemplateCaretakerObject: new CreateTemplateCaretaker(),
         };
       },
