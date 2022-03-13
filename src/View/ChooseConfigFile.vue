@@ -144,8 +144,6 @@ export default {
       updatedConfigFiles: ConfigFile[],
       configFileName: string,
     ): boolean {
-      console.log('updatedConfigFiles', updatedConfigFiles);
-      console.log('configFileName', configFileName);
       if (updatedConfigFiles !== undefined) {
         return updatedConfigFiles
           .map((configFile: ConfigFile) => configFile.configFileName)
