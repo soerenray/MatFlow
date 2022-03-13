@@ -34,6 +34,7 @@
     "cypress": "^8.3.0",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-vue": "^8.0.3",
     "eslint-plugin-vuejs-accessibility": "^1.1.0",
     "jest": "^27.0.5",
@@ -53,6 +54,9 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
+    "plugins": [
+      "only-warn"
+    ],
     "rules": {
       "no-underscore-dangle": "off",
       "import/no-cycle": "off",
