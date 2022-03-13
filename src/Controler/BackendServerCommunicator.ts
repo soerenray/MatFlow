@@ -245,8 +245,7 @@ class BackendServerCommunicator {
       users.forEach((user: User) => {
         tempUsers.push(new User(user.userName, user.userStatus, user.userPrivilege));
       });
-      return new Promise((res, rej) => res([new User('name1', 'suspended', 'administrator')]))
-      // return tempUsers;
+      return new Promise((res, rej) => res(tempUsers))
     }
 
     public pushUser(user: User): void { updateUser(user); }
