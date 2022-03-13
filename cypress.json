@@ -1,3 +1,7 @@
 {
-  "pluginsFile": "tests/e2e/plugins/index.js"
+  "viewportHeight": 800,
+  "viewportWidth": 1000,
+  "fixturesFolder": false,
+  "componentFolder": "tests/frontendtests/integration/",
+  "testFiles": "*.spec.ts"
 }
