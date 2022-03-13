@@ -19,8 +19,6 @@ type workflowInstanceNameAsString = keyof typeof versions
 class BackendServerCommunicator {
     static serverAddress = 'http://127.0.0.1:5000/'
 
-    public constructor() { }
-
     // (Florian) logIn of airflow is used
     // public pushLogIn(userName: string, userPassword: string): void { return }
 
@@ -242,12 +240,12 @@ class BackendServerCommunicator {
         });
     }
 
-    public pullUsers(): User[] {
+    public async pullUsers(): Promise<User[]> {
       const tempUsers: User[] = [];
       users.forEach((user: User) => {
         tempUsers.push(new User(user.userName, user.userStatus, user.userPrivilege));
       });
-      return tempUsers;
+      return new Promise((res, rej) => res(tempUsers))
     }
 
     public pushUser(user: User): void { updateUser(user); }

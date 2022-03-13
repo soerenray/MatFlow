@@ -109,8 +109,12 @@ export default {
     async pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
-      this.createWorkflowInstanceObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
+      await this
+        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+          res.forEach((elem) => {
+            this.createWorkflowInstanceObject.templatesName.push(elem);
+          });
+        });
     },
     resetView() {
       this.createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
@@ -222,8 +226,12 @@ export default {
     },
   },
   async created() {
-    this.createWorkflowInstanceObject.templatesName = await this
-      .backendServerCommunicatorObject.pullTemplatesName();
+    await this
+      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+        res.forEach((elem) => {
+          this.createWorkflowInstanceObject.templatesName.push(elem);
+        });
+      });
     // For now this is everthing I want to recover
     this.createWorkflowInstanceCaretakerObject.addCreateWorkflowInstanceMementoObjectToArray(
       this.createWorkflowInstanceObject.createWorkflowInstanceMemento(),
