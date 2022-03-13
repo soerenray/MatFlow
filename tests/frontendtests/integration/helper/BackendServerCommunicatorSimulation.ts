@@ -1,7 +1,7 @@
 // This class simulates the BackendServerCommunicator and gives the option to set value
 // where the BackendServerCommunicator only pulls values
 
-// @ts-ignore
+// @ts-nocheck
 /* eslint-disable */
 
 import ConfigFile from '@Classes/ConfigFile';

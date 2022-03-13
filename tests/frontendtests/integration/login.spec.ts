@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-// @ts-ignore
+// @ts-nocheck
 /* eslint-disable */
 
 import { mount } from '@cypress/vue';

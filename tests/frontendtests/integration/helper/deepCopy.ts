@@ -3,7 +3,7 @@ import Server from '@Classes/Server';
 import User from '@Classes/User';
 import Version from '@Classes/Version';
 
-// @ts-ignore
+// @ts-nocheck
 /* eslint-disable */
 
 function deepCopyJS(elem: any): any {

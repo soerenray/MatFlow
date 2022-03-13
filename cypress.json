@@ -3,5 +3,6 @@
   "viewportWidth": 1000,
   "fixturesFolder": false,
   "componentFolder": "tests/frontendtests/integration/",
+  "integrationFolder": "tests/frontendtests/integration/",
   "testFiles": "*.spec.ts"
 }
