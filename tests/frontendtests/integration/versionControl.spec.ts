@@ -1,10 +1,12 @@
 /// <reference types="cypress" />
 
+// @ts-ignore
+/* eslint-disable */
+
 import { mountCallback } from '@cypress/vue';
 import VersionControlView from '@View/VersionControl.vue';
 import vuetify from '@/plugins/vuetify';
 import VersionControlModel from '@Model/VersionControl';
-import { camelize } from 'vue';
 import Version from '@Classes/Version';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 

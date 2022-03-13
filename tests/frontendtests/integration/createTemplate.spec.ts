@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+// @ts-ignore
+/* eslint-disable */
+
 import { mountCallback } from '@cypress/vue';
 import CreateTemplateView from '@View/CreateTemplate.vue';
 import CreateTemplateModel from '@Model/CreateTemplate';

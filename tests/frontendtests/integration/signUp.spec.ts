@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+// @ts-ignore
+/* eslint-disable */
+
 import { mount } from '@cypress/vue';
 import vuetify from '@/plugins/vuetify';
 import SignUpView from '@View/SignUp.vue';

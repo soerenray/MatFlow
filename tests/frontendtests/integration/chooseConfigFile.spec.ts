@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+// @ts-ignore
+/* eslint-disable */
+
 import { mountCallback } from '@cypress/vue';
 import ChooseConfigFileView from '@View/ChooseConfigFile.vue';
 import vuetify from '@/plugins/vuetify';
