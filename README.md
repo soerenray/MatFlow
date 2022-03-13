@@ -57,6 +57,11 @@ Run unit-tests:
 ```
 npm run test:unit
 ```
+Run integration-tests:
+```
+npm run test:integration
+```
+
 
 ## Operator
 If you want to try out the alternating operator, check out the tutorial_matflow DAG.
