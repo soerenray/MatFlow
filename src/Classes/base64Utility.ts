@@ -51,6 +51,7 @@ function fileToDataURL(file: File): string {
   reader.readAsDataURL(file);
   reader.onload = () => reader.result;
   reader.onerror = (error) => {
+    // eslint-disable-next-line no-console
     console.log('Error: ', error);
   };
   return ''; // error has occured
