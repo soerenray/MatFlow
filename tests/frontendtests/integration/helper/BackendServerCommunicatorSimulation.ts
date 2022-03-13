@@ -93,6 +93,8 @@ class BackendServerCommunicatorSimulation extends BackendServerCommunicator {
     }
 
     // push requests should make no impact
+    public pushLogIn(userName: string, userPassword: string): void { }
+
     public pushCreateTemplate(template: Template): void { }
 
     public pushCreateWorkflowInstanceFromTemplate(workflowInstanceObject: WorkflowInstance): void { }
