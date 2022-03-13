@@ -262,7 +262,25 @@ class BackendServerCommunicator {
         return tempUsers
     }
 
-    public pushUser(user: User): void { updateUser(user) }
+    public pushUser(user: User): void {
+        axios.put( BackendServerCommunicator.serverAddress + keys.setUserDetails, {
+        [keys.userName]: user.userName,
+        [keys.userStatusName]: user.userStatus,
+        [keys.userPrivilegeName]: user.userPrivilege,
+        [keys.passwordName] : "unknown" // dummy_password
+    })
+    .then(function (response) {
+        console.log("setUserResp:", response)
+        switch (response.data[keys.statusCodeName]) {
+            case 607:
+                // everything went fine
+                break;
+            default:
+                // error -> can be
+                break;
+        }
+    }) }
+    
     public pushDeleteUser(user: User): void { deleteUser(user) }
     public async pullServers(): Promise<Server[]> {
         let servers: Server[] = []

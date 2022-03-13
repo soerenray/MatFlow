@@ -81,7 +81,7 @@ const userAdministrationObject = new UserAdministration(
   ],
   [],
   ["activated", "suspended", "pending"],
-  ["visitor", "developer", "administrator"]
+  ["visitor", "developer", "Admin"]
 );
 
 export default {
