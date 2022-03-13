@@ -101,8 +101,10 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      this.createTemplateObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
+      await this
+        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+          res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
+        });
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
@@ -170,8 +172,10 @@ export default {
     },
   },
   async created() {
-    this.createTemplateObject.templatesName = await this
-      .backendServerCommunicatorObject.pullTemplatesName();
+    await this
+      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+        res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
+      });
     // For now this is everything I want to recover
     this.createTemplateCaretakerObject.addCreateTemplateMementoObjectToArray(
       this.createTemplateObject.createTemplateMemento(),
