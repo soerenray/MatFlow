@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --silent",
-    "test:e2e": "vue-cli-service test:e2e",
+    "test:integration": "npx cypress open-ct",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

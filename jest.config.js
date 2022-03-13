@@ -1,11 +1,13 @@
 // const srcURL = '<rootDir>/matflow/frontend/src/';
-const testURL = 'tests/frontendtests/';
+// const testURL = 'tests-jest/frontendtests/';
 const srcURL = '<rootDir>/src/';
 
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
-  testMatch: ['<rootDir>/tests/frontendtests/**/*.spec.(js|jsx|ts|tsx)'],
+  testMatch: ['<rootDir>/tests-jest/frontendtests/**/*.spec.(js|jsx|ts|tsx)'],
   // setupFiles: [`./${testURL}unit/index.ts`],
+  testPathIgnorePatterns: ['/node_modules/'],
+  testEnvironment: 'jsdom',
   moduleNameMapper: {
     '@/(.*)': `${srcURL}/$1`,
     '@Classes/(.*)': `${srcURL}Classes/$1`,
