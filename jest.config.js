@@ -5,7 +5,7 @@ const srcURL = '<rootDir>/src/';
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
   testMatch: ['<rootDir>/tests/frontendtests/**/*.spec.(js|jsx|ts|tsx)'],
-  setupFiles: [`./${testURL}unit/index.ts`],
+  // setupFiles: [`./${testURL}unit/index.ts`],
   moduleNameMapper: {
     '@/(.*)': `${srcURL}/$1`,
     '@Classes/(.*)': `${srcURL}Classes/$1`,
