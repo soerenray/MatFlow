@@ -11,10 +11,14 @@ import Version from '@Classes/Version';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
 BackendServerCommunicatorSimulation.prototype
-  . pullVersionsWithWorkflowInstanceName = async () => this.versions;
+  . pullVersionsWithWorkflowInstanceName = async function() {
+  return new Promise((res) => setTimeout(res(this.versions), 500))
+  }
 BackendServerCommunicatorSimulation.prototype
-  . pullWorkflowInstancesNameAndConfigFilesName = async () => this
-    .workflowInstancesNameAndConfigFilesName;
+  . pullWorkflowInstancesNameAndConfigFilesName = async function() {
+
+  return new Promise((res) => setTimeout(res(this.workflowInstancesNameAndConfigFilesName), 500))
+  }
 
 const workflowInstance1Version1 = new Version('1.1', 'changed value of key1', [['key1: Ipsom lorum', 'key1: lorem ipsum'], ['key1: xy', 'key2: xy'],
   ['key3: 5.0 5.0', "key3: 'text'"]]);

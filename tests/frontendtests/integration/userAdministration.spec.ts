@@ -10,7 +10,9 @@ import UserAdministrationModel from '@Model/UserAdministration';
 import User from '@Classes/User';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
-BackendServerCommunicatorSimulation.prototype.pullUsers = async () => this.users;
+BackendServerCommunicatorSimulation.prototype.pullUsers = async function() {
+  return new Promise((res) => setTimeout(res(this.users), 500))
+};
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 

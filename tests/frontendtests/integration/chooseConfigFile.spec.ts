@@ -19,10 +19,13 @@ const workflow2Conf3 = new ConfigFile('conf3', [['key1', 'val1'], ['key2', 'val2
 
 // Simulated backend-behavior
 BackendServerCommunicatorSimulation.prototype
-  . pullConfigFileWithConfigFileNameWithWorkflowInstanceName = async () => this.configFile;
+  . pullConfigFileWithConfigFileNameWithWorkflowInstanceName = async function () {
+    return new Promise((res) => setTimeout(res(this.configFile), 500));
+  };
 BackendServerCommunicatorSimulation.prototype
-  . pullWorkflowInstancesNameAndConfigFilesName = async () => this
-    .workflowInstancesNameAndConfigFilesName;
+  . pullWorkflowInstancesNameAndConfigFilesName = async function () {
+    return new Promise((res) => setTimeout(res(this.workflowInstancesNameAndConfigFilesName), 500));
+  };
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = [['workflowInstance1', ['conf1', 'conf2']], ['workflowInstance2', ['conf1', 'conf2', 'conf3']]];

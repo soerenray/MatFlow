@@ -9,7 +9,9 @@ import SignUpView from '@View/SignUp.vue';
 import SignUpModel from '@Model/SignUp';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
-BackendServerCommunicatorSimulation.prototype.pullTemplatesName = async () => this.templateNames;
+BackendServerCommunicatorSimulation.prototype.pullTemplatesName = async function() {
+  return new Promise((res) => setTimeout(res(this.templateNames), 500))
+}
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 

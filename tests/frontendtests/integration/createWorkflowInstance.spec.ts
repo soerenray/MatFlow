@@ -11,7 +11,9 @@ import CreateWorkflowInstanceModel from '@Model/CreateWorkflowInstance';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
 BackendServerCommunicatorSimulation.prototype
-  . pullTemplatesName = async () => this.templateNames;
+  . pullTemplatesName = async function() {
+   return new Promise((res) => setTimeout(res(this.templateNames), 500))
+  }
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 backendServerCommunicatorObject.templateNames = (['Template1', 'Template2', 'Template3']);

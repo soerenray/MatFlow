@@ -19,7 +19,9 @@ const server1 = new Server(
   [['cpu1', '50%']],
 );
 
-BackendServerCommunicatorSimulation.prototype.pullServers = async () => this.servers;
+BackendServerCommunicatorSimulation.prototype.pullServers = async function() {
+  return new Promise((res) => setTimeout(res(this.servers), 500))
+}
 
 const backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
 
