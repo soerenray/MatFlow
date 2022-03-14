@@ -174,18 +174,28 @@ class BackendServerCommunicator {
     }
 
     public async pullConfigFileWithConfigFileNameWithWorkflowInstanceName(workflowInstanceName: string, configFileName: string): Promise<ConfigFile> {
-        let conf_file: ConfigFile = new ConfigFile(); // initialize variable as "empty" config file
-        await axios.get(BackendServerCommunicator.serverAddress + keys.getConfigFromWfInstance)
+        let confFile: ConfigFile = new ConfigFile(); // initialize variable as "empty" config file
+        let config = {
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "data": {
+                [keys.workflowInstanceName]: workflowInstanceName,
+                [keys.configFileName]: configFileName
+            }
+        };
+        console.log("configBefore", config);
+        await axios.get(BackendServerCommunicator.serverAddress + keys.getConfigFromWfInstance, config)
         .then(function (response) {
-            // console.log(response)
+            console.log("pullConfResp", response)
             let data = response.data;
             if (data[keys.statusCodeName] == 607) {
-                conf_file = new ConfigFile(data[keys.configFileName], data[keys.keyValuePairsName]);
+                confFile = new ConfigFile(data[keys.configFileName], data[keys.keyValuePairsName]);
             } else {
                 // error occurred
             }
         })
-        return conf_file;
+        return confFile;
     }
 
     public pushConfigFilesWithWorkflowInstanceName(configFiles: ConfigFile[], workflowInstanceName: string): void {
