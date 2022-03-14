@@ -31,12 +31,12 @@
             <v-file-input
               data-cy="fileInput"
               id="fileInput"
-              v-model="templateFolderAsArray"
+              v-model="dagFileAsArray"
               variant="contained"
               style="width: 200px"
               :clearable="false"
-              accept="application/zip"
-              label="import folder"
+              type='file'
+              label="template-blueprint"
             >
             </v-file-input>
           </v-col>
@@ -146,20 +146,12 @@ export default {
         this.createTemplateObject.chosenTemplateName = chosenTemplateName;
       },
     },
-    templateFolderAsArray: {
+    dagFileAsArray: {
       get(): File[] {
-        return [this.createTemplateObject.templateFolder];
+        return [this.createTemplateObject.dagFile];
       },
-      set(templateFolder: File[]) {
-        [this.createTemplateObject.templateFolder] = templateFolder;
-      },
-    },
-    templateFolder: {
-      get(): File {
-        return this.createTemplateObject.templateFolder;
-      },
-      set(templateFolder: File) {
-        this.createTemplateObject.templateFolder = templateFolder;
+      set(dagFileAsArray: File[]) {
+        [this.createTemplateObject.dagFile] = dagFileAsArray;
       },
     },
     dagFile: {
