@@ -74,10 +74,14 @@ export default {
       this.resetView();
     },
     resetView() {
-      backendServerCommunicatorObject.pullTemplatesName();
       createTemplateObject.setCreateTemplateMemento(
         createTemplateCaretakerObject.createTemplateMementoObjects[0]
       );
+      setTimeout(() => {
+        backendServerCommunicatorObject.pullTemplatesName().then(function (result){
+          createTemplateObject.templatesName = result;
+        });
+      }, 2000);
       backendServerCommunicatorObject.pullTemplatesName().then(function (result){
         createTemplateObject.templatesName = result;
       });

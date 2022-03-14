@@ -141,6 +141,7 @@ class BackendServerCommunicator {
         let templateNames: string[] = []
         await axios.get(BackendServerCommunicator.serverAddress + keys.getAllTemplateNames)
         .then(function (response) {
+            console.log("pullTempNames", response);
             let data = response.data;
             if (data[keys.statusCodeName] == 607) {
                 templateNames = data[keys.templateNames];
