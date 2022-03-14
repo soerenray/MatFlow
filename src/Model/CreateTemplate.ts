@@ -11,6 +11,8 @@ class CreateTemplate {
 
     private _dagFile: File
 
+    private _createFromEmptyFile: boolean
+
     /**
     *
     * @param newTemplateName The newTemplateName
@@ -18,13 +20,22 @@ class CreateTemplate {
     * @param chosenTemplateName The chosenTemplateName
     * @param templateFolder The templateFolder
     * @param dagFile The dagFile
+    * @param createFromEmptyFileThe createFromEmptyFile
     */
-    constructor(newTemplateName = '', templatesName: string[] = [], chosenTemplateName = '', templateFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), dagFile: File = new File([], 'emptyFile', { type: 'application/zip' })) {
+    constructor(
+      newTemplateName = '',
+      templatesName: string[] = [],
+      chosenTemplateName = '',
+      templateFolder: File = new File([], 'emptyFile', { type: 'application/zip' }),
+      dagFile: File = new File([], 'emptyFile', { type: 'application/zip' }),
+      createFromEmptyFile = false,
+    ) {
       this._newTemplateName = newTemplateName;
       this._templatesName = templatesName;
       this._chosenTemplateName = chosenTemplateName;
       this._templateFolder = templateFolder;
       this._dagFile = dagFile;
+      this._createFromEmptyFile = createFromEmptyFile;
     }
 
     /**
@@ -107,6 +118,22 @@ class CreateTemplate {
       this._chosenTemplateName = chosenTemplateName;
     }
 
+    /**
+    * Gets the createFromEmptyFile
+    * @returns _createFromEmptyFile
+    */
+    public get createFromEmptyFile(): boolean {
+      return this._createFromEmptyFile;
+    }
+
+    /**
+    * Sets the value of _createFromEmptyFile
+    * @param createFromEmptyFile The new value of _createFromEmptyFile
+    */
+    public set createFromEmptyFile(createFromEmptyFile: boolean) {
+      this._createFromEmptyFile = createFromEmptyFile;
+    }
+
     public setCreateTemplateMemento(createTemplateMemento: CreateTemplateMemento) {
       const tempCreateTemplateMementoObject = createTemplateMemento.createtTemplateObject;
       this.newTemplateName = tempCreateTemplateMementoObject.newTemplateName;
@@ -114,6 +141,7 @@ class CreateTemplate {
       this.chosenTemplateName = tempCreateTemplateMementoObject.chosenTemplateName;
       this.templateFolder = tempCreateTemplateMementoObject.templateFolder;
       this.dagFile = tempCreateTemplateMementoObject.dagFile;
+      this.createFromEmptyFile = tempCreateTemplateMementoObject.createFromEmptyFile;
     }
 
     public createTemplateMemento(): CreateTemplateMemento {
@@ -123,6 +151,7 @@ class CreateTemplate {
         this.chosenTemplateName,
         this.templateFolder,
         this.dagFile,
+        this.createFromEmptyFile,
       ));
     }
 }

@@ -41,7 +41,7 @@
             </v-file-input>
           </v-col>
           <v-col>
-            <v-radio-group>
+            <v-radio-group v-model="createFromEmptyFile">
               <v-radio data-cy="createFromEmptyFile">
                 <template v-slot:label>
                   <div>
@@ -168,6 +168,14 @@ export default {
       },
       set(dagFile: File) {
         this.createTemplateObject.dagFile = dagFile;
+      },
+    },
+    createFromEmptyFile: {
+      get(): boolean {
+        return this.createTemplateObject.createFromEmptyFile;
+      },
+      set(createFromEmptyFile: File) {
+        this.createTemplateObject.createFromEmptyFile = createFromEmptyFile;
       },
     },
   },
