@@ -158,7 +158,7 @@ class BackendServerCommunicator {
         let result: Array<[string, string[]]> = []
         await axios.get(BackendServerCommunicator.serverAddress + keys.getAllWfInstancesNamesAndConfigFileNames)
         .then(function (response) {
-            // console.log(response)
+            console.log("pullInstancesAndConf", response)
             let data = response.data;
             if (data[keys.statusCodeName] == 607){
                 for (let wf_name in data[keys.namesAndConfigs]) {
@@ -212,11 +212,11 @@ class BackendServerCommunicator {
         })
     }
 
-    public async pullVersionsWithWorkflowInstanceName(workflowInstanceName: workflowInstanceNameAsString): Promise<Version[]> {
+    public async pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Promise<Version[]> {
         let versions: Version[] = []
         await axios.get(BackendServerCommunicator.serverAddress + keys.getWfInstanceVersions)
         .then(function (response) {
-            // console.log(response)
+            console.log("pullversions", response)
             let data = response.data;
             if (data[keys.statusCodeName] == 607) {
                 for (let versionDict of data[keys.versionsName]){

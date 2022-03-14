@@ -85,17 +85,19 @@ export default {
       this.pullVersionsWithWorkflowInstanceName();
     },
     pullVersionsWithWorkflowInstanceName: function () {
-      versionControlObject.versions =
         backendServerCommunicatorObject.pullVersionsWithWorkflowInstanceName(
           this.selectedWorkflowInstanceName
-        );
+        ).then((result) => {
+          versionControlObject.versions = result;
+        });
     },
     pullWorkflowInstancesName: function () {
-      this.workflowInstancesName = backendServerCommunicatorObject
-        .pullWorkflowInstancesNameAndConfigFilesName()
-        .map((workflowInstanceNameAndConfigFilesName) => {
+      backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+      .then((result) => {
+        this.workflowInstancesName = result.map((workflowInstanceNameAndConfigFilesName) => {
           return workflowInstanceNameAndConfigFilesName[0];
         });
+      });
     },
     pushReplaceActiveVersionOfWorkflowInstance() {
       backendServerCommunicatorObject.pushReplaceActiveVersionOfWorkflowInstance(
