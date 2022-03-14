@@ -36,11 +36,12 @@
             </v-col>
             <v-col>
               <v-file-input
-                id="importConfigFolder"
-                data-cy="importConfigFolder"
-                v-model="configFolderAsArray"
+                id="importConfigFiles"
+                data-cy="importConfigFiles"
+                :multiple="true"
+                v-model="configFiles"
                 :clearable="false"
-                accept="application/zip"
+                accept="files"
                 label="Config file folder"
               ></v-file-input>
             </v-col>
@@ -98,7 +99,8 @@ export default {
     return {
       backendServerCommunicatorObject: new BackendServerCommunicator(),
       createWorkflowInstanceObject: new CreateWorkflowInstance(
-        ['import worfklow', 'create workflow-instance from template'],
+        // ['import worfklow', 'create workflow-instance from template'],
+        ['create workflow-instance from template'],
         'create workflow-instance from template',
       ),
       createWorkflowInstanceCaretakerObject:
@@ -109,8 +111,12 @@ export default {
     async pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
-      this.createWorkflowInstanceObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
+      await this
+        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+          res.forEach((elem) => {
+            this.createWorkflowInstanceObject.templatesName.push(elem);
+          });
+        });
     },
     resetView() {
       this.createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
@@ -169,31 +175,20 @@ export default {
         this.createWorkflowInstanceObject.templatesName = templatesName;
       },
     },
-    // file-input requires an array
-    configFolderAsArray: {
+    configFiles: {
       get(): File[] {
-        return [this.createWorkflowInstanceObject.configFolder];
+        return this.createWorkflowInstanceObject.configFiles;
       },
-      set(configFolder: File[]) {
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
-        [this.createWorkflowInstanceObject.configFolder] = configFolder;
+      set(configFiles: File[]) {
+        this.createWorkflowInstanceObject.configFiles = configFiles;
       },
     },
-    // file-input requires an array
     workflowInstanceFolderAsArray: {
       get(): File[] {
         return [this.createWorkflowInstanceObject.workflowInstanceFolder];
       },
       set(workflowInstanceFolder: File[]) {
         [this.createWorkflowInstanceObject.workflowInstanceFolder] = workflowInstanceFolder;
-      },
-    },
-    configFolder: {
-      get(): File {
-        return this.createWorkflowInstanceObject.configFolder;
-      },
-      set(configFolder: File) {
-        this.createWorkflowInstanceObject.configFolder = configFolder;
       },
     },
     workflowInstanceFolder: {
@@ -222,8 +217,12 @@ export default {
     },
   },
   async created() {
-    this.createWorkflowInstanceObject.templatesName = await this
-      .backendServerCommunicatorObject.pullTemplatesName();
+    await this
+      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+        res.forEach((elem) => {
+          this.createWorkflowInstanceObject.templatesName.push(elem);
+        });
+      });
     // For now this is everthing I want to recover
     this.createWorkflowInstanceCaretakerObject.addCreateWorkflowInstanceMementoObjectToArray(
       this.createWorkflowInstanceObject.createWorkflowInstanceMemento(),

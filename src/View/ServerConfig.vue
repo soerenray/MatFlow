@@ -10,7 +10,7 @@
         <v-table>
           <thead data-cy="tableHeader">
             <tr>
-              <td v-for="header in tableHeaders" :item-key="header.value">
+              <td v-for="header in tableHeaders" :key="header.value">
                 {{ header.text }}
               </td>
             </tr>

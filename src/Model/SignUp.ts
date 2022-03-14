@@ -113,14 +113,17 @@ class SignUp {
       this.userName = tempSignUpObject.userName;
       this.userPassword = tempSignUpObject.userPassword;
       this.userPasswordRepeated = tempSignUpObject.userPasswordRepeated;
+      this.showPassword = tempSignUpObject.showPassword;
+      this.showPasswordRepeated = tempSignUpObject.showPasswordRepeated;
     }
 
     public createSignUpMemento(): SignUpMemento {
       return new SignUpMemento(new SignUp(
         this.userName,
         this.userPassword,
-
         this.userPasswordRepeated,
+        this.showPassword,
+        this.showPasswordRepeated,
       ));
     }
 }

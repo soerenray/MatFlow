@@ -1,11 +1,6 @@
 <template>
   <v-app>
-    <div style="height: 30px">
-      <v-toolbar dense color="#AED6F1">
-        <v-toolbar-title>Administration</v-toolbar-title>
-      </v-toolbar>
-    </div>
-    <div style="padding-top: 40px; padding-left: 10px; padding-right=10px">
+    <div style="padding-left: 10px; padding-right=10px">
       <v-card>
         <v-row>
           <v-col>
@@ -38,7 +33,7 @@
         <v-table>
           <thead>
             <tr>
-              <th v-for="header in tableHeaders" class="text-left">
+              <th v-for="header in tableHeaders" :key="header.tex" class="text-left">
                 {{ header.text }}
               </th>
             </tr>

@@ -1,5 +1,4 @@
 import Keys from '@Classes/Keys';
-import { dataURLtoFile, dataURLtoFileNoMime } from './base64Utility';
 
 class User {
     private _userName: string

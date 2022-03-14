@@ -31,17 +31,17 @@
             <v-file-input
               data-cy="fileInput"
               id="fileInput"
-              v-model="templateFolderAsArray"
+              v-model="dagFileAsArray"
               variant="contained"
               style="width: 200px"
               :clearable="false"
-              accept="application/zip"
-              label="import folder"
+              type='file'
+              label="template-blueprint"
             >
             </v-file-input>
           </v-col>
           <v-col>
-            <v-radio-group>
+            <v-radio-group v-model="createFromEmptyFile">
               <v-radio data-cy="createFromEmptyFile">
                 <template v-slot:label>
                   <div>
@@ -101,8 +101,10 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      this.createTemplateObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
+      await this
+        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+          res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
+        });
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
@@ -144,20 +146,12 @@ export default {
         this.createTemplateObject.chosenTemplateName = chosenTemplateName;
       },
     },
-    templateFolderAsArray: {
+    dagFileAsArray: {
       get(): File[] {
-        return [this.createTemplateObject.templateFolder];
+        return [this.createTemplateObject.dagFile];
       },
-      set(templateFolder: File[]) {
-        [this.createTemplateObject.templateFolder] = templateFolder;
-      },
-    },
-    templateFolder: {
-      get(): File {
-        return this.createTemplateObject.templateFolder;
-      },
-      set(templateFolder: File) {
-        this.createTemplateObject.templateFolder = templateFolder;
+      set(dagFileAsArray: File[]) {
+        [this.createTemplateObject.dagFile] = dagFileAsArray;
       },
     },
     dagFile: {
@@ -168,10 +162,20 @@ export default {
         this.createTemplateObject.dagFile = dagFile;
       },
     },
+    createFromEmptyFile: {
+      get(): boolean {
+        return this.createTemplateObject.createFromEmptyFile;
+      },
+      set(createFromEmptyFile: File) {
+        this.createTemplateObject.createFromEmptyFile = createFromEmptyFile;
+      },
+    },
   },
   async created() {
-    this.createTemplateObject.templatesName = await this
-      .backendServerCommunicatorObject.pullTemplatesName();
+    await this
+      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+        res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
+      });
     // For now this is everything I want to recover
     this.createTemplateCaretakerObject.addCreateTemplateMementoObjectToArray(
       this.createTemplateObject.createTemplateMemento(),

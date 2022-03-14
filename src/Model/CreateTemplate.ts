@@ -7,24 +7,30 @@ class CreateTemplate {
 
     private _chosenTemplateName: string
 
-    private _templateFolder: File
-
     private _dagFile: File
+
+    private _createFromEmptyFile: boolean
 
     /**
     *
     * @param newTemplateName The newTemplateName
     * @param templatesName The templatesName
     * @param chosenTemplateName The chosenTemplateName
-    * @param templateFolder The templateFolder
     * @param dagFile The dagFile
+    * @param createFromEmptyFile createFromEmptyFile
     */
-    constructor(newTemplateName = '', templatesName: string[] = [], chosenTemplateName = '', templateFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), dagFile: File = new File([], 'emptyFile', { type: 'application/zip' })) {
+    constructor(
+      newTemplateName = '',
+      templatesName: string[] = [],
+      chosenTemplateName = '',
+      dagFile: File = new File([], 'emptyFile', { type: 'file' }),
+      createFromEmptyFile = false,
+    ) {
       this._newTemplateName = newTemplateName;
       this._templatesName = templatesName;
       this._chosenTemplateName = chosenTemplateName;
-      this._templateFolder = templateFolder;
       this._dagFile = dagFile;
+      this._createFromEmptyFile = createFromEmptyFile;
     }
 
     /**
@@ -60,22 +66,6 @@ class CreateTemplate {
     }
 
     /**
-    * Gets the templateFolder
-    * @returns _templateFolder
-    */
-    public get templateFolder(): File {
-      return this._templateFolder;
-    }
-
-    /**
-    * Sets the value of _templateFolder
-    * @param templateFolder The new value of _templateFolder
-    */
-    public set templateFolder(templateFolder: File) {
-      this._templateFolder = templateFolder;
-    }
-
-    /**
     * Gets the dagFile
     * @returns _dagFile
     */
@@ -107,13 +97,29 @@ class CreateTemplate {
       this._chosenTemplateName = chosenTemplateName;
     }
 
+    /**
+    * Gets the createFromEmptyFile
+    * @returns _createFromEmptyFile
+    */
+    public get createFromEmptyFile(): boolean {
+      return this._createFromEmptyFile;
+    }
+
+    /**
+    * Sets the value of _createFromEmptyFile
+    * @param createFromEmptyFile The new value of _createFromEmptyFile
+    */
+    public set createFromEmptyFile(createFromEmptyFile: boolean) {
+      this._createFromEmptyFile = createFromEmptyFile;
+    }
+
     public setCreateTemplateMemento(createTemplateMemento: CreateTemplateMemento) {
       const tempCreateTemplateMementoObject = createTemplateMemento.createtTemplateObject;
       this.newTemplateName = tempCreateTemplateMementoObject.newTemplateName;
       this.templatesName = tempCreateTemplateMementoObject.templatesName;
       this.chosenTemplateName = tempCreateTemplateMementoObject.chosenTemplateName;
-      this.templateFolder = tempCreateTemplateMementoObject.templateFolder;
       this.dagFile = tempCreateTemplateMementoObject.dagFile;
+      this.createFromEmptyFile = tempCreateTemplateMementoObject.createFromEmptyFile;
     }
 
     public createTemplateMemento(): CreateTemplateMemento {
@@ -121,8 +127,8 @@ class CreateTemplate {
         this.newTemplateName,
         this.templatesName,
         this.chosenTemplateName,
-        this.templateFolder,
         this.dagFile,
+        this.createFromEmptyFile,
       ));
     }
 }

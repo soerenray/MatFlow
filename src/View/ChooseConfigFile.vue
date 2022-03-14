@@ -44,10 +44,10 @@
             v-for="configFileName in configFilesName"
             :key="configFileName"
           >
-            <!-- <v-col
+          <v-col
               @click="
                 setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
-                  'configFileName'
+                  configFileName
                 )
               "
               :style="{
@@ -60,7 +60,7 @@
             >
               {{ configFileName }}
             </v-col>
-            <v-divider></v-divider> -->
+            <v-divider></v-divider>
           </div>
         </v-card>
       </div>
@@ -79,11 +79,10 @@
 
 <script lang='ts'>
 // @ts-nocheck
-
 import ChooseConfigFile from '@Model/ChooseConfigFile';
 import ConfigFile from '@Classes/ConfigFile';
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
-import EditKeyValuePairs from './EditKeyValuePairs.vue';
+import EditKeyValuePairs from '@View/EditKeyValuePairs.vue';
 
 export default {
   name: 'ChooseConfigFile',
@@ -171,24 +170,15 @@ export default {
       );
     },
     async resetChoosenConfigFileObjects() {
+      this.updatedConfigFiles = [];
       this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = await this
         .backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
-      this.updatedConfigFiles = [];
-      this.chosenConfigFile = this.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-        this.selectedWorkflowInstanceName,
-        this.selectedConfigFileName,
-      );
-      this.updatedConfigFiles.push(this.chosenConfigFile);
-    },
-    pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-      workflowInstanceName: string,
-      configFileName: string,
-    ): ConfigFile {
-      return this.backendServerCommunicatorObject
+      this.chosenConfigFile = await this.backendServerCommunicatorObject
         .pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-          workflowInstanceName,
-          configFileName,
+          this.selectedWorkflowInstanceName,
+          this.selectedConfigFileName,
         );
+      this.updatedConfigFiles.push(this.chosenConfigFile);
     },
     setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
       selectedWorkflowInstanceName: string,
@@ -198,7 +188,7 @@ export default {
       this.updatedConfigFiles = [];
       this.chosenConfigFile = new ConfigFile();
     },
-    setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
+    async setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
       selectedConfigFileName: string,
     ) {
       this.selectedConfigFileName = selectedConfigFileName;
@@ -208,7 +198,7 @@ export default {
           this.selectedConfigFileName,
         )
       ) {
-        this.chosenConfigFile = this.backendServerCommunicatorObject
+        this.chosenConfigFile = await this.backendServerCommunicatorObject
           .pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName,
@@ -275,8 +265,12 @@ export default {
     },
   },
   async created() {
-    this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = await this
-      .backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+    this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+      .then((res) => {
+        res.forEach((elem) => {
+          this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames.push(elem);
+        });
+      });
   },
 };
 </script>
