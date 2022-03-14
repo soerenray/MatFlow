@@ -4,14 +4,14 @@
       <v-table>
         <thead data-cy='tableHeader'>
           <tr>
-            <td v-for="header in headers" :item-key="header.name">
+            <td v-for="header in headers" :key="header.name">
               {{ header.text }}
             </td>
             </tr>
         </thead>
         <tbody data-cy='tableBody'>
           <tr v-for='parameterChange in parameterChangesTableObject'
-          item-key='parameterChange.oldValue'>
+          :key='parameterChange.oldValue'>
             <td>{{parameterChange.oldValue}}</td>
             <td>{{parameterChange.newValue}}</td>
           </tr>

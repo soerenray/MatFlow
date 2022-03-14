@@ -6,6 +6,11 @@ const basUrlSrc = './src';
 module.exports = defineConfig({
   transpileDependencies: true,
 
+  // pluginOptions: {
+  //   vuetify: {
+  //     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+  //   },
+  // },
   configureWebpack: {
     resolve: {
       alias: {
@@ -20,9 +25,9 @@ module.exports = defineConfig({
     },
   },
 
-  // pluginOptions: {
-  //   vuetify: {
-  //     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-  //   },
-  // },
+  pluginOptions: {
+    vuetify: {
+      // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+    },
+  },
 });

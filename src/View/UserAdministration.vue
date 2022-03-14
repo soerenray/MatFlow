@@ -38,7 +38,7 @@
         <v-table>
           <thead>
             <tr>
-              <th v-for="header in tableHeaders" class="text-left">
+              <th v-for="header in tableHeaders" :key="header.tex" class="text-left">
                 {{ header.text }}
               </th>
             </tr>
