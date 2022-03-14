@@ -38,7 +38,8 @@ stages:
 test:
   stage: tests
   script:
-    - python setup.py test
+    - python -m unittest discover
+    - npm run test:unit
 
 
 checkstyle:
