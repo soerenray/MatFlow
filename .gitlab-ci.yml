@@ -38,8 +38,7 @@ stages:
 test:
   stage: tests
   script:
-    - python -m unittest discover
-    - npm run test:unit
+    - python -m unittest discover -s tests/workflowtests
 
 
 checkstyle:
