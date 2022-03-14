@@ -71,7 +71,7 @@ class UserController:
     # overridePayload: Payload of strings + "roles" is an Array of [{str : str}]
     # patchOverrideUser: API call Response
 
-    def overrideUser(self, overrideUser: User, basic: str):
+    def overrideUser(self, overrideUser: User, basic: (str, str)):
         overrideUsername = overrideUser.getUsername()
         overrideStatus = overrideUser.getStatus()
         overridePrivilege = overrideUser.getPrivilege()
@@ -125,7 +125,7 @@ class UserController:
     # deleteUserAddress: str
     # deleteUserCode: API call Response
 
-    def deleteUser(self, deleteUser: User, basic: HTTPBasicAuth):
+    def deleteUser(self, deleteUser: User, basic: (str, str)):
         deleteUsername = deleteUser.getUsername()
 
         # we build our address
@@ -152,7 +152,7 @@ class UserController:
     # createUserStatusCode: API call Response
 
     def createUser(
-            self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: HTTPBasicAuth
+            self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: (str, str)
     ):
         # we check if the passwords are identical
 
@@ -186,7 +186,7 @@ class UserController:
             raise UserExistsException("")
 
     # auxiliary method for testing
-    def deleteAllUsers(self, basic: HTTPBasicAuth):
+    def deleteAllUsers(self, basic: (str, str)):
         details = self.getAllUsersAndDetails()
         for user in dict(details)[keys.all_users]:
             username: str = dict(user)["username"]

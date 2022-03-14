@@ -242,6 +242,7 @@ class FrontendAPI:
         out_dict: dict = dict()
         list_of_versions: List[dict] = []
         try:
+            auth_tag = request.authorization
             loaded = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name], loaded)
             wf_name: str = loaded[keys.workflow_instance_name]
@@ -272,6 +273,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.version_number_name], decoded_json)
             FrontendAPI.workflow_manager.set_active_version_through_number(
@@ -299,6 +301,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
@@ -329,6 +332,7 @@ class FrontendAPI:
             String: json-dumped object containing encoded config file
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.config_file_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
@@ -357,6 +361,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.template_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
@@ -431,7 +436,6 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_details = request.get_json()
             auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
