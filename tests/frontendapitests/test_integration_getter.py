@@ -42,92 +42,22 @@ class IntegrationTest(unittest.TestCase):
             "test_template",
             Path(__file__).parent / "res" / "conf_folder_test1",
         )
-        # TODO comment back in after test_create_version is working
-        # note: str = "note to self: don't code at 2 am"
-        # config_files: List[dict] = [
-        #     {
-        #         keys.config_file_name: "test1.conf",
-        #         keys.key_value_pairs_name: [
-        #             ("i_was", "replaced"),
-        #             ("this_one", "as_well"),
-        #             ("four", "4"),
-        #             ("also", "find_me"),
-        #         ],
-        #     }
-        # ]
-        # create_wf_version(self.app, "test_instance", note, config_files)
+        note: str = "note to self: don't code at 2 am"
+        config_files: List[dict] = [
+            {
+                keys.config_file_name: "test1.conf",
+                keys.key_value_pairs_name: [
+                    ("i_was", "replaced"),
+                    ("this_one", "as_well"),
+                    ("four", "4"),
+                    ("also", "find_me"),
+                ],
+            }
+        ]
+        create_wf_version(self.app, "test_instance", note, config_files)
 
     def tearDown(self) -> None:
         tear_down(self.app)
-
-        # for file in os.listdir(path_to_temp_in):
-        #     if os.path.isdir(os.path.join(path_to_temp_in, file)):
-        #         print("delete dir: " + file)
-        #         for element in os.listdir(os.path.join(path_to_temp_in, file)):
-        #             os.remove(os.path.join(path_to_temp_in, file, element))
-        #         os.rmdir(os.path.join(path_to_temp_in, file))
-        #     elif os.path.isfile(file):
-        #         print("delete file: " + file)
-        #         os.remove(file)
-
-    # relaced through help method (bottom of file)
-    # @classmethod
-    # @unittest.skip("siehe unten, gleiche Methode in anderer Klasse")
-    # def test_create_version(cls):
-    #     # TODO failes noch
-    #     send_off = json.dumps(
-    #         {
-    #             keys.workflow_instance_name: "test_instance",
-    #             keys.version_note_name: "note to self: don't code at 2 am",
-    #             keys.config_files: [
-    #                 {
-    #                     keys.config_file_name: "test_conf1.conf",
-    #                     keys.key_value_pairs_name: [("hello", "world")],
-    #                 }
-    #             ],
-    #         }
-    #     )
-    #
-    #     got = json.loads(
-    #         cls.app.post("create_version_of_wf_instance", json=send_off).get_data()
-    #     )
-
-    # relaced through help method (bottom of file)
-    # @classmethod
-    # def test_create_user(cls):
-    #     payload = json.dumps(
-    #         {
-    #             keys.user_name: "first_user",
-    #             keys.password_name: "default",
-    #             keys.repeat_password_name: "default",
-    #         }
-    #     )
-    #     got = json.loads(cls.app.post("register_user", json=payload).get_data())
-    #     print(got)
-
-    # relaced through help method (bottom of file)
-    # @classmethod
-    # def test_create_wf_instance(cls):
-    #     wf_name = "test_instance"
-    #     template_name = "test_template"
-    #     with open(Path(__file__).parent / "res" / "test1.conf", "rb") as file:
-    #         read_file = file.read()
-    #         encoded_config = base64.b64encode(read_file)
-    #     input_wf_dict = {
-    #         keys.workflow_instance_name: wf_name,
-    #         keys.template_name: template_name,
-    #         keys.config_files: [
-    #             {
-    #                 keys.file_key: encoded_config.decode("utf-8"),
-    #                 keys.config_file_name: "test1.conf",
-    #             }
-    #         ],
-    #     }
-    #     send_off = json.dumps(input_wf_dict)
-    #     got = json.loads(
-    #         cls.app.post("create_workflow_instance", json=send_off).get_data()
-    #     )
-    #     print(got)
 
     def test_create_wf_instance_double(self):
         # Arrange
@@ -142,29 +72,6 @@ class IntegrationTest(unittest.TestCase):
         # Assert
         expected_status: int = 604  # double wf instance exception
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
-
-    # relaced through help method (bottom of file)
-    # @classmethod
-    # def test_create_template(cls):
-    #     # Arrange
-    #     template_name = "test_template"
-    #     dag_name = "daggy.py"
-    #     with open(Path(__file__).parent / "res" / "dag_test.py", "rb") as file:
-    #         read_file = file.read()
-    #         encoded_dag = base64.b64encode(read_file).decode("utf-8")
-    #     input_dict = {
-    #         keys.template_name: template_name,
-    #         keys.dag_definition_name: dag_name,
-    #         keys.file_key: encoded_dag,
-    #     }
-    #     send_off = json.dumps(input_dict)
-    #     expected_status: int = 607
-    #
-    #     # Act
-    #     got = json.loads(cls.app.post("create_template", json=send_off).get_data())
-    #
-    #     # Assert
-    #     cls.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
     def test_create_template_double(self):
         # Arrange
@@ -337,10 +244,7 @@ class IntegrationTest(unittest.TestCase):
         print(got)
         self.assertIn("test_instance", got[keys.names_and_configs])
 
-    @unittest.skip("Versions läuft schief")
     def test_get_wf_instance_versions_test(self):
-        # Fehler bei Lukas, noch nicht implementiert, siehe wf manager 336;
-        # get_versions_from_workflow_instance
         input_data = json.dumps({keys.workflow_instance_name: "test_instance"})
         got = json.loads(
             self.__class__.app.get(
@@ -348,11 +252,10 @@ class IntegrationTest(unittest.TestCase):
             ).get_data()
         )
         print(got)
-        # TODO version erst vorher erstellen
+        expected_status: int = 607  # success
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
-    # @unittest.skip("Lukas: Unknown column 'cf.conf' in 'field list'")
     def test_get_config_from_wf_instance(self):
-        # TODO Lukas (Fehler siehe skip header)
         # Arrange
         conf_name = os.path.join("test1.conf")
         input_data = json.dumps(
@@ -418,16 +321,15 @@ class IntegrationTest(unittest.TestCase):
             },
         )
 
-    @unittest.skip("Version klappt nicht")
     def test_replace_version(self):
-        # TODO Florian nachdem test_create_version läuft
-        payload = {
+        # TODO Florian: Add workflows to Airflow
+        payload: dict = {
             keys.workflow_instance_name: "test_instance",
-            keys.version_number_name: "Florian bitte" "einfuegen",
+            keys.version_number_name: "1.1",
         }
         got = json.loads(
             self.__class__.app.put(
-                "replace_active_wf_instance_version", json=json.dumps(payload)
+                "replace_wf_instance_active_version", json=json.dumps(payload)
             ).get_data()
         )
         self.assertEqual(got, {keys.status_code_name: 607})

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import List
 
 from matflow.exceptionpackage import MatFlowException
 import mysql.connector
@@ -122,7 +123,7 @@ class DatabaseTable:
         db.close()
         return
 
-    def get_multiple(self, query: str, arguments: tuple) -> str:
+    def get_multiple(self, query: str, arguments: tuple) -> List[object]:
         """Search for multiple values in database.
 
         Throw error if no entry found in database.

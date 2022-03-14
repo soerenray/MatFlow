@@ -99,7 +99,7 @@ class DatabaseVersion(WorkflowVersion):
         # the file names match now we can start the actual comparison
         parameter_changes: List[ParameterChange] = []  # the distinct changes go in here
         for name, old_path in old_config_files:
-            new_path: Path = self.get_changed_config_files() / name
+            new_path: Path = Path(self.get_changed_config_files()) / name
             new_file: ConfigFile = ConfigFile(name, new_path)
             old_file: ConfigFile = ConfigFile(name, old_path)
             # those are the changes as quadruple (old_key, new_key, old_value, new_value)

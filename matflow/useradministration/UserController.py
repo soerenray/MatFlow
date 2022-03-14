@@ -165,7 +165,7 @@ class UserController:
 
         # this is the Payload we use to create the User
         createUserPayload = {
-            "email": ".",
+            "email": signUpUsername,
             "first_name": ".",
             "last_name": ".",
             "roles": [{"name": "Public"}],
