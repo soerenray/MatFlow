@@ -165,8 +165,10 @@ export default {
       );
     },
     resetChoosenConfigFileObjects() {
-      this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-        this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+      this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+      .then((result) => {
+          this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = result;
+      });
       this.updatedConfigFiles = [];
       this.chosenConfigFile =
         this.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
@@ -179,10 +181,14 @@ export default {
       workflowInstanceName: string,
       configFileName: string
     ): ConfigFile {
-      return this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+      let returnValue: ConfigFile = new ConfigFile(); // place holder value
+      this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
         workflowInstanceName,
         configFileName
-      );
+      ).then((result) => {
+        returnValue = result;
+        });
+      return returnValue;
     },
     setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
       selectedWorkflowInstanceName: string
@@ -202,11 +208,12 @@ export default {
           this.selectedConfigFileName
         )
       ) {
-        this.chosenConfigFile =
-          this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-            this.selectedWorkflowInstanceName,
-            this.selectedConfigFileName
-          );
+        this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
+          this.selectedWorkflowInstanceName,
+          this.selectedConfigFileName
+        ).then((result) => {
+          this.chosenConfigFile = result;
+        });
         this.updatedConfigFiles.push(this.chosenConfigFile);
       } else {
         this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(
@@ -276,8 +283,10 @@ export default {
     // initialized in data
     // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
     Vue.observable(this.chooseConfigFileObject);
-    this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames =
-      this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+    this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+    .then((result) => {
+      this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = result;
+    });
   },
 };
 </script>
