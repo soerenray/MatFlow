@@ -318,7 +318,7 @@ class FrontendAPI:
             return ExceptionHandler.success(dict())
 
     @staticmethod
-    @app.route("/get_config_from_wf_instance", methods=["GET"])
+    @app.route("/get_config_from_wf_instance", methods=["POST"])
     def get_config_from_wf_instance() -> str:
         """
         gets config file by workflow instance name and associated config file name (contains the wanted workflow
