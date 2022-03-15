@@ -275,11 +275,36 @@ services:
     restart: always
     ports:
       - 3306:3306
+<<<<<<< HEAD
     expose: 
       - "3306"
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: databaseshema
+=======
+    expose:
+      - "3306"
+    environment:
+      MYSQL_DATABASE: databaseshema
+      MYSQL_USER: 'matflowUser'
+      MYSQL_PASSWORD: 'qMyaU7AjPJ3Epsmc'
+      MYSQL_ROOT_PASSWORD: 12345
+
+  matflow_api:
+    image: matflow_api
+    build: 
+      context: ./
+      dockerfile: ./docker_api/Dockerfile
+
+  matflow_web:
+    image: matflow_web
+    restart: always
+    build: 
+      context: ./
+      dockerfile: ./docker_web/Dockerfile
+    ports:
+      - 8081:8081
+>>>>>>> frontend
 
 volumes:
   postgres-db-volume:

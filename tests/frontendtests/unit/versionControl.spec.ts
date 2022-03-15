@@ -1,3 +1,0 @@
-describe('VersionControl.vue', () => {
-    it('', () => { })
-})
