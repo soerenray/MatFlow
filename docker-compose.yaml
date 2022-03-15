@@ -48,17 +48,15 @@ x-airflow-common:
   # build: .
   environment:
     &airflow-common-env
+    AIRFLOW_UID: 50000
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres2/airflow
-    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres2/airflow
-    AIRFLOW__CELERY__BROKER_URL: redis://:@redis2:6379/0
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+    AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
-    AIRFLOW__WEBSERVER__BASE_URL: 'http://gondolin.ipd.kit.edu/matflow/airflow'
-    AIRFLOW__CELERY__FLOWER_URL_PREFIX: '/matflow/flower'
-    AIRFLOW__WEBSERVER__ENABLE_PROXY_FIX: 'true'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
     - ./dags:/opt/airflow/dags
@@ -67,27 +65,27 @@ x-airflow-common:
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
-    redis2:
+    redis:
       condition: service_healthy
-    postgres2:
+    postgres:
       condition: service_healthy
 
 services:
-  postgres2:
+  postgres:
     image: postgres:13
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
-      - postgres-db-volume-2:/var/lib/postgresql/data
+      - postgres-db-volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
     restart: always
 
-  redis2:
+  redis:
     image: redis:latest
     expose:
       - 6379
@@ -102,7 +100,7 @@ services:
     <<: *airflow-common
     command: webserver
     ports:
-      - 9090:8080
+      - 8080:8080
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 10s
@@ -257,7 +255,7 @@ services:
     <<: *airflow-common
     command: celery flower
     ports:
-      - 6666:5555
+      - 5555:5555
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
       interval: 10s
@@ -303,5 +301,4 @@ services:
       - 8081:8081
 
 volumes:
-  postgres-db-volume-2:
-
+  postgres-db-volume:

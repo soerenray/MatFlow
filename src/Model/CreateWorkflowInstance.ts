@@ -7,7 +7,7 @@ class CreateWorkflowInstance {
 
     private _templatesName: string[]
 
-    private _configFolder: File
+    private _configFiles: File[]
 
     private _workflowInstanceFolder: File
 
@@ -20,16 +20,16 @@ class CreateWorkflowInstance {
     * @param dropDownCreateOrImportWokflowInstance The dropDownCreateOrImportWokflowInstance
     * @param selectedDropDownItem The selectedDropDownItem
     * @param templatesName The templatesName
-    * @param configFolder The configFolder
+    * @param configFiles The configFiles
     * @param workflowInstanceFolder The workflowInstanceFolder
     * @param selectedTemplateName The selectedTemplateName
     * @param workflowInstanceName The workflowInstanceName
     */
-    constructor(dropDownCreateOrImportWokflowInstance: string[] = [], selectedDropDownItem = '', templatesName: string[] = [], configFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), workflowInstanceFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), selectedTemplateName = '', workflowInstanceName = '') {
+    constructor(dropDownCreateOrImportWokflowInstance: string[] = [], selectedDropDownItem = '', templatesName: string[] = [], configFiles: File[] = [new File([], 'emptyFile', { type: 'file' })], workflowInstanceFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), selectedTemplateName = '', workflowInstanceName = '') {
       this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
       this._selectedDropDownItem = selectedDropDownItem;
       this._templatesName = templatesName;
-      this._configFolder = configFolder;
+      this._configFiles = configFiles;
       this._workflowInstanceFolder = workflowInstanceFolder;
       this._selectedTemplateName = selectedTemplateName;
       this._workflowInstanceName = workflowInstanceName;
@@ -86,19 +86,19 @@ class CreateWorkflowInstance {
     }
 
     /**
-    * Gets the configFolder
-    * @returns _configFolder
+    * Gets the configFiles
+    * @returns _configFiles
     */
-    public get configFolder(): File {
-      return this._configFolder;
+    public get configFiles(): File[] {
+      return this._configFiles;
     }
 
     /**
-    * Sets the value of _configFolder
-    * @param configFolder The new value of _configFolder
+    * Sets the value of _configFiles
+    * @param configFiles The new value of _configFiles
     */
-    public set configFolder(configFolder: File) {
-      this._configFolder = configFolder;
+    public set configFiles(configFiles: File[]) {
+      this._configFiles = configFiles;
     }
 
     /**
@@ -157,7 +157,7 @@ class CreateWorkflowInstance {
         .dropDownCreateOrImportWokflowInstance;
       this.selectedDropDownItem = tempCreateWorkflowInstanceObject.selectedDropDownItem;
       this.templatesName = tempCreateWorkflowInstanceObject.templatesName;
-      this.configFolder = tempCreateWorkflowInstanceObject.configFolder;
+      this.configFiles = tempCreateWorkflowInstanceObject.configFiles;
       this.workflowInstanceFolder = tempCreateWorkflowInstanceObject.workflowInstanceFolder;
       this.selectedTemplateName = tempCreateWorkflowInstanceObject.selectedTemplateName;
       this.workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName;
@@ -168,7 +168,7 @@ class CreateWorkflowInstance {
         this.dropDownCreateOrImportWokflowInstance,
         this.selectedDropDownItem,
         this.templatesName,
-        this.configFolder,
+        this.configFiles,
         this.workflowInstanceFolder,
         this.selectedTemplateName,
         this.workflowInstanceName,

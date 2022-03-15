@@ -155,10 +155,8 @@ class WorkflowData:
         """
         # create new version entry
         new_version_nr = new_version.get_version_number().get_number()
-        new_entry = "INSERT INTO Version (wfName, version, note) VALUES (%s, %s, %s)"
-        self.__databaseTable.set(
-            new_entry, (wf_name, new_version_nr, new_version.get_note())
-        )
+        new_entry = "INSERT INTO Version (wfName, version) VALUES (%s, %s)"
+        self.__databaseTable.set(new_entry, (wf_name, new_version_nr))
         # get keys of versions out of Version table
         new_version_index: str = self.__get_key_of_workflow_version(
             wf_name, new_version_nr
@@ -303,6 +301,7 @@ class WorkflowData:
                                               AND version = %s) v, VersionFile vf
                                           WHERE v.ID = vf.versionID) v2 ON v1.confKey = v2.confKey
                                     """
+
 
         versions = self.get_version_numbers_of_workflow_instance(wf_name)
         database_versions: List[DatabaseVersion] = []  # return value

@@ -34,4 +34,3 @@ urllib3==1.26.8
 virtualenv==20.13.0
 waitress==2.0.0
 Werkzeug==2.0.2
-deprecated

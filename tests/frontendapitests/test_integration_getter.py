@@ -199,7 +199,8 @@ class IntegrationTest(unittest.TestCase):
         got = json.loads(
             self.__class__.app.put("set_user_details", json=payload).get_data()
         )
-        self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 601})))
+        expected_status: int = 601
+        self.assertEqual(dict(got)[keys.status_code_name], expected_status)
 
     def test_delete_user(self):
         payload = json.dumps(
@@ -247,7 +248,7 @@ class IntegrationTest(unittest.TestCase):
     def test_get_wf_instance_versions_test(self):
         input_data = json.dumps({keys.workflow_instance_name: "test_instance"})
         got = json.loads(
-            self.__class__.app.get(
+            self.__class__.app.post(
                 "get_wf_instance_versions", json=input_data
             ).get_data()
         )
@@ -284,6 +285,9 @@ class IntegrationTest(unittest.TestCase):
         self.assertEqual(expected_pairs, dict(got)[keys.key_value_pairs_name])
 
     def test_get_all_wf_instances_names_and_config_files_names(self):
+        # TODO Lukas
+        # error in "get_names_of_workflows_and_config_files()" of WorkflowData.py
+        # get duplicate file names if there is more than one version
         got = json.loads(
             self.__class__.app.get(
                 "get_all_wf_instances_names_and_config_file_names"

@@ -93,7 +93,7 @@ class UserController:
         # this are the parameters that will get changed
 
         overridePayload = {
-            "email": ".",
+            "email": overrideUsername,
             "first_name": ".",
             "last_name": ".",
             "roles": [{"name": overridePrivilege}],
