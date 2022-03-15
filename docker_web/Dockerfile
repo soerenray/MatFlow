@@ -1,0 +1,4 @@
+FROM node:12.18.1
+COPY ./ $HOME/matflow_data/
+RUN (cd /matflow_data/ && npm install)
+CMD (cd /matflow_data/ && npm run serve -- --port 8081)

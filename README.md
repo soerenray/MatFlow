@@ -28,7 +28,7 @@ http://<Server IP>:8080
 ```
 
 **Server application** <br>
-Install server application dependencies:
+<!--Install server application dependencies:
 ```
 pip install -r requirements.txt
 npm install
@@ -39,6 +39,16 @@ Run server application:
 npm run serve -- --port 8081
 docker-compose up
 python3 -m matflow.main
+```-->
+
+Install server application dependencies:
+```
+docker-compose build
+```
+Run server application:
+```
+docker-compose up
+python3 -m matflow.main
 ```
 
 ## Testing
@@ -47,6 +57,11 @@ Run unit-tests:
 ```
 npm run test:unit
 ```
+Run integration-tests:
+```
+npm run test:integration
+```
+
 
 ## Operator
 If you want to try out the alternating operator, check out the tutorial_matflow DAG.

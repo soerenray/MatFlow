@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import json
 import os.path
+import traceback
 from pathlib import Path
 from typing import List
 
+import requests.utils
 from deprecated import deprecated
 from flask import Flask, request
 
@@ -12,7 +14,8 @@ from flask import Flask, request
 from matflow.exceptionpackage.MatFlowException import (
     MatFlowException,
     ConverterException,
-    AirflowConnectionException, LoginException,
+    AirflowConnectionException,
+    LoginException,
 )
 from requests.exceptions import ConnectionError
 from matflow.frontendapi import utilities, keys
@@ -81,7 +84,7 @@ class FrontendAPI:
     @classmethod
     def __start_api(cls):
         # serve(app, host="127.0.0.1", port=5000)
-        app.run(debug=True)
+        app.run(debug=True, port=8082)
 
     @staticmethod
     @app.route("/", methods=["GET", "POST"])
@@ -99,7 +102,8 @@ class FrontendAPI:
             String: json-dumped object containing the above described information
         """
         try:
-            server: Server = FrontendAPI.hardware_controller.getServer()
+            auth_tag = request.authorization
+            server: Server = FrontendAPI.hardware_controller.getServer(auth_tag["username"], auth_tag["password"])
             encoded_server: dict = server.encode_server()
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -117,9 +121,10 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_decoded = request.get_json()
+            json_decoded = get_json_not_dict()
             server: Server = Server.extract_server(json_decoded)
-            FrontendAPI.hardware_controller.setServer(server)
+            auth_tag = request.authorization
+            FrontendAPI.hardware_controller.setServer(server, auth_tag["username"], auth_tag["password"])
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -148,7 +153,9 @@ class FrontendAPI:
         # 'email': '.', 'fail_login_count': 0, 'first_name': '.', 'last_login': '2022-02-25T08:58:08.301726',
         # 'last_name': '.', 'login_count': 3, 'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
         try:
-            details = FrontendAPI.user_controller.getAllUsersAndDetails()
+            auth_tag = request.authorization
+            details = FrontendAPI.user_controller.getAllUsersAndDetails((auth_tag["username"], auth_tag["password"]))
+
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except ConnectionError:
@@ -182,8 +189,9 @@ class FrontendAPI:
         """
         try:
             json_details = request.get_json()
+            auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.overrideUser(user)
+            FrontendAPI.user_controller.overrideUser(user, (auth_tag["username"], auth_tag["password"]))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -208,8 +216,9 @@ class FrontendAPI:
         """
         try:
             json_details = request.get_json()
+            auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.deleteUser(user)
+            FrontendAPI.user_controller.deleteUser(user, (auth_tag["username"], auth_tag["password"]))
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -235,6 +244,7 @@ class FrontendAPI:
         out_dict: dict = dict()
         list_of_versions: List[dict] = []
         try:
+            auth_tag = request.authorization
             loaded = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name], loaded)
             wf_name: str = loaded[keys.workflow_instance_name]
@@ -265,6 +275,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.version_number_name], decoded_json)
             FrontendAPI.workflow_manager.set_active_version_through_number(
@@ -292,6 +303,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
@@ -322,6 +334,7 @@ class FrontendAPI:
             String: json-dumped object containing encoded config file
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.config_file_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
@@ -350,6 +363,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             check_routine([keys.workflow_instance_name, keys.template_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
@@ -388,7 +402,7 @@ class FrontendAPI:
 
     @staticmethod
     @app.route("/verify_login", methods=["GET"])
-    @deprecated(reason="Please use airflow login", version="1.0")
+    #  @deprecated(reason="Please use airflow login", version="1.0")
     def verify_login() -> str:
         """
         verifies username with associated password via username and password
@@ -424,6 +438,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
+            auth_tag = request.authorization
             decoded_json: dict = json.loads(request.get_json())
             keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
             check_routine(keys_to_check, decoded_json)
@@ -431,12 +446,15 @@ class FrontendAPI:
                 decoded_json[keys.user_name],
                 decoded_json[keys.password_name],
                 decoded_json[keys.repeat_password_name],
+                (auth_tag["username"], auth_tag["password"])
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as error:
             return ExceptionHandler.handle_exception(
-                ConverterException("false/ no json provided")
+                ConverterException(
+                    "false/ no json provided" + " Error: " + str(error.args)
+                )
             )
         except ConnectionError:
             return ExceptionHandler.handle_exception(
@@ -455,13 +473,17 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            template: Template = Template.extract_template(request.get_json())
+            template: Template = Template.extract_template(get_json_not_dict())
             FrontendAPI.workflow_manager.create_template(template)
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as error:
+            print(error.args)
+            print(traceback.format_exc())
             return ExceptionHandler.handle_exception(
-                ConverterException("false/ no json provided")
+                ConverterException(
+                    "false/ no json provided" + "Error: " + str(error.args)
+                )
             )
         else:
             return ExceptionHandler.success(dict())
@@ -489,7 +511,7 @@ class FrontendAPI:
             String: json-dumped object containing encoded template
         """
         try:
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.template_name], decoded_json)
             name = decoded_json[keys.template_name]
             template: Template = FrontendAPI.workflow_manager.get_template_from_name(
@@ -515,7 +537,7 @@ class FrontendAPI:
         """
         try:
             contemporary_template: Template = Template.extract_template(
-                request.get_json()
+                get_json_not_dict()
             )
             FrontendAPI.workflow_manager.create_template(contemporary_template)
             file_path: Path = (
@@ -533,15 +555,22 @@ class FrontendAPI:
             out = utilities.encode_file(file_path, keys.dag_picture_name)
             # file is already removed in utilities.encode
             os.rmdir(file_path.parent)
-            return ExceptionHandler.success(
-                out
-            )
+            return ExceptionHandler.success(out)
 
 
 def check_routine(keys_to_check: List[str], decoded_json: dict) -> None:
     for key in keys_to_check:
         if key not in decoded_json:
             raise TypeError
+
+
+def get_json_not_dict() -> str:
+    json_str: str
+    if type(request.get_json()) != str:
+        json_str = json.dumps(request.get_json())
+    else:
+        json_str = request.get_json()
+    return json_str
 
 
 ###################################

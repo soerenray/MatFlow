@@ -1,3 +1,0 @@
-describe('LogIn.vue', () => {
-    it('', () => { })
-})

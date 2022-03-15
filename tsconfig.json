@@ -4,38 +4,39 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
-    "importHelpers": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "useDefineForClassFields": true,
     "sourceMap": true,
-    "baseUrl": "matflow/frontend/src",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/vuetify/types"
-    ],
+    "baseUrl": ".",
     "types": [
+      "vue",
       "webpack-env",
-      "vuetify",
       "jest"
     ],
     "paths": {
       "@Classes/*": [
-        "Classes/*"
+        "src/Classes/*"
       ],
       "@Controler/*": [
-        "Controler/*"
+        "src/Controler/*"
       ],
       "@Memento/*": [
-        "Memento/*"
+        "src/Memento/*"
       ],
       "@Model/*": [
-        "Model/*"
+        "src/Model/*"
       ],
       "@View/*": [
-        "View/*"
+        "src/View/*"
+      ],
+      "@/*": [
+        "src/*"
       ],
     },
     "lib": [
@@ -46,11 +47,11 @@
     ]
   },
   "include": [
-    "matflow/frontend/src/**/*.ts",
-    "matflow/frontend/src/**/*.tsx",
-    "matflow/frontend/src/**/*.vue",
-    "tests/frontendtests/**/*.ts",
-    "tests/frontendtests/**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
