@@ -39,12 +39,12 @@ test:
   stage: tests
   script:
     # only folders containing .py tests in alphabetical(file) order
-    - python -m unittest discover -s tests.databasetests
-    - python -m unittest discover -s tests.frontendapitests
-    - python -m unittest discover -s tests.hardwareadministrationtets
-    - python -m unittest discover -s tests.operatortest
-    - python -m unittest discover -s tests.useradministrationtests
-    - python -m unittest discover -s tests.workflowtests
+    - python -m unittest discover -s tests/databasetests
+    - python -m unittest discover -s tests/frontendapitests
+    - python -m unittest discover -s tests/hardwareadministrationtets
+    - python -m unittest discover -s tests/operatortest
+    - python -m unittest discover -s tests/useradministrationtests
+    - python -m unittest discover -s tests/workflowtests
 
 
 
