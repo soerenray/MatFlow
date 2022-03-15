@@ -99,7 +99,7 @@ export default {
         ],
         [],
         ['activated', 'suspended', 'pending'],
-        ['visitor', 'developer', 'administrator'],
+        ['Public', 'User', 'Admin'],
       ),
     };
   },

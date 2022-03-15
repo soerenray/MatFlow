@@ -130,10 +130,9 @@ export default {
         === 'create workflow-instance from template'
       ) {
         this.backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
-          this.createNewWorkflowInstanceObject(
-            this.workflowInstanceFolder,
-            this.workflowInstanceName,
-          ),
+          this.workflowInstanceName,
+          this.selectedTemplateName,
+          [this.workflowInstanceFolder],
         );
       } else {
         this.backendServerCommunicatorObject.pushExistingWorkflowInstance(

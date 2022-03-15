@@ -215,14 +215,15 @@ class BackendServerCommunicator {
         [Keys.configFiles]: configDicts,
       })
         .then((response) => {
-          switch (response.data[Keys.statusCodeName]) {
-            case 607:
-              // everything went fine
-              break;
-            default:
-              // error -> can be
-              break;
-          }
+            console.log("createVersionResp", response);
+            switch (response.data[Keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
         });
     }
 
@@ -332,9 +333,9 @@ class BackendServerCommunicator {
 
     public async pullServers(): Promise<Server[]> {
       let servers: Server[] = [];
-      await axios.get('http://localhost:5000/get_server_details')
+      await axios.get(BackendServerCommunicator.serverAddress + Keys.getServerDetails)
         .then((response) => {
-          console.log(response);
+          console.log("PullServerResp", response);
           const { data } = response;
           let status: string;
           if (data[Keys.serverStatusName]) {
@@ -359,7 +360,6 @@ class BackendServerCommunicator {
         [Keys.serverResourcesName]: server.serverResources[0],
         [Keys.selectedForExecutionName]: server.selectedForExecution,
       };
-      console.log('serverData', data);
       axios.put(BackendServerCommunicator.serverAddress + Keys.setServerDetails, data)
         .then((response) => {
           console.log('pushServerResp:', response);

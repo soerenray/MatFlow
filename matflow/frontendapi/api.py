@@ -304,7 +304,7 @@ class FrontendAPI:
             version_note: str = decoded_json[keys.version_note_name]
             configs: List[
                 ReducedConfigFile
-            ] = ReducedConfigFile.extract_multiple_configs(request.get_json())
+            ] = ReducedConfigFile.extract_multiple_configs(get_json_not_dict())
             FrontendAPI.workflow_manager.create_new_version_of_workflow_instance(
                 wf_instance_name, configs, version_note
             )
@@ -318,7 +318,7 @@ class FrontendAPI:
             return ExceptionHandler.success(dict())
 
     @staticmethod
-    @app.route("/get_config_from_wf_instance", methods=["GET"])
+    @app.route("/get_config_from_wf_instance", methods=["POST"])
     def get_config_from_wf_instance() -> str:
         """
         gets config file by workflow instance name and associated config file name (contains the wanted workflow
@@ -365,14 +365,14 @@ class FrontendAPI:
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: Path = ReducedConfigFile.extract_multiple_config_files(
-                request.get_json()
+                get_json_not_dict()
             )
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(
                 template_name, wf_name, files
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as e:
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )
