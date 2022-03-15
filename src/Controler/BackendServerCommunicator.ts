@@ -229,7 +229,7 @@ class BackendServerCommunicator {
 
     public async pullVersionsWithWorkflowInstanceName(workflowInstanceName: string): Promise<Version[]> {
       const versions: Version[] = [];
-      await axios.get(BackendServerCommunicator.serverAddress + Keys.getWfInstanceVersions)
+      await axios.post(BackendServerCommunicator.serverAddress + Keys.getWfInstanceVersions, {[Keys.workflowInstanceName]: workflowInstanceName})
         .then((response) => {
           console.log('pullversions', response);
           const { data } = response;
@@ -256,13 +256,14 @@ class BackendServerCommunicator {
         [Keys.versionNumberName]: versionNumber,
       })
         .then((response) => {
-          switch (response.data[Keys.statusCodeName]) {
-            case 607:
-              // everything went fine
-              break;
-            default:
-              // error -> can be
-              break;
+            console.log("pushReplVersionResp", response);
+            switch (response.data[Keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                      // error -> can be
+                      break;
           }
         });
     }
