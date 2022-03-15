@@ -19,7 +19,6 @@ class DatabaseTable:
         if DatabaseTable.__instance is not None:
             raise Exception("This class is a singleton!")
         else:
-            self.setup_database()
             DatabaseTable.__instance = self
             return
 
@@ -217,42 +216,6 @@ class DatabaseTable:
 
         return data
 
-    def setup_database(self):
-        """first setup of tables in the database.
-
-        Establish connection to database with set parameters.
-        Read queries from external file "Database_Table_Setup.txt" and execute.
-
-        Print error, but don't crash if tables are already up
-
-        """
-        # connection to database
-        db = self.__get_database_connection()
-        cursor = db.cursor()
-
-        # queries outsourced to avoid overly long lines in code
-        path = Path(__file__).parent
-        database_setup_file = open(os.path.join(path, "Database_Table_Setup.txt"), "r")
-        database_setup = database_setup_file.read().replace("\n", "").split(";")
-
-        # actual queries
-
-        for line in database_setup:
-            if line == "":  # end of file
-                break
-
-            # error on double execution
-            try:
-                cursor.execute(line + ";")
-                # print("success creation: " +line)           #debugging
-            except mysql.connector.Error as err:
-                # print(err)  # tmp for debugging
-                raise MatFlowException.InternalException(err.msg)
-
-        # close connection
-        cursor.close()
-        db.close()
-
 
 # TODO vvv delete or move before shipping vvv
 def init_tests():
@@ -262,7 +225,6 @@ def init_tests():
     )
 
     d_table = DatabaseTable.get_instance()
-    d_table.setup_database()
 
     print("TEST IN DatabaseTable END!")
 
