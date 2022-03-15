@@ -275,13 +275,6 @@ services:
     restart: always
     ports:
       - 3306:3306
-<<<<<<< HEAD
-    expose: 
-      - "3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: 12345
-      MYSQL_DATABASE: databaseshema
-=======
     expose:
       - "3306"
     environment:
@@ -304,7 +297,6 @@ services:
       dockerfile: ./docker_web/Dockerfile
     ports:
       - 8081:8081
->>>>>>> frontend
 
 volumes:
   postgres-db-volume:
