@@ -9,7 +9,9 @@ class CreateTemplate {
 
     private _dagFile: File
 
-    private _createFromEmptyFile: boolean
+    private _openEdit: boolean
+
+    private _tempTextFile: string
 
     /**
     *
@@ -17,20 +19,23 @@ class CreateTemplate {
     * @param templatesName The templatesName
     * @param chosenTemplateName The chosenTemplateName
     * @param dagFile The dagFile
-    * @param createFromEmptyFile createFromEmptyFile
+    * @param openEdit openEdit
+    * @param tempTextFile Is need to write text from the dagFile temporary
     */
     constructor(
       newTemplateName = '',
       templatesName: string[] = [],
       chosenTemplateName = '',
       dagFile: File = new File([], 'emptyFile', { type: 'file' }),
-      createFromEmptyFile = false,
+      openEdit = false,
+      tempTextFile = '',
     ) {
       this._newTemplateName = newTemplateName;
       this._templatesName = templatesName;
       this._chosenTemplateName = chosenTemplateName;
       this._dagFile = dagFile;
-      this._createFromEmptyFile = createFromEmptyFile;
+      this._openEdit = openEdit;
+      this._tempTextFile = tempTextFile;
     }
 
     /**
@@ -98,19 +103,35 @@ class CreateTemplate {
     }
 
     /**
-    * Gets the createFromEmptyFile
-    * @returns _createFromEmptyFile
+    * Gets the openEdit
+    * @returns _openEdit
     */
-    public get createFromEmptyFile(): boolean {
-      return this._createFromEmptyFile;
+    public get openEdit(): boolean {
+      return this._openEdit;
     }
 
     /**
-    * Sets the value of _createFromEmptyFile
-    * @param createFromEmptyFile The new value of _createFromEmptyFile
+    * Sets the value of _openEdit
+    * @param openEdit The new value of _openEdit
     */
-    public set createFromEmptyFile(createFromEmptyFile: boolean) {
-      this._createFromEmptyFile = createFromEmptyFile;
+    public set openEdit(openEdit: boolean) {
+      this._openEdit = openEdit;
+    }
+
+    /**
+    * Gets the tempTextFile
+    * @returns _tempTextFile
+    */
+    public get tempTextFile(): string {
+      return this._tempTextFile;
+    }
+
+    /**
+    * Sets the value of _tempTextFile
+    * @param tempTextFile The new value of _tempTextFile
+    */
+    public set tempTextFile(tempTextFile: string) {
+      this._tempTextFile = tempTextFile;
     }
 
     public setCreateTemplateMemento(createTemplateMemento: CreateTemplateMemento) {
@@ -119,7 +140,8 @@ class CreateTemplate {
       this.templatesName = tempCreateTemplateMementoObject.templatesName;
       this.chosenTemplateName = tempCreateTemplateMementoObject.chosenTemplateName;
       this.dagFile = tempCreateTemplateMementoObject.dagFile;
-      this.createFromEmptyFile = tempCreateTemplateMementoObject.createFromEmptyFile;
+      this.openEdit = tempCreateTemplateMementoObject.openEdit;
+      this.tempTextFile = tempCreateTemplateMementoObject.tempTextFile;
     }
 
     public createTemplateMemento(): CreateTemplateMemento {
@@ -128,7 +150,8 @@ class CreateTemplate {
         this.templatesName,
         this.chosenTemplateName,
         this.dagFile,
-        this.createFromEmptyFile,
+        this.openEdit,
+        this.tempTextFile,
       ));
     }
 }
