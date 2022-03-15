@@ -332,15 +332,43 @@ class BackendServerCommunicator {
         .then(function (response) {
             console.log(response)
             const data = response.data
-            servers = [new Server(data.serverAddress, 'running', data.containerLimit, data.selectedForExecution, data.serverName, [["cpu1", "50%"]])]
+            let status: string;
+            if (data[keys.serverStatusName]){
+                status = "running";
+            } else {
+                status = "inactive";
+            }
+            servers = [new Server(data[keys.serverAddressName], status, data[keys.containerLimitName], data[keys.selectedForExecutionName], data[keys.serverName], [data[keys.serverResourcesName]])]
+            // servers = [new Server(data.serverAddress, 'running', data.containerLimit, data.selectedForExecution, data.serverName, [["cpu1", "50%"]])]
         })
         return servers
         // funktioniert. Es sind aber dummy daten
         // return pullServers2()
     }
-    public pushServer(server: Server): void { pushServer(server) }
+    public pushServer(server: Server): void { 
+        let data = {
+            [keys.serverName]: server.serverName,
+            [keys.serverAddressName]: server.serverAddress,
+            [keys.serverStatusName]: server.serverStatus,
+            [keys.containerLimitName] : server.containerLimit,
+            [keys.serverResourcesName] : server.serverResources[0],
+            [keys.selectedForExecutionName] : server.selectedForExecution
+        }
+        console.log("serverData", data);
+        axios.put( BackendServerCommunicator.serverAddress + keys.setServerDetails, data)
+        .then(function (response) {
+            console.log("pushServerResp:", response)
+            switch (response.data[keys.statusCodeName]) {
+                case 607:
+                    // everything went fine
+                    break;
+                default:
+                    // error -> can be
+                    break;
+            }
+        });
+    }
 
-    private encode_file(file: File): string {return ""} // TODO
 }
 
 export default BackendServerCommunicator

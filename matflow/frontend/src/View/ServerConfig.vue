@@ -116,7 +116,10 @@ export default {
       this.pullServers();
     },
     pullServers() {
-      this.servers = backendServerCommunicatorObject.pullServers();
+      backendServerCommunicatorObject.pullServers()
+      .then((result) => {
+        this.servers = result;
+      });
     },
     pushServer(serverName: string) {
       backendServerCommunicatorObject.pushServer(
