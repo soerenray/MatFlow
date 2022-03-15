@@ -4,7 +4,7 @@ import User from '@Classes/User';
 import Server from '@Classes/Server';
 import Version from '@Classes/Version';
 import Template from '@Classes/Template';
-import { fileToDataURL } from '@Classes/base64Utility';
+import { fileToDataURL, dataURLtoFile } from '@Classes/base64Utility';
 import Keys from '@Controler/Keys';
 
 import WorkflowInstance from '@Classes/WorkflowInstance';
@@ -108,6 +108,9 @@ class BackendServerCommunicator {
     }
 
     //TODO pullTemplateByName
+    public async pullDagFileByTemplateName(worflowInstanceName: string): Promise<File>{
+      return dataURLtoFile("", ""); //dummy
+    }
 
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(

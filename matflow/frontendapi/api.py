@@ -500,7 +500,7 @@ class FrontendAPI:
         )
 
     @staticmethod
-    @app.route("/get_template", methods=["GET"])
+    @app.route("/get_template", methods=["POST"])
     def get_template() -> str:
         """
         gets wanted template by name
