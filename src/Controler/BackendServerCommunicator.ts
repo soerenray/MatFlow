@@ -1,3 +1,4 @@
+/* eslint-disable */
 import ConfigFile from '@Classes/ConfigFile';
 import User from '@Classes/User';
 import Server from '@Classes/Server';
@@ -107,7 +108,11 @@ class BackendServerCommunicator {
     }
 
     // TODO the workflowInstance object doesn't contain the conf folder
-    public pushCreateWorkflowInstanceFromTemplate(workflowInstanceName: string, templateName: string, confFiles: File[]): void {
+    public pushCreateWorkflowInstanceFromTemplate(
+      workflowInstanceName: string,
+      templateName: string,
+      confFiles: File[],
+    ): void {
       const confFilesDummy: File[] = [new File([], 'emptyFile.conf')];
       const confDict: Array<Object> = [];
       for (const file of confFilesDummy) {
