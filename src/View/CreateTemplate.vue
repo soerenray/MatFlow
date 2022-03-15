@@ -101,10 +101,8 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      await this
-        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
-          res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
-        });
+      this.createTemplateObject.templatesName = await this
+        .backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(

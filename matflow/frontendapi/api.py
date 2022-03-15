@@ -346,7 +346,7 @@ class FrontendAPI:
                 ConverterException("false/ no json provided")
             )
         else:
-            return ExceptionHandler.success(file.encode_config())y
+            return ExceptionHandler.success(file.encode_config())
 
     @staticmethod
     @app.route("/create_workflow_instance", methods=["POST"])

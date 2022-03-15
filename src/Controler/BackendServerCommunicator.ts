@@ -18,7 +18,7 @@ const axios = require('axios').default;
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
-    static serverAddress = 'http://127.0.0.1:5000/'
+    static serverAddress = 'http://127.0.0.1:8082/'
 
     public constructor() { }
 
@@ -106,6 +106,8 @@ class BackendServerCommunicator {
           // transfer error
         });
     }
+
+    //TODO pullTemplateByName
 
     // TODO the workflowInstance object doesn't contain the conf folder
     public pushCreateWorkflowInstanceFromTemplate(

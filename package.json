@@ -74,7 +74,8 @@
       "no-console": "off",
       "no-underscore-dangle": "off",
       "import/no-cycle": "off",
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
+      "linebreak-style": "off"
     },
     "overrides": [
       {
