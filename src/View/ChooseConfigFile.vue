@@ -169,15 +169,7 @@ export default {
         this.selectedWorkflowInstanceName,
       );
     },
-<<<<<<< HEAD:matflow/frontend/src/View/ChooseConfigFile.vue
-    resetChoosenConfigFileObjects() {
-      this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
-      .then((result) => {
-          this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = result;
-      });
-=======
     async resetChoosenConfigFileObjects() {
->>>>>>> frontend:src/View/ChooseConfigFile.vue
       this.updatedConfigFiles = [];
       this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = await this
         .backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
@@ -188,22 +180,6 @@ export default {
         );
       this.updatedConfigFiles.push(this.chosenConfigFile);
     },
-<<<<<<< HEAD:matflow/frontend/src/View/ChooseConfigFile.vue
-    pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-      workflowInstanceName: string,
-      configFileName: string
-    ): ConfigFile {
-      let returnValue: ConfigFile = new ConfigFile(); // place holder value
-      this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-        workflowInstanceName,
-        configFileName
-      ).then((result) => {
-        returnValue = result;
-        });
-      return returnValue;
-    },
-=======
->>>>>>> frontend:src/View/ChooseConfigFile.vue
     setSelectedWorkflowInstanceNameAndResetConfigFileNameAndUpdatedConfigFiles(
       selectedWorkflowInstanceName: string,
     ) {
@@ -222,20 +198,11 @@ export default {
           this.selectedConfigFileName,
         )
       ) {
-<<<<<<< HEAD:matflow/frontend/src/View/ChooseConfigFile.vue
-        this.backendServerCommunicatorObject.pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
-          this.selectedWorkflowInstanceName,
-          this.selectedConfigFileName
-        ).then((result) => {
-          this.chosenConfigFile = result;
-        });
-=======
         this.chosenConfigFile = await this.backendServerCommunicatorObject
           .pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
             this.selectedWorkflowInstanceName,
             this.selectedConfigFileName,
           );
->>>>>>> frontend:src/View/ChooseConfigFile.vue
         this.updatedConfigFiles.push(this.chosenConfigFile);
       } else {
         this.chosenConfigFile = this.getConfigFileFromUpdatedConfigFiles(
@@ -297,18 +264,6 @@ export default {
       },
     },
   },
-<<<<<<< HEAD:matflow/frontend/src/View/ChooseConfigFile.vue
-  created: function () {
-    // Vue is oberserving data in the data property.
-    // The object choosenConfigFileObject wouldn't update, when the parameters are
-    // initialized in data
-    // Vue.observable has to be used to make an object outside of data reactive: https:///// v3.vuejs.org/guide/reactivity-fundamentals.html#declaring-reactive-state
-    Vue.observable(this.chooseConfigFileObject);
-    this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
-    .then((result) => {
-      this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = result;
-    });
-=======
   async created() {
     this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
       .then((res) => {
@@ -316,7 +271,6 @@ export default {
           this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames.push(elem);
         });
       });
->>>>>>> frontend:src/View/ChooseConfigFile.vue
   },
 };
 </script>

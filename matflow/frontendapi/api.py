@@ -83,7 +83,7 @@ class FrontendAPI:
     @classmethod
     def __start_api(cls):
         # serve(app, host="127.0.0.1", port=5000)
-        app.run(debug=True)
+        app.run(debug=True, port=8082)
 
     @staticmethod
     @app.route("/", methods=["GET", "POST"])
@@ -318,7 +318,7 @@ class FrontendAPI:
             return ExceptionHandler.success(dict())
 
     @staticmethod
-    @app.route("/get_config_from_wf_instance", methods=["POST"])
+    @app.route("/get_config_from_wf_instance", methods=["GET"])
     def get_config_from_wf_instance() -> str:
         """
         gets config file by workflow instance name and associated config file name (contains the wanted workflow
@@ -346,7 +346,7 @@ class FrontendAPI:
                 ConverterException("false/ no json provided")
             )
         else:
-            return ExceptionHandler.success(file.encode_config())
+            return ExceptionHandler.success(file.encode_config())y
 
     @staticmethod
     @app.route("/create_workflow_instance", methods=["POST"])
@@ -365,14 +365,14 @@ class FrontendAPI:
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: Path = ReducedConfigFile.extract_multiple_config_files(
-                get_json_not_dict()
+                request.get_json()
             )
             FrontendAPI.workflow_manager.create_workflow_instance_from_template(
                 template_name, wf_name, files
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError as error:
+        except TypeError:
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )
