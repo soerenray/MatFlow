@@ -199,7 +199,8 @@ class IntegrationTest(unittest.TestCase):
         got = json.loads(
             self.__class__.app.put("set_user_details", json=payload).get_data()
         )
-        self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 601})))
+        expected_status: int = 601
+        self.assertEqual(dict(got)[keys.status_code_name], expected_status)
 
     def test_delete_user(self):
         payload = json.dumps(
@@ -245,11 +246,9 @@ class IntegrationTest(unittest.TestCase):
         self.assertIn("test_instance", got[keys.names_and_configs])
 
     def test_get_wf_instance_versions_test(self):
-        # TODO Fehler bei Lukas
-        # "Column 'confKey' in field list is ambiguous"
         input_data = json.dumps({keys.workflow_instance_name: "test_instance"})
         got = json.loads(
-            self.__class__.app.get(
+            self.__class__.app.post(
                 "get_wf_instance_versions", json=input_data
             ).get_data()
         )

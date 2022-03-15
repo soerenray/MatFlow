@@ -226,7 +226,7 @@ class FrontendAPI:
             return ExceptionHandler.success(dict())
 
     @staticmethod
-    @app.route("/get_wf_instance_versions", methods=["GET"])
+    @app.route("/get_wf_instance_versions", methods=["POST"])
     def get_wf_instance_versions() -> str:
         """
         gets the versions associated with wanted workflow instance
@@ -247,7 +247,7 @@ class FrontendAPI:
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
-        except TypeError:
+        except TypeError as e:
             return ExceptionHandler.handle_exception(
                 ConverterException("false/ no json provided")
             )

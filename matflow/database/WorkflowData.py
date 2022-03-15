@@ -128,7 +128,7 @@ class WorkflowData:
         # define empty dictionary
         workflow_dict: Dict[str, List[str]] = {}
         # get all existing files with corresponding workflows
-        query = "SELECT v.wfName, vf.filename FROM Version v INNER JOIN VersionFile vf ON vf.versionID = v.ID;"
+        query = "SELECT DISTINCT v.wfName, vf.filename FROM Version v INNER JOIN VersionFile vf ON vf.versionID = v.ID;"
         raw_data = self.__databaseTable.get_multiple(query, ())
         # build dictionary
         for (name, file_path) in raw_data:
@@ -287,21 +287,21 @@ class WorkflowData:
 
         # 2) compare old and new version and get file path of new version file
         get_other_version_file = """SELECT v1.file, v1.note
-                                    FROM (SELECT confKey, file
+                                    FROM (SELECT cf.confKey, file, v.note
                                           FROM (SELECT * 
                                               FROM Version v
                                               WHERE wfName = %s
                                               AND version = %s) v, VersionFile vf, ConfFile cf
                                           WHERE v.ID = vf.versionID
                                           AND cf.confKey = vf.confKey) v1 LEFT JOIN
-                                         (SELECT confKey
+                                         (SELECT vf.confKey
                                           FROM (SELECT * 
                                               FROM Version 
                                               WHERE wfName = %s
                                               AND version = %s) v, VersionFile vf
                                           WHERE v.ID = vf.versionID) v2 ON v1.confKey = v2.confKey
-                                    WHERE NOT v1.confKey = v2.confKey
                                     """
+
 
         versions = self.get_version_numbers_of_workflow_instance(wf_name)
         database_versions: List[DatabaseVersion] = []  # return value
