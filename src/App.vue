@@ -2,7 +2,7 @@
   <v-app>
     <v-main>
       <v-row>
-          <v-toolbar dense color="#AED6F1">
+          <v-toolbar style='width: 100%' dense color="#AED6F1">
             <v-row>
               <v-col>
                 <v-btn to="/CreateTemplate" variant="text">CreateTemplate
@@ -37,6 +37,11 @@
               <v-col>
                 <v-btn to="/LogIn" variant="text">LogIn
                    <router-link to="/LogIn"></router-link>
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn href='http://localhost:8080' variant="text">
+                   Airflow
                 </v-btn>
               </v-col>
             </v-row>
