@@ -1,21 +1,17 @@
 from airflow.plugins_manager import AirflowPlugin
 
-from flask import Blueprint
-# from flask_admin import BaseView, expose
-# from flask_admin.base import MenuLink
-
 # Importing base classes that we need to derive
+from airflow.models.baseoperator import BaseOperatorLink
 from airflow.hooks.base_hook import BaseHook
 from airflow.models import BaseOperator
 from airflow.sensors.base_sensor_operator import BaseSensorOperator
 from airflow.executors.base_executor import BaseExecutor
-from flask_appbuilder import BaseView as AppBuilderBaseView
 
 # Will show up under airflow.hooks.test_plugin.PluginHook
 class PluginHook(BaseHook):
     pass
 
-# Will show up under airflow.operators.test_plugin.PluginOperator
+# Will show up under airflow.operators.test_plugin.PluginOperatorflask_admin
 class PluginOperator(BaseOperator):
     pass
 
@@ -31,32 +27,17 @@ class PluginExecutor(BaseExecutor):
 def plugin_macro():
     pass
 
-# Creating a flask appbuilder BaseView
-class TestAppBuilderBaseView(AppBuilderBaseView):
-
-    template_folder = '/home/uc/airflow/plugins'
-
-    def list(self):
-        return self.render_template("test.html", content="Templates erstellen")
-
-v_appbuilder_view = TestAppBuilderBaseView()
-v_appbuilder_package = {"name": "Create template",
-                        "category": "Workflow/ Workflow-Instance",
-                        "view": v_appbuilder_view}
-
-# Creating a flask appbuilder Menu Item
-appbuilder_mitem = {"name": "Administration page",
-                    "category": "Administration",
+appbuilder_mitem = {"name": "Frontend homepage",
+                    "category": "Frontend",
                     "category_icon": "fa-th",
-                    "href": "https://www.google.com"}
+                    "href": "http://localhost:8081"}
 
 # Defining the plugin class
 class AirflowTestPlugin(AirflowPlugin):
-    name = "LinkToFrontend"
+    name = "frontend_Link"
     operators = [PluginOperator]
     sensors = [PluginSensorOperator]
     hooks = [PluginHook]
     executors = [PluginExecutor]
     macros = [plugin_macro]
-    appbuilder_views = [v_appbuilder_package]
     appbuilder_menu_items = [appbuilder_mitem]
