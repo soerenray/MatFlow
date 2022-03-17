@@ -61,7 +61,7 @@ describe('ServerConfig', () => {
     backendServerCommunicatorObject.servers = [server1];
   })
 
-  it('Table headers are displayed correctly in the correct order', () => {
+  it('Table headers are displayed correctly and in the correct order', () => {
     cy.get('[data-cy=tableHeader]')
     cy.get('[data-cy=tableHeader] > tr > td').eq(0).should('have.text', 'Server location name');
     cy.get('[data-cy=tableHeader] > tr > td').eq(1).should('have.text', 'Address');
@@ -72,22 +72,22 @@ describe('ServerConfig', () => {
     cy.get('[data-cy=tableHeader] > tr > td').eq(6).should('have.text', 'apply changes');
   });
 
-  it('Table body exists of exactly one element', () => {
+  it('Table-body exists of exactly one element', () => {
     cy.get('[data-cy=tableBody]').should('exist');
   });
 
-  it('Table body consits of exactly one element', () => {
+  it('Table-body consits of exactly one element', () => {
     cy.get('[data-cy=tableBody] > tr').should('have.length', 1);
   });
 
-  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values", () => {
+  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should contain the correct values", () => {
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-materialwissenschaften');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123.123.11.1');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(2).should('have.value', 'running');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '5');
   });
 
-  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should have to correct values afetr 'apply changes' is pressed", () => {
+  it("'Server location name', 'Address', 'Status', 'Container limit', 'Selected for execution' should contain the correct values after 'apply changes' is pressed", () => {
     cy.get('[data-cy=applyChanges]').eq(0).click();
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).should('have.value', 'kit-materialwissenschaften');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).should('have.value', '123.123.11.1');
@@ -138,13 +138,13 @@ describe('ServerConfig', () => {
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '10');
   });
 
-  it('Server resources of server1 should contain the correct entries in the correct order', () => {
+  it("Server resources of 'server1' should contain the correct entries in the correct order", () => {
     cy.get('[data-cy=serverResources]').eq(0).click();
     cy.get('[data-cy=keyValuePairs] .v-field__input').eq(0).should('have.value', 'cpu1');
     cy.get('[data-cy=keyValuePairs] .v-field__input').eq(1).should('have.value', '50%');
   });
 
-  it("The changes should be applyed, after typing new key-value-pairs in 'server resoureces'", () => {
+  it("The changes should be applied, after typing new key-value-pairs in 'server resoureces'", () => {
     cy.get('[data-cy=serverResources]').eq(0).click();
     cy.get('[data-cy=keyValuePairs] .v-field__input').eq(0).click().clear()
       .type('cpu2');
