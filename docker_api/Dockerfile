@@ -4,4 +4,4 @@ COPY matflow ./matflow
 COPY requirements.txt .
 COPY Pipfile* .
 RUN pip install -r requirements.txt
-CMD python -m matflow.main.py
+CMD python -m matflow.main
