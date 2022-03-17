@@ -1,3 +1,7 @@
 FROM python:3.8
-COPY ./ $HOME/matflow_data/
-CMD (cd /matflow_data/ && pip install -r requirements.txt)
+WORKDIR /usr/src/app
+COPY matflow ./matflow
+COPY requirements.txt .
+COPY Pipfile* .
+RUN pip install -r requirements.txt
+CMD python -m matflow.main.py
