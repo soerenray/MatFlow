@@ -13,6 +13,10 @@ class CreateTemplate {
 
     private _tempTextFile: string
 
+    private _isDagFileInBase64: boolean
+
+    private _dagFileInBase64: ArrayBuffer
+
     /**
     *
     * @param newTemplateName The newTemplateName
@@ -21,6 +25,8 @@ class CreateTemplate {
     * @param dagFile The dagFile
     * @param openEdit openEdit
     * @param tempTextFile Is need to write text from the dagFile temporary
+    * @param isDagFileInBase64 True if the dagFile is converted to base64 format
+    * @param dagFileInBase64 The dagFile in base64 format
     */
     constructor(
       newTemplateName = '',
@@ -29,6 +35,8 @@ class CreateTemplate {
       dagFile: File = new File([], 'emptyFile', { type: 'file' }),
       openEdit = false,
       tempTextFile = '',
+      isDagFileInBase64 = false,
+      dagFileInBase64: ArrayBuffer = new ArrayBuffer(0),
     ) {
       this._newTemplateName = newTemplateName;
       this._templatesName = templatesName;
@@ -36,6 +44,8 @@ class CreateTemplate {
       this._dagFile = dagFile;
       this._openEdit = openEdit;
       this._tempTextFile = tempTextFile;
+      this._isDagFileInBase64 = isDagFileInBase64;
+      this._dagFileInBase64 = dagFileInBase64;
     }
 
     /**
@@ -132,6 +142,38 @@ class CreateTemplate {
     */
     public set tempTextFile(tempTextFile: string) {
       this._tempTextFile = tempTextFile;
+    }
+
+    /**
+    * Gets the isDagFileInBase64
+    * @returns _isDagFileInBase64
+    */
+    public get isDagFileInBase64(): boolean {
+      return this._isDagFileInBase64;
+    }
+
+    /**
+    * Sets the value of _isDagFileInBase64
+    * @param isDagFileInBase64 The new value of _isDagFileInBase64
+    */
+    public set isDagFileInBase64(isDagFileInBase64: boolean) {
+      this._isDagFileInBase64 = isDagFileInBase64;
+    }
+
+    /**
+    * Gets the dagFileInBase64
+    * @returns _dagFileInBase64
+    */
+    public get dagFileInBase64(): ArrayBuffer {
+      return this._dagFileInBase64;
+    }
+
+    /**
+    * Sets the value of _dagFileInBase64
+    * @param dagFileInBase64 The new value of _dagFileInBase64
+    */
+    public set dagFileInBase64(dagFileInBase64: ArrayBuffer) {
+      this._dagFileInBase64 = dagFileInBase64;
     }
 
     public setCreateTemplateMemento(createTemplateMemento: CreateTemplateMemento) {
