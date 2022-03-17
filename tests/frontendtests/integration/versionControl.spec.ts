@@ -147,7 +147,7 @@ describe('VersionControl table content check', () => {
     cy.get('[data-cy=tableBody] > tr').should('exist');
   });
 
-  it("The tablebody has the correct (versionNumber, version note)-pairs in the correct order after clicked on 'workflowInstance1'", () => {
+  it("The table-body has the correct (versionNumber, versionNotes)-pairs in the correct order, after it was clicked on the 'workflowInstance1'-element", () => {
     backendServerCommunicatorObject.versions = [workflowInstance1Version1, workflowInstance1Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(0).click();
     cy.get('[data-cy=tableBody] > tr').eq(0).children().eq(0)
@@ -160,7 +160,7 @@ describe('VersionControl table content check', () => {
       .should('have.text', 'reverted previous change');
   });
 
-  it("The tablebody has the correct (versionNumber, version note)-pairs in the correct order after clicked on 'workflowInstance1' and then 'workflowInstance2'", () => {
+  it("The tablebody has the correct (versionNumber, version note)-pairs in the correct order after clicked on the 'workflowInstance1'-element and then 'workflowInstance2'-element", () => {
     backendServerCommunicatorObject.versions = [workflowInstance1Version1, workflowInstance1Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(0).click().then(() => {
       backendServerCommunicatorObject.versions = [workflowInstance2Version1, workflowInstance2Version2];
@@ -176,7 +176,7 @@ describe('VersionControl table content check', () => {
       .should('have.text', 'fixed typo in key-value');
   });
 
-  it('The headers of keyValuePairs are displayed correctly in the correct order', () => {
+  it('The headers of keyValuePairs are displayed correctly and in the correct order', () => {
     backendServerCommunicatorObject.versions = [workflowInstance1Version1, workflowInstance1Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(0).click();
     cy.get('[data-cy=fileButton]').eq(0).click();
@@ -184,7 +184,7 @@ describe('VersionControl table content check', () => {
     cy.get('[data-cy=keyValuePair] [data-cy=tableHeader] > tr > td').eq(1).should('have.text', 'new value');
   });
 
-  it("The changed parameters of version '1.1' of 'workflowInstance1' should be displayed correctly in the correct order", () => {
+  it("The changed parameters of version '1.1' of 'workflowInstance1' should be displayed correctly and in the correct order", () => {
     backendServerCommunicatorObject.versions = [workflowInstance1Version1, workflowInstance1Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(0).click();
     cy.get('[data-cy=fileButton]').eq(0).click();
@@ -202,7 +202,7 @@ describe('VersionControl table content check', () => {
       .should('have.text', "key3: 'text'");
   });
 
-  it("The changed parameters of version '2.2' of 'workflowInstance2' should be displayed correctly in the correct order", () => {
+  it("The changed parameters of version '2.2' of 'workflowInstance2' should be displayed correctly and in the correct order", () => {
     backendServerCommunicatorObject.versions = [workflowInstance2Version1, workflowInstance2Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(1).click();
     cy.get('[data-cy=fileButton]').eq(1).click();
