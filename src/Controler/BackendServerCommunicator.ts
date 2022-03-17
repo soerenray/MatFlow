@@ -6,7 +6,7 @@ import Version from '@Classes/Version';
 import Template from '@Classes/Template';
 import { fileToDataURL, dataURLtoFile } from '@Classes/base64Utility';
 import Keys from '@Controler/Keys';
-
+import UserData from '@Classes/UserData';
 import WorkflowInstance from '@Classes/WorkflowInstance';
 import user from '@Classes/User';
 import {
@@ -14,6 +14,7 @@ import {
 } from '../DummyData/DataInTypscript';
 
 const axios = require('axios').default;
+const userDataObject = new UserData('','')
 
 type workflowInstanceNameAsString = keyof typeof versions
 
@@ -376,7 +377,12 @@ class BackendServerCommunicator {
               break;
           }
         });
-    }
+      }
+
+      public pushLogIn(userName: string, userPassword: string) {
+        userDataObject.userName = userName
+        userDataObject.userPassword = userPassword
+      }
 }
 
 export default BackendServerCommunicator;

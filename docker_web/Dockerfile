@@ -1,4 +1,11 @@
-FROM node:12.18.1
-COPY ./ $HOME/matflow_data/
-RUN (cd /matflow_data/ && npm install)
-CMD (cd /matflow_data/ && npm run serve -- --port 8081)
+FROM node:17
+WORKDIR /usr/src/app
+COPY ./src ./src
+COPY ./public ./public
+COPY ./package*.json ./
+COPY ./tsconfig.json ./
+COPY ./vue.config.js ./
+COPY ./babel.config.js ./
+RUN npm run build
+CMD npm run serve -- --port 8081
+# CMD bash

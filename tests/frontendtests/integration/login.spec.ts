@@ -76,7 +76,6 @@ describe('LogIn', () => {
     cy.get('.mdi-eye-off')
   });
 
-
   it('The password field should be visible (have password tag) after clicking the eye-icon', () => {
     cy.get('.mdi-eye-off').click();
     cy.get('[data-cy=userPassword] .v-field__input').should('have.prop', 'type').should('to.eq', 'text');

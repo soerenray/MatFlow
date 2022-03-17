@@ -6,8 +6,8 @@ import traceback
 from pathlib import Path
 from typing import List
 
-import requests.utils
-from deprecated import deprecated
+# import requests.utils
+# from deprecated import deprecated
 from flask import Flask, request
 
 # for production api:
