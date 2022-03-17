@@ -51,12 +51,18 @@
                   style="width: 800px">
                   <v-card-title>Edit Dag-file</v-card-title>
                   <v-card-header>
-                    <v-btn @click='writeFromtempTextFile'>
+                    <v-btn data-cy='save' @click='writeFromtempTextFile'>
                       Save
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn data-cy='close' @click='openEdit = false'>
+                      <v-icon>
+                        mdi-close
+                      </v-icon>
                     </v-btn>
                   </v-card-header>
                   <v-card-text>
-                    <v-textarea v-model="tempTextFile" filled></v-textarea>
+                    <v-textarea data-cy="textarea" v-model="tempTextFile" filled></v-textarea>
                   </v-card-text>
                 </v-card>
               </v-dialog>

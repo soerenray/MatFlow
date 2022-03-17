@@ -275,8 +275,12 @@ services:
       # Map all files in init folder as initialize database files
       - ./dbimageinit:/docker-entrypoint-initdb.d
     restart: always
-    ports:
-      - 3308:3306
+    #  vv only for testing* needed vv
+    #  *only for Tests starting outside docker image or docker-compose up
+    #ports:
+    #  - 3308:3306
+    #  view also matflow/database/mydb.conf
+
     expose:
       - 3306
     environment:
