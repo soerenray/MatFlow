@@ -1,10 +1,5 @@
 <template>
   <v-app>
-    <div style="height: 30px">
-      <v-toolbar dense color="#AED6F1">
-        <v-toolbar-title>Administration</v-toolbar-title>
-      </v-toolbar>
-    </div>
     <div style="padding-top: 40px; padding-left: 10px; padding-right: 10px">
       <v-card>
         <v-table>
