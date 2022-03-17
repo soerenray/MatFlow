@@ -6,6 +6,6 @@ COPY ./package*.json ./
 COPY ./tsconfig.json ./
 COPY ./vue.config.js ./
 COPY ./babel.config.js ./
-RUN npm run build
+RUN npm install
 CMD npm run serve -- --port 8081
 # CMD bash

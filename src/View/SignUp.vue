@@ -1,5 +1,5 @@
 <template>
-  <v-app :style="{ background: '#B5EEF6' }">
+  <v-app :style="{ background: '#B5EEF6', height: '1080px' }">
     <v-layout justify-center align-center class="mx-auto mt-8">
       <v-card width="800px" height="400px">
         <v-card-title class="justify-center">

@@ -1,5 +1,7 @@
 #import resource
-from matflow.database import ServerData
+from typing import List, Tuple
+
+from matflow.database.ServerData import ServerData
 from matflow.hardwareadministration.Server import Server
 import requests
 from requests.auth import HTTPBasicAuth
@@ -71,9 +73,12 @@ class Hardware_Controller:
         search_user = username
         search_url = "http://localhost:8080/api/v1/users/" + search_user
         permission = requests.get(search_url, auth= hardware_auth).json()["roles"][0]["name"]
-        if permission == "admin":
-            tempServerData = ServerData()
-            self._Server = tempServerData.get_server()
+        if permission == "Admin":
+            tempServerData = ServerData.get_instance()
+            database_resp: List[Tuple[str, str]] = tempServerData.get_server()
+            self._Server = Server()
+            self._Server.setName(database_resp[0][1])
+            self._Server.setAddress(database_resp[0][0])
             return self._Server
 
     def setServer(self, server: Server, username:str, password: str):
@@ -81,6 +86,6 @@ class Hardware_Controller:
         search_user = username
         search_url = "http://localhost:8080/api/v1/users/" + search_user
         permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0]["name"]
-        if permission == "admin":
+        if permission == "Admin":
             tempServerData = ServerData()
             tempServerData.write_server(server)

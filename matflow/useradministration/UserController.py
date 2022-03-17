@@ -97,13 +97,8 @@ class UserController:
             "first_name": ".",
             "last_name": ".",
             "roles": [{"name": overridePrivilege}],
-            "username": overrideUsername,
-            "password": overridePassword,
+            "username": overrideUsername
         }
-        patchOverrideUser = requests.patch(
-            overrideAddress, json=overridePayload, auth=basic
-        )
-
         # we patch the user
 
         patchOverrideUser = requests.patch(
@@ -172,9 +167,6 @@ class UserController:
             "username": signUpUsername,
             "password": signUpPassword,
         }
-        createUserStatusCode = requests.post(
-            createUserAddress, json=createUserPayload, auth=basic
-        )
 
         # we make the API call to create the User
         createUserStatusCode = requests.post(
@@ -187,7 +179,7 @@ class UserController:
 
     # auxiliary method for testing
     def deleteAllUsers(self, basic: (str, str)):
-        details = self.getAllUsersAndDetails()
+        details = self.getAllUsersAndDetails(basic)
         for user in dict(details)[keys.all_users]:
             username: str = dict(user)["username"]
             if username != "airflow":
