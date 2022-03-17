@@ -31,7 +31,10 @@ class BackendServerCommunicator {
         [Keys.userName]: userName,
         [Keys.passwordName]: userPassword,
         [Keys.repeatPasswordName]: userPasswordRepeated,
-      })
+      }, {auth: {
+        username: userDataObject.userName,
+        password: userDataObject.userPassword
+      }})
         .then((response) => {
           console.log('sign up resp: ', response);
           switch (response.data[Keys.statusCodeName]) {
@@ -274,7 +277,11 @@ class BackendServerCommunicator {
 
     public async pullUsers(): Promise<User[]> {
       const tempUsers: User[] = [];
-      await axios.get(BackendServerCommunicator.serverAddress + Keys.getAllUsersAndDetails)
+      console.log("userDataObj", userDataObject)
+      await axios.get(BackendServerCommunicator.serverAddress + Keys.getAllUsersAndDetails, {auth: {
+        username: userDataObject.userName,
+        password: userDataObject.userPassword
+      }})
         .then((response) => {
           console.log('get_users_resp', response);
           const { data } = response;
@@ -296,7 +303,10 @@ class BackendServerCommunicator {
         [Keys.userStatusName]: user.userStatus,
         [Keys.userPrivilegeName]: user.userPrivilege,
         [Keys.passwordName]: 'airflow', // dummy_password
-      })
+      }, {auth: {
+        username: userDataObject.userName,
+        password: userDataObject.userPassword
+      }})
         .then((response) => {
           console.log('setUserResp:', response);
           switch (response.data[Keys.statusCodeName]) {
@@ -321,6 +331,10 @@ class BackendServerCommunicator {
           [Keys.userPrivilegeName]: user.userPrivilege,
           [Keys.passwordName]: 'airflow', // dummy_password
         },
+        auth: {
+          username: userDataObject.userName,
+          password: userDataObject.userPassword
+        },
       };
       axios.delete(BackendServerCommunicator.serverAddress + Keys.deleteUser, config)
         .then((response) => {
@@ -338,7 +352,11 @@ class BackendServerCommunicator {
 
     public async pullServers(): Promise<Server[]> {
       let servers: Server[] = [];
-      await axios.get(BackendServerCommunicator.serverAddress + Keys.getServerDetails)
+      console.log("userDataObj", userDataObject)
+      await axios.get(BackendServerCommunicator.serverAddress + Keys.getServerDetails, {auth: {
+        username: userDataObject.userName,
+        password: userDataObject.userPassword
+      }})
         .then((response) => {
           console.log("PullServerResp", response);
           const { data } = response;
@@ -364,8 +382,11 @@ class BackendServerCommunicator {
         [Keys.containerLimitName]: server.containerLimit,
         [Keys.serverResourcesName]: server.serverResources[0],
         [Keys.selectedForExecutionName]: server.selectedForExecution,
-      };
-      axios.put(BackendServerCommunicator.serverAddress + Keys.setServerDetails, data)
+        };
+      axios.put(BackendServerCommunicator.serverAddress + Keys.setServerDetails, data, {auth: {
+        username: userDataObject.userName,
+        password: userDataObject.userPassword
+      }})
         .then((response) => {
           console.log('pushServerResp:', response);
           switch (response.data[Keys.statusCodeName]) {
@@ -382,6 +403,7 @@ class BackendServerCommunicator {
       public pushLogIn(userName: string, userPassword: string) {
         userDataObject.userName = userName
         userDataObject.userPassword = userPassword
+        console.log("LoginResp", userName, userPassword)
       }
 }
 

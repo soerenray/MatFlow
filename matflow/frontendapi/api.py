@@ -188,7 +188,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_details = request.get_json()
+            json_details = get_json_not_dict()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.overrideUser(user, (auth_tag["username"], auth_tag["password"]))
@@ -215,7 +215,7 @@ class FrontendAPI:
             String: response indicating successful request
         """
         try:
-            json_details = request.get_json()
+            json_details = get_json_not_dict()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
             FrontendAPI.user_controller.deleteUser(user, (auth_tag["username"], auth_tag["password"]))
@@ -245,7 +245,7 @@ class FrontendAPI:
         list_of_versions: List[dict] = []
         try:
             auth_tag = request.authorization
-            loaded = json.loads(request.get_json())
+            loaded = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name], loaded)
             wf_name: str = loaded[keys.workflow_instance_name]
             versions: List[
@@ -276,7 +276,7 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name, keys.version_number_name], decoded_json)
             FrontendAPI.workflow_manager.set_active_version_through_number(
                 decoded_json[keys.workflow_instance_name],
@@ -304,7 +304,7 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
             version_note: str = decoded_json[keys.version_note_name]
@@ -335,7 +335,7 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name, keys.config_file_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
             config_name: str = decoded_json[keys.config_file_name]
@@ -364,7 +364,7 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             check_routine([keys.workflow_instance_name, keys.template_name], decoded_json)
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
@@ -412,7 +412,7 @@ class FrontendAPI:
         """
         try:
             raise LoginException("Use airflow login")
-            # decoded_json: dict = json.loads(request.get_json())
+            # decoded_json: dict = json.loads(get_json_not_dict())
             # check_routine([keys.user_name, keys.password_name], decoded_json)
             # FrontendAPI.user_controller.loginUser(
             #     decoded_json[keys.user_name], decoded_json[keys.password_name]
@@ -439,7 +439,7 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            decoded_json: dict = json.loads(request.get_json())
+            decoded_json: dict = json.loads(get_json_not_dict())
             keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
             check_routine(keys_to_check, decoded_json)
             FrontendAPI.user_controller.createUser(
