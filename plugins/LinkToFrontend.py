@@ -30,7 +30,7 @@ def plugin_macro():
 appbuilder_mitem = {"name": "Frontend homepage",
                     "category": "Frontend",
                     "category_icon": "fa-th",
-                    "href": "http://localhost:8081"}
+                    "href": "http://localhost:8081/LogIn"}
 
 # Defining the plugin class
 class AirflowTestPlugin(AirflowPlugin):
