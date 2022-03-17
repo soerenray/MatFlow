@@ -554,7 +554,7 @@ def tear_down(client: FlaskClient):
 
     # delete all users
     user_controller: UserController = UserController()
-    user_controller.deleteAllUsers()
+    user_controller.deleteAllUsers(("airflow", "airflow"))
 
 
 if __name__ == "__main__":

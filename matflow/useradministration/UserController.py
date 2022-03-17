@@ -179,7 +179,7 @@ class UserController:
 
     # auxiliary method for testing
     def deleteAllUsers(self, basic: (str, str)):
-        details = self.getAllUsersAndDetails()
+        details = self.getAllUsersAndDetails(basic)
         for user in dict(details)[keys.all_users]:
             username: str = dict(user)["username"]
             if username != "airflow":
