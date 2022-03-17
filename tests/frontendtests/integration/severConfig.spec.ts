@@ -106,6 +106,13 @@ describe('ServerConfig', () => {
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '10');
   });
 
+  it("Container limit should be 5. Then after typing 10 it should contain the value 10", () => {
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).invoke('val', '5')
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '5');
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).click().clear().type('10')
+    cy.get('[data-cy=tableBody] > tr .v-field__input').eq(3).should('have.value', '10');
+  });
+
   it("Changes made to 'Server location name', 'Address', 'Status', 'Container limit' should not change after 'apply changes' is pressed", () => {
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(0).invoke('val', 'kit-informatik');
     cy.get('[data-cy=tableBody] > tr .v-field__input').eq(1).invoke('val', '123,456.78');
