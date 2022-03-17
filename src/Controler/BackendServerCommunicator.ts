@@ -19,7 +19,7 @@ const userDataObject = new UserData('','')
 type workflowInstanceNameAsString = keyof typeof versions
 
 class BackendServerCommunicator {
-    static serverAddress = 'http://127.0.0.1:8082/'
+    static serverAddress = 'http://127.0.0.1:8082'
 
     public constructor() { }
 

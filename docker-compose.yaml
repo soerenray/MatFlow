@@ -277,8 +277,8 @@ services:
     restart: always
     #  vv only for testing* needed vv
     #  *only for Tests starting outside docker image or docker-compose up
-    #ports:
-    #  - 3308:3306
+    ports:
+     - 3306:3306
     #  view also matflow/database/mydb.conf
 
     expose:
@@ -287,13 +287,23 @@ services:
       MYSQL_DATABASE: matflowDatabase
       MYSQL_USER: matflowUser
       MYSQL_PASSWORD: qMyaU7AjPJ3Epsmc
-      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_ROOT_PASSWORD: 12345 
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 90s
+      timeout: 10s
+      retries: 2
 
   matflow_api:
     image: matflow_api
+    depends_on:
+      mysql-db:
+        condition: service_healthy
     build: 
       context: ./
       dockerfile: ./docker_api/Dockerfile
+    ports:
+     - 8082:8082
 
   matflow_web:
     image: matflow_web
