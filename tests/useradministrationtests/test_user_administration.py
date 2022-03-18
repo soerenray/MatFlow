@@ -1,5 +1,5 @@
-from UserController import UserController
-from User import User
+from matflow.useradministration.UserController import UserController
+from matflow.useradministration.User import User
 import unittest
 import requests
 import json
