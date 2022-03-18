@@ -110,9 +110,20 @@ class BackendServerCommunicator {
         });
     }
 
-    //TODO pullTemplateByName
-    public async pullDagFileByTemplateName(worflowInstanceName: string): Promise<File>{
-      return dataURLtoFile("", ""); //dummy
+    public async pullDagFileByTemplateName(templateName: string): Promise<File>{
+      let encodedFile: string = "invalid";
+      axios.post(BackendServerCommunicator.serverAddress + Keys.getTemplate, {
+        [Keys.templateName]: templateName,
+      }).then((response) => {
+        const { data } = response;
+        console.log("pullDagFile", response);
+        if (data[Keys.statusCodeName] == 607) {
+          encodedFile =  data[Keys.fileKey];
+        } else {
+          // error occurred
+        }
+      })
+      return dataURLtoFile(encodedFile, templateName +".py");
     }
 
     // TODO the workflowInstance object doesn't contain the conf folder
