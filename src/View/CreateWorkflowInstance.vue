@@ -35,10 +35,14 @@
               </v-select>
             </v-col>
             <v-col>
-              <v-file-input
+            <v-file-input
                 id="importConfigFiles"
                 data-cy="importConfigFiles"
+                @change="transformDagFilesToBase64"
                 :multiple="true"
+                :loading="(!areconfigFilesInBase64WithName && (configFiles.length > 0))"
+                :disabled="(!areconfigFilesInBase64WithName &&
+                            (configFilesInBase64WithName.length > 0))"
                 v-model="configFiles"
                 :clearable="false"
                 accept="files"
@@ -50,6 +54,8 @@
                 id="sendWorkflowInstance"
                 data-cy="sendWorkflowInstance"
                 fab
+                :disabled="!(areconfigFilesInBase64WithName && workflowInstanceName !== '',
+                 selectedTemplateName != '')"
                 small
                 @click="pressSendButton"
                 color="#58D68D"
@@ -92,6 +98,7 @@ import CreateWorkflowInstance from '@Model/CreateWorkflowInstance';
 import CreateWorkflowInstanceCaretaker from '@Memento/CreateWorkflowInstanceCaretaker';
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
 import WorkflowInstance from '@Classes/WorkflowInstance';
+import { filesToDataURLWithFunction } from '@Classes/base64Utility';
 
 export default {
   name: 'CreateWorkflowInstance',
@@ -108,6 +115,15 @@ export default {
     };
   },
   methods: {
+    transformDagFilesToBase64() {
+      filesToDataURLWithFunction(
+        this.configFiles, (
+          (input: [(ArrayBuffer|string), string][], isConverted: boolean) => {
+            this.configFilesInBase64WithName = input;
+            this.areconfigFilesInBase64WithName = isConverted;
+          }),
+      );
+    },
     async pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
@@ -132,7 +148,7 @@ export default {
         this.backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
           this.workflowInstanceName,
           this.selectedTemplateName,
-          [this.workflowInstanceFolder],
+          this.configFilesInBase64WithName,
         );
       } else {
         this.backendServerCommunicatorObject.pushExistingWorkflowInstance(
@@ -210,8 +226,25 @@ export default {
       get(): string {
         return this.createWorkflowInstanceObject.workflowInstanceName;
       },
-      set(worklfowInstanceName: string) {
-        this.createWorkflowInstanceObject.workflowInstanceName = worklfowInstanceName;
+      set(workflowInstanceName: string) {
+        this.createWorkflowInstanceObject.workflowInstanceName = workflowInstanceName;
+      },
+    },
+    areconfigFilesInBase64WithName: {
+      get(): boolean {
+        return this.createWorkflowInstanceObject.areconfigFilesInBase64WithName;
+      },
+      set(areconfigFilesInBase64WithName: boolean) {
+        this.createWorkflowInstanceObject
+          .areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
+      },
+    },
+    configFilesInBase64WithName: {
+      get(): [ArrayBuffer, string][] {
+        return this.createWorkflowInstanceObject.configFilesInBase64WithName;
+      },
+      set(configFilesInBase64WithName: [ArrayBuffer, string][]) {
+        this.createWorkflowInstanceObject.configFilesInBase64WithName = configFilesInBase64WithName;
       },
     },
   },

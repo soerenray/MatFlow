@@ -20,6 +20,7 @@
               data-cy="selectTemplateNameFromDropdown"
               id="selectTemplateNameFromDropdown"
               :items="templatesName"
+              @select="transformDagFileToBase64"
               variant="contained"
               style="width: 300px"
               v-model="chosenTemplateName"
@@ -30,6 +31,8 @@
           <v-col>
             <v-file-input
               data-cy="fileInput"
+              :loading="(!isDagFileInBase64 && tempTextFile !== '')"
+              @change="transformDagFileToBase64"
               id="fileInput"
               v-model="dagFileAsArray"
               variant="contained"
@@ -51,7 +54,7 @@
                   style="width: 800px">
                   <v-card-title>Edit Dag-file</v-card-title>
                   <v-card-header>
-                    <v-btn data-cy='save' @click='writeFromtempTextFile'>
+                    <v-btn data-cy='save' @click='writeFromtempTextFileAndConvertToBase64'>
                       Save
                     </v-btn>
                     <v-spacer></v-spacer>
@@ -68,6 +71,7 @@
               </v-dialog>
               <div style="padding-left: 25px">
                 <v-btn
+                  :disabled="!(isDagFileInBase64 && newTemplateName !== '')"
                   data-cy="sendTemplate"
                   @click="pressSendButton"
                   color="#58D68D"
@@ -90,6 +94,7 @@ import CreateTemplate from '@Model/CreateTemplate';
 import CreateTemplateCaretaker from '@Memento/CreateTemplateCaretaker';
 import Template from '@Classes/Template';
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
+import { fileToDataURLWithFunction } from '@Classes/base64Utility';
 
 export default {
   name: 'CreateTemplate',
@@ -101,6 +106,15 @@ export default {
     };
   },
   methods: {
+    transformDagFileToBase64() {
+      fileToDataURLWithFunction(
+        this.dagFile, (
+          (input: ArrayBuffer, isConverted: boolean) => {
+            this.dagFileInBase64 = input;
+            this.isDagFileInBase64 = isConverted;
+          }),
+      );
+    },
     pressSendButton() {
       this.pushTemplateObjectToBackend();
       this.resetView();
@@ -116,7 +130,7 @@ export default {
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
         this.createNewTemplateObject(
-          this.createTemplateObject.templateFolder,
+          this.dagFileInBase64,
           this.newTemplateName,
         ),
       );
@@ -136,8 +150,9 @@ export default {
         this.tempTextFile = text;
       });
     },
-    writeFromtempTextFile() {
+    writeFromtempTextFileAndConvertToBase64() {
       this.dagFile = new File([this.tempTextFile], this.dagFile.name, { type: this.dagFile.type });
+      this.transformDagFileToBase64();
     },
   },
   computed: {
@@ -195,6 +210,23 @@ export default {
       },
       set(tempTextFile: string) {
         this.createTemplateObject.tempTextFile = tempTextFile;
+      },
+    },
+    isDagFileInBase64: {
+      get(): boolean {
+        return this.createTemplateObject.isDagFileInBase64;
+      },
+      set(isDagFileInBase64: boolean) {
+        this.createTemplateObject.isDagFileInBase64 = isDagFileInBase64;
+      },
+    },
+    dagFileInBase64: {
+      get(): ArrayBuffer {
+        return this.createTemplateObject.dagFileInBase64;
+      },
+      set(dagFileInBase64: ArrayBuffer) {
+        console.log('setting', dagFileInBase64);
+        this.createTemplateObject.dagFileInBase64 = dagFileInBase64;
       },
     },
   },

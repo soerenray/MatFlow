@@ -46,15 +46,49 @@ function dataURLtoFileNoMime(dataurl: string, filename: string): File {
  * @param file the file object
  * @returns file encoded as string
  */
-function fileToDataURL(file: File): string {
+function fileToDataURLWithFunction(
+  file: File,
+  func: ((arg1: ArrayBuffer | string, arg2: boolean) => void),
+) {
   const reader = new FileReader();
   reader.readAsDataURL(file);
-  reader.onload = () => reader.result;
+  reader.onload = () => {
+    if (reader.result != null) {
+      // @ts-ignore
+      func(reader.result.split(',')[1], true);
+    }
+  };
   reader.onerror = (error) => {
     // eslint-disable-next-line no-console
     console.log('Error: ', error);
   };
-  return ''; // error has occured
 }
 
-export { dataURLtoFile, dataURLtoFileNoMime, fileToDataURL };
+function filesToDataURLWithFunction(
+  files: File[],
+  func: ((arg1: [(ArrayBuffer|string), string][], arg2: boolean) => void),
+) {
+  const filesInBase64WithName: [(ArrayBuffer|string), string][] = [];
+
+  files.forEach((file) => {
+    fileToDataURLWithFunction(file, ((input: ArrayBuffer | string) => {
+      filesInBase64WithName.push([input, file.name]);
+    }));
+  });
+
+  let i = 0;
+  const lookForFileTransferToComplete = setInterval(() => {
+    i += 1;
+    console.log('files in base64', filesInBase64WithName.length);
+    // Ends if all files are transfered or 50 secconds have passed
+    if (filesInBase64WithName.length === files.length || i === 100) {
+      func(filesInBase64WithName, true);
+      clearInterval(lookForFileTransferToComplete);
+    }
+  }, 500);
+}
+
+export {
+  dataURLtoFile, dataURLtoFileNoMime,
+  fileToDataURLWithFunction, filesToDataURLWithFunction,
+};
