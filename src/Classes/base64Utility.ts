@@ -29,6 +29,7 @@ function dataURLtoFile(dataurl: string, filename: string): File {
  * @returns File object
  */
 function dataURLtoFileNoMime(dataurl: string, filename: string): File {
+  console.log('fileIN', dataurl);
   const bstr = atob(dataurl);
   let n = bstr.length;
   const u8arr = new Uint8Array(n);

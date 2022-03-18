@@ -15,12 +15,12 @@
               hide-details="auto"
             ></v-text-field>
           </v-col>
+          {{chosenTemplateName}}
           <v-col>
             <v-select
               data-cy="selectTemplateNameFromDropdown"
               id="selectTemplateNameFromDropdown"
               :items="templatesName"
-              @select="transformDagFileToBase64"
               variant="contained"
               style="width: 300px"
               v-model="chosenTemplateName"
@@ -106,6 +106,14 @@ export default {
     };
   },
   methods: {
+    pullDagFileAndTransformDagFileToBase64() {
+      console.log('hi');
+      this.backendServerCommunicatorObject.pullDagFileByTemplateName(this.chosenTemplateName)
+        .then((result) => {
+          this.dagFile = result;
+          this.transformDagFileToBase64();
+        });
+    },
     transformDagFileToBase64() {
       fileToDataURLWithFunction(
         this.dagFile, (
@@ -239,6 +247,14 @@ export default {
     this.createTemplateCaretakerObject.addCreateTemplateMementoObjectToArray(
       this.createTemplateObject.createTemplateMemento(),
     );
+  },
+  watch: {
+    chosenTemplateName: {
+      handler() {
+        console.log('ho');
+        this.pullDagFileAndTransformDagFileToBase64();
+      },
+    },
   },
 };
 </script>
