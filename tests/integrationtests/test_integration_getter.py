@@ -7,6 +7,7 @@ import unittest
 import socket
 from pathlib import Path
 from typing import List, Tuple
+import mysql.connector
 
 from flask.testing import FlaskClient
 
@@ -550,11 +551,27 @@ def tear_down(client: FlaskClient):
         "WorkflowTemplate",
         "Server",
     ]
-    matflow.database.DatabaseTable.clear_tables(table_names)
+    clear_tables(table_names)
 
     # delete all users
     user_controller: UserController = UserController()
     user_controller.deleteAllUsers(("airflow", "airflow"))
+
+
+def clear_tables(tables):
+    """helping function for clearing all tables"""
+    conf_path: Path = Path(__file__).parent / "mydb.conf"
+    db = mysql.connector.connect(option_files=str(conf_path))
+
+    cursor = db.cursor()
+
+    for rem in tables:
+        print("Clear " + rem)
+        tmp = "DELETE FROM {}"
+        cursor.execute(tmp.format(rem))
+        db.commit()
+    cursor.close()
+    db.close()
 
 
 if __name__ == "__main__":
