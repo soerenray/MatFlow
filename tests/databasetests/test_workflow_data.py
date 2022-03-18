@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from typing import Dict, List
 from unittest.mock import patch, Mock
-
+import os
 from matflow.database.WorkflowData import WorkflowData
 from matflow.workflow.database_version import DatabaseVersion
 from matflow.workflow.version_number import VersionNumber
@@ -19,6 +19,13 @@ class TestWorkflowDataSetup(unittest.TestCase):
 
 
 class TestWorkflowData(TestWorkflowDataSetup):
+    def setUp(self) -> None:
+        p = Path(__file__)
+        # dir path
+        self.parent_path = Path(p.parent.absolute())
+        self.test_files = Path(os.path.join(self.parent_path, "testfiles"))
+        self.workflow_data = WorkflowData.get_instance()
+
     def test_get_Instance(self):
         self.assertEqual(self.workflow_data, WorkflowData.get_instance())
 
@@ -30,15 +37,15 @@ class TestWorkflowData(TestWorkflowDataSetup):
             return_value=True,
         ) as mock_check_for:  # is only called once to check if workflow with called name already exists
             # Arrange
-            workflow = WorkflowInstance("workflow1", Path(".test"), Path("."))
-            ex_path = Path(".")
-
+            workflow = WorkflowInstance(
+                "workflow1",
+                Path(os.path.join(self.parent_path, "test")),
+                self.parent_path,
+            )
+            ex_path = self.parent_path
             # Act/Assert
-            with self.assertRaises(InternalException) as error:
-                self.assertRaises(
-                    InternalException,
-                    self.workflow_data.create_wf_instance(workflow, ex_path),
-                )
+            with self.assertRaises(InternalException):
+                self.workflow_data.create_wf_instance(workflow, ex_path),
 
             # Assert
             mock_check_for.assert_called_once()
@@ -48,7 +55,6 @@ class TestWorkflowData(TestWorkflowDataSetup):
         # basic test if all functions are called
         # Arrange
         workflow = WorkflowInstance("workflow1", Path(".test"), Path("."))
-        ex_path = Path("./testfiles")
 
         with patch.object(
             DatabaseTable,
@@ -63,12 +69,12 @@ class TestWorkflowData(TestWorkflowDataSetup):
                     "set",
                 ) as mock_set:
                     # Act
-                    self.workflow_data.create_wf_instance(workflow, ex_path)
+                    self.workflow_data.create_wf_instance(workflow, self.test_files)
 
                     # Assert
                     # (weak) called at least so many times as files from directory have to be passed
                     size = 0
-                    for _ in ex_path.iterdir():
+                    for _ in self.test_files.iterdir():
                         size += 1
                     self.assertTrue(mock_set.call_count >= size)
 
@@ -78,7 +84,7 @@ class TestWorkflowData(TestWorkflowDataSetup):
 
             # mock_get_one should be called exactly len(ex_path)+1 times
             size = 1
-            for _ in ex_path.iterdir():
+            for _ in self.test_files.iterdir():
                 size += 1
             self.assertTrue(mock_get_one.call_count >= size)
 
@@ -151,8 +157,7 @@ class TestWorkflowData(TestWorkflowDataSetup):
         # Arrange
         wf_name = "workflow1"
         version_number = VersionNumber("1.2")
-        path = Path("./testfiles")
-        new_version = DatabaseVersion(version_number, "note", path)
+        new_version = DatabaseVersion(version_number, "note", self.test_files)
         old_version_number = "1"
 
         with patch.object(
@@ -180,7 +185,7 @@ class TestWorkflowData(TestWorkflowDataSetup):
                 self.assertIn(version_number.get_number(), str(arg_list[i]))
                 i += 1
                 # two calls per file. Insert into ConfFile and insert into Versionfile
-                for file in path.iterdir():
+                for file in self.test_files.iterdir():
                     self.assertIn(file.name, str(arg_list[i]))
                     i += 1
                     self.assertIn(file.name, str(arg_list[i]))
@@ -198,7 +203,7 @@ class TestWorkflowData(TestWorkflowDataSetup):
             self.assertIn(old_version_number, str(arg_list[i]))
             i += 1
             # file
-            for file in path.iterdir():
+            for file in self.test_files.iterdir():
                 self.assertIn(file.name, str(arg_list[i]))
                 i += 1
 

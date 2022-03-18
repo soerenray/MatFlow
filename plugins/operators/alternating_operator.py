@@ -7,6 +7,7 @@ class ConditionOperator(BaseOperator, ABC):
     """
     The condition operator for the alternating operator without n tasks.
     """
+
     def __init__(self, condition: bool, *args, **kwargs):
         self.condition = condition
         super(ConditionOperator, self).__init__(*args, **kwargs)
@@ -29,7 +30,9 @@ class AlternatingOperator(BaseOperator):
     ui_color = "white"
     ui_fgcolor = "black"
 
-    def __init__(self, operators: List[BaseOperator], n_tasks: int = -1, *args, **kwargs):
+    def __init__(
+        self, operators: List[BaseOperator], n_tasks: int = -1, *args, **kwargs
+    ):
         """
         constructs a new alternating operator
         Args:
@@ -63,8 +66,7 @@ class AlternatingOperator(BaseOperator):
 
     def __loop_execute(self):
         for operator in self.operators:
-            if hasattr(operator, 'get_context') and callable(
-                    operator.get_context):
+            if hasattr(operator, "get_context") and callable(operator.get_context):
                 operator.execute(operator.get_context())
             else:
                 operator.execute("")

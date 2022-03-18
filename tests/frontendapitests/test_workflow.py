@@ -19,7 +19,7 @@ class WorkflowInstanceTest(unittest.TestCase):
         self.app = app.test_client()
         self.failed_dict = {
             keys.status_code_name: InternalException("whoops").get_status_code(),
-            "error_message": "whoops"
+            "error_message": "whoops",
         }
         self.mockConfig = Mock()
 

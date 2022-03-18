@@ -48,7 +48,6 @@ class TestDatabaseTable(TestCase):
 
 
 class TestConnection(TestDatabaseTable):
-
     @unittest.skip("Docker needs to be up")
     def test_set_get_one(self):
         # because some tables have dependencies and tests are generally not in order

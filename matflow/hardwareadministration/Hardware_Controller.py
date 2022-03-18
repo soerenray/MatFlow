@@ -1,4 +1,4 @@
-#import resource
+# import resource
 from typing import List, Tuple
 
 from matflow.database.ServerData import ServerData
@@ -29,7 +29,7 @@ class Hardware_Controller:
         tempServerData.write_server(newServer)
 
     # setCPUResources
-    #def setResources(self, newResource: resource, newSoft: int, newHard: int):
+    # def setResources(self, newResource: resource, newSoft: int, newHard: int):
     #    resource.setrlimit(newResource, newSoft, newHard)
 
     # Methods
@@ -72,7 +72,9 @@ class Hardware_Controller:
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
         search_url = "http://localhost:8080/api/v1/users/" + search_user
-        permission = requests.get(search_url, auth= hardware_auth).json()["roles"][0]["name"]
+        permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
+            "name"
+        ]
         if permission == "Admin":
             tempServerData = ServerData.get_instance()
             database_resp: List[Tuple[str, str]] = tempServerData.get_server()
@@ -81,11 +83,13 @@ class Hardware_Controller:
             self._Server.setAddress(database_resp[0][0])
             return self._Server
 
-    def setServer(self, server: Server, username:str, password: str):
+    def setServer(self, server: Server, username: str, password: str):
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
         search_url = "http://localhost:8080/api/v1/users/" + search_user
-        permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0]["name"]
+        permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
+            "name"
+        ]
         if permission == "Admin":
             tempServerData = ServerData()
             tempServerData.write_server(server)
