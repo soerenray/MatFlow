@@ -96,6 +96,7 @@ class TemplateTest(unittest.TestCase):
                     Template.extract_dag_file(json_dict)
                     assert mock_method.call_count > 0
 
+    @unittest.skip("No writing done in Template class")
     def test_dag_call_save(self):
         json_dict: dict = {keys.dag_definition_name: "dag.py", keys.file_key: "bhbeb"}
         with patch.object(utilities, "decode_file", return_value=self.dagMock):
@@ -246,6 +247,7 @@ class ReducedConfigTest(unittest.TestCase):
             configs[0].get_key_value_pairs(), self.reduced_config.get_key_value_pairs()
         )
 
+    @unittest.skip("no write action")
     def test_extract_config_files_call_write(self):
         with patch.object(utilities, "create_dir", return_value="/"):
             with patch.object(utilities, "decode_file", return_value="encoded_file"):

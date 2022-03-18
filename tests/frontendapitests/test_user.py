@@ -1,3 +1,4 @@
+import base64
 import json
 import unittest
 from copy import deepcopy
@@ -62,8 +63,10 @@ class UserTest(unittest.TestCase):
         self.failed_dict = {
             keys.status_code_name: InternalException(
                 "scooby not found"
-            ).get_status_code()
+            ).get_status_code(), "error_message": "whoops"
         }
+        to_be_encoded = json.dumps({"username": "test", "password": "test"}).encode('utf-8')
+        self.headers = {"Authorization": "Basic {}".format(base64.b64encode(to_be_encoded).decode('utf-8'))}
 
     def test_get_all_users_call(self):
         with patch.object(
@@ -71,20 +74,19 @@ class UserTest(unittest.TestCase):
             "getAllUsersAndDetails",
             return_value=self.all_users,
         ) as mock_method:
-            self.app.get("get_all_users_and_details")
+            self.app.get("get_all_users_and_details", headers=self.headers)
             # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
             assert mock_method.call_count > 0
             # no exceptions possible
 
     def test_getAllUsersAndDetails_response(self):
-        # TODO failed noch
         # we only get an array of users
         with patch.object(
             FrontendAPI.user_controller.__class__,
             "getAllUsersAndDetails",
             return_value=self.all_users,
         ):
-            got = self.app.get("get_all_users_and_details")
+            got = self.app.get("get_all_users_and_details", headers=self.headers)
             # content not relevant, Nils has to test this
             retrieved_json = json.loads(got.get_data())
             expected_response: dict = deepcopy(self.all_users_response)
@@ -97,7 +99,7 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user) as mock_method:
             with patch.object(FrontendAPI.user_controller.__class__, "overrideUser"):
                 self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1)
+                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers= self.headers
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -108,7 +110,7 @@ class UserTest(unittest.TestCase):
                 FrontendAPI.user_controller.__class__, "overrideUser"
             ) as mock_method_2:
                 self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1)
+                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method_2.call_count > 0
@@ -117,7 +119,7 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user):
             with patch.object(FrontendAPI.user_controller.__class__, "overrideUser"):
                 got = self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1)
+                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
@@ -127,10 +129,10 @@ class UserTest(unittest.TestCase):
             with patch.object(
                 FrontendAPI.user_controller.__class__,
                 "overrideUser",
-                side_effect=InternalException("scooby not found"),
+                side_effect=InternalException("whoops"),
             ):
                 got = self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1)
+                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, self.failed_dict)
@@ -139,7 +141,7 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user) as mock_method:
             with patch.object(FrontendAPI.user_controller.__class__, "deleteUser"):
                 self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1)
+                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -150,7 +152,7 @@ class UserTest(unittest.TestCase):
                 FrontendAPI.user_controller.__class__, "deleteUser"
             ) as mock_method_2:
                 self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1)
+                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method_2.call_count > 0
@@ -160,10 +162,10 @@ class UserTest(unittest.TestCase):
             with patch.object(
                 FrontendAPI.user_controller.__class__,
                 "deleteUser",
-                side_effect=InternalException("scooby not found"),
+                side_effect=InternalException("whoops"),
             ):
                 got = self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1)
+                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, self.failed_dict)
@@ -172,7 +174,7 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user):
             with patch.object(FrontendAPI.user_controller.__class__, "deleteUser"):
                 got = self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1)
+                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
@@ -224,7 +226,7 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ),
+                ), headers=self.headers
             )
             assert mock_method.call_count > 0
 
@@ -232,7 +234,7 @@ class UserTest(unittest.TestCase):
         with patch.object(
             FrontendAPI.user_controller.__class__,
             "createUser",
-            side_effect=InternalException("oops"),
+            side_effect=InternalException("whoops"),
         ):
             got = self.app.post(
                 "register_user",
@@ -242,7 +244,7 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ),
+                ), headers = self.headers
             )
             retrieved_json: dict = json.loads(got.get_data())
             self.assertEqual(self.failed_dict, retrieved_json)
@@ -257,7 +259,7 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ),
+                ), headers=self.headers
             )
             retrieved_json: dict = json.loads(got.get_data())
             self.assertEqual(success_response, retrieved_json)

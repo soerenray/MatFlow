@@ -18,7 +18,8 @@ class WorkflowInstanceTest(unittest.TestCase):
         self.frontendVersion2 = Mock()
         self.app = app.test_client()
         self.failed_dict = {
-            keys.status_code_name: InternalException("whoops").get_status_code()
+            keys.status_code_name: InternalException("whoops").get_status_code(),
+            "error_message": "whoops"
         }
         self.mockConfig = Mock()
 
@@ -34,7 +35,7 @@ class WorkflowInstanceTest(unittest.TestCase):
                 with patch.object(
                     self.frontendVersion2, "encode_version", return_value=dict()
                 ):
-                    self.app.get(
+                    self.app.post(
                         "get_wf_instance_versions",
                         json=json.dumps({keys.workflow_instance_name: "bla"}),
                     )
@@ -54,7 +55,7 @@ class WorkflowInstanceTest(unittest.TestCase):
                 with patch.object(
                     self.frontendVersion2, "encode_version", return_value=dict()
                 ):
-                    self.app.get(
+                    self.app.post(
                         "get_wf_instance_versions",
                         json=json.dumps({keys.workflow_instance_name: "bla"}),
                     )
@@ -74,7 +75,7 @@ class WorkflowInstanceTest(unittest.TestCase):
                 with patch.object(
                     self.frontendVersion2, "encode_version", return_value=dict()
                 ) as mock_method_3:
-                    self.app.get(
+                    self.app.post(
                         "get_wf_instance_versions",
                         json=json.dumps({keys.workflow_instance_name: "bla"}),
                     )
@@ -94,7 +95,7 @@ class WorkflowInstanceTest(unittest.TestCase):
                 with patch.object(
                     self.frontendVersion2, "encode_version", return_value=dict()
                 ):
-                    got = self.app.get(
+                    got = self.app.post(
                         "get_wf_instance_versions",
                         json=json.dumps({keys.workflow_instance_name: "bla"}),
                     )
@@ -110,7 +111,7 @@ class WorkflowInstanceTest(unittest.TestCase):
                 "get_versions_from_workflow_instance",
                 return_value=[self.frontendVersion1, self.frontendVersion1],
             ):
-                got = self.app.get(
+                got = self.app.post(
                     "get_wf_instance_versions",
                     json=json.dumps({keys.workflow_instance_name: "bla"}),
                 )
@@ -148,7 +149,7 @@ class WorkflowInstanceTest(unittest.TestCase):
         with patch.object(
             FrontendAPI.workflow_manager.__class__,
             "set_active_version_through_number",
-            side_effect=InternalException("oops"),
+            side_effect=InternalException("whoops"),
         ):
             got = self.app.put(
                 "replace_wf_instance_active_version",
@@ -224,7 +225,7 @@ class WorkflowInstanceTest(unittest.TestCase):
         with patch.object(
             FrontendAPI.workflow_manager.__class__,
             "create_new_version_of_workflow_instance",
-            side_effect=InternalException("oops"),
+            side_effect=InternalException("whoops"),
         ):
             with patch.object(
                 ReducedConfigFile, "extract_multiple_configs", return_value=[]
@@ -272,7 +273,7 @@ class WorkflowInstanceTest(unittest.TestCase):
             with patch.object(
                 self.mockConfig, "encode_config", return_value={"he": "du"}
             ):
-                self.app.get(
+                self.app.post(
                     "get_config_from_wf_instance",
                     json=json.dumps(
                         {
@@ -293,7 +294,7 @@ class WorkflowInstanceTest(unittest.TestCase):
             with patch.object(
                 self.mockConfig, "encode_config", return_value={"he": "du"}
             ) as mock_method:
-                self.app.get(
+                self.app.post(
                     "get_config_from_wf_instance",
                     json=json.dumps(
                         {
@@ -314,7 +315,7 @@ class WorkflowInstanceTest(unittest.TestCase):
             with patch.object(
                 self.mockConfig, "encode_config", return_value={"he": "du"}
             ):
-                got = self.app.get(
+                got = self.app.post(
                     "get_config_from_wf_instance",
                     json=json.dumps(
                         {
@@ -335,7 +336,7 @@ class WorkflowInstanceTest(unittest.TestCase):
             with patch.object(
                 self.mockConfig, "encode_config", return_value={"he": "du"}
             ):
-                got = self.app.get(
+                got = self.app.post(
                     "get_config_from_wf_instance",
                     json=json.dumps(
                         {
