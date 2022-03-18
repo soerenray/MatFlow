@@ -4,7 +4,7 @@ from airflow.plugins_manager import AirflowPlugin
 def discover_matflow_port(base_url: str) -> str:
     # airflow is on 8080
     port = 8081
-    end_address = "http://localhost:" + str(port) + "/#/" + base_url
+    end_address = "http://localhost:" + str(port) + "/" + base_url
     return end_address
 
 
