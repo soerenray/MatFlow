@@ -6,7 +6,9 @@ import unittest
 
 
 class TestDatabaseConnection(unittest.TestCase):
-    def connection(self):
+
+    @unittest.skip("Docker reequired")
+    def test_connection(self):
         p = Path(__file__)
         # dir path
         dir_abs = p.parent.absolute()
