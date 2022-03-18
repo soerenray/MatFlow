@@ -11,26 +11,33 @@ from airflow.executors.base_executor import BaseExecutor
 class PluginHook(BaseHook):
     pass
 
+
 # Will show up under airflow.operators.test_plugin.PluginOperatorflask_admin
 class PluginOperator(BaseOperator):
     pass
+
 
 # Will show up under airflow.sensors.test_plugin.PluginSensorOperator
 class PluginSensorOperator(BaseSensorOperator):
     pass
 
+
 # Will show up under airflow.executors.test_plugin.PluginExecutor
 class PluginExecutor(BaseExecutor):
     pass
+
 
 # Will show up under airflow.macros.test_plugin.plugin_macro
 def plugin_macro():
     pass
 
-appbuilder_mitem = {"name": "Frontend homepage",
-                    "category": "Frontend",
-                    "category_icon": "fa-th",
-                    "href": "http://localhost:8081/LogIn"}
+
+appbuilder_mitem = {
+    "name": "Frontend homepage",
+    "category": "Frontend",
+    "category_icon": "fa-th",
+    "href": "http://localhost:8081/LogIn",
+}
 
 # Defining the plugin class
 class AirflowTestPlugin(AirflowPlugin):

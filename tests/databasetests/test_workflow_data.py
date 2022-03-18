@@ -19,14 +19,12 @@ class TestWorkflowDataSetup(unittest.TestCase):
 
 
 class TestWorkflowData(TestWorkflowDataSetup):
-
     def setUp(self) -> None:
         p = Path(__file__)
         # dir path
         self.parent_path = Path(p.parent.absolute())
         self.test_files = Path(os.path.join(self.parent_path, "testfiles"))
         self.workflow_data = WorkflowData.get_instance()
-
 
     def test_get_Instance(self):
         self.assertEqual(self.workflow_data, WorkflowData.get_instance())
@@ -39,8 +37,12 @@ class TestWorkflowData(TestWorkflowDataSetup):
             return_value=True,
         ) as mock_check_for:  # is only called once to check if workflow with called name already exists
             # Arrange
-            workflow = WorkflowInstance("workflow1", Path(os.path.join(self.parent_path, "test")), self.parent_path)
-            ex_path =self.parent_path
+            workflow = WorkflowInstance(
+                "workflow1",
+                Path(os.path.join(self.parent_path, "test")),
+                self.parent_path,
+            )
+            ex_path = self.parent_path
             # Act/Assert
             with self.assertRaises(InternalException):
                 self.workflow_data.create_wf_instance(workflow, ex_path),

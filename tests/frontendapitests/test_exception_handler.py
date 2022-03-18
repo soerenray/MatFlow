@@ -19,7 +19,9 @@ class ExceptionHandlerTest(unittest.TestCase):
         got = json.loads(
             ExceptionHandler.handle_exception(ConverterException("whoops"))
         )
-        expected = json.loads(json.dumps({"statusCode": 611, "error_message": "whoops"}))
+        expected = json.loads(
+            json.dumps({"statusCode": 611, "error_message": "whoops"})
+        )
         self.assertEqual(got, expected)
 
 

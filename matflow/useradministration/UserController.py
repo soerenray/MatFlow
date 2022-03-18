@@ -49,9 +49,7 @@ class UserController:
     #    }
 
     def getAllUsersAndDetails(self, basic: (str, str)):
-        listUsers = requests.get(
-            "http://localhost:8080/api/v1/users", auth=basic
-        )
+        listUsers = requests.get("http://localhost:8080/api/v1/users", auth=basic)
         if listUsers.status_code == 200:
             return listUsers.json()
 
@@ -97,7 +95,7 @@ class UserController:
             "first_name": ".",
             "last_name": ".",
             "roles": [{"name": overridePrivilege}],
-            "username": overrideUsername
+            "username": overrideUsername,
         }
         # we patch the user
 
@@ -147,7 +145,11 @@ class UserController:
     # createUserStatusCode: API call Response
 
     def createUser(
-            self, signUpUsername: str, signUpPassword: str, signUpPasswordRepetition: str, basic: (str, str)
+        self,
+        signUpUsername: str,
+        signUpPassword: str,
+        signUpPasswordRepetition: str,
+        basic: (str, str),
     ):
         # we check if the passwords are identical
 

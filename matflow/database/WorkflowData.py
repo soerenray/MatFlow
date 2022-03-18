@@ -302,7 +302,6 @@ class WorkflowData:
                                           WHERE v.ID = vf.versionID) v2 ON v1.confKey = v2.confKey
                                     """
 
-
         versions = self.get_version_numbers_of_workflow_instance(wf_name)
         database_versions: List[DatabaseVersion] = []  # return value
         for version in versions:

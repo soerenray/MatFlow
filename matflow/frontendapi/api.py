@@ -103,7 +103,9 @@ class FrontendAPI:
         """
         try:
             auth_tag = request.authorization
-            server: Server = FrontendAPI.hardware_controller.getServer(auth_tag["username"], auth_tag["password"])
+            server: Server = FrontendAPI.hardware_controller.getServer(
+                auth_tag["username"], auth_tag["password"]
+            )
             encoded_server: dict = server.encode_server()
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -124,7 +126,9 @@ class FrontendAPI:
             json_decoded = get_json_not_dict()
             server: Server = Server.extract_server(json_decoded)
             auth_tag = request.authorization
-            FrontendAPI.hardware_controller.setServer(server, auth_tag["username"], auth_tag["password"])
+            FrontendAPI.hardware_controller.setServer(
+                server, auth_tag["username"], auth_tag["password"]
+            )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -154,7 +158,9 @@ class FrontendAPI:
         # 'last_name': '.', 'login_count': 3, 'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
         try:
             auth_tag = request.authorization
-            details = FrontendAPI.user_controller.getAllUsersAndDetails((auth_tag["username"], auth_tag["password"]))
+            details = FrontendAPI.user_controller.getAllUsersAndDetails(
+                (auth_tag["username"], auth_tag["password"])
+            )
 
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -191,7 +197,9 @@ class FrontendAPI:
             json_details = get_json_not_dict()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.overrideUser(user, (auth_tag["username"], auth_tag["password"]))
+            FrontendAPI.user_controller.overrideUser(
+                user, (auth_tag["username"], auth_tag["password"])
+            )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -218,7 +226,9 @@ class FrontendAPI:
             json_details = get_json_not_dict()
             auth_tag = request.authorization
             user: User = User.extract_user(json_details)
-            FrontendAPI.user_controller.deleteUser(user, (auth_tag["username"], auth_tag["password"]))
+            FrontendAPI.user_controller.deleteUser(
+                user, (auth_tag["username"], auth_tag["password"])
+            )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
         except TypeError:
@@ -277,7 +287,9 @@ class FrontendAPI:
         try:
             auth_tag = request.authorization
             decoded_json: dict = json.loads(get_json_not_dict())
-            check_routine([keys.workflow_instance_name, keys.version_number_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.version_number_name], decoded_json
+            )
             FrontendAPI.workflow_manager.set_active_version_through_number(
                 decoded_json[keys.workflow_instance_name],
                 decoded_json[keys.version_number_name],
@@ -305,7 +317,9 @@ class FrontendAPI:
         try:
             auth_tag = request.authorization
             decoded_json: dict = json.loads(get_json_not_dict())
-            check_routine([keys.workflow_instance_name, keys.version_note_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.version_note_name], decoded_json
+            )
             wf_instance_name: str = decoded_json[keys.workflow_instance_name]
             version_note: str = decoded_json[keys.version_note_name]
             configs: List[
@@ -336,7 +350,9 @@ class FrontendAPI:
         try:
             auth_tag = request.authorization
             decoded_json: dict = json.loads(get_json_not_dict())
-            check_routine([keys.workflow_instance_name, keys.config_file_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.config_file_name], decoded_json
+            )
             wf_name: str = decoded_json[keys.workflow_instance_name]
             config_name: str = decoded_json[keys.config_file_name]
             file: ReducedConfigFile = (
@@ -365,7 +381,9 @@ class FrontendAPI:
         try:
             auth_tag = request.authorization
             decoded_json: dict = json.loads(get_json_not_dict())
-            check_routine([keys.workflow_instance_name, keys.template_name], decoded_json)
+            check_routine(
+                [keys.workflow_instance_name, keys.template_name], decoded_json
+            )
             wf_name: str = decoded_json[keys.workflow_instance_name]
             template_name: str = decoded_json[keys.template_name]
             files: Path = ReducedConfigFile.extract_multiple_config_files(
@@ -440,14 +458,18 @@ class FrontendAPI:
         try:
             auth_tag = request.authorization
             decoded_json: dict = json.loads(get_json_not_dict())
-            keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
+            keys_to_check = [
+                keys.user_name,
+                keys.password_name,
+                keys.repeat_password_name,
+            ]
             check_routine(keys_to_check, decoded_json)
             check_auth_tag(auth_tag)
             FrontendAPI.user_controller.createUser(
                 decoded_json[keys.user_name],
                 decoded_json[keys.password_name],
                 decoded_json[keys.repeat_password_name],
-                (auth_tag["username"], auth_tag["password"])
+                (auth_tag["username"], auth_tag["password"]),
             )
         except MatFlowException as exception:
             return ExceptionHandler.handle_exception(exception)
@@ -563,6 +585,7 @@ def check_routine(keys_to_check: List[str], decoded_json: dict) -> None:
     for key in keys_to_check:
         if key not in decoded_json:
             raise TypeError("please provide: " + key)
+
 
 def check_auth_tag(auth_tag: dict) -> None:
     # These are hard coded airflow requirements

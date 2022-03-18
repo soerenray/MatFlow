@@ -6,7 +6,6 @@ import unittest
 
 
 class TestDatabaseConnection(unittest.TestCase):
-
     @unittest.skip("Docker reequired")
     def test_connection(self):
         p = Path(__file__)
