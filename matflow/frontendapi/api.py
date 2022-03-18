@@ -442,6 +442,7 @@ class FrontendAPI:
             decoded_json: dict = json.loads(get_json_not_dict())
             keys_to_check = [keys.user_name, keys.password_name, keys.repeat_password_name]
             check_routine(keys_to_check, decoded_json)
+            check_auth_tag(auth_tag)
             FrontendAPI.user_controller.createUser(
                 decoded_json[keys.user_name],
                 decoded_json[keys.password_name],
@@ -561,7 +562,12 @@ class FrontendAPI:
 def check_routine(keys_to_check: List[str], decoded_json: dict) -> None:
     for key in keys_to_check:
         if key not in decoded_json:
-            raise TypeError
+            raise TypeError("please provide: " + key)
+
+def check_auth_tag(auth_tag: dict) -> None:
+    # These are hard coded airflow requirements
+    keys_to_check = ["username", "password"]
+    check_routine(keys_to_check, auth_tag)
 
 
 def get_json_not_dict() -> str:

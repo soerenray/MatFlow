@@ -1,16 +1,21 @@
 import base64
+import builtins
 import os.path
 import unittest
 from pathlib import Path
-from unittest.mock import patch, mock_open
+from unittest.mock import patch, MagicMock
 
 from matflow.frontendapi import utilities
 
 
 class UtilitiesTest(unittest.TestCase):
+
     def setUp(self) -> None:
         res_path = os.path.join(Path(__file__).parent, "res")
         self.file_path = Path(os.path.join(res_path, "gibberish.py"))
+        self.mock_open = MagicMock()
+
+
     def test_create_dir_valid(self):
         expected = "scooby_0"
         with patch.object(utilities.os.path, "isdir", return_value=False):
@@ -65,6 +70,13 @@ class UtilitiesTest(unittest.TestCase):
             with patch.object(utilities.os, "remove") as mock_method:
                 got = utilities.encode_file(self.file_path, "key_scooby")
                 assert mock_method.call_count > 0
+
+    def test_encode_file_call_write(self):
+        with patch.object(utilities, "b64encode", return_value="scooby".encode("utf-8")):
+            with patch.object(utilities.os, "remove"):
+                with patch.object(builtins,"open", return_value= self.mock_open) as mock_method:
+                    got = utilities.encode_file(self.file_path, "key_scooby")
+                    assert mock_method.call_count > 0
 
 
     def test_decode_file_valid(self):

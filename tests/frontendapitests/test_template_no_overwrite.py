@@ -20,7 +20,7 @@ class TemplateTest(unittest.TestCase):
         self.failed_dict = {
             keys.status_code_name: InternalException(
                 "scooby not found"
-            ).get_status_code()
+            ).get_status_code(), "error_message": "whoops"
         }
         self.templateMock = Mock()
         self.imageMock = Mock()
@@ -48,7 +48,7 @@ class TemplateTest(unittest.TestCase):
 
     def test_create_template_response_fail(self):
         with patch.object(
-            Template, "extract_template", side_effect=InternalException("boo")
+            Template, "extract_template", side_effect=InternalException("whoops")
         ):
             with patch.object(
                 FrontendAPI.workflow_manager.__class__, "create_template"
@@ -99,7 +99,7 @@ class TemplateTest(unittest.TestCase):
             with patch.object(
                 self.templateMock, "encode_template", return_value={"he": "ha"}
             ):
-                self.app.get(
+                self.app.post(
                     "get_template", json=json.dumps({keys.template_name: "hu"})
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
@@ -114,7 +114,7 @@ class TemplateTest(unittest.TestCase):
             with patch.object(
                 self.templateMock, "encode_template", return_value={"he": "ha"}
             ) as mock_method:
-                self.app.get(
+                self.app.post(
                     "get_template", json=json.dumps({keys.template_name: "hu"})
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
@@ -124,10 +124,10 @@ class TemplateTest(unittest.TestCase):
         with patch.object(
             FrontendAPI.workflow_manager.__class__,
             "get_template_from_name",
-            side_effect=InternalException("boo"),
+            side_effect=InternalException("whoops"),
         ):
             with patch.object(Template, "encode_template", return_value={"he": "ha"}):
-                got = self.app.get(
+                got = self.app.post(
                     "get_template", json=json.dumps({keys.template_name: "hu"})
                 )
                 retrieved_json: dict = json.loads(got.get_data())
@@ -142,7 +142,7 @@ class TemplateTest(unittest.TestCase):
             with patch.object(
                 self.templateMock, "encode_template", return_value={"he": "ha"}
             ):
-                got = self.app.get(
+                got = self.app.post(
                     "get_template", json=json.dumps({keys.template_name: "hu"})
                 )
                 retrieved_json: dict = json.loads(got.get_data())
