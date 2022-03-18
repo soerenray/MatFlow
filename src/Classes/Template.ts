@@ -2,34 +2,34 @@ import { dataURLtoFileNoMime } from './base64Utility';
 import Keys from './Keys';
 
 class Template {
-    private _dagDefinitionFile: File
+    private _dagDefinitionFileInBase64: File
 
     private _templateName: string
 
     /**
     *
-    * @param dagDefinitionFile The dagDefinitionFile
+    * @param dagDefinitionFileInBase64 The dagDefinitionFileInBase64
     * @param templateName The templateName
     */
-    constructor(dagDefinitionFile: File, templateName: string) {
-      this._dagDefinitionFile = dagDefinitionFile;
+    constructor(dagDefinitionFileInBase64: File, templateName: string) {
+      this._dagDefinitionFileInBase64 = dagDefinitionFileInBase64;
       this._templateName = templateName;
     }
 
     /**
-    * Gets the dagDefinitionFile
-    * @returns _dagDefinitionFile
+    * Gets the dagDefinitionFileInBase64
+    * @returns _dagDefinitionFileInBase64
     */
-    public get dagDefinitionFile(): File {
-      return this._dagDefinitionFile;
+    public get dagDefinitionFileInBase64(): File {
+      return this._dagDefinitionFileInBase64;
     }
 
     /**
-    * Sets the value of _dagDefinitionFile
-    * @param dagDefinitionFile The new value of _dagDefinitionFile
+    * Sets the value of _dagDefinitionFileInBase64
+    * @param dagDefinitionFileInBase64 The new value of _dagDefinitionFileInBase64
     */
-    public set dagDefinitionFile(dagDefinitionFile: File) {
-      this._dagDefinitionFile = dagDefinitionFile;
+    public set dagDefinitionFileInBase64(dagDefinitionFileInBase64: File) {
+      this._dagDefinitionFileInBase64 = dagDefinitionFileInBase64;
     }
 
     /**

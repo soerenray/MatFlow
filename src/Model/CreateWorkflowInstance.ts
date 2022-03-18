@@ -15,6 +15,10 @@ class CreateWorkflowInstance {
 
     private _workflowInstanceName: string
 
+    private _areconfigFilesInBase64WithName: boolean
+
+    private _configFilesInBase64WithName: [ArrayBuffer, string][]
+
     /**
     *
     * @param dropDownCreateOrImportWokflowInstance The dropDownCreateOrImportWokflowInstance
@@ -24,8 +28,20 @@ class CreateWorkflowInstance {
     * @param workflowInstanceFolder The workflowInstanceFolder
     * @param selectedTemplateName The selectedTemplateName
     * @param workflowInstanceName The workflowInstanceName
+    * @param areconfigFilesInBase64WithName True if all configFiles are transformed to base64
+    * @param configFilesInBase64WithName The configFiles as base64 and their names
     */
-    constructor(dropDownCreateOrImportWokflowInstance: string[] = [], selectedDropDownItem = '', templatesName: string[] = [], configFiles: File[] = [new File([], 'emptyFile', { type: 'file' })], workflowInstanceFolder: File = new File([], 'emptyFile', { type: 'application/zip' }), selectedTemplateName = '', workflowInstanceName = '') {
+    constructor(
+      dropDownCreateOrImportWokflowInstance: string[] = [],
+      selectedDropDownItem = '',
+      templatesName: string[] = [],
+      configFiles: File[] = [],
+      workflowInstanceFolder: File = new File([], 'emptyFile', { type: 'file' }),
+      selectedTemplateName = '',
+      workflowInstanceName = '',
+      areconfigFilesInBase64WithName = false,
+      configFilesInBase64WithName: [ArrayBuffer, string][] = [],
+    ) {
       this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
       this._selectedDropDownItem = selectedDropDownItem;
       this._templatesName = templatesName;
@@ -33,6 +49,8 @@ class CreateWorkflowInstance {
       this._workflowInstanceFolder = workflowInstanceFolder;
       this._selectedTemplateName = selectedTemplateName;
       this._workflowInstanceName = workflowInstanceName;
+      this._areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
+      this._configFilesInBase64WithName = configFilesInBase64WithName;
     }
 
     /**
@@ -149,6 +167,38 @@ class CreateWorkflowInstance {
       this._workflowInstanceName = workflowInstanceName;
     }
 
+    /**
+    * Gets the areconfigFilesInBase64WithName
+    * @returns _areconfigFilesInBase64WithName
+    */
+    public get areconfigFilesInBase64WithName(): boolean {
+      return this._areconfigFilesInBase64WithName;
+    }
+
+    /**
+    * Sets the value of _areconfigFilesInBase64WithName
+    * @param areconfigFilesInBase64WithName The new value of _areconfigFilesInBase64WithName
+    */
+    public set areconfigFilesInBase64WithName(areconfigFilesInBase64WithName: boolean) {
+      this._areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
+    }
+
+    /**
+    * Gets the configFilesInBase64WithName
+    * @returns _configFilesInBase64WithName
+    */
+    public get configFilesInBase64WithName(): [ArrayBuffer, string][] {
+      return this._configFilesInBase64WithName;
+    }
+
+    /**
+    * Sets the value of _configFilesInBase64WithName
+    * @param configFilesInBase64WithName The new value of _configFilesInBase64WithName
+    */
+    public set configFilesInBase64WithName(configFilesInBase64WithName: [ArrayBuffer, string][]) {
+      this._configFilesInBase64WithName = configFilesInBase64WithName;
+    }
+
     public setCreateWorkflowInstanceMemento(createWorkflowInstanceMemento:
        CreateWorkflowInstanceMemento): void {
       const tempCreateWorkflowInstanceObject = createWorkflowInstanceMemento
@@ -161,6 +211,10 @@ class CreateWorkflowInstance {
       this.workflowInstanceFolder = tempCreateWorkflowInstanceObject.workflowInstanceFolder;
       this.selectedTemplateName = tempCreateWorkflowInstanceObject.selectedTemplateName;
       this.workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName;
+      this.areconfigFilesInBase64WithName = tempCreateWorkflowInstanceObject
+        .areconfigFilesInBase64WithName;
+      this.configFilesInBase64WithName = tempCreateWorkflowInstanceObject
+        .configFilesInBase64WithName;
     }
 
     public createWorkflowInstanceMemento(): CreateWorkflowInstanceMemento {
@@ -172,6 +226,8 @@ class CreateWorkflowInstance {
         this.workflowInstanceFolder,
         this.selectedTemplateName,
         this.workflowInstanceName,
+        this.areconfigFilesInBase64WithName,
+        this.configFilesInBase64WithName,
       ));
     }
 }

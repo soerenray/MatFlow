@@ -4,7 +4,7 @@ import User from '@Classes/User';
 import Server from '@Classes/Server';
 import Version from '@Classes/Version';
 import Template from '@Classes/Template';
-import { fileToDataURL, dataURLtoFile } from '@Classes/base64Utility';
+import { dataURLtoFile } from '@Classes/base64Utility';
 import Keys from '@Controler/Keys';
 import UserData from '@Classes/UserData';
 import WorkflowInstance from '@Classes/WorkflowInstance';
@@ -69,8 +69,7 @@ class BackendServerCommunicator {
     // public pullGraphForTemporaryTemplate(tempTemplate: Template): File { return }
 
     public pushCreateTemplate(template: Template): void {
-      // encode the dag file
-      const encoded_file: string = fileToDataURL(new File([], 'emptyFile.py')); // TODO dummy file
+      console.log('Template in base64', template.dagDefinitionFileInBase64)
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -78,8 +77,8 @@ class BackendServerCommunicator {
       };
       const data = {
         [Keys.templateName]: template.templateName,
-        [Keys.dagDefinitionName]: 'dummyName.py', // TODO dummy file name
-        [Keys.fileKey]: encoded_file,
+        [Keys.dagDefinitionName]: template.templateName + ".py",
+        [Keys.fileKey]: template.dagDefinitionFileInBase64,
       };
 
       axios.post(BackendServerCommunicator.serverAddress + Keys.createTemplate, data, config)
@@ -120,16 +119,17 @@ class BackendServerCommunicator {
     public pushCreateWorkflowInstanceFromTemplate(
       workflowInstanceName: string,
       templateName: string,
-      confFiles: File[],
+      confFilesInBase64WithName: [ArrayBuffer, string][],
     ): void {
-      const confFilesDummy: File[] = [new File([], 'emptyFile.conf')];
+      console.log("base64", confFilesInBase64WithName);
       const confDict: Array<Object> = [];
-      for (const file of confFilesDummy) {
+      confFilesInBase64WithName.forEach(([encodedFile, fileName]) => {
         confDict.push({
-          [Keys.configFileName]: file.name,
-          [Keys.fileKey]: fileToDataURL(file),
+          [Keys.configFileName]: fileName,
+          [Keys.fileKey]: encodedFile,
         });
-      }
+      });
+      console.log("confDict", confDict)
       axios.post(BackendServerCommunicator.serverAddress + Keys.createWfInstance, {
         [Keys.workflowInstanceName]: workflowInstanceName,
         [Keys.templateName]: templateName,

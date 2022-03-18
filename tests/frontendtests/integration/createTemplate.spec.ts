@@ -88,7 +88,7 @@ describe('CreateTemplate', () => {
     cy.get('#selectTemplateNameFromDropdown').should('have.value', 'Template2');
   });
 
-  it('Name the template template1, select Template2 as template-blueprint, check to create from empty file and send it', () => {
+  it('Name the template template1, select Template2 as template-blueprint and send it', () => {
     cy.get('[data-cy=nameOfTheTemplate]').click().type('template1');
     cy.get('[data-cy=selectTemplateNameFromDropdown]').click();
     cy.get('[data-cy=selectTemplateNameFromDropdown]').parents().contains('Template2').click();
