@@ -21,18 +21,21 @@ class Tests(unittest.TestCase):
     #    requests.delete("http://localhost:8080/api/v1/users/overrideUsername", auth = self.testUserController.getAuth)
 
     # workflowtests the getUsername method and the User Constructor
+    @unittest.skip("Airflow needs to be up")
     def testGetUsername(self):
         self.assertEqual("testUsername", self.testUser.getUsername())
 
     # UserController workflowtests
 
     # test Authentification in the Constructor
+    @unittest.skip("Airflow needs to be up")
     def testAuth(self):
         self.assertEqual(
             HTTPBasicAuth("airflow", "airflow"), self.testUserController.getAuth()
         )
 
     # test getAllUsersAndDetails statuscode 200 method
+    @unittest.skip("Airflow needs to be up")
     def testGetAllUsersAndDetails(self):
         self.assertEqual(
             requests.get(
@@ -43,10 +46,12 @@ class Tests(unittest.TestCase):
         )
 
     # test getAllUsersAndDetails statuscode != 200 method
+    @unittest.skip("Airflow needs to be up")
     def testGetAllUsersAndDetails(self):
         self.assertNotEqual(requests.get("http://localhost:8080/api/v1/users"), 200)
 
     # test createUser
+    @unittest.skip("Airflow needs to be up")
     def testCreateUser(self):
         self.testUserController.createUser(
             "testUsername", "testPassword", "testPassword"
@@ -60,6 +65,7 @@ class Tests(unittest.TestCase):
         )
 
     # test deleteUser
+    @unittest.skip("Airflow needs to be up")
     def testDeleteUser(self):
         self.testUserController.deleteUser(self.testUser)
         self.assertNotEqual(
@@ -71,6 +77,7 @@ class Tests(unittest.TestCase):
         )
 
     # test check Usernames
+    @unittest.skip("Airflow needs to be up")
     def testCheckUsernames(self):
         overrideTestUser = User("testUsername", "active", "Viewer", "overridePassword")
         self.testUserController.createUser(
