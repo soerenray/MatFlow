@@ -40,7 +40,7 @@ class CreateWorkflowInstance {
       selectedTemplateName = '',
       workflowInstanceName = '',
       areconfigFilesInBase64WithName = false,
-      configFilesInBase64WithName = [],
+      configFilesInBase64WithName: [ArrayBuffer, string][] = [],
     ) {
       this._dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
       this._selectedDropDownItem = selectedDropDownItem;
@@ -211,6 +211,10 @@ class CreateWorkflowInstance {
       this.workflowInstanceFolder = tempCreateWorkflowInstanceObject.workflowInstanceFolder;
       this.selectedTemplateName = tempCreateWorkflowInstanceObject.selectedTemplateName;
       this.workflowInstanceName = tempCreateWorkflowInstanceObject.workflowInstanceName;
+      this.areconfigFilesInBase64WithName = tempCreateWorkflowInstanceObject
+        .areconfigFilesInBase64WithName;
+      this.configFilesInBase64WithName = tempCreateWorkflowInstanceObject
+        .configFilesInBase64WithName;
     }
 
     public createWorkflowInstanceMemento(): CreateWorkflowInstanceMemento {
@@ -222,6 +226,8 @@ class CreateWorkflowInstance {
         this.workflowInstanceFolder,
         this.selectedTemplateName,
         this.workflowInstanceName,
+        this.areconfigFilesInBase64WithName,
+        this.configFilesInBase64WithName,
       ));
     }
 }

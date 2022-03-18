@@ -54,7 +54,8 @@ function fileToDataURLWithFunction(
   reader.readAsDataURL(file);
   reader.onload = () => {
     if (reader.result != null) {
-      func(reader.result, true);
+      // @ts-ignore
+      func(reader.result.split(',')[1], true);
     }
   };
   reader.onerror = (error) => {

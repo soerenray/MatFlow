@@ -148,7 +148,7 @@ export default {
         this.backendServerCommunicatorObject.pushCreateWorkflowInstanceFromTemplate(
           this.workflowInstanceName,
           this.selectedTemplateName,
-          [this.configFilesInBase64WithName],
+          this.configFilesInBase64WithName,
         );
       } else {
         this.backendServerCommunicatorObject.pushExistingWorkflowInstance(

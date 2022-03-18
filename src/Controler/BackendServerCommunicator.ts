@@ -70,7 +70,6 @@ class BackendServerCommunicator {
 
     public pushCreateTemplate(template: Template): void {
       console.log('Template in base64', template.dagDefinitionFileInBase64)
-
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +77,7 @@ class BackendServerCommunicator {
       };
       const data = {
         [Keys.templateName]: template.templateName,
-        [Keys.dagDefinitionName]: 'dummyName.py', // TODO dummy file name
+        [Keys.dagDefinitionName]: template.templateName + ".py",
         [Keys.fileKey]: template.dagDefinitionFileInBase64,
       };
 
@@ -122,13 +121,15 @@ class BackendServerCommunicator {
       templateName: string,
       confFilesInBase64WithName: [ArrayBuffer, string][],
     ): void {
+      console.log("base64", confFilesInBase64WithName);
       const confDict: Array<Object> = [];
-      for (const configFileInBase64WithName of confFilesInBase64WithName) {
+      confFilesInBase64WithName.forEach(([encodedFile, fileName]) => {
         confDict.push({
-          [Keys.configFileName]: configFileInBase64WithName[1],
-          [Keys.fileKey]: configFileInBase64WithName[0],
+          [Keys.configFileName]: fileName,
+          [Keys.fileKey]: encodedFile,
         });
-      }
+      });
+      console.log("confDict", confDict)
       axios.post(BackendServerCommunicator.serverAddress + Keys.createWfInstance, {
         [Keys.workflowInstanceName]: workflowInstanceName,
         [Keys.templateName]: templateName,
