@@ -17,7 +17,7 @@ class TestConfigFile(TestCase):
     def setUp(self):
         # set up paths and config-file objects
 
-        self.base_path: Path = Path(__file__).parent / "test_files/config_file"
+        self.base_path: Path = Path(__file__).parent.absolute() / "test_files/config_file"
         self.path1 = self.base_path / "test1.conf"
         self.config1 = ConfigFile("test1", self.path1)
         self.path1_updated = self.base_path / "test1updated.conf"

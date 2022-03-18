@@ -22,6 +22,8 @@ import matflow.database.DatabaseTable
 from matflow.useradministration.UserController import UserController
 from matflow.workflow.workflow_manager import WorkflowManager
 
+AUTH = {"username": "airflow", "password": "airflow"}
+
 
 class IntegrationTest(unittest.TestCase):
     app = app.test_client()
@@ -89,7 +91,7 @@ class IntegrationTest(unittest.TestCase):
 
     # TODO scheitert ziemlich sicher daran, dass alle User als Admins created werden user_roles != userPriveleges
     def test_get_all_users(self):
-        got = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
+        got = json.loads(self.__class__.app.get("get_all_users_and_details", headers=AUTH).get_data())
         print(got)
         expected = json.loads(
             json.dumps(
@@ -116,7 +118,7 @@ class IntegrationTest(unittest.TestCase):
         # default server comparison
         hostname = socket.gethostname()
         self.address = socket.gethostbyname(hostname)
-        got = json.loads(self.__class__.app.get("get_server_details").get_data())
+        got = json.loads(self.__class__.app.get("get_server_details", headers=AUTH).get_data())
         expected = json.loads(
             json.dumps(
                 {
@@ -151,7 +153,7 @@ class IntegrationTest(unittest.TestCase):
                 ],
             }
         )
-        self.__class__.app.put("set_server_details", json=payload).get_data()
+        self.__class__.app.put("set_server_details", json=payload, headers=AUTH).get_data()
         got = json.loads(self.__class__.app.get("get_server_details").get_data())
         expected = json.loads(payload)
         expected.update({keys.status_code_name: 607})
@@ -183,7 +185,7 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.put("set_user_details", json=payload).get_data()
+            self.__class__.app.put("set_user_details", json=payload, headers=AUTH).get_data()
         )
         self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 607})))
 
@@ -197,7 +199,7 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.put("set_user_details", json=payload).get_data()
+            self.__class__.app.put("set_user_details", json=payload, headers=AUTH).get_data()
         )
         expected_status: int = 601
         self.assertEqual(dict(got)[keys.status_code_name], expected_status)
@@ -212,7 +214,7 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.delete("delete_user", json=payload).get_data()
+            self.__class__.app.delete("delete_user", json=payload, headers=AUTH).get_data()
         )
         self.assertEqual(got, {keys.status_code_name: 607})
         all = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
@@ -269,7 +271,7 @@ class IntegrationTest(unittest.TestCase):
         # Act
         got = json.loads(
             self.__class__.app.get(
-                "get_config_from_wf_instance", json=input_data
+                "get_config_from_wf_instance", json=input_data, headers=AUTH
             ).get_data()
         )
 
@@ -469,7 +471,7 @@ def create_user(client: FlaskClient, name: str) -> str:
             keys.repeat_password_name: "default",
         }
     )
-    return json.loads(client.post("register_user", json=payload).get_data())
+    return json.loads(client.post("register_user", json=payload, headers=AUTH).get_data())
 
 
 def create_template(
