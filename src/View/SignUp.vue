@@ -9,15 +9,15 @@
           <v-col>
             <v-row>
               <v-text-field
-                data-cy='emailAddress'
+                data-cy="emailAddress"
                 v-model="userName"
                 label="email-address"
               ></v-text-field
             ></v-row>
-            {{  }}
+            {{}}
             <v-row>
               <v-text-field
-                data-cy='userPassword'
+                data-cy="userPassword"
                 v-model="userPassword"
                 label="password"
                 :type="showPassword ? 'text' : 'password'"
@@ -27,7 +27,7 @@
             ></v-row>
             <v-row>
               <v-text-field
-                data-cy='userPasswordRepeated'
+                data-cy="userPasswordRepeated"
                 label="repeat password"
                 v-model="userPasswordRepeated"
                 :type="showPasswordRepeated ? 'text' : 'password'"
@@ -38,7 +38,12 @@
           </v-col>
           <v-row>
             <v-spacer></v-spacer>
-            <v-btn data-cy='signUp' @click="pushSignUpAndResetView" color="blue" dark>
+            <v-btn
+              data-cy="signUp"
+              @click="pushSignUpAndResetView"
+              color="blue"
+              dark
+            >
               SignUp
             </v-btn>
           </v-row>

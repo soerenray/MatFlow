@@ -1,47 +1,49 @@
 <template>
   <v-app :style="{ background: '#B5F6BC', height: '1080px' }">
     <v-layout class="mx-auto mt-8">
-      <v-main>
-        <v-card width="800px" height="400px">
-          <v-card-title class="justify-center">
-            <p>LogIn</p>
-          </v-card-title>
-          <v-card-text>
-            <v-col>
-              <v-row>
-                <v-text-field
-                  data-cy="emailAddress"
-                  v-model="userName"
-                  label="email-address"
-                ></v-text-field
-              ></v-row>
-              <v-row>
-                <v-text-field
-                  data-cy="userPassword"
-                  v-model="userPassword"
-                  label="password"
-                  :type="showPassword ? 'text' : 'password'"
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                ></v-text-field
-              ></v-row>
-            </v-col>
-            <v-col>
-              <div style="padding-left: 10px">
-                <v-row> Create a user-account, when you are new</v-row>
+      <v-card width="800px" height="400px">
+        <v-card-title class="justify-center">
+          <p>LogIn</p>
+        </v-card-title>
+        <v-card-text>
+          <v-col>
+            <v-row>
+              <v-text-field
+                data-cy="emailAddress"
+                v-model="userName"
+                label="email-address"
+              ></v-text-field
+            ></v-row>
+            <v-row>
+              <v-text-field
+                data-cy="userPassword"
+                v-model="userPassword"
+                label="password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+              ></v-text-field
+            ></v-row>
+          </v-col>
+          <v-col>
+            <div style="padding-left: 10px">
+              <v-row> Create a user-account, when you are new</v-row>
+            </div>
+            <v-row>
+              <div style="padding-left: 10px; padding-top: 5px">
+                <router-link to="/SignUp">SignUp</router-link>
               </div>
-              <v-row>
-                <div style="padding-left: 10px; padding-top: 5px">
-                  <router-link to="/SignUp">SignUp</router-link>
-                </div>
-                <v-spacer></v-spacer>
-                <v-btn data-cy='loginButton' @click=
-                "pushLogInAndResetView" color="blue">LogIn</v-btn>
-              </v-row>
-            </v-col>
-          </v-card-text>
-        </v-card>
-      </v-main>
+              <v-spacer></v-spacer>
+              <v-btn
+                data-cy="loginButton"
+                @click="pushLogInAndResetView"
+                color="blue"
+                >LogIn</v-btn
+              >
+            </v-row>
+          </v-col>
+        </v-card-text>
+      </v-card>
     </v-layout>
   </v-app>
 </template>
