@@ -83,8 +83,8 @@ class FrontendAPI:
 
     @classmethod
     def __start_api(cls):
-        # serve(app, host="127.0.0.1", port=5000)
-        app.run(debug=True, port=8082)
+        # serve(app, host="0.0.0.0", port=5000)
+        app.run(debug=True, port=8082, host="0.0.0.0")
 
     @staticmethod
     @app.route("/", methods=["GET", "POST"])
