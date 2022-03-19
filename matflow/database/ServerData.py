@@ -33,10 +33,13 @@ class ServerData:
         name = server.getName()
         ip_address = server.getAddress()
 
-        # insert values
-        query = "INSERT INTO Server (ip, name) VALUES (%s, %s)"
+        # queries
+        check_query = "SELECT * FROM Server WHERE ip = '%s' AND name = '%s'"
+        insert_query = "INSERT INTO Server (ip, name) VALUES (%s, %s)"
+        if self.databaseTable.check_for(check_query, (ip_address, name)):
+            return
         # execute
-        self.databaseTable.set(query, (ip_address, name))
+        self.databaseTable.set(insert_query, (ip_address, name))
         return
 
     def get_server(self) -> List[Tuple[str, str]]:
