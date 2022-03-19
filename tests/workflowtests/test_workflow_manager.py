@@ -850,3 +850,7 @@ def make_path_to_backup(base_path: Path, path: Path) -> Path:
     for folder in stack:
         result = result / folder
     return result
+
+
+if __name__ == "__main__":
+    unittest.main()

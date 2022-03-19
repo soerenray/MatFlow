@@ -12,7 +12,7 @@ class TestActivateInstance(unittest.TestCase):
         base_path: Path = Path(__file__).parent.absolute()
         self.dag_path = Path(
             os.path.join(
-                base_path, "test_files", "workflow_manager", "template1", "tpl1.py"
+                base_path, "test_files", "tpl2.py"
             )
         )
         config_path = Path(os.path.join(base_path, "test_files", "config_file"))
