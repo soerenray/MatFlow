@@ -339,7 +339,7 @@ class TestGetTemplateAndNames(TestWorkflowManager):
         actual_names: List[str] = self.w_man.get_template_names()
 
         # Assert
-        self.assertEqual(expected_names, actual_names)
+        self.assertCountEqual(expected_names, actual_names)
 
     def test_get_template_from_wrong_name(self):
         # Arrange

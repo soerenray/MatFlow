@@ -1,5 +1,6 @@
 import json
 import unittest
+import socket
 from unittest.mock import Mock, patch
 from matflow.exceptionpackage.MatFlowException import (
     ConverterException,
@@ -13,10 +14,12 @@ from matflow.hardwareadministration.Server import Server
 class ServerTest(unittest.TestCase):
     def setUp(self) -> None:
         self.app = app.test_client()
+        hostname = socket.gethostname()
+        self.address = socket.gethostbyname(hostname)
         self.expected_dict_server: dict = {
             keys.server_name: "server",
             keys.server_status_name: "online",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.container_limit_name: 4,
             keys.server_resources_name: [("ha", "ha")],
             keys.selected_for_execution_name: True,
@@ -24,7 +27,7 @@ class ServerTest(unittest.TestCase):
         self.expected_dict_server_2: dict = {
             keys.server_name: "server",
             keys.server_status_name: "online",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.container_limit_name: 4,
             keys.server_resources_name: ("ha", "ha"),
             keys.selected_for_execution_name: True,
@@ -41,7 +44,7 @@ class ServerTest(unittest.TestCase):
         server: Server = Server()
         expected = {
             "serverName": "server",
-            "serverAddress": "192.168.0.81",
+            "serverAddress": self.address,
             "serverStatus": True,
             "containerLimit": 20,
             "selectedForExecution": True,
@@ -176,7 +179,7 @@ class ServerTest(unittest.TestCase):
     def test_extraction_invalid_name(self):
         to_dump = {
             keys.server_status_name: "online",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.container_limit_name: 4,
             keys.server_resources_name: ("ha", "ha"),
             keys.selected_for_execution_name: True,
@@ -187,7 +190,7 @@ class ServerTest(unittest.TestCase):
     def test_extraction_invalid_status(self):
         to_dump = {
             keys.server_name: "server",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.container_limit_name: 4,
             keys.server_resources_name: ("ha", "ha"),
             keys.selected_for_execution_name: True,
@@ -209,7 +212,7 @@ class ServerTest(unittest.TestCase):
     def test_extraction_invalid_limit(self):
         to_dump = {
             keys.server_name: "server",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.server_status_name: "online",
             keys.server_resources_name: ("ha", "ha"),
             keys.selected_for_execution_name: True,
@@ -220,7 +223,7 @@ class ServerTest(unittest.TestCase):
     def test_extraction_invalid_resource(self):
         to_dump = {
             keys.server_name: "server",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.server_status_name: "online",
             keys.container_limit_name: 4,
             keys.selected_for_execution_name: True,
@@ -231,7 +234,7 @@ class ServerTest(unittest.TestCase):
     def test_extraction_invalid_execution(self):
         to_dump = {
             keys.server_name: "server",
-            keys.server_address_name: "127.0.0.1",
+            keys.server_address_name: self.address,
             keys.server_status_name: "online",
             keys.container_limit_name: 4,
             keys.server_resources_name: ("ha", "ha"),

@@ -4,6 +4,7 @@ import unittest
 from copy import deepcopy
 from unittest.mock import patch, Mock
 from matflow.database.DatabaseTable import DatabaseTable
+
 with patch.object(DatabaseTable, "get_instance", return_value=""):
     from matflow.frontendapi.api import app, FrontendAPI
     from matflow.frontendapi import keys
@@ -34,39 +35,70 @@ class UserTest(unittest.TestCase):
             keys.user_privilege_name: "user",
             keys.password_name: "jinkies",
         }
-        self.all_users: dict = {'total_entries': 2,
-                                'users': [{'active': True,
-                                           'changed_on': '2022-02-24T21:16:07.771595',
-                                           'created_on': '2022-02-24T21:16:07.771470',
-                                           'email': 'airflowadmin@example.com',
-                                           'fail_login_count': 0,
-                                           'first_name': 'Airflow',
-                                           'last_login': '2022-02-25T14:40:36.356283',
-                                           'last_name': 'Admin', 'login_count': 183,
-                                           'roles': [{'name': 'Admin'}],
-                                           'username': 'airflow'},
-                                          {'active': True,
-                                           'changed_on': '2022-02-25T08:49:46.339749',
-                                           'created_on': '2022-02-25T08:49:46.339308',
-                                           'email': '.', 'fail_login_count': 0,
-                                           'first_name': '.',
-                                           'last_login': '2022-02-25T08:58:08.301726',
-                                           'last_name': '.', 'login_count': 3,
-                                           'roles': [{'name': 'Admin'}], 'username': 'first_user'}]}
+        self.all_users: dict = {
+            "total_entries": 2,
+            "users": [
+                {
+                    "active": True,
+                    "changed_on": "2022-02-24T21:16:07.771595",
+                    "created_on": "2022-02-24T21:16:07.771470",
+                    "email": "airflowadmin@example.com",
+                    "fail_login_count": 0,
+                    "first_name": "Airflow",
+                    "last_login": "2022-02-25T14:40:36.356283",
+                    "last_name": "Admin",
+                    "login_count": 183,
+                    "roles": [{"name": "Admin"}],
+                    "username": "airflow",
+                },
+                {
+                    "active": True,
+                    "changed_on": "2022-02-25T08:49:46.339749",
+                    "created_on": "2022-02-25T08:49:46.339308",
+                    "email": ".",
+                    "fail_login_count": 0,
+                    "first_name": ".",
+                    "last_login": "2022-02-25T08:58:08.301726",
+                    "last_name": ".",
+                    "login_count": 3,
+                    "roles": [{"name": "Admin"}],
+                    "username": "first_user",
+                },
+            ],
+        }
 
-        self.all_users_response = json.loads(json.dumps({keys.all_users: [{keys.user_name: "airflow",
-                                                    keys.user_status_name: True,
-                                                    keys.user_privilege_name: "Admin"},
-                                                                          {keys.user_name: "first_user",
-                                                                           keys.user_status_name: True,
-                                                                           keys.user_privilege_name: "Admin"}]}))
+        self.all_users_response = json.loads(
+            json.dumps(
+                {
+                    keys.all_users: [
+                        {
+                            keys.user_name: "airflow",
+                            keys.user_status_name: True,
+                            keys.user_privilege_name: "Admin",
+                        },
+                        {
+                            keys.user_name: "first_user",
+                            keys.user_status_name: True,
+                            keys.user_privilege_name: "Admin",
+                        },
+                    ]
+                }
+            )
+        )
         self.failed_dict = {
             keys.status_code_name: InternalException(
                 "scooby not found"
-            ).get_status_code(), "error_message": "whoops"
+            ).get_status_code(),
+            "error_message": "whoops",
         }
-        to_be_encoded = json.dumps({"username": "test", "password": "test"}).encode('utf-8')
-        self.headers = {"Authorization": "Basic {}".format(base64.b64encode(to_be_encoded).decode('utf-8'))}
+        to_be_encoded = json.dumps({"username": "test", "password": "test"}).encode(
+            "utf-8"
+        )
+        self.headers = {
+            "Authorization": "Basic {}".format(
+                base64.b64encode(to_be_encoded).decode("utf-8")
+            )
+        }
 
     def test_get_all_users_call(self):
         with patch.object(
@@ -99,7 +131,9 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user) as mock_method:
             with patch.object(FrontendAPI.user_controller.__class__, "overrideUser"):
                 self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers= self.headers
+                    "set_user_details",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -110,7 +144,9 @@ class UserTest(unittest.TestCase):
                 FrontendAPI.user_controller.__class__, "overrideUser"
             ) as mock_method_2:
                 self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "set_user_details",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method_2.call_count > 0
@@ -119,7 +155,9 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user):
             with patch.object(FrontendAPI.user_controller.__class__, "overrideUser"):
                 got = self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "set_user_details",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
@@ -132,7 +170,9 @@ class UserTest(unittest.TestCase):
                 side_effect=InternalException("whoops"),
             ):
                 got = self.app.put(
-                    "set_user_details", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "set_user_details",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, self.failed_dict)
@@ -141,7 +181,9 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user) as mock_method:
             with patch.object(FrontendAPI.user_controller.__class__, "deleteUser"):
                 self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "delete_user",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method.call_count > 0
@@ -152,7 +194,9 @@ class UserTest(unittest.TestCase):
                 FrontendAPI.user_controller.__class__, "deleteUser"
             ) as mock_method_2:
                 self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "delete_user",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 # assert mock_method.assert_called() does not work whereas mock_method.assert_not_called() throws error
                 assert mock_method_2.call_count > 0
@@ -165,7 +209,9 @@ class UserTest(unittest.TestCase):
                 side_effect=InternalException("whoops"),
             ):
                 got = self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "delete_user",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, self.failed_dict)
@@ -174,7 +220,9 @@ class UserTest(unittest.TestCase):
         with patch.object(User, "extract_user", return_value=self.user):
             with patch.object(FrontendAPI.user_controller.__class__, "deleteUser"):
                 got = self.app.delete(
-                    "delete_user", json=json.dumps(self.expected_dict_user_1), headers=self.headers
+                    "delete_user",
+                    json=json.dumps(self.expected_dict_user_1),
+                    headers=self.headers,
                 )
                 retrieved_json: dict = json.loads(got.get_data())
                 self.assertEqual(retrieved_json, success_response)
@@ -226,7 +274,8 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ), headers=self.headers
+                ),
+                headers=self.headers,
             )
             assert mock_method.call_count > 0
 
@@ -244,7 +293,8 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ), headers = self.headers
+                ),
+                headers=self.headers,
             )
             retrieved_json: dict = json.loads(got.get_data())
             self.assertEqual(self.failed_dict, retrieved_json)
@@ -259,7 +309,8 @@ class UserTest(unittest.TestCase):
                         keys.password_name: "doo",
                         keys.repeat_password_name: "doo",
                     }
-                ), headers=self.headers
+                ),
+                headers=self.headers,
             )
             retrieved_json: dict = json.loads(got.get_data())
             self.assertEqual(success_response, retrieved_json)

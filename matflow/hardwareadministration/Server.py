@@ -86,13 +86,14 @@ class Server:
 
     # check status method:
     def checkStatus(self):
-         #scanner = nmap.PortScanner()
-         #host = socket.gethostbyname(self.getAddress())
-         #scanner.scan(host, "1","-v")
-         #if scanner[host].state() == "UP":
-             return True
-         #else:
-         #    return False
+        # scanner = nmap.PortScanner()
+        # host = socket.gethostbyname(self.getAddress())
+        # scanner.scan(host, "1","-v")
+        # if scanner[host].state() == "UP":
+        return True
+
+    # else:
+    #    return False
 
     @classmethod
     def extract_server(cls, json_details: str) -> Server:

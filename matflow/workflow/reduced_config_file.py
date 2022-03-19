@@ -156,5 +156,7 @@ class ReducedConfigFile:
             if keys.config_file_name not in encoded_config:
                 raise ConverterException("no file provided")
             config_name = encoded_config[keys.config_file_name]
-            config_file = utilities.decode_file(encoded_config[keys.file_key], os.path.join(save_dir, config_name))
+            config_file = utilities.decode_file(
+                encoded_config[keys.file_key], os.path.join(save_dir, config_name)
+            )
         return Path(save_dir)
