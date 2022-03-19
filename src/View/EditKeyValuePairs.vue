@@ -1,58 +1,60 @@
 <template>
-  <v-app>
-    <div style="width: 700px; padding-top: 10px">
-      <v-card>
-        <v-card style="padding-bottom: 35px; height: 40px">
-          <v-row>
-            <div style="padding-left: 20px; padding-top: 10px">
-              <v-btn data-cy='revertAllFiles' @click="resetChoosenConfigFileObject" color="yellow"
-                >Revert all files</v-btn
-              >
-            </div>
-            <v-spacer></v-spacer>
-            <div style="padding-right: 20px; padding-top: 10px">
-              <v-btn data-cy='saveAllFiles' @click=
-              "pushUpdatedConfigFilesToBackendServer" color="blue"
-                >Save all files</v-btn
-              >
-            </div>
-          </v-row>
-        </v-card>
-        <v-divider></v-divider>
-        <v-card>
-          <v-row>
-            <v-col style="padding-left: 20px">
-              <v-btn variant="text" color="blue"> Key name </v-btn>
-            </v-col>
-            <v-spacer></v-spacer>
-            <v-col style="padding-right: 340px">
-              <v-btn variant="text" color="blue"> Value </v-btn>
-            </v-col>
-          </v-row>
-          <v-row v-for="keyValuePair in keyValuePairs" :key="keyValuePair.name">
-            <div data-cy="keyEntry" style="padding-left: 20px">
-              <v-text-field
-                @input="changeAllKeyValuePairs"
-                v-model="keyValuePair.keyName"
-                style="width: 200px"
-                variant="contained"
-              ></v-text-field>
-            </div>
-            <v-spacer></v-spacer>
-            <div data-cy="valueEntry" style="padding-right: 50px">
-              <v-text-field
-                @input="changeAllKeyValuePairs"
-                v-model="keyValuePair.keyValue"
-                variant="contained"
-                style="width: 400px"
-                dense
-              ></v-text-field>
-            </div>
-          </v-row>
-        </v-card>
-      </v-card>
+  <v-card>
+    <div class="d-flex flex-row">
+      <div style="width: 300px" class="pl-2 mr-10">
+        <div>
+          <v-btn
+            data-cy="revertAllFiles"
+            @click="resetChoosenConfigFileObject"
+            color="yellow"
+            >Revert all files</v-btn
+          >
+        </div>
+        <div>
+          <v-btn variant="text" color="blue"> Key name </v-btn>
+        </div>
+        <div>
+          <div
+            data-cy="keyEntry"
+            v-for="keyValuePair in keyValuePairs"
+            :key="keyValuePair.name"
+          >
+            <v-text-field
+              @input="changeAllKeyValuePairs"
+              v-model="keyValuePair.keyName"
+              variant="contained"
+            ></v-text-field>
+          </div>
+        </div>
+      </div>
+      <div style="width: 300px" class="pr-2">
+        <div class="d-flex flex-row">
+          <v-spacer></v-spacer>
+          <v-btn
+            data-cy="saveAllFiles"
+            @click="pushUpdatedConfigFilesToBackendServer"
+            color="blue"
+            >Save all files</v-btn
+          >
+        </div>
+        <div>
+          <v-btn variant="text" color="blue"> Value </v-btn>
+        </div>
+        <div
+          data-cy="valueEntry"
+          v-for="keyValuePair in keyValuePairs"
+          :key="keyValuePair.name"
+        >
+          <v-text-field
+            @input="changeAllKeyValuePairs"
+            v-model="keyValuePair.keyValue"
+            variant="contained"
+            dense
+          ></v-text-field>
+        </div>
+      </div>
     </div>
-  </v-app>
+  </v-card>
 </template>
 
 <script lang='ts'>
@@ -102,8 +104,10 @@ export default {
       keyValuePairs: Array<KeyValuePair>,
     ): Array<[string, string]> {
       return keyValuePairs.map(
-        (keyValuePair: KeyValuePair): [string, string] => [keyValuePair.keyName,
-          keyValuePair.keyValue],
+        (keyValuePair: KeyValuePair): [string, string] => [
+          keyValuePair.keyName,
+          keyValuePair.keyValue,
+        ],
       );
     },
     initialiseKeyValuePairs() {

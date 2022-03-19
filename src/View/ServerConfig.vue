@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <div style="padding-top: 40px; padding-left: 10px; padding-right: 10px">
+  <v-app class="ma-6">
+    <div>
       <v-card>
         <v-table>
           <thead data-cy="tableHeader">

@@ -1,12 +1,14 @@
 <template>
-  <v-app>
-    <v-card>
+  <v-app class="ma-4">
+    <v-card flat>
       <v-card-title> Create new workflow-instance </v-card-title>
-      <div style="padding-left: 20px">
+      <div class="ml-4">
         <v-select
+          style="width: 80%"
           id="selectOptionToCreateWorkflowInstance"
           data-cy="selectOptionToCreateWorkflowInstance"
           :items="dropDownCreateOrImportWokflowInstance"
+          :disabled="true"
           v-model="selectedDropDownItem"
         ></v-select>
         <div
@@ -19,6 +21,7 @@
               <v-text-field
                 id="nameOfTheWorkflowInstance"
                 data-cy="nameOfTheWorkflowInstance"
+                variant="contained"
                 label="Name of the workflow-instance"
                 v-model="workflowInstanceName"
                 hide-details="auto"
@@ -27,6 +30,7 @@
             <v-col>
               <v-select
                 id="selectTemplateNameFromDropdown"
+                variant="contained"
                 data-cy="selectTemplateNameFromDropdown"
                 :items="templatesName"
                 v-model="selectedTemplateName"
@@ -35,14 +39,19 @@
               </v-select>
             </v-col>
             <v-col>
-            <v-file-input
+              <v-file-input
                 id="importConfigFiles"
+                variant="contained"
                 data-cy="importConfigFiles"
                 @change="transformDagFilesToBase64"
                 :multiple="true"
-                :loading="(!areconfigFilesInBase64WithName && (configFiles.length > 0))"
-                :disabled="(!areconfigFilesInBase64WithName &&
-                            (configFilesInBase64WithName.length > 0))"
+                :loading="
+                  !areconfigFilesInBase64WithName && configFiles.length > 0
+                "
+                :disabled="
+                  !areconfigFilesInBase64WithName &&
+                  configFilesInBase64WithName.length > 0
+                "
                 v-model="configFiles"
                 :clearable="false"
                 accept="files"
@@ -54,8 +63,14 @@
                 id="sendWorkflowInstance"
                 data-cy="sendWorkflowInstance"
                 fab
-                :disabled="!(areconfigFilesInBase64WithName && workflowInstanceName !== '',
-                 selectedTemplateName != '')"
+                :disabled="
+                  !(
+                    areconfigFilesInBase64WithName &&
+                    workflowInstanceName !== '' &&
+                    selectedTemplateName !== '' &&
+                    configFiles !== []
+                  )
+                "
                 small
                 @click="pressSendButton"
                 color="#58D68D"
@@ -92,7 +107,7 @@
   </v-app>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 // @ts-nocheck
 import CreateWorkflowInstance from '@Model/CreateWorkflowInstance';
 import CreateWorkflowInstanceCaretaker from '@Memento/CreateWorkflowInstanceCaretaker';
@@ -117,22 +132,18 @@ export default {
   methods: {
     transformDagFilesToBase64() {
       filesToDataURLWithFunction(
-        this.configFiles, (
-          (input: [(ArrayBuffer|string), string][], isConverted: boolean) => {
-            this.configFilesInBase64WithName = input;
-            this.areconfigFilesInBase64WithName = isConverted;
-          }),
+        this.configFiles,
+        (input: [ArrayBuffer | string, string][], isConverted: boolean) => {
+          this.configFilesInBase64WithName = input;
+          this.areconfigFilesInBase64WithName = isConverted;
+        },
       );
     },
     async pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
-      await this
-        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
-          res.forEach((elem) => {
-            this.createWorkflowInstanceObject.templatesName.push(elem);
-          });
-        });
+
+      this.createWorkflowInstanceObject.templatesName = await this.backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
       this.createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(
@@ -170,8 +181,7 @@ export default {
           .dropDownCreateOrImportWokflowInstance;
       },
       set(dropDownCreateOrImportWokflowInstance: string[]) {
-        this.createWorkflowInstanceObject
-          .dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
+        this.createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
       },
     },
     selectedDropDownItem: {
@@ -235,8 +245,7 @@ export default {
         return this.createWorkflowInstanceObject.areconfigFilesInBase64WithName;
       },
       set(areconfigFilesInBase64WithName: boolean) {
-        this.createWorkflowInstanceObject
-          .areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
+        this.createWorkflowInstanceObject.areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
       },
     },
     configFilesInBase64WithName: {
@@ -249,8 +258,9 @@ export default {
     },
   },
   async created() {
-    await this
-      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+    await this.backendServerCommunicatorObject
+      .pullTemplatesName()
+      .then((res) => {
         res.forEach((elem) => {
           this.createWorkflowInstanceObject.templatesName.push(elem);
         });

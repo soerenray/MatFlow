@@ -1,23 +1,24 @@
 <template>
   <v-app>
-    <v-card>
-      <v-table>
-        <thead data-cy='tableHeader'>
-          <tr>
-            <td v-for="header in headers" :key="header.name">
-              {{ header.text }}
-            </td>
-            </tr>
-        </thead>
-        <tbody data-cy='tableBody'>
-          <tr v-for='parameterChange in parameterChangesTableObject'
-          :key='parameterChange.oldValue'>
-            <td>{{parameterChange.oldValue}}</td>
-            <td>{{parameterChange.newValue}}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-card>
+    <v-table>
+      <thead data-cy="tableHeader">
+        <tr>
+          <td>{{ headers[0].text }}</td>
+          <div flat class="mx-2"></div>
+          <td>{{ headers[1].text }}</td>
+        </tr>
+      </thead>
+      <tbody data-cy="tableBody">
+        <tr
+          v-for="parameterChange in parameterChangesTableObject"
+          :key="parameterChange.oldValue"
+        >
+          <td>{{ parameterChange.oldValue }}</td>
+          <div class="mx-5"></div>
+          <td>{{ parameterChange.newValue }}</td>
+        </tr>
+      </tbody>
+    </v-table>
   </v-app>
 </template>
 
