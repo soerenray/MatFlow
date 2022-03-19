@@ -11,6 +11,8 @@ from typing import List
 from flask import Flask, request
 
 # for production api:
+from waitress import serve
+
 from matflow.exceptionpackage.MatFlowException import (
     MatFlowException,
     ConverterException,
@@ -83,8 +85,8 @@ class FrontendAPI:
 
     @classmethod
     def __start_api(cls):
-        # serve(app, host="0.0.0.0", port=5000)
-        app.run(debug=True, port=8082, host="0.0.0.0")
+        serve(app, host="0.0.0.0", port=8082)
+        # app.run(debug=True, port=8082, host="0.0.0.0")
 
     @staticmethod
     @app.route("/", methods=["GET", "POST"])
