@@ -30,6 +30,7 @@ class WorkflowInstance(Template):
             raise EmptyConfigFolderException("")  # TODO
         self.__config_folder = config_folder
         self.__name = name
+        self.__dag_definition_file = dag_definition_file
 
     # getter
 
@@ -63,10 +64,12 @@ class WorkflowInstance(Template):
             dags_folder (Path): The path where the changed dag definition file belongs
 
         """
-        p = Path(__file__)
+        shutil.copyfile(self.__dag_definition_file, os.path.join(dags_folder, (self.__name + ".py")))
+
+        # p = Path(__file__)
         # root -> matflow -> workflow -> workflow_instance.py
-        parent_path = Path(p.parent.parent.parent.absolute())
+        # parent_path = Path(p.parent.parent.parent.absolute())
         # root -> dags
-        dag_path = os.path.join(parent_path, "dags", (self.__name + ".py"))
+        # dag_path = os.path.join(parent_path, "dags", (self.__name + ".py"))
         # copy from dag_folder to dag path
-        shutil.copyfile(dags_folder.absolute(), Path(dag_path))
+        # shutil.copyfile(dags_folder.absolute(), Path(dag_path))"""
