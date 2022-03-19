@@ -6,7 +6,7 @@
 
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:latest
+image: python:3.8.6
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
@@ -26,6 +26,7 @@ cache:
   
 before_script:
   - python --version  # For debugging
+  - pip install --upgrade pip
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
@@ -42,7 +43,7 @@ test:
     # only folders containing .py tests in alphabetical(file) order
     - python -m unittest discover -s tests/databasetests
     - python -m unittest discover -s tests/frontendapitests
-    - python -m unittest discover -s tests/hardwareadministrationtets
+    - python -m unittest discover -s tests/hardwareadministrationtests
     - python -m unittest discover -s tests/operatortest
     - python -m unittest discover -s tests/useradministrationtests
     - python -m unittest discover -s tests/workflowtests

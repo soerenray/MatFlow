@@ -34,7 +34,7 @@ class TestWorkflowManager(TestCase):
     w_man: WorkflowManager = WorkflowManager.get_instance()
 
     # initialize paths
-    base_path: Path = Path(__file__).parent / "test_files/workflow_manager"
+    base_path: Path = Path(__file__).parent.absolute() / "test_files/workflow_manager"
     temp_path: Path = base_path / "templates"
     wf_path: Path = base_path / "wf_instances"
 
@@ -339,7 +339,7 @@ class TestGetTemplateAndNames(TestWorkflowManager):
         actual_names: List[str] = self.w_man.get_template_names()
 
         # Assert
-        self.assertEqual(expected_names, actual_names)
+        self.assertCountEqual(expected_names, actual_names)
 
     def test_get_template_from_wrong_name(self):
         # Arrange

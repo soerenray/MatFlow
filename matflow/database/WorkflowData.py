@@ -302,7 +302,6 @@ class WorkflowData:
                                           WHERE v.ID = vf.versionID) v2 ON v1.confKey = v2.confKey
                                     """
 
-
         versions = self.get_version_numbers_of_workflow_instance(wf_name)
         database_versions: List[DatabaseVersion] = []  # return value
         for version in versions:
@@ -418,49 +417,3 @@ class WorkflowData:
 
         versions.sort(key=lambda x: list(map(int, x.split("."))))
         return versions
-
-
-# TODO vvv delete before shipping vvv
-def class_debugging():
-    print("TEST IN WorkflowData START")
-    print(
-        "Comment out if not needed/crahses program because no Databaseconnection could be established"
-    )
-
-    wf_data = WorkflowData()
-    # dummy data
-    test_workflow1 = WorkflowInstance("workflow3", Path("./Testfile1.txt"), Path(""))
-    test_workflow2 = WorkflowInstance(
-        "workflow5", Path("./Testfile2.txt"), Path("../workflow")
-    )
-    try:
-        wf_data.create_wf_instance(test_workflow1, Path(""))
-    except MatFlowException.InternalException as err:
-        print(err)
-    try:
-        wf_data.create_wf_instance(test_workflow2, Path("../workflow"))
-    except MatFlowException.InternalException as err:
-        print(err)
-
-    dictionary = wf_data.get_names_of_workflows_and_config_files()
-    print(dictionary)
-    # retrieve dummy data
-    # test = wfData.get_Server()
-    # print(test)
-
-    data = wf_data.get_active_version_of_workflow_instance("workflow3")
-    print(data)
-
-    versions = wf_data.get_version_numbers_of_workflow_instance("workflow3")
-    print("Versions of workflow3")
-    print(versions)
-
-    conf_path = wf_data.get_config_file_from_workflow_instance(
-        "workflow3", "mydb.conf", "1"
-    )
-    print(conf_path)
-
-    print("TEST IN WorkflowData END!")
-
-
-# class_debugging()

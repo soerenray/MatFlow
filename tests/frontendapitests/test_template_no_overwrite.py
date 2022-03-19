@@ -5,6 +5,7 @@ from unittest.mock import patch, Mock
 from matflow.database.DatabaseTable import DatabaseTable
 from matflow.frontendapi import keys, utilities
 from matflow.exceptionpackage.MatFlowException import InternalException
+
 with patch.object(DatabaseTable, "get_instance", return_value=""):
     from matflow.workflow.template import Template
     from matflow.frontendapi import api
@@ -20,11 +21,11 @@ class TemplateTest(unittest.TestCase):
         self.failed_dict = {
             keys.status_code_name: InternalException(
                 "scooby not found"
-            ).get_status_code(), "error_message": "whoops"
+            ).get_status_code(),
+            "error_message": "whoops",
         }
         self.templateMock = Mock()
         self.imageMock = Mock()
-
 
     def test_create_template_call_extract_template(self):
         with patch.object(
@@ -152,23 +153,25 @@ class TemplateTest(unittest.TestCase):
                 self.assertEqual(retrieved_json, expected_dict)
 
     def test_get_graph_call_extract(self):
-        with patch.object(Template, "extract_template", return_value=self.templateMock) as mock_method:
+        with patch.object(
+            Template, "extract_template", return_value=self.templateMock
+        ) as mock_method:
             with patch.object(
-                    FrontendAPI.workflow_manager.__class__, "create_template"
+                FrontendAPI.workflow_manager.__class__, "create_template"
             ):
                 with patch.object(
-                        FrontendAPI.workflow_manager.__class__,
-                        "get_dag_representation_from_template",
-                        return_value=self.imageMock,
+                    FrontendAPI.workflow_manager.__class__,
+                    "get_dag_representation_from_template",
+                    return_value=self.imageMock,
                 ):
                     with patch.object(
-                            utilities, "encode_file", return_value={"bla": "ble"}
+                        utilities, "encode_file", return_value={"bla": "ble"}
                     ):
                         with patch.object(api.os, "rmdir"):
                             got = self.app.get(
                                 "get_graph_for_temporary_template",
                                 json=json.dumps({"hu": "bla"}),
-                                )
+                            )
                             assert mock_method.call_count > 0
 
     def test_get_graph_call_create_template(self):
@@ -177,34 +180,40 @@ class TemplateTest(unittest.TestCase):
                 FrontendAPI.workflow_manager.__class__,
                 "get_dag_representation_from_template",
                 return_value=self.imageMock,
-                ):
+            ):
                 with patch.object(
                     utilities, "encode_file", return_value={"bla": "ble"}
                 ):
-                    with patch.object(FrontendAPI.workflow_manager.__class__, "create_template") as mock_method:
+                    with patch.object(
+                        FrontendAPI.workflow_manager.__class__, "create_template"
+                    ) as mock_method:
                         with patch.object(api.os, "rmdir"):
                             got = self.app.get(
                                 "get_graph_for_temporary_template",
                                 json=json.dumps({"hu": "bla"}),
-                                )
+                            )
                             assert mock_method.call_count > 0
 
     def test_get_graph_call_get_dag(self):
         with patch.object(Template, "extract_template", return_value=self.templateMock):
             with patch.object(
-                    FrontendAPI.workflow_manager.__class__, "create_template"
+                FrontendAPI.workflow_manager.__class__, "create_template"
             ):
                 with patch.object(
-                        FrontendAPI.workflow_manager.__class__,
-                        "get_dag_representation_from_template",
-                        return_value=self.imageMock,
+                    FrontendAPI.workflow_manager.__class__,
+                    "get_dag_representation_from_template",
+                    return_value=self.imageMock,
                 ) as mock_method:
                     with patch.object(
-                            utilities, "encode_file", return_value={"bla": "ble"}
+                        utilities, "encode_file", return_value={"bla": "ble"}
                     ):
-                        with patch.object(Template, "extract_template",
-                                          return_value=""):
-                            with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            Template, "extract_template", return_value=""
+                        ):
+                            with patch.object(
+                                FrontendAPI.workflow_manager.__class__,
+                                "create_template",
+                            ):
                                 with patch.object(api.os, "rmdir"):
                                     got = self.app.get(
                                         "get_graph_for_temporary_template",
@@ -215,19 +224,23 @@ class TemplateTest(unittest.TestCase):
     def test_get_graph_call_encode_file(self):
         with patch.object(Template, "extract_template", return_value=self.templateMock):
             with patch.object(
-                    FrontendAPI.workflow_manager.__class__, "create_template"
+                FrontendAPI.workflow_manager.__class__, "create_template"
             ):
                 with patch.object(
-                        FrontendAPI.workflow_manager.__class__,
-                        "get_dag_representation_from_template",
-                        return_value=self.imageMock,
+                    FrontendAPI.workflow_manager.__class__,
+                    "get_dag_representation_from_template",
+                    return_value=self.imageMock,
                 ):
                     with patch.object(
-                            utilities, "encode_file", return_value={"bla": "ble"}
+                        utilities, "encode_file", return_value={"bla": "ble"}
                     ) as mock_method:
-                        with patch.object(Template, "extract_template",
-                                          return_value=""):
-                            with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            Template, "extract_template", return_value=""
+                        ):
+                            with patch.object(
+                                FrontendAPI.workflow_manager.__class__,
+                                "create_template",
+                            ):
                                 with patch.object(api.os, "rmdir"):
                                     got = self.app.get(
                                         "get_graph_for_temporary_template",
@@ -236,19 +249,23 @@ class TemplateTest(unittest.TestCase):
                                     assert mock_method.call_count > 0
 
     def test_get_graph_response_fail(self):
-        with patch.object(Template, "extract_template", side_effect=InternalException("whoops")):
+        with patch.object(
+            Template, "extract_template", side_effect=InternalException("whoops")
+        ):
             with patch.object(
-                    FrontendAPI.workflow_manager.__class__, "create_template"
+                FrontendAPI.workflow_manager.__class__, "create_template"
             ):
                 with patch.object(
-                        FrontendAPI.workflow_manager.__class__,
-                        "get_dag_representation_from_template",
-                        return_value=self.imageMock,
+                    FrontendAPI.workflow_manager.__class__,
+                    "get_dag_representation_from_template",
+                    return_value=self.imageMock,
                 ):
                     with patch.object(
-                            utilities, "encode_file", return_value={"bla": "ble"}
+                        utilities, "encode_file", return_value={"bla": "ble"}
                     ):
-                        with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            FrontendAPI.workflow_manager.__class__, "create_template"
+                        ):
                             with patch.object(api.os, "rmdir") as mock_method:
                                 got = self.app.get(
                                     "get_graph_for_temporary_template",
@@ -270,18 +287,24 @@ class TemplateTest(unittest.TestCase):
                     with patch.object(
                         utilities, "encode_file", return_value={"bla": "ble"}
                     ):
-                        with patch.object(Template, "extract_template",
-                                          return_value=""):
-                            with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            Template, "extract_template", return_value=""
+                        ):
+                            with patch.object(
+                                FrontendAPI.workflow_manager.__class__,
+                                "create_template",
+                            ):
                                 with patch.object(api.os, "rmdir"):
                                     got = self.app.get(
-                                    "get_graph_for_temporary_template",
-                                    json=json.dumps({"hu": "bla"}),
+                                        "get_graph_for_temporary_template",
+                                        json=json.dumps({"hu": "bla"}),
                                     )
                                     retrieved_json: dict = json.loads(got.get_data())
                                     expected_dict: dict = deepcopy(success_response)
                                     expected_dict.update({"bla": "ble"})
-                                    expected_dict = json.loads(json.dumps(expected_dict))
+                                    expected_dict = json.loads(
+                                        json.dumps(expected_dict)
+                                    )
                                     self.assertEqual(expected_dict, retrieved_json)
 
     def test_get_graph_call_rmdir(self):
@@ -297,13 +320,17 @@ class TemplateTest(unittest.TestCase):
                     with patch.object(
                         utilities, "encode_file", return_value={"bla": "ble"}
                     ):
-                        with patch.object(Template, "extract_template",
-                                          return_value=""):
-                            with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            Template, "extract_template", return_value=""
+                        ):
+                            with patch.object(
+                                FrontendAPI.workflow_manager.__class__,
+                                "create_template",
+                            ):
                                 with patch.object(api.os, "rmdir") as mock_method:
                                     got = self.app.get(
-                                    "get_graph_for_temporary_template",
-                                    json=json.dumps({"hu": "bla"}),
+                                        "get_graph_for_temporary_template",
+                                        json=json.dumps({"hu": "bla"}),
                                     )
                                     assert mock_method.call_count > 0
 
@@ -320,13 +347,17 @@ class TemplateTest(unittest.TestCase):
                     with patch.object(
                         utilities, "encode_file", return_value={"bla": "ble"}
                     ):
-                        with patch.object(Template, "extract_template",
-                                          return_value="") as mock_method:
-                            with patch.object(FrontendAPI.workflow_manager.__class__, "create_template"):
+                        with patch.object(
+                            Template, "extract_template", return_value=""
+                        ) as mock_method:
+                            with patch.object(
+                                FrontendAPI.workflow_manager.__class__,
+                                "create_template",
+                            ):
                                 with patch.object(api.os, "rmdir"):
                                     got = self.app.get(
-                                    "get_graph_for_temporary_template",
-                                    json=json.dumps({"hu": "bla"}),
+                                        "get_graph_for_temporary_template",
+                                        json=json.dumps({"hu": "bla"}),
                                     )
                                     assert mock_method.call_count > 0
 

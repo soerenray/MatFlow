@@ -58,25 +58,3 @@ class ServerData:
             return data
 
         return data
-
-
-# TODO vvv delete before shipping vvv
-def class_debugging():
-    print("TEST IN ServerData START")
-    print(
-        "Comment out if not needed/crahses program because no Databaseconnection could be established"
-    )
-
-    s_data = ServerData()
-    # dummy data
-    server = Server("name1", "adress1", "status1", 42, True, ["no", "limit"])
-    s_data.write_server(server)
-
-    # retrieve dummy data
-    test = s_data.get_server()
-    print(test)
-
-    print("TEST IN ServerData END!")
-
-
-# class_debugging()
