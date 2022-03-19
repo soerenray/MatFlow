@@ -65,11 +65,3 @@ class WorkflowInstance(Template):
 
         """
         shutil.copyfile(self.__dag_definition_file, os.path.join(dags_folder, (self.__name + ".py")))
-
-        # p = Path(__file__)
-        # root -> matflow -> workflow -> workflow_instance.py
-        # parent_path = Path(p.parent.parent.parent.absolute())
-        # root -> dags
-        # dag_path = os.path.join(parent_path, "dags", (self.__name + ".py"))
-        # copy from dag_folder to dag path
-        # shutil.copyfile(dags_folder.absolute(), Path(dag_path))"""
