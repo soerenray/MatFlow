@@ -64,4 +64,6 @@ class WorkflowInstance(Template):
             dags_folder (Path): The path where the changed dag definition file belongs
 
         """
-        shutil.copyfile(self.__dag_definition_file, os.path.join(dags_folder, (self.__name + ".py")))
+        shutil.copyfile(
+            self.__dag_definition_file, os.path.join(dags_folder, (self.__name + ".py"))
+        )

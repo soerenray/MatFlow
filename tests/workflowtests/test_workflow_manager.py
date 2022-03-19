@@ -526,6 +526,7 @@ class TestGetVersionsFromWorkflowInstance(TestWorkflowManager):
         # now we have to put in the old, empty instance folder
         empty_folder: Path = self.base_path / "wf_instances"
         self.w_man._WorkflowManager__versions_base_directory = empty_folder
+        delete_rest_instances()
 
     @mock.patch("matflow.workflow.workflow_manager.WorkflowData")
     def test_unknown_instance(self, mock_wf_data):
@@ -850,6 +851,14 @@ def make_path_to_backup(base_path: Path, path: Path) -> Path:
     for folder in stack:
         result = result / folder
     return result
+
+
+def delete_rest_instances():
+    dags_path = os.path.join(Path(__file__).parent.parent.parent.absolute(), "dags")
+    if os.path.exists(os.path.join(dags_path, "instance1.py")):
+        os.remove(os.path.join(dags_path, "instance1.py"))
+    if os.path.exists(os.path.join(dags_path, "instance2.py")):
+        os.remove(os.path.join(dags_path, "instance2.py"))
 
 
 if __name__ == "__main__":
