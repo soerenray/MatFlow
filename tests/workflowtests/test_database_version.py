@@ -10,7 +10,9 @@ from matflow.exceptionpackage.MatFlowException import InternalException
 
 class TestDatabaseVersion(TestCase):
     def setUp(self):
-        self.base_path: Path = Path(__file__).parent.absolute() / "test_files/database_version/"
+        self.base_path: Path = (
+            Path(__file__).parent.absolute() / "test_files/database_version/"
+        )
         configs_dir1: Path = self.base_path / "changed_files"
         version_number: VersionNumber = VersionNumber("1.1")
         self.version1: DatabaseVersion = DatabaseVersion(
