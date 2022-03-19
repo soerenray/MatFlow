@@ -1,3 +1,5 @@
+import os.path
+import shutil
 from pathlib import Path
 from os import listdir
 from matflow.workflow.template import Template
@@ -27,6 +29,7 @@ class WorkflowInstance(Template):
         if not listdir(config_folder):  # the config folder is empty
             raise EmptyConfigFolderException("")  # TODO
         self.__config_folder = config_folder
+        self.__name = name
 
     # getter
 
@@ -60,4 +63,15 @@ class WorkflowInstance(Template):
             dags_folder (Path): The path where the changed dag definition file belongs
 
         """
-        pass  # TODO
+        p = Path(__file__)
+        # root -> matflow -> workflow -> workflow_instace.py
+        # and root -> dags
+        parent_path = Path(p.parent.parent.parent.absolute())
+        # extract filename
+        dag_path = os.path.join(parent_path, "dags", (self.__name + ".py"))
+        print(dag_path)
+        print(dags_folder.absolute())
+        shutil.copyfile(
+            dags_folder.absolute(),
+            Path(dag_path)
+        )
