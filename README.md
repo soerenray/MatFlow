@@ -30,15 +30,11 @@ http://<Server IP>:8080
 **Server application** <br>
 Install server application dependencies:
 ```
-pip install -r requirements.txt
-npm install
+docker-compose build
 ```
-This creates a virtualenv environment. If you want to use a pipenv environment instead, replace pip with pipenv in the commands above.  <br><br/>
 Run server application:
 ```
-npm run serve -- --port 8081
 docker-compose up
-python3 -m matflow.main
 ```
 
 ## Testing
@@ -50,6 +46,21 @@ npm run test:unit
 Run integration-tests:
 ```
 npm run test:integration
+```
+
+**Server application**<br>
+Run unit tests:
+```
+python -m unittest discover -s tests/databasetests
+python -m unittest discover -s tests/frontendapitests
+python -m unittest discover -s tests/hardwareadministrationtests
+python -m unittest discover -s tests/operatortest
+python -m unittest discover -s tests/useradministrationtests
+python -m unittest discover -s tests/workflowtests
+```
+Run integration-tests:
+```
+python -m unittest discover -s tests/integrationtests
 ```
 
 
