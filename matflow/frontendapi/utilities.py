@@ -23,13 +23,14 @@ def create_dir(path: str) -> str:
         counter += 1
 
 
-def encode_file(file_path: Path, key: str) -> dict:
+def encode_file(file_path: Path, key: str, delete_file: bool) -> dict:
     """
     encodes a file in base64 encoding
 
     Args:
         file_path(Path): path to file
         key(String): key for json object
+        delete_file(bool): indicates if the file shall be deleted after encoding
 
     Returns:
         dictionary with encoded file
@@ -38,7 +39,8 @@ def encode_file(file_path: Path, key: str) -> dict:
     with open(file_path, "rb") as file:
         encoding = b64encode(file.read()).decode("utf-8")
         out_dict.update({key: encoding})
-    os.remove(file_path)
+    if delete_file:
+        os.remove(file_path)
     return out_dict
 
 

@@ -4,7 +4,7 @@ import User from '@Classes/User';
 import Server from '@Classes/Server';
 import Version from '@Classes/Version';
 import Template from '@Classes/Template';
-import { dataURLtoFile } from '@Classes/base64Utility';
+import { dataURLtoFile, dataURLtoFileNoMime } from '@Classes/base64Utility';
 import Keys from '@Controler/Keys';
 import UserData from '@Classes/UserData';
 import WorkflowInstance from '@Classes/WorkflowInstance';
@@ -110,9 +110,22 @@ class BackendServerCommunicator {
         });
     }
 
-    //TODO pullTemplateByName
-    public async pullDagFileByTemplateName(worflowInstanceName: string): Promise<File>{
-      return dataURLtoFile("", ""); //dummy
+    public async pullDagFileByTemplateName(templateName: string): Promise<File>{
+      let encodedFile: string = "invalid";
+      const data = {
+        [Keys.templateName]: templateName,
+      }
+      await axios.post(BackendServerCommunicator.serverAddress + Keys.getTemplate, data)
+      .then((response) => {
+        const { data } = response;
+        console.log("pullDagFile", response);
+        if (data[Keys.statusCodeName] == 607) {
+          encodedFile =  data[Keys.fileKey][Keys.dagDefinitionName];
+        } else {
+          // error occurred
+        }
+      })
+      return dataURLtoFileNoMime(encodedFile, templateName +".py");
     }
 
     // TODO the workflowInstance object doesn't contain the conf folder

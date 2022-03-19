@@ -15,12 +15,12 @@
               hide-details="auto"
             ></v-text-field>
           </v-col>
+          {{ chosenTemplateName }}
           <v-col>
             <v-select
               data-cy="selectTemplateNameFromDropdown"
               id="selectTemplateNameFromDropdown"
               :items="templatesName"
-              @select="transformDagFileToBase64"
               variant="contained"
               style="width: 300px"
               v-model="chosenTemplateName"
@@ -31,14 +31,14 @@
           <v-col>
             <v-file-input
               data-cy="fileInput"
-              :loading="(!isDagFileInBase64 && tempTextFile !== '')"
+              :loading="!isDagFileInBase64 && tempTextFile !== ''"
               @change="transformDagFileToBase64"
               id="fileInput"
               v-model="dagFileAsArray"
               variant="contained"
               style="width: 300px"
               :clearable="false"
-              type='file'
+              type="file"
               label="template-blueprint"
             >
             </v-file-input>
@@ -46,26 +46,34 @@
           <v-col>
             <v-row style="padding-top: 25px">
               <v-dialog v-model="openEdit">
-                <template v-slot:activator="{ }">
-                   <v-btn data-cy="editTemplate" color="blue"
-                   @click="openEditAndWriteTotempTextFile">Edit</v-btn>
+                <template v-slot:activator="{}">
+                  <v-btn
+                    data-cy="editTemplate"
+                    color="blue"
+                    @click="openEditAndWriteTotempTextFile"
+                    >Edit</v-btn
+                  >
                 </template>
-                <v-card
-                  style="width: 800px">
+                <v-card style="width: 800px">
                   <v-card-title>Edit Dag-file</v-card-title>
                   <v-card-header>
-                    <v-btn data-cy='save' @click='writeFromtempTextFileAndConvertToBase64'>
+                    <v-btn
+                      data-cy="save"
+                      @click="writeFromtempTextFileAndConvertToBase64"
+                    >
                       Save
                     </v-btn>
                     <v-spacer></v-spacer>
-                    <v-btn data-cy='close' @click='openEdit = false'>
-                      <v-icon>
-                        mdi-close
-                      </v-icon>
+                    <v-btn data-cy="close" @click="openEdit = false">
+                      <v-icon> mdi-close </v-icon>
                     </v-btn>
                   </v-card-header>
                   <v-card-text>
-                    <v-textarea data-cy="textarea" v-model="tempTextFile" filled></v-textarea>
+                    <v-textarea
+                      data-cy="textarea"
+                      v-model="tempTextFile"
+                      filled
+                    ></v-textarea>
                   </v-card-text>
                 </v-card>
               </v-dialog>
@@ -106,13 +114,22 @@ export default {
     };
   },
   methods: {
+    pullDagFileAndTransformDagFileToBase64() {
+      console.log('hi');
+      this.backendServerCommunicatorObject
+        .pullDagFileByTemplateName(this.chosenTemplateName)
+        .then((result) => {
+          this.dagFile = result;
+          this.transformDagFileToBase64();
+        });
+    },
     transformDagFileToBase64() {
       fileToDataURLWithFunction(
-        this.dagFile, (
-          (input: ArrayBuffer, isConverted: boolean) => {
-            this.dagFileInBase64 = input;
-            this.isDagFileInBase64 = isConverted;
-          }),
+        this.dagFile,
+        (input: ArrayBuffer, isConverted: boolean) => {
+          this.dagFileInBase64 = input;
+          this.isDagFileInBase64 = isConverted;
+        },
       );
     },
     pressSendButton() {
@@ -124,15 +141,12 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      this.createTemplateObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
+      this.createTemplateObject.templatesName = await this.backendServerCommunicatorObject
+        .pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
-        this.createNewTemplateObject(
-          this.dagFileInBase64,
-          this.newTemplateName,
-        ),
+        this.createNewTemplateObject(this.dagFileInBase64, this.newTemplateName),
       );
     },
     createNewTemplateObject(
@@ -151,7 +165,9 @@ export default {
       });
     },
     writeFromtempTextFileAndConvertToBase64() {
-      this.dagFile = new File([this.tempTextFile], this.dagFile.name, { type: this.dagFile.type });
+      this.dagFile = new File([this.tempTextFile], this.dagFile.name, {
+        type: this.dagFile.type,
+      });
       this.transformDagFileToBase64();
     },
   },
@@ -231,14 +247,24 @@ export default {
     },
   },
   async created() {
-    await this
-      .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
+    await this.backendServerCommunicatorObject
+      .pullTemplatesName()
+      .then((res) => {
         res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
       });
     // For now this is everything I want to recover
     this.createTemplateCaretakerObject.addCreateTemplateMementoObjectToArray(
       this.createTemplateObject.createTemplateMemento(),
     );
+  },
+  watch: {
+    chosenTemplateName: {
+      handler() {
+        if (this.chosenTemplateName !== '' && this.chosenTemplateName !== undefined) {
+          this.pullDagFileAndTransformDagFileToBase64();
+        }
+      },
+    },
   },
 };
 </script>

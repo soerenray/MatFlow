@@ -547,7 +547,7 @@ class FrontendAPI:
                 ConverterException("false/ no json provided")
             )
         else:
-            return ExceptionHandler.success(template.encode_template())
+            return ExceptionHandler.success(template.encode_template(False))
 
     @staticmethod
     @app.route("/get_graph_for_temporary_template", methods=["GET"])
@@ -575,7 +575,7 @@ class FrontendAPI:
                 ConverterException("false/ no json provided")
             )
         else:
-            out = utilities.encode_file(file_path, keys.dag_picture_name)
+            out = utilities.encode_file(file_path, keys.dag_picture_name, True)
             # file is already removed in utilities.encode
             os.rmdir(file_path.parent)
             return ExceptionHandler.success(out)

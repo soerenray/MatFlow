@@ -49,7 +49,7 @@ class UtilitiesTest(unittest.TestCase):
             utilities, "b64encode", return_value="scooby".encode("utf-8")
         ):
             with patch.object(utilities.os, "remove"):
-                got = utilities.encode_file(self.file_path, "key_scooby")
+                got = utilities.encode_file(self.file_path, "key_scooby", True)
                 self.assertEqual({"key_scooby": "scooby"}, got)
 
     def test_encode_file_invalid(self):
@@ -57,7 +57,7 @@ class UtilitiesTest(unittest.TestCase):
             utilities, "b64encode", return_value="scooby".encode("utf-8")
         ):
             with patch.object(utilities.os, "remove"):
-                got = utilities.encode_file(self.file_path, "key_scooby")
+                got = utilities.encode_file(self.file_path, "key_scooby", True)
                 self.assertNotEqual({"key_scooby": "schooooby"}, got)
 
     def test_encode_file_call_encode(self):
@@ -65,7 +65,7 @@ class UtilitiesTest(unittest.TestCase):
             utilities, "b64encode", return_value="scooby".encode("utf-8")
         ) as mock_method:
             with patch.object(utilities.os, "remove"):
-                got = utilities.encode_file(self.file_path, "key_scooby")
+                got = utilities.encode_file(self.file_path, "key_scooby", True)
                 assert mock_method.call_count > 0
 
     def test_encode_file_call_remove(self):
@@ -73,7 +73,7 @@ class UtilitiesTest(unittest.TestCase):
             utilities, "b64encode", return_value="scooby".encode("utf-8")
         ):
             with patch.object(utilities.os, "remove") as mock_method:
-                got = utilities.encode_file(self.file_path, "key_scooby")
+                got = utilities.encode_file(self.file_path, "key_scooby", True)
                 assert mock_method.call_count > 0
 
     def test_encode_file_call_write(self):
@@ -84,7 +84,7 @@ class UtilitiesTest(unittest.TestCase):
                 with patch.object(
                     builtins, "open", return_value=self.mock_open
                 ) as mock_method:
-                    got = utilities.encode_file(self.file_path, "key_scooby")
+                    got = utilities.encode_file(self.file_path, "key_scooby", True)
                     assert mock_method.call_count > 0
 
     def test_decode_file_valid(self):
