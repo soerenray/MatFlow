@@ -35,14 +35,18 @@
               </v-select>
             </v-col>
             <v-col>
-            <v-file-input
+              <v-file-input
                 id="importConfigFiles"
                 data-cy="importConfigFiles"
                 @change="transformDagFilesToBase64"
                 :multiple="true"
-                :loading="(!areconfigFilesInBase64WithName && (configFiles.length > 0))"
-                :disabled="(!areconfigFilesInBase64WithName &&
-                            (configFilesInBase64WithName.length > 0))"
+                :loading="
+                  !areconfigFilesInBase64WithName && configFiles.length > 0
+                "
+                :disabled="
+                  !areconfigFilesInBase64WithName &&
+                  configFilesInBase64WithName.length > 0
+                "
                 v-model="configFiles"
                 :clearable="false"
                 accept="files"
@@ -54,8 +58,11 @@
                 id="sendWorkflowInstance"
                 data-cy="sendWorkflowInstance"
                 fab
-                :disabled="!(areconfigFilesInBase64WithName && workflowInstanceName !== '',
-                 selectedTemplateName != '')"
+                :disabled="
+                  !(areconfigFilesInBase64WithName &&
+                    workflowInstanceName !== '',
+                  selectedTemplateName != '')
+                "
                 small
                 @click="pressSendButton"
                 color="#58D68D"
@@ -127,12 +134,9 @@ export default {
     async pressSendButton() {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
-      await this
-        .backendServerCommunicatorObject.pullTemplatesName().then((res) => {
-          res.forEach((elem) => {
-            this.createWorkflowInstanceObject.templatesName.push(elem);
-          });
-        });
+
+      this.createWorkflowInstanceObject.templatesName = await this
+        .backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
       this.createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(

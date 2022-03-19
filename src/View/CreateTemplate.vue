@@ -15,7 +15,6 @@
               hide-details="auto"
             ></v-text-field>
           </v-col>
-          {{ chosenTemplateName }}
           <v-col>
             <v-select
               data-cy="selectTemplateNameFromDropdown"
