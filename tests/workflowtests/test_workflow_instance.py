@@ -4,12 +4,17 @@ from pathlib import Path
 from unittest.mock import patch
 
 from matflow.workflow import workflow_instance
-from matflow.workflow.workflow_instance import  WorkflowInstance
+from matflow.workflow.workflow_instance import WorkflowInstance
+
 
 class TestActivateInstance(unittest.TestCase):
     def setUp(self):
         base_path: Path = Path(__file__).parent.absolute()
-        self.dag_path = Path(os.path.join(base_path, "test_files", "workflow_manager", "template1", "tpl1.py"))
+        self.dag_path = Path(
+            os.path.join(
+                base_path, "test_files", "workflow_manager", "template1", "tpl1.py"
+            )
+        )
         config_path = Path(os.path.join(base_path, "test_files", "config_file"))
         self.instance = WorkflowInstance("test_instance", self.dag_path, config_path)
 

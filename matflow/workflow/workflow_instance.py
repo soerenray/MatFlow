@@ -71,7 +71,4 @@ class WorkflowInstance(Template):
         dag_path = os.path.join(parent_path, "dags", (self.__name + ".py"))
         print(dag_path)
         print(dags_folder.absolute())
-        shutil.copyfile(
-            dags_folder.absolute(),
-            Path(dag_path)
-        )
+        shutil.copyfile(dags_folder.absolute(), Path(dag_path))
