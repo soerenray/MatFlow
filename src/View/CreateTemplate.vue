@@ -260,8 +260,9 @@ export default {
   watch: {
     chosenTemplateName: {
       handler() {
-        console.log('ho');
-        this.pullDagFileAndTransformDagFileToBase64();
+        if (this.chosenTemplateName !== '' && this.chosenTemplateName !== undefined) {
+          this.pullDagFileAndTransformDagFileToBase64();
+        }
       },
     },
   },
