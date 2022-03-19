@@ -125,7 +125,7 @@ class Template:
         dag_file = utilities.decode_file(decoded_json[keys.file_key], file_path)
         return Path(file_path)
 
-    def encode_template(self) -> dict:
+    def encode_template(self, delete_dag_file: bool) -> dict:
         """
         encodes all template attributes and dumps them into json object
 
@@ -138,6 +138,6 @@ class Template:
         # path to file
         file_path: Path = self.get_dag_definition_file()
         out_dict.update(
-            {keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name)}
+            {keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name, delete_dag_file)}
         )
         return out_dict

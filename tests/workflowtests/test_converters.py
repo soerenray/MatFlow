@@ -111,7 +111,7 @@ class TemplateTest(unittest.TestCase):
                 self.template, "get_dag_definition_file", return_value=self.dagMock
             ):
                 with patch.object(utilities, "encode_file", return_value="zcezbe"):
-                    self.template.encode_template()
+                    self.template.encode_template(True)
                     assert mock_method.call_count > 0
 
     def test_encode_call_dag(self):
@@ -120,7 +120,7 @@ class TemplateTest(unittest.TestCase):
                 Template, "get_dag_definition_file", return_value=self.dagMock
             ) as mock_method:
                 with patch.object(utilities, "encode_file", return_value="zcezbe"):
-                    self.template.encode_template()
+                    self.template.encode_template(True)
                     assert mock_method.call_count > 0
 
     def test_encode_call_encode(self):
@@ -131,7 +131,7 @@ class TemplateTest(unittest.TestCase):
                 with patch.object(
                     utilities, "encode_file", return_value="zcezbe"
                 ) as mock_method:
-                    self.template.encode_template()
+                    self.template.encode_template(True)
                     assert mock_method.call_count > 0
 
     # encoding never raises exception -> always valid
@@ -142,7 +142,7 @@ class TemplateTest(unittest.TestCase):
                 Template, "get_dag_definition_file", return_value=self.dagMock
             ):
                 with patch.object(utilities, "encode_file", return_value="zcezbe"):
-                    encoded = self.template.encode_template()
+                    encoded = self.template.encode_template(True)
                     self.assertEqual(encoded, expected)
 
 
