@@ -22,8 +22,8 @@ import matflow.database.DatabaseTable
 from matflow.useradministration.UserController import UserController
 from matflow.workflow.workflow_manager import WorkflowManager
 
-AUTH = {"username": "airflow", "password": "airflow"}
-
+credentials = base64.b64encode(b"airflow:airflow").decode('utf-8')
+AUTH={"Authorization": f"Basic {credentials}"}
 
 class IntegrationTest(unittest.TestCase):
     app = app.test_client()
@@ -105,7 +105,7 @@ class IntegrationTest(unittest.TestCase):
                         {
                             keys.user_name: "first_user",
                             keys.user_status_name: True,
-                            keys.user_privilege_name: "Admin",
+                            keys.user_privilege_name: "Public",
                         },
                     ],
                     keys.status_code_name: 607,
@@ -217,7 +217,7 @@ class IntegrationTest(unittest.TestCase):
             self.__class__.app.delete("delete_user", json=payload, headers=AUTH).get_data()
         )
         self.assertEqual(got, {keys.status_code_name: 607})
-        all = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
+        all = json.loads(self.__class__.app.get("get_all_users_and_details", headers=AUTH).get_data())
         self.assertNotIn(
             {
                 keys.user_name: "first_user",
@@ -270,7 +270,7 @@ class IntegrationTest(unittest.TestCase):
 
         # Act
         got = json.loads(
-            self.__class__.app.get(
+            self.__class__.app.post(
                 "get_config_from_wf_instance", json=input_data, headers=AUTH
             ).get_data()
         )
@@ -314,7 +314,7 @@ class IntegrationTest(unittest.TestCase):
 
         # Act
         got = json.loads(
-            self.__class__.app.get("get_template", json=input_data).get_data()
+            self.__class__.app.post("get_template", json=input_data).get_data()
         )
 
         # Assert
