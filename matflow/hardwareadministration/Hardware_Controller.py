@@ -91,5 +91,5 @@ class Hardware_Controller:
             "name"
         ]
         if permission == "Admin":
-            tempServerData = ServerData()
+            tempServerData = ServerData.get_instance()
             tempServerData.write_server(server)

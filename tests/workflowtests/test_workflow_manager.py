@@ -34,7 +34,7 @@ class TestWorkflowManager(TestCase):
     w_man: WorkflowManager = WorkflowManager.get_instance()
 
     # initialize paths
-    base_path: Path = Path(__file__).parent / "test_files/workflow_manager"
+    base_path: Path = Path(__file__).parent.absolute() / "test_files/workflow_manager"
     temp_path: Path = base_path / "templates"
     wf_path: Path = base_path / "wf_instances"
 
