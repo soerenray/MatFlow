@@ -138,6 +138,10 @@ class Template:
         # path to file
         file_path: Path = self.get_dag_definition_file()
         out_dict.update(
-            {keys.file_key: utilities.encode_file(file_path, keys.dag_definition_name, delete_dag_file)}
+            {
+                keys.file_key: utilities.encode_file(
+                    file_path, keys.dag_definition_name, delete_dag_file
+                )
+            }
         )
         return out_dict
