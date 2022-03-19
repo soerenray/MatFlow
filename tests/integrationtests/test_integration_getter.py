@@ -8,9 +8,7 @@ import socket
 from pathlib import Path
 from typing import List, Tuple
 import mysql.connector
-
 from flask.testing import FlaskClient
-
 from matflow.frontendapi.api import app
 from matflow.frontendapi.api import FrontendAPI
 from matflow.frontendapi import keys, utilities
@@ -22,6 +20,9 @@ import matflow.database.DatabaseTable
 # The goal is not to test every aspect (done in unittest, it is to test teh integrity of the software
 from matflow.useradministration.UserController import UserController
 from matflow.workflow.workflow_manager import WorkflowManager
+
+credentials = base64.b64encode(b"airflow:airflow").decode("utf-8")
+AUTH = {"Authorization": f"Basic {credentials}"}
 
 
 class IntegrationTest(unittest.TestCase):
@@ -56,6 +57,18 @@ class IntegrationTest(unittest.TestCase):
             }
         ]
         create_wf_version(self.app, "test_instance", note, config_files)
+        # Also create initial server
+        hostname = socket.gethostname()
+        address = socket.gethostbyname(hostname)
+        set_server_details(
+            self.app,
+            "server",
+            str(address),
+            True,
+            20,
+            True,
+            [str(resource.RLIM_INFINITY), str(resource.RLIMIT_CPU)],
+        )
 
     def tearDown(self) -> None:
         tear_down(self.app)
@@ -90,7 +103,9 @@ class IntegrationTest(unittest.TestCase):
 
     # TODO scheitert ziemlich sicher daran, dass alle User als Admins created werden user_roles != userPriveleges
     def test_get_all_users(self):
-        got = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
+        got = json.loads(
+            self.__class__.app.get("get_all_users_and_details", headers=AUTH).get_data()
+        )
         print(got)
         expected = json.loads(
             json.dumps(
@@ -104,7 +119,7 @@ class IntegrationTest(unittest.TestCase):
                         {
                             keys.user_name: "first_user",
                             keys.user_status_name: True,
-                            keys.user_privilege_name: "Admin",
+                            keys.user_privilege_name: "Public",
                         },
                     ],
                     keys.status_code_name: 607,
@@ -117,7 +132,9 @@ class IntegrationTest(unittest.TestCase):
         # default server comparison
         hostname = socket.gethostname()
         self.address = socket.gethostbyname(hostname)
-        got = json.loads(self.__class__.app.get("get_server_details").get_data())
+        got = json.loads(
+            self.__class__.app.get("get_server_details", headers=AUTH).get_data()
+        )
         expected = json.loads(
             json.dumps(
                 {
@@ -136,6 +153,7 @@ class IntegrationTest(unittest.TestCase):
         )
         self.assertEqual(expected, got)
 
+    @unittest.skip("Not yet fully implemented")
     def test_reset_server_details(self):
         hostname = socket.gethostname()
         self.address = socket.gethostbyname(hostname)
@@ -152,8 +170,12 @@ class IntegrationTest(unittest.TestCase):
                 ],
             }
         )
-        self.__class__.app.put("set_server_details", json=payload).get_data()
-        got = json.loads(self.__class__.app.get("get_server_details").get_data())
+        resp = self.__class__.app.put(
+            "set_server_details", json=payload, headers=AUTH
+        ).get_data()
+        got = json.loads(
+            self.__class__.app.get("get_server_details", headers=AUTH).get_data()
+        )
         expected = json.loads(payload)
         expected.update({keys.status_code_name: 607})
         expected = json.loads(json.dumps(expected))
@@ -172,7 +194,7 @@ class IntegrationTest(unittest.TestCase):
                 ],
             }
         )
-        self.__class__.app.put("set_server_details", json=payload)
+        self.__class__.app.put("set_server_details", json=payload, headers=AUTH)
 
     def test_set_user_details(self):
         payload = json.dumps(
@@ -184,7 +206,9 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.put("set_user_details", json=payload).get_data()
+            self.__class__.app.put(
+                "set_user_details", json=payload, headers=AUTH
+            ).get_data()
         )
         self.assertEqual(got, json.loads(json.dumps({keys.status_code_name: 607})))
 
@@ -198,7 +222,9 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.put("set_user_details", json=payload).get_data()
+            self.__class__.app.put(
+                "set_user_details", json=payload, headers=AUTH
+            ).get_data()
         )
         expected_status: int = 601
         self.assertEqual(dict(got)[keys.status_code_name], expected_status)
@@ -213,10 +239,14 @@ class IntegrationTest(unittest.TestCase):
             }
         )
         got = json.loads(
-            self.__class__.app.delete("delete_user", json=payload).get_data()
+            self.__class__.app.delete(
+                "delete_user", json=payload, headers=AUTH
+            ).get_data()
         )
         self.assertEqual(got, {keys.status_code_name: 607})
-        all = json.loads(self.__class__.app.get("get_all_users_and_details").get_data())
+        all = json.loads(
+            self.__class__.app.get("get_all_users_and_details", headers=AUTH).get_data()
+        )
         self.assertNotIn(
             {
                 keys.user_name: "first_user",
@@ -269,8 +299,8 @@ class IntegrationTest(unittest.TestCase):
 
         # Act
         got = json.loads(
-            self.__class__.app.get(
-                "get_config_from_wf_instance", json=input_data
+            self.__class__.app.post(
+                "get_config_from_wf_instance", json=input_data, headers=AUTH
             ).get_data()
         )
 
@@ -313,7 +343,7 @@ class IntegrationTest(unittest.TestCase):
 
         # Act
         got = json.loads(
-            self.__class__.app.get("get_template", json=input_data).get_data()
+            self.__class__.app.post("get_template", json=input_data).get_data()
         )
 
         # Assert
@@ -326,6 +356,7 @@ class IntegrationTest(unittest.TestCase):
             },
         )
 
+    @unittest.skip("Not yet fully implemented")
     def test_replace_version(self):
         # TODO Florian: Add workflows to Airflow
         payload: dict = {
@@ -451,6 +482,26 @@ class SetUpTester(unittest.TestCase):
         expected_status: int = 607
         self.assertEqual(expected_status, dict(got)[keys.status_code_name])
 
+    def test_set_server_details(self):
+        # Arrange
+        hostname = socket.gethostname()
+        self.address = socket.gethostbyname(hostname)
+
+        # Act
+        got = set_server_details(
+            self.app,
+            "server",
+            str(self.address),
+            True,
+            20,
+            True,
+            [str(resource.RLIM_INFINITY), str(resource.RLIMIT_CPU)],
+        )
+
+        # Assert
+        expected_status: int = 607
+        self.assertEqual(expected_status, dict(got)[keys.status_code_name])
+
 
 # utility method
 def delete_dir_content(dir_path: Path):
@@ -470,7 +521,9 @@ def create_user(client: FlaskClient, name: str) -> str:
             keys.repeat_password_name: "default",
         }
     )
-    return json.loads(client.post("register_user", json=payload).get_data())
+    return json.loads(
+        client.post("register_user", json=payload, headers=AUTH).get_data()
+    )
 
 
 def create_template(
@@ -523,6 +576,31 @@ def create_wf_version(
     )
     return json.loads(
         client.post("create_version_of_wf_instance", json=send_off).get_data()
+    )
+
+
+def set_server_details(
+    client: FlaskClient,
+    name: str,
+    address: str,
+    status: bool,
+    limit: int,
+    selected: bool,
+    resources: List[str],
+) -> str:
+
+    payload = json.dumps(
+        {
+            keys.server_name: name,
+            keys.server_address_name: address,
+            keys.server_status_name: status,
+            keys.container_limit_name: limit,
+            keys.selected_for_execution_name: selected,
+            keys.server_resources_name: resources,
+        }
+    )
+    return json.loads(
+        client.put("set_server_details", json=payload, headers=AUTH).get_data()
     )
 
 
