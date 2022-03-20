@@ -10,8 +10,7 @@
           >
           <v-divider></v-divider>
           <v-col></v-col>
-          <v-col></v-col>
-          <v-divider></v-divider>
+          <!-- <v-divider></v-divider> -->
           <div
             data-cy="workflowInstancesName"
             v-for="workflowInstanceName in workflowInstancesName"
