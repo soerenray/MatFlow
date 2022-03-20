@@ -47,7 +47,7 @@
             </td>
             <td>
               <v-select
-                data-cy="userPriviliges"
+                data-cy="userStatus"
                 :items="selectStatuses"
                 v-model="user.userStatus"
                 label="Item"
@@ -55,7 +55,7 @@
             </td>
             <td>
               <v-select
-                data-cy="userStatus"
+                data-cy="userPriviliges"
                 :items="selectPrivileges"
                 v-model="user.userPrivilege"
               ></v-select>
@@ -90,13 +90,13 @@ export default {
       userAdministrationObject: new UserAdministration(
         [
           { text: 'Username', value: 'name' },
+          { text: 'Is activated', value: 'status' },
           { text: 'User priviliges', value: 'privilege' },
-          { text: 'Status', value: 'status' },
           { text: 'Delete', value: 'delete' },
         ],
         [],
-        ['activated', 'suspended', 'pending'],
-        ['Public', 'User', 'Admin'],
+        [true, false],
+        ['Public', 'Develop', 'Admin'],
       ),
     };
   },

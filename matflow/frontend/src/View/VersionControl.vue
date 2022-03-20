@@ -3,6 +3,12 @@
     <div class="d-flex flex-row ma-4">
       <div style="min-width: 300px" class="mr-1">
         <v-card>
+          <v-card height="50px"
+            ><v-card-text>
+              <h3>Workflow-instances names:</h3>
+            </v-card-text></v-card
+          >
+          <v-divider></v-divider>
           <v-col></v-col>
           <v-col></v-col>
           <v-divider></v-divider>
