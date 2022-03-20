@@ -66,7 +66,7 @@
       </div>
       <edit-key-value-pairs
         v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
-        v-on:update="pushUpdatedConfigFilesToBackendServer"
+        v-on:update="pushUpdatedConfigFilesToBackendServerAndReset"
         v-on:reset="resetChoosenConfigFileObjects"
         :fileName="selectedConfigFileName"
         :keyValuePairsFromParent="keyValuePairs"
@@ -165,6 +165,10 @@ export default {
         throw new Error(`There is no configFile with name ${configFileName}`);
       }
       return configFile;
+    },
+    pushUpdatedConfigFilesToBackendServerAndReset() {
+      this.pushUpdatedConfigFilesToBackendServer();
+      this.resetChoosenConfigFileObjects();
     },
     pushUpdatedConfigFilesToBackendServer() {
       this.backendServerCommunicatorObject.pushConfigFilesWithWorkflowInstanceName(

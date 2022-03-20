@@ -11,7 +11,9 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { startDevServer } = require('@cypress/webpack-dev-server');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const webpackConfig = require('@vue/cli-service/webpack.config');
 
 /**
