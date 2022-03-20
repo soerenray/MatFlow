@@ -124,3 +124,4 @@ Werkzeug
 wrapt==1.13.3
 WTForms==2.3.3
 zipp==3.7.0
+flask-cors==3.0.10
