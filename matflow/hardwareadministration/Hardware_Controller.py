@@ -2,6 +2,7 @@
 from typing import List, Tuple
 
 from matflow.database.ServerData import ServerData
+from matflow.frontendapi import keys
 from matflow.hardwareadministration.Server import Server
 import requests
 from requests.auth import HTTPBasicAuth
@@ -71,7 +72,7 @@ class Hardware_Controller:
     def getServer(self, username: str, password: str) -> Server:
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
-        search_url = keys.airflow_address + "api/v1/users" + search_user
+        search_url = keys.airflow_address + "api/v1/users/" + search_user
         permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
             "name"
         ]
@@ -86,7 +87,7 @@ class Hardware_Controller:
     def setServer(self, server: Server, username: str, password: str):
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
-        search_url = keys.airflow_address + "api/v1/users" + search_user
+        search_url = keys.airflow_address + "api/v1/users/" + search_user
         permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
             "name"
         ]
