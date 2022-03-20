@@ -100,6 +100,7 @@ import CreateTemplateCaretaker from '@Memento/CreateTemplateCaretaker';
 import Template from '@Classes/Template';
 import BackendServerCommunicator from '@Controler/BackendServerCommunicator';
 import { fileToDataURLWithFunction } from '@Classes/base64Utility';
+import callFunctionRepeatedly from '@/Helper/CallRepeatedly';
 
 export default {
   name: 'CreateTemplate',
@@ -112,7 +113,6 @@ export default {
   },
   methods: {
     pullDagFileAndTransformDagFileToBase64() {
-      console.log('hi');
       this.backendServerCommunicatorObject
         .pullDagFileByTemplateName(this.chosenTemplateName)
         .then((result) => {
@@ -133,13 +133,29 @@ export default {
       this.pushTemplateObjectToBackend();
       this.resetView();
     },
+    async pullTemplatesAndUpdateTemplatesName() {
+      this.createTemplateObject.templatesName.splice('');
+      this.backendServerCommunicatorObject
+        .pullTemplatesName()
+        .then((res) => {
+          res.forEach((elem) => this.createTemplateObject.templatesName.push(elem));
+        });
+    },
+    pullTemplatesNameRepeatedlyAndUpateTemplatesName() {
+      callFunctionRepeatedly(() => {
+        this.pullTemplatesAndUpdateTemplatesName();
+      }, 5, 500);
+    },
     async resetView() {
-      await this.backendServerCommunicatorObject.pullTemplatesName();
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
+<<<<<<< HEAD:src/View/CreateTemplate.vue
+      this.pullTemplatesNameRepeatedlyAndUpateTemplatesName();
+=======
       this.createTemplateObject.templatesName = await this
         .backendServerCommunicatorObject.pullTemplatesName();
+>>>>>>> development:matflow/frontend/src/View/CreateTemplate.vue
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
@@ -238,7 +254,6 @@ export default {
         return this.createTemplateObject.dagFileInBase64;
       },
       set(dagFileInBase64: ArrayBuffer) {
-        console.log('setting', dagFileInBase64);
         this.createTemplateObject.dagFileInBase64 = dagFileInBase64;
       },
     },

@@ -44,7 +44,7 @@
               <v-col></v-col>
               <tr v-for="version in versions" :key="version.name">
                 <td>{{ version.versionNumber }}</td>
-                <!-- <td>{{ version.versionNote }}</td> -->
+                <td>{{ version.versionNote }}</td>
                 <td>
                   <v-btn size="small" icon>
                     <v-dialog

@@ -19,7 +19,7 @@ const server1 = new Server(
   [['cpu1', '50%']],
 );
 
-BackendServerCommunicatorSimulation.prototype.pullServers = async function() {
+BackendServerCommunicatorSimulation.prototype.pullServers = async function () {
   return new Promise((res) => setTimeout(res(this.servers), 500))
 }
 
@@ -57,19 +57,19 @@ describe('ServerConfig', () => {
   );
 
   afterEach(() => {
-    backendServerCommunicatorObject =  new BackendServerCommunicatorSimulation();
+    backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
     backendServerCommunicatorObject.servers = [server1];
   })
 
   it('Table headers are displayed correctly and in the correct order', () => {
     cy.get('[data-cy=tableHeader]')
-    cy.get('[data-cy=tableHeader] > tr > td').eq(0).should('have.text', 'Server location name');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(1).should('have.text', 'Address');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(2).should('have.text', 'Status');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(3).should('have.text', 'Container limit');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(4).should('have.text', 'Select server for execution');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(5).should('have.text', 'Configurate server resources');
-    cy.get('[data-cy=tableHeader] > tr > td').eq(6).should('have.text', 'apply changes');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(0).should('have.text', 'Server location name');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(1).should('have.text', 'Address');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(2).should('have.text', 'Status');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(3).should('have.text', 'Container limit');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(4).should('have.text', 'Select server for execution');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(5).should('have.text', 'Configurate server resources');
+    cy.get('[data-cy=tableHeader] > tr > th').eq(6).should('have.text', 'apply changes');
   });
 
   it('Table-body exists of exactly one element', () => {
