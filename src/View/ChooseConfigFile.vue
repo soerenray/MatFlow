@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <v-row>
-      <div style="width: 300px; padding-left: 20px; padding-top: 20px">
+    <div class="d-flex flex-row ma-4">
+      <div style="min-width: 15%" class="mr-2">
         <v-card height="50px">
           <v-btn variant="text">Workflow-instances names:</v-btn>
         </v-card>
         <v-divider></v-divider>
         <v-card>
-          <div
+          <v-div
             class="workflowInstanceName"
             v-for="workflowInstanceName in workflowInstancesName"
             :key="workflowInstanceName"
@@ -30,21 +30,21 @@
               {{ workflowInstanceName }}
             </v-col>
             <v-divider></v-divider>
-          </div>
+          </v-div>
         </v-card>
       </div>
-      <div style="width: 300px; padding-top: 20px">
+      <div style="min-width: 15%" class="pr-2">
         <v-card height="50px">
           <v-btn variant="text">Config-file names:</v-btn>
         </v-card>
         <v-divider></v-divider>
-        <v-card>
-          <div
+        <v-card v-if="configFilesName.length > 0">
+          <v-div
             class="configFileName"
             v-for="configFileName in configFilesName"
             :key="configFileName"
           >
-          <v-col
+            <v-col
               @click="
                 setSelectedConfigFileNameAndRequestConfigFileFromBackendServer(
                   configFileName
@@ -61,19 +61,17 @@
               {{ configFileName }}
             </v-col>
             <v-divider></v-divider>
-          </div>
+          </v-div>
         </v-card>
       </div>
-      <div style="padding-left: 40 px; padding-top: 20px">
-        <edit-key-value-pairs
-          v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
-          v-on:update="pushUpdatedConfigFilesToBackendServer"
-          v-on:reset="resetChoosenConfigFileObjects"
-          :fileName="selectedConfigFileName"
-          :keyValuePairsFromParent="keyValuePairs"
-        ></edit-key-value-pairs>
-      </div>
-    </v-row>
+      <edit-key-value-pairs
+        v-on:changeAllKeyValuePairs="changeAllKeyValuePairs"
+        v-on:update="pushUpdatedConfigFilesToBackendServer"
+        v-on:reset="resetChoosenConfigFileObjects"
+        :fileName="selectedConfigFileName"
+        :keyValuePairsFromParent="keyValuePairs"
+      ></edit-key-value-pairs>
+    </div>
   </v-app>
 </template>
 
@@ -117,8 +115,10 @@ export default {
       oldKeyValuePairs.forEach(
         (keyValuePair: [string, string], index: number) => {
           /* eslint-disable no-param-reassign */
-          [keyValuePair[0], keyValuePair[1]] = [newKeyValuePairs[index][0],
-            newKeyValuePairs[index][1]];
+          [keyValuePair[0], keyValuePair[1]] = [
+            newKeyValuePairs[index][0],
+            newKeyValuePairs[index][1],
+          ];
           /* eslint-enable no-param-reassign */
         },
       );
@@ -130,7 +130,8 @@ export default {
     ): string {
       if (selectedConfigFileName === configFileName) {
         return '#a9cce3';
-      } if (
+      }
+      if (
         this.isConfigFileNameInUpdatedConfigFiles(
           updatedConfigFiles,
           configFileName,
@@ -145,9 +146,11 @@ export default {
       configFileName: string,
     ): boolean {
       if (updatedConfigFiles !== undefined) {
-        return updatedConfigFiles
-          .map((configFile: ConfigFile) => configFile.configFileName)
-          .indexOf(configFileName) !== -1;
+        return (
+          updatedConfigFiles
+            .map((configFile: ConfigFile) => configFile.configFileName)
+            .indexOf(configFileName) !== -1
+        );
       }
       return false;
     },
@@ -171,8 +174,9 @@ export default {
     },
     async resetChoosenConfigFileObjects() {
       this.updatedConfigFiles = [];
-      this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames = await this
-        .backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName();
+      this.chooseConfigFileObject
+        .workflowIntancesAndConfigFilesNames = await this.backendServerCommunicatorObject
+          .pullWorkflowInstancesNameAndConfigFilesName();
       this.chosenConfigFile = await this.backendServerCommunicatorObject
         .pullConfigFileWithConfigFileNameWithWorkflowInstanceName(
           this.selectedWorkflowInstanceName,
@@ -222,10 +226,10 @@ export default {
       );
     },
     configFilesName(): string[] {
-      const indexOfSelectedWorkflowInstanceName = this
-        .workflowInstancesName.indexOf(this.selectedWorkflowInstanceName);
+      const indexOfSelectedWorkflowInstanceName = this.workflowInstancesName
+        .indexOf(this.selectedWorkflowInstanceName);
       if (indexOfSelectedWorkflowInstanceName === -1) {
-        return [''];
+        return [];
       }
       return this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames[
         indexOfSelectedWorkflowInstanceName
@@ -265,10 +269,13 @@ export default {
     },
   },
   async created() {
-    this.backendServerCommunicatorObject.pullWorkflowInstancesNameAndConfigFilesName()
+    this.backendServerCommunicatorObject
+      .pullWorkflowInstancesNameAndConfigFilesName()
       .then((res) => {
         res.forEach((elem) => {
-          this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames.push(elem);
+          this.chooseConfigFileObject.workflowIntancesAndConfigFilesNames.push(
+            elem,
+          );
         });
       });
   },

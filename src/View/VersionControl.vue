@@ -1,87 +1,92 @@
 <template>
   <v-app>
-    <v-row style="padding-left: 30px; padding-top: 30px">
-      <v-card style="padding-right: 5px">
-        <v-col></v-col>
-        <v-col></v-col>
-        <v-divider></v-divider>
-        <div
-          data-cy="workflowInstancesName"
-          v-for="workflowInstanceName in workflowInstancesName"
-          :key="workflowInstanceName"
-        >
-          <v-col
-            @click="
-              selectWorkflowInstanceNameAndPullVersions(workflowInstanceName)
-            "
-            v-if="selectedWorkflowInstanceName != workflowInstanceName"
-            style="background-color: white"
-          >
-            {{ workflowInstanceName }}
-          </v-col>
-          <v-col
-            v-if="selectedWorkflowInstanceName == workflowInstanceName"
-            style="background-color: #a9cce3"
-          >
-            {{ workflowInstanceName }}
-          </v-col>
+    <div class="d-flex flex-row ma-4">
+      <div style="min-width: 300px" class="mr-1">
+        <v-card>
+          <v-col></v-col>
+          <v-col></v-col>
           <v-divider></v-divider>
-        </div>
-      </v-card>
-      <v-card width="700px">
-        <v-table>
-          <thead data-cy="tableHeader">
-            <tr>
-              <td v-for="header in tableHeaders" :key="header.name">
-                {{ header.text }}
-              </td>
-            </tr>
-          </thead>
-          <tbody data-cy="tableBody">
-            <v-col></v-col>
-            <tr v-for="version in versions" :key="version.name">
-              <td>{{ version.versionNumber }}</td>
-              <td>{{ version.versionNote }}</td>
-              <td>
-                <v-btn size="small" icon>
-                  <v-dialog
-                    class="mx-auto mt-8"
-                    v-model="dialogKeyValuePairs"
-                    max-width="600px"
+          <div
+            data-cy="workflowInstancesName"
+            v-for="workflowInstanceName in workflowInstancesName"
+            :key="workflowInstanceName"
+          >
+            <v-col
+              @click="
+                selectWorkflowInstanceNameAndPullVersions(workflowInstanceName)
+              "
+              v-if="selectedWorkflowInstanceName != workflowInstanceName"
+              style="background-color: white"
+            >
+              {{ workflowInstanceName }}
+            </v-col>
+            <v-col
+              v-if="selectedWorkflowInstanceName == workflowInstanceName"
+              style="background-color: #a9cce3"
+            >
+              {{ workflowInstanceName }}
+            </v-col>
+            <v-divider></v-divider>
+          </div>
+        </v-card>
+      </div>
+      <v-card>
+        <v-card-title>
+          <v-table style="padding-bottom: 20px">
+            <thead data-cy="tableHeader">
+              <tr>
+                <td v-for="header in tableHeaders" :key="header.name">
+                  {{ header.text }}
+                </td>
+              </tr>
+            </thead>
+            <tbody data-cy="tableBody">
+              <v-col></v-col>
+              <tr v-for="version in versions" :key="version.name">
+                <td>{{ version.versionNumber }}</td>
+                <!-- <td>{{ version.versionNote }}</td> -->
+                <td>
+                  <v-btn size="small" icon>
+                    <v-dialog
+                      orign="center"
+                      transition="dialog-bottom-transition"
+                      v-model="dialogKeyValuePairs"
+                      min-width="600px"
+                    >
+                      <template v-slot:activator="{ props }">
+                        <v-btn
+                          data-cy="fileButton"
+                          @click="selectedVersionObject = version"
+                          size="small"
+                          icon
+                          v-bind="props"
+                        >
+                          <v-icon>mdi-file</v-icon>
+                        </v-btn>
+                      </template>
+                      <key-value-pairs
+                        data-cy="keyValuePair"
+                        :parameter-changes="
+                          selectedVersionObject.parameterChanges
+                        "
+                      ></key-value-pairs>
+                    </v-dialog>
+                  </v-btn>
+                </td>
+                <td>
+                  <v-btn
+                    size="small"
+                    @click="pushReplaceActiveVersionOfWorkflowInstance"
+                    icon
+                    ><v-icon>mdi-file-restore</v-icon></v-btn
                   >
-                    <template v-slot:activator="{ props }">
-                      <v-btn
-                        data-cy="fileButton"
-                        @click="selectedVersionObject = version"
-                        size="small"
-                        icon
-                        v-bind="props"
-                      >
-                        <v-icon>mdi-file</v-icon>
-                      </v-btn>
-                    </template>
-                    <key-value-pairs
-                      data-cy="keyValuePair"
-                      :parameter-changes="
-                        selectedVersionObject.parameterChanges
-                      "
-                    ></key-value-pairs>
-                  </v-dialog>
-                </v-btn>
-              </td>
-              <td>
-                <v-btn
-                  size="small"
-                  @click="pushReplaceActiveVersionOfWorkflowInstance"
-                  icon
-                  ><v-icon>mdi-file-restore</v-icon></v-btn
-                >
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-card-title>
       </v-card>
-    </v-row>
+    </div>
   </v-app>
 </template>
 
@@ -100,7 +105,7 @@ export default {
       backendServerCommunicatorObject: new BackendServerCommunicator(),
       versionControlObject: new VersionControl([
         { text: 'Version number', value: 'versionNumber' },
-        { text: 'Version notes', value: 'versionNote' },
+        // { text: 'Version notes', value: 'versionNote' },
         { text: 'Changed parameters', value: 'parameterChanges' },
         { text: 'Load into current workspace', value: 'workspace' },
       ]),

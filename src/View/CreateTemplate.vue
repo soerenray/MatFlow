@@ -1,96 +1,94 @@
 <template>
-  <v-app>
-    <v-card>
+  <v-app class="ma-4">
+    <v-card flat>
       <v-card-title> Create new template </v-card-title>
-      <div style="padding-left: 20px">
-        <v-row>
-          <v-col>
-            <v-text-field
-              id="nameOfTheTempalte"
-              data-cy="nameOfTheTemplate"
-              label="Name of the template"
-              variant="contained"
-              style="width: 300px"
-              v-model="newTemplateName"
-              hide-details="auto"
-            ></v-text-field>
-          </v-col>
-          <v-col>
-            <v-select
-              data-cy="selectTemplateNameFromDropdown"
-              id="selectTemplateNameFromDropdown"
-              :items="templatesName"
-              variant="contained"
-              style="width: 300px"
-              v-model="chosenTemplateName"
-              label="use predefined template"
-            >
-            </v-select>
-          </v-col>
-          <v-col>
-            <v-file-input
-              data-cy="fileInput"
-              :loading="!isDagFileInBase64 && tempTextFile !== ''"
-              @change="transformDagFileToBase64"
-              id="fileInput"
-              v-model="dagFileAsArray"
-              variant="contained"
-              style="width: 300px"
-              :clearable="false"
-              type="file"
-              label="template-blueprint"
-            >
-            </v-file-input>
-          </v-col>
-          <v-col>
-            <v-row style="padding-top: 25px">
-              <v-dialog v-model="openEdit">
-                <template v-slot:activator="{}">
-                  <v-btn
-                    data-cy="editTemplate"
-                    color="blue"
-                    @click="openEditAndWriteTotempTextFile"
-                    >Edit</v-btn
-                  >
-                </template>
-                <v-card style="width: 800px">
-                  <v-card-title>Edit Dag-file</v-card-title>
-                  <v-card-header>
-                    <v-btn
-                      data-cy="save"
-                      @click="writeFromtempTextFileAndConvertToBase64"
-                    >
-                      Save
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn data-cy="close" @click="openEdit = false">
-                      <v-icon> mdi-close </v-icon>
-                    </v-btn>
-                  </v-card-header>
-                  <v-card-text>
-                    <v-textarea
-                      data-cy="textarea"
-                      v-model="tempTextFile"
-                      filled
-                    ></v-textarea>
-                  </v-card-text>
-                </v-card>
-              </v-dialog>
-              <div style="padding-left: 25px">
+      <v-row class="ml-2">
+        <v-col>
+          <v-text-field
+            id="nameOfTheTempalte"
+            data-cy="nameOfTheTemplate"
+            label="Name of the template"
+            variant="contained"
+            style="width: 300px"
+            v-model="newTemplateName"
+            hide-details="auto"
+          ></v-text-field>
+        </v-col>
+        <v-col>
+          <v-select
+            data-cy="selectTemplateNameFromDropdown"
+            id="selectTemplateNameFromDropdown"
+            :items="templatesName"
+            variant="contained"
+            style="width: 300px"
+            v-model="chosenTemplateName"
+            label="use predefined template"
+          >
+          </v-select>
+        </v-col>
+        <v-col>
+          <v-file-input
+            data-cy="fileInput"
+            :loading="!isDagFileInBase64 && tempTextFile !== ''"
+            @change="transformDagFileToBase64"
+            id="fileInput"
+            v-model="dagFileAsArray"
+            variant="contained"
+            style="width: 300px"
+            :clearable="false"
+            type="file"
+            label="template-blueprint"
+          >
+          </v-file-input>
+        </v-col>
+        <v-col>
+          <v-row style="padding-top: 25px">
+            <v-dialog v-model="openEdit">
+              <template v-slot:activator="{}">
                 <v-btn
-                  :disabled="!(isDagFileInBase64 && newTemplateName !== '')"
-                  data-cy="sendTemplate"
-                  @click="pressSendButton"
-                  color="#58D68D"
+                  data-cy="editTemplate"
+                  color="blue"
+                  @click="openEditAndWriteTotempTextFile"
+                  >Edit</v-btn
                 >
-                  <v-icon> mdi-send </v-icon>
-                </v-btn>
-              </div>
-            </v-row>
-          </v-col>
-          <v-col></v-col>
-        </v-row>
-      </div>
+              </template>
+              <v-card style="width: 800px">
+                <v-card-title>Edit Dag-file</v-card-title>
+                <v-card-header>
+                  <v-btn
+                    data-cy="save"
+                    @click="writeFromtempTextFileAndConvertToBase64"
+                  >
+                    Save
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn data-cy="close" @click="openEdit = false">
+                    <v-icon> mdi-close </v-icon>
+                  </v-btn>
+                </v-card-header>
+                <v-card-text>
+                  <v-textarea
+                    data-cy="textarea"
+                    v-model="tempTextFile"
+                    filled
+                  ></v-textarea>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+            <div style="padding-left: 25px">
+              <v-btn
+                :disabled="!(isDagFileInBase64 && newTemplateName !== '')"
+                data-cy="sendTemplate"
+                @click="pressSendButton"
+                color="#58D68D"
+              >
+                <v-icon> mdi-send </v-icon>
+              </v-btn>
+            </div>
+          </v-row>
+        </v-col>
+        <v-col></v-col>
+      </v-row>
     </v-card>
   </v-app>
 </template>
@@ -140,8 +138,7 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      this.createTemplateObject.templatesName = await this.backendServerCommunicatorObject
-        .pullTemplatesName();
+      this.createTemplateObject.templatesName = await this.backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(
@@ -259,7 +256,10 @@ export default {
   watch: {
     chosenTemplateName: {
       handler() {
-        if (this.chosenTemplateName !== '' && this.chosenTemplateName !== undefined) {
+        if (
+          this.chosenTemplateName !== ''
+          && this.chosenTemplateName !== undefined
+        ) {
           this.pullDagFileAndTransformDagFileToBase64();
         }
       },
