@@ -9,6 +9,7 @@ from typing import List
 # import requests.utils
 # from deprecated import deprecated
 from flask import Flask, request
+from flask_cors import CORS
 
 # for production api:
 from waitress import serve
@@ -85,6 +86,7 @@ class FrontendAPI:
 
     @classmethod
     def __start_api(cls):
+        CORS(app)
         serve(app, host="0.0.0.0", port=8082)
         # app.run(debug=True, port=8082, host="0.0.0.0")
 

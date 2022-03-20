@@ -34,6 +34,8 @@ server_address_name: str = "serverAddress"
 server_status_name: str = "serverStatus"
 container_limit_name: str = "containerLimit"
 
+airflow_address: str = "http://airflow-webserver:8080/"
+
 
 temp_in_name: str = "temp_in"
 temp_out_name: str = "temp_out"
