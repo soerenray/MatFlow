@@ -61,7 +61,7 @@
               {{ configFileName }}
             </v-col>
             <v-divider></v-divider>
-          </v-div>
+          </div>
         </v-card>
       </div>
       <edit-key-value-pairs

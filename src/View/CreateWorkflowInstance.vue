@@ -182,7 +182,8 @@ export default {
           .dropDownCreateOrImportWokflowInstance;
       },
       set(dropDownCreateOrImportWokflowInstance: string[]) {
-        this.createWorkflowInstanceObject.dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
+        this.createWorkflowInstanceObject
+          .dropDownCreateOrImportWokflowInstance = dropDownCreateOrImportWokflowInstance;
       },
     },
     selectedDropDownItem: {
@@ -246,7 +247,8 @@ export default {
         return this.createWorkflowInstanceObject.areconfigFilesInBase64WithName;
       },
       set(areconfigFilesInBase64WithName: boolean) {
-        this.createWorkflowInstanceObject.areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
+        this.createWorkflowInstanceObject
+          .areconfigFilesInBase64WithName = areconfigFilesInBase64WithName;
       },
     },
     configFilesInBase64WithName: {
