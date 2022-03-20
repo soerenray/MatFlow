@@ -9,7 +9,10 @@ class HardwareControllerTest(unittest.TestCase):
 
     @unittest.skip("docker required")
     def test_get_server_with_permission(self):
-        self.assertEqual(self.test_server, self.test_hardware_controller.getServer("airflow", "airflow"))
+        self.assertEqual(
+            self.test_server,
+            self.test_hardware_controller.getServer("airflow", "airflow"),
+        )
 
     @unittest.skip("docker required")
     def test_set_server(self):
