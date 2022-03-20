@@ -152,6 +152,11 @@ export default {
       );
       this.pullTemplatesNameRepeatedlyAndUpateTemplatesName();
     },
+    pushTemplateObjectToBackend() {
+      this.backendServerCommunicatorObject.pushCreateTemplate(
+        this.createNewTemplateObject(this.dagFileInBase64, this.newTemplateName),
+      );
+    },
     createNewTemplateObject(
       templateBlueprintFile: File,
       templateName: string,
