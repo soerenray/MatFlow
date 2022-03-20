@@ -11,8 +11,13 @@ import vuetify from '@/plugins/vuetify';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
 BackendServerCommunicatorSimulation.prototype
-  . pullTemplatesName = async function() {
+  .pullTemplatesName = async function () {
     return new Promise((res) => setTimeout(res(this.templatesName), 500))
+  }
+
+BackendServerCommunicatorSimulation.prototype
+  .pullDagFileByTemplateName = async function () {
+    return new Promise((res) => setTimeout(res(new File([], 'dagFile', { type: 'file' })), 500))
   }
 
 const templatesName = ['Template1', 'Template2', 'Template3']
@@ -53,7 +58,7 @@ describe('CreateTemplate', () => {
     cy.get('[data-cy=editTemplate]').click()
     cy.get('[data-cy=textarea] .v-field__input').should('have.value', '')
   });
-  
+
   it("Open the text-editor type in 'hello'. The text-editor should only contain the word hello", () => {
     cy.get('[data-cy=editTemplate]').click()
     cy.get('[data-cy=textarea').click().type('hello')

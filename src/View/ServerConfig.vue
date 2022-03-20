@@ -5,9 +5,9 @@
         <v-table>
           <thead data-cy="tableHeader">
             <tr>
-              <td v-for="header in tableHeaders" :key="header.value">
+              <th v-for="header in tableHeaders" :key="header.value">
                 {{ header.text }}
-              </td>
+              </th>
             </tr>
           </thead>
           <tbody data-cy="tableBody">
@@ -57,58 +57,41 @@
                       <v-icon>mdi-memory</v-icon></v-btn
                     >
                   </template>
-                  <div style="width: 700px">
-                    <v-card>
-                      <v-row>
-                        <v-col>
-                          <v-row style="padding-top: 10px">
-                            <div>
-                              <v-btn variant="text" color="blue">
-                                Key name
-                              </v-btn>
-                            </div>
-                            <v-spacer></v-spacer>
-                            <div style="padding-right: 290px">
-                              <v-btn variant="text" color="blue"> Value </v-btn>
-                            </div>
-                          </v-row>
-                        </v-col>
-                        <v-col data-cy="keyValuePairs">
-                          <v-card
-                            v-for="(
-                              keyValuePair, index
-                            ) in server.serverResources"
-                            :key="index"
-                          >
-                            <v-row>
-                              <div
-                                style="padding-top: 15px; padding-left: 20px"
-                              >
-                                <v-text-field
-                                  v-model="keyValuePair[0]"
-                                  style="width: 150px"
-                                  solo
-                                  variant="contained"
-                                  dense
-                                ></v-text-field>
-                              </div>
-                              <v-spacer></v-spacer>
-                              <div
-                                style="padding-top: 15px; padding-right: 50px"
-                              >
-                                <v-text-field
-                                  v-model="keyValuePair[1]"
-                                  style="width: 400px"
-                                  variant="contained"
-                                  dense
-                                ></v-text-field>
-                              </div>
-                            </v-row>
-                          </v-card>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </div>
+                  <v-table>
+                    <thead>
+                      <tr>
+                        <th>
+                          <v-btn variant="text" color="blue"> Key name </v-btn>
+                        </th>
+                        <th>
+                          <v-btn variant="text" color="blue"> Value </v-btn>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        data-cy="keyValuePairs"
+                        v-for="(keyValuePair, index) in server.serverResources"
+                        :key="index"
+                      >
+                        <td>
+                          <v-text-field
+                            v-model="keyValuePair[0]"
+                            solo
+                            variant="contained"
+                            dense
+                          ></v-text-field>
+                        </td>
+                        <td>
+                          <v-text-field
+                            v-model="keyValuePair[1]"
+                            variant="contained"
+                            dense
+                          ></v-text-field>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </v-table>
                 </v-dialog>
               </td>
               <td>

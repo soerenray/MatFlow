@@ -38,18 +38,19 @@ describe('EditKeyValuePairs', () => {
     cy.get('[data-cy=valueEntry] .v-field__input').eq(1).should('have.value', 'val2');
   });
 
-  it('The entry of key1 is changed to key2, which should failed (duplicated key)', () => {
-    cy.get('[data-cy=keyEntry] .v-field__input').eq(0).click().clear()
-      .type('key2');
-    cy.get('[data-cy=keyEntry] .v-field__input').eq(0).should('not.have.value', 'key2');
-    // it should have entry 'key', since that is the last entry that was valid
-    cy.get('[data-cy=keyEntry] .v-field__input').eq(0).should('have.value', 'key');
-  });
+  it("The entry of key1 is changed to key2, which should not be accepted (duplicated key) and been changed to key" +
+    "after clicked on another field", () => {
+      cy.get('[data-cy=keyEntry] .v-field__input').eq(0).click().clear()
+        .type('key2');
+      cy.get('[data-cy=keyEntry] .v-field__input').eq(1).click()
+      // it should have entry 'key', since that is the last entry that was valid
+      cy.get('[data-cy=keyEntry] .v-field__input').eq(0).should('have.value', 'key');
+    });
 
   it('The entry of key1 is changed to key3', () => {
     cy.get('[data-cy=keyEntry] .v-field__input').eq(0).click().clear()
       .type('key3');
-    cy.get('[data-cy=keyEntry] .v-field__input').eq(0);
+    cy.get('[data-cy=keyEntry] .v-field__input').eq(0).should('have.value', 'key3');
   });
 
   it('The entry of val1 is changed to val2', () => {

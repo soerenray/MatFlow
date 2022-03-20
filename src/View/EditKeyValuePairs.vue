@@ -78,7 +78,6 @@ export default {
     };
   },
   props: {
-    // keyValuePairs: [],
     keyValuePairsFromParent: {
       type: Array as () => Array<[string, string]>,
     },
