@@ -71,7 +71,7 @@ class Hardware_Controller:
     def getServer(self, username: str, password: str) -> Server:
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
-        search_url = "http://airflow-webserver:8080/api/v1/users" + search_user
+        search_url = keys.airflow_address + "api/v1/users" + search_user
         permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
             "name"
         ]
@@ -86,7 +86,7 @@ class Hardware_Controller:
     def setServer(self, server: Server, username: str, password: str):
         hardware_auth = HTTPBasicAuth(username, password)
         search_user = username
-        search_url = "http://airflow-webserver:8080/api/v1/users" + search_user
+        search_url = keys.airflow_address + "api/v1/users" + search_user
         permission = requests.get(search_url, auth=hardware_auth).json()["roles"][0][
             "name"
         ]

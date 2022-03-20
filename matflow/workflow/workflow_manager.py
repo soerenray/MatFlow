@@ -37,7 +37,7 @@ class WorkflowManager:
     __versions_base_directory: Path = Path(__file__).parent / "wf_instances"
     __template_base_directory: Path = Path(__file__).parent / "templates"
     __airflow_dag_folder: Path = Path(__file__).parent.parent.parent / "dags"
-    __airflow_address: str = "http://airflow-webserver:8080/"
+    __airflow_address: str = keys.airflow_address
     __airflow_authentication: HTTPBasicAuth = HTTPBasicAuth("airflow", "airflow")
     __initial_version_note = "initial version"
 

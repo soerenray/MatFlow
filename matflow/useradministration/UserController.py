@@ -49,7 +49,7 @@ class UserController:
     #    }
 
     def getAllUsersAndDetails(self, basic: (str, str)):
-        listUsers = requests.get("http://airflow-webserver:8080/api/v1/users", auth=basic)
+        listUsers = requests.get(keys.airflow_address + "api/v1/users", auth=basic)
         if listUsers.status_code == 200:
             return listUsers.json()
 
@@ -76,7 +76,7 @@ class UserController:
         overridePassword = overrideUser.getPassword()
 
         # now we build our api call address
-        overrideAddress = "http://airflow-webserver:8080/api/v1/users" + overrideUsername
+        overrideAddress = keys.airflow_address + "api/v1/users/" + overrideUsername
         getOverrideUser = requests.get(overrideAddress, auth=basic)
 
         # we check if the response is what we wanted
@@ -123,7 +123,7 @@ class UserController:
 
         # we build our address
 
-        deleteUserAddress = "http://airflow-webserver:8080/api/v1/users" + deleteUsername
+        deleteUserAddress = keys.airflow_address + "api/v1/users/" + deleteUsername
 
         # delete the User via the api call
 
@@ -158,7 +158,7 @@ class UserController:
 
         # we build our address
 
-        createUserAddress = "http://airflow-webserver:8080/api/v1/users"
+        createUserAddress = keys.airflow_address + "api/v1/users"
 
         # this is the Payload we use to create the User
         createUserPayload = {
@@ -185,7 +185,7 @@ class UserController:
         for user in dict(details)[keys.all_users]:
             username: str = dict(user)["username"]
             if username != "airflow":
-                delete_address = "http://airflow-webserver:8080/api/v1/users" + username
+                delete_address = keys.airflow_address + "api/v1/users/" + username
                 # delete the User via the api call
                 response = requests.delete(delete_address, auth=basic)
 
