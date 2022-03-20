@@ -150,17 +150,7 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-<<<<<<< HEAD:src/View/CreateTemplate.vue
       this.pullTemplatesNameRepeatedlyAndUpateTemplatesName();
-=======
-      this.createTemplateObject.templatesName = await this
-        .backendServerCommunicatorObject.pullTemplatesName();
->>>>>>> development:matflow/frontend/src/View/CreateTemplate.vue
-    },
-    pushTemplateObjectToBackend() {
-      this.backendServerCommunicatorObject.pushCreateTemplate(
-        this.createNewTemplateObject(this.dagFileInBase64, this.newTemplateName),
-      );
     },
     createNewTemplateObject(
       templateBlueprintFile: File,
