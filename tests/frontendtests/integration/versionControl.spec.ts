@@ -11,18 +11,18 @@ import Version from '@Classes/Version';
 import BackendServerCommunicatorSimulation from './helper/BackendServerCommunicatorSimulation';
 
 BackendServerCommunicatorSimulation.prototype
-  . pullVersionsWithWorkflowInstanceName = async function() {
-  return new Promise((res) => setTimeout(res(this.versions), 500))
+  .pullVersionsWithWorkflowInstanceName = async function () {
+    return new Promise((res) => setTimeout(res(this.versions), 500))
   }
 BackendServerCommunicatorSimulation.prototype
-  . pullWorkflowInstancesNameAndConfigFilesName = async function() {
-  return new Promise((res) => setTimeout(res(this.workflowInstancesNameAndConfigFilesName), 500))
+  .pullWorkflowInstancesNameAndConfigFilesName = async function () {
+    return new Promise((res) => setTimeout(res(this.workflowInstancesNameAndConfigFilesName), 500))
   }
 
 const workflowInstance1Version1 = new Version('1.1', 'changed value of key1', [['key1: Ipsom lorum', 'key1: lorem ipsum'], ['key1: xy', 'key2: xy'],
-  ['key3: 5.0 5.0', "key3: 'text'"]]);
+['key3: 5.0 5.0', "key3: 'text'"]]);
 const workflowInstance1Version2 = new Version('1.1.1', 'reverted previous change', [['key1: Ipsom lorum', 'key1: lorem ipsum'], ['key1: xy', 'key2: xy'],
-  ['key3: 5.0 5.0', "key3: 'text'"]]);
+['key3: 5.0 5.0', "key3: 'text'"]]);
 const workflowInstance2Version1 = new Version('2.1', 'changed name of key3', [['key3: Foo bar', 'key1: Foo bar']]);
 const workflowInstance2Version2 = new Version('2.2', 'fixed typo in key-value', [['key1: xy', 'key1: xy'], ['key2: 42', 'key2: 420'],
 ]);
@@ -64,7 +64,7 @@ describe('VersionControl workflowInstance-button check', () => {
   afterEach(() => {
     let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
     backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesNameAndConfigFilesName
-    
+
   })
 
   it('There are exactly two workflowInstances to choose from', () => {
@@ -127,7 +127,7 @@ describe('VersionControl table content check', () => {
   afterEach(() => {
     let backendServerCommunicatorObject = new BackendServerCommunicatorSimulation();
     backendServerCommunicatorObject.workflowInstancesNameAndConfigFilesName = workflowInstancesNameAndConfigFilesName
-    
+
   })
 
   it('The table-headers should contain the correct entries with the correct order', () => {
@@ -180,8 +180,8 @@ describe('VersionControl table content check', () => {
     backendServerCommunicatorObject.versions = [workflowInstance1Version1, workflowInstance1Version2];
     cy.get('[data-cy=workflowInstancesName] .v-col').eq(0).click();
     cy.get('[data-cy=fileButton]').eq(0).click();
-    cy.get('[data-cy=keyValuePair] [data-cy=tableHeader] > tr > td').eq(0).should('have.text', 'old value');
-    cy.get('[data-cy=keyValuePair] [data-cy=tableHeader] > tr > td').eq(1).should('have.text', 'new value');
+    cy.get('[data-cy=keyValuePair] [data-cy=tableHeader] > tr > th').eq(0).should('have.text', 'old value');
+    cy.get('[data-cy=keyValuePair] [data-cy=tableHeader] > tr > th').eq(1).should('have.text', 'new value');
   });
 
   it("The changed parameters of version '1.1' of 'workflowInstance1' should be displayed correctly and in the correct order", () => {

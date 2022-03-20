@@ -3,9 +3,8 @@
     <v-table>
       <thead data-cy="tableHeader">
         <tr>
-          <td>{{ headers[0].text }}</td>
-          <div flat class="mx-2"></div>
-          <td>{{ headers[1].text }}</td>
+          <th class="mr-5">{{ headers[0].text }}</th>
+          <th>{{ headers[1].text }}</th>
         </tr>
       </thead>
       <tbody data-cy="tableBody">
@@ -13,8 +12,7 @@
           v-for="parameterChange in parameterChangesTableObject"
           :key="parameterChange.oldValue"
         >
-          <td>{{ parameterChange.oldValue }}</td>
-          <div class="mx-5"></div>
+          <td class="mr-5">{{ parameterChange.oldValue }}</td>
           <td>{{ parameterChange.newValue }}</td>
         </tr>
       </tbody>

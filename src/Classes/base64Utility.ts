@@ -15,7 +15,7 @@ function dataURLtoFile(dataurl: string, filename: string): File {
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
 
-  for (;n > 0; n -= 1) {
+  for (; n > 0; n -= 1) {
     u8arr[n] = bstr.charCodeAt(n);
   }
 
@@ -29,12 +29,11 @@ function dataURLtoFile(dataurl: string, filename: string): File {
  * @returns File object
  */
 function dataURLtoFileNoMime(dataurl: string, filename: string): File {
-  console.log('fileIN', dataurl);
   const bstr = atob(dataurl);
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
 
-  for (;n > 0; n -= 1) {
+  for (; n > 0; n -= 1) {
     u8arr[n] = bstr.charCodeAt(n);
   }
 
@@ -59,17 +58,13 @@ function fileToDataURLWithFunction(
       func(reader.result.split(',')[1], true);
     }
   };
-  reader.onerror = (error) => {
-    // eslint-disable-next-line no-console
-    console.log('Error: ', error);
-  };
 }
 
 function filesToDataURLWithFunction(
   files: File[],
-  func: ((arg1: [(ArrayBuffer|string), string][], arg2: boolean) => void),
+  func: ((arg1: [(ArrayBuffer | string), string][], arg2: boolean) => void),
 ) {
-  const filesInBase64WithName: [(ArrayBuffer|string), string][] = [];
+  const filesInBase64WithName: [(ArrayBuffer | string), string][] = [];
 
   files.forEach((file) => {
     fileToDataURLWithFunction(file, ((input: ArrayBuffer | string) => {
@@ -80,7 +75,6 @@ function filesToDataURLWithFunction(
   let i = 0;
   const lookForFileTransferToComplete = setInterval(() => {
     i += 1;
-    console.log('files in base64', filesInBase64WithName.length);
     // Ends if all files are transfered or 50 secconds have passed
     if (filesInBase64WithName.length === files.length || i === 100) {
       func(filesInBase64WithName, true);

@@ -143,7 +143,8 @@ export default {
       this.pushCreateWorkflowInstanceFromTemplate();
       this.resetView();
 
-      this.createWorkflowInstanceObject.templatesName = await this.backendServerCommunicatorObject.pullTemplatesName();
+      this.createWorkflowInstanceObject.templatesName = await this
+        .backendServerCommunicatorObject.pullTemplatesName();
     },
     resetView() {
       this.createWorkflowInstanceObject.setCreateWorkflowInstanceMemento(

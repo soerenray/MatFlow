@@ -6,8 +6,8 @@
           <v-btn variant="text">Workflow-instances names:</v-btn>
         </v-card>
         <v-divider></v-divider>
-        <v-card>
-          <v-div
+        <v-card v-if="workflowInstancesName.length > 0">
+          <div
             class="workflowInstanceName"
             v-for="workflowInstanceName in workflowInstancesName"
             :key="workflowInstanceName"
@@ -30,7 +30,7 @@
               {{ workflowInstanceName }}
             </v-col>
             <v-divider></v-divider>
-          </v-div>
+          </div>
         </v-card>
       </div>
       <div style="min-width: 15%" class="pr-2">
@@ -39,7 +39,7 @@
         </v-card>
         <v-divider></v-divider>
         <v-card v-if="configFilesName.length > 0">
-          <v-div
+          <div
             class="configFileName"
             v-for="configFileName in configFilesName"
             :key="configFileName"
