@@ -34,6 +34,7 @@ class MyTestCase(unittest.TestCase):
     # UserController workflowtests
 
     # test getAllUsersAndDetails statuscode 200 method
+    @unittest.skip("Airflow needs to be up")
     def testGetAllUsersAndDetails(self):
         self.assertEqual(
             requests.get(
@@ -44,6 +45,7 @@ class MyTestCase(unittest.TestCase):
         )
 
     # test getAllUsersAndDetails statuscode != 200 method
+    @unittest.skip("Airflow needs to be up")
     def testGetAllUsersAndDetails(self):
         shouldBeNone = self.testUserController.getAllUsersAndDetails(
             HTTPBasicAuth("test", "test")
@@ -52,6 +54,7 @@ class MyTestCase(unittest.TestCase):
         self.assertNotEqual(shouldBeNone, shouldNotbeNone)
 
     # test createUser
+    @unittest.skip("Airflow needs to be up")
     def testCreateUserWithWrongPwRepetition(self):
         with self.assertRaises(SignUpException) as context:
             self.testUserController.createUser(
@@ -59,6 +62,7 @@ class MyTestCase(unittest.TestCase):
             )
             self.assertTrue("Not the same Password" in context.exception)
 
+    @unittest.skip("Airflow needs to be up")
     def testCreateUserWithAlreadyTakenUsername(self):
         with self.assertRaises(SignUpException) as context:
             self.testUserController.createUser(
@@ -66,17 +70,20 @@ class MyTestCase(unittest.TestCase):
             )
             self.assertTrue("Signup failed, User already exists" in context.exception)
 
+    @unittest.skip("Airflow needs to be up")
     def testCreateUserCorrectly(self):
         self.testUserController.createUser(
             "testUsername", "testPassword", "testPassword", self.__basic
         )
 
     # test deleteUser
+    @unittest.skip("Airflow needs to be up")
     def testDeleteNonexistingUser(self):
         with self.assertRaises(UserExistsException) as context:
             self.testUserController.deleteUser(self.testUser, self.__basic)
             self.assertTrue("User doesn't exist" in context.exception)
 
+    @unittest.skip("Airflow needs to be up")
     def testDeleteUser(self):
         self.testUserController.createUser(
             "testUsername", "testPassword", "testPassword", self.__basic
@@ -84,11 +91,13 @@ class MyTestCase(unittest.TestCase):
         self.testUserController.deleteUser(self.testUser, self.__basic)
 
     # test override User
+    @unittest.skip("Airflow needs to be up")
     def testOverrideNonExistingUser(self):
         with self.assertRaises(UserExistsException) as context:
             self.testUserController.overrideUser(self.testUser, self.__basic)
             self.assertTrue("User doesn't exist" in context.exception)
 
+    @unittest.skip("Airflow needs to be up")
     def testOverrideUser(self):
         self.testUserController.createUser(
             "testUsername", "testPassword", "testPassword", self.__basic
