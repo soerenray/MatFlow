@@ -638,7 +638,9 @@ def tear_down(client: FlaskClient):
 
 def clear_tables(tables):
     """helping function for clearing all tables"""
-    conf_path: Path = Path(__file__).parent / "mydb.conf"
+    conf_path: Path = (
+        Path(__file__).parent.parent.parent / "matflow" / "database" / "mydb.conf"
+    )
     db = mysql.connector.connect(option_files=str(conf_path))
 
     cursor = db.cursor()
