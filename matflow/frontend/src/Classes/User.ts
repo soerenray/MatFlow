@@ -3,7 +3,7 @@ import Keys from '@Classes/Keys';
 class User {
   private _userName: string
 
-  private _userStatus: string
+  private _userStatus: boolean
 
   private _userPrivilege: string
 
@@ -13,7 +13,7 @@ class User {
   * @param userStatus The userStatus
   * @param userPrivilege The userPrivilege
   */
-  constructor(userName: string, userStatus: string, userPrivilege: string) {
+  constructor(userName: string, userStatus: boolean, userPrivilege: string) {
     this._userName = userName;
     this._userStatus = userStatus;
     this._userPrivilege = userPrivilege;
@@ -39,7 +39,7 @@ class User {
   * Gets the userStatus
   * @returns _userStatus
   */
-  public get userStatus(): string {
+  public get userStatus(): boolean {
     return this._userStatus;
   }
 
@@ -47,7 +47,7 @@ class User {
   * Sets the value of _userStatus
   * @param userStatus The new value of _userStatus
   */
-  public set userStatus(userStatus: string) {
+  public set userStatus(userStatus: boolean) {
     this._userStatus = userStatus;
   }
 
