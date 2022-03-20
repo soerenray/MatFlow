@@ -1,31 +1,27 @@
-const path = require('path')
+const { defineConfig } = require('@vue/cli-service');
+const path = require('path');
 
-module.exports = {
-  lintOnSave: true,
-  pages: {
-    index: {
-      entry: 'Implementierung/Frontend/src/main.ts',
-      template: 'Implementierung/Frontend/public/index.html'
-    }
-  },
-  transpileDependencies: [
-    'vuetify'
-  ],
+const basUrlSrc = 'matflow/frontend/src';
+
+module.exports = defineConfig({
+  transpileDependencies: true,
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'Implementierung/Frontend/src/')
-      }
-    }
+        '@': path.resolve(__dirname, basUrlSrc),
+        '@plugins': path.resolve(__dirname, `${basUrlSrc}/plugins`),
+        '@Classes': path.resolve(__dirname, `${basUrlSrc}/Classes`),
+        '@Controler': path.resolve(__dirname, `${basUrlSrc}/Controler`),
+        '@Memento': path.resolve(__dirname, `${basUrlSrc}/Memento`),
+        '@Model': path.resolve(__dirname, `${basUrlSrc}/Model`),
+        '@View': path.resolve(__dirname, `${basUrlSrc}/View`),
+      },
+    },
   },
-  chainWebpack: config => {
-    config
-      .plugin('copy')
-      .use(require('copy-webpack-plugin'), [[{
-        from: path.resolve(__dirname, 'Implementierung/Frontend/public'),
-        to: path.resolve(__dirname, 'dist'),
-        toType: 'dir',
-        ignore: ['.DS_Store']
-      }]])
-  }
-}
+
+  pluginOptions: {
+    vuetify: {
+      // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
+    },
+  },
+});

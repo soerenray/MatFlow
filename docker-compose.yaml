@@ -267,5 +267,52 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
+  mysql-db:
+    image: mysql:8.0.28
+    # platform: linux/x86_64
+    volumes:
+      - "./.mysql-data/db:/var/lib/mysql"
+      # Map all files in init folder as initialize database files
+      - ./dbimageinit:/docker-entrypoint-initdb.d
+    restart: always
+    #  vv only for testing* needed vv
+    #  *only for Tests starting outside docker image or docker-compose up
+    # ports:
+    # - 3306:3306
+    #  view also matflow/database/mydb.conf
+
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: matflowDatabase
+      MYSQL_USER: matflowUser
+      MYSQL_PASSWORD: qMyaU7AjPJ3Epsmc
+      MYSQL_ROOT_PASSWORD: 12345 
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 90s
+      timeout: 10s
+      retries: 2
+
+  matflow_api:
+    image: matflow_api
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    build: 
+      context: ./
+      dockerfile: ./docker_api/Dockerfile
+    ports:
+     - 8082:8082
+
+  matflow_web:
+    image: matflow_web
+    restart: always
+    build: 
+      context: ./
+      dockerfile: ./docker_web/Dockerfile
+    ports:
+      - 8081:8081
+
 volumes:
   postgres-db-volume:

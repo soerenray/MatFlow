@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex
 
@@ -8,6 +7,9 @@ test.py
 
 # filter out files in pycache directory
 *.pyc
+
+# don't commit the MANIFEST file
+MANIFEST
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
@@ -32,8 +34,8 @@ test.py
 # *.ps
 # *.eps
 # *.pdf
-Entwurfsheft/main.pdf
-Implementierungsheft/main.pdf
+docs/Entwurfsheft/main.pdf
+docs/Implementierungsheft/main.pdf
 
 ## Generated if empty string is given at "Please type another file name for output:"
 .pdf
@@ -309,7 +311,6 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.toptal.com/developers/gitignore/api/latex
-
 node_modules
 /dist
 
@@ -336,8 +337,15 @@ pnpm-debug.log*
 # Pycharm dirs
 __pycache__
 
-=======
 .DS_Store
 .idea/
->>>>>>> project_setup
 
+# database generated on docker-compose up
+.mysql-data/*
+
+# airflow logs
+logs/*
+
+# pycharm pro free trial folder
+_trial_temp/
+*/_trial_temp.lock
