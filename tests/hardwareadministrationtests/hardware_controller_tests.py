@@ -20,7 +20,7 @@ class HardwareControllerTest(unittest.TestCase):
 
     @unittest.skip("docker required")
     def test_write_server(self):
-        self.test_hardware_controller.write_server(self.test_server)
+        self.test_hardware_controller.writeServer(self.test_server)
         self.assertEqual(self.test_server, self.test_hardware_controller.get_server())
 
     if __name__ == "__main__":
