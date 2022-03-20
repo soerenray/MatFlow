@@ -1,6 +1,6 @@
 // const srcURL = '<rootDir>/matflow/frontend/src/';
 // const testURL = 'tests-jest/frontendtests/';
-const srcURL = '<rootDir>/src/';
+const srcURL = '<rootDir>/matflow/frontend/src/';
 
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
