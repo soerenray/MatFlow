@@ -1,16 +1,10 @@
 const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
 
-const basUrlSrc = './src';
+const basUrlSrc = 'matflow/frontend/src';
 
 module.exports = defineConfig({
   transpileDependencies: true,
-
-  // pluginOptions: {
-  //   vuetify: {
-  //     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
-  //   },
-  // },
   configureWebpack: {
     resolve: {
       alias: {

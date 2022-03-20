@@ -138,7 +138,8 @@ export default {
       this.createTemplateObject.setCreateTemplateMemento(
         this.createTemplateCaretakerObject.createTemplateMementoObjects[0],
       );
-      this.createTemplateObject.templatesName = await this.backendServerCommunicatorObject.pullTemplatesName();
+      this.createTemplateObject.templatesName = await this
+        .backendServerCommunicatorObject.pullTemplatesName();
     },
     pushTemplateObjectToBackend() {
       this.backendServerCommunicatorObject.pushCreateTemplate(

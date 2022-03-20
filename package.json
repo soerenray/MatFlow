@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve matflow/frontend/src/main.ts",
+    "build": "vue-cli-service build matflow/frontend/src/main.ts",
     "test:unit": "vue-cli-service test:unit --silent",
     "test:integration": "npx cypress open-ct",
     "lint": "vue-cli-service lint"
